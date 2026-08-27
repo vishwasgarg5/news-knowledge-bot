@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 import yaml
 
 from .ai import generate
+from .learning import daily_learning
 from .news import collect
 from .research import research_stories
 from .settings import CONFIG, DATA
@@ -112,8 +113,10 @@ def main():
     articles = collect(cfg.get("sources", {}), limits.get("max_articles_per_source", 30), limits.get("max_total_articles", 500))
     today = datetime.now(IST).date().isoformat()
     previous = history_snapshot()
-    draft = generate([a.__dict__ for a in articles], previous, today)
+    learning = daily_learning()
+    draft = generate([a.__dict__ for a in articles], previous, today, {"daily_learning": learning})
     historical = research_stories(draft.get("top_stories", [])[:limits.get("top_stories", 12)])
+    historical["daily_learning"] = learning
     result = generate([a.__dict__ for a in articles], previous, today, historical)
     persist(result, today)
     for message in build_messages(result, today): send_text(message)
