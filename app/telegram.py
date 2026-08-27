@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import html
 import time
 import requests
 
@@ -15,15 +14,10 @@ def send(text: str):
     r = requests.post(API.format(TELEGRAM_BOT_TOKEN), data={
         "chat_id": TELEGRAM_CHAT_ID,
         "text": text,
-        "parse_mode": "HTML",
         "disable_web_page_preview": True,
     }, timeout=30)
     r.raise_for_status()
     time.sleep(0.4)
-
-
-def esc(value) -> str:
-    return html.escape(str(value or ""))
 
 
 def chunks(text: str, size: int = 3800):
