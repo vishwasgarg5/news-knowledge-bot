@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -11,6 +11,8 @@ from .news import collect
 from .settings import CONFIG, DATA
 from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
+
+IST = ZoneInfo("Asia/Kolkata")
 
 
 def load_sources():
@@ -31,7 +33,6 @@ def history_snapshot():
 
 def build_messages(result: dict, today: str) -> list[str]:
     msgs = [f"🧠 <b>DAILY NEWS + KNOWLEDGE BRIEF</b>\n{today}\n\nAutomatic morning briefing • zero daily input"]
-
     top = result.get("top_stories", [])
     text = "🔥 <b>TOP NEWS</b>\n"
     for i, s in enumerate(top, 1):
@@ -46,23 +47,19 @@ def build_messages(result: dict, today: str) -> list[str]:
         events = s.get("timeline", [])
         if not events: continue
         timeline += f"\n<b>{s.get('headline','')}</b>\n"
-        for e in events[:6]:
-            timeline += f"• {e.get('date','')} — {e.get('headline','')}\n"
+        for e in events[:6]: timeline += f"• {e.get('date','')} — {e.get('headline','')}\n"
     if len(timeline) > 60: msgs.append(timeline)
 
-    ca = result.get("current_affairs", [])
     text = "📅 <b>CURRENT AFFAIRS</b>\n"
-    for x in ca:
+    for x in result.get("current_affairs", []):
         text += f"\n<b>{x.get('topic','')}</b> [{x.get('category','')}]\n{x.get('summary','')}\n🎯 {x.get('why_important','')}\n🔗 {x.get('source_url','')}\n"
     msgs.append(text)
 
-    culture = result.get("culture", [])
-    religion = result.get("religion", [])
     text = "🎭 <b>CULTURE & HERITAGE</b>\n"
-    for x in culture:
+    for x in result.get("culture", []):
         text += f"\n<b>{x.get('topic','')}</b> — {x.get('type','')}\n{x.get('explanation','')}\nOrigin: {x.get('origin','')}\nSignificance: {x.get('significance','')}\n🔗 {x.get('source_url','')}\n"
     text += "\n🕉️ <b>RELIGION & PHILOSOPHY</b>\n"
-    for x in religion:
+    for x in result.get("religion", []):
         text += f"\n<b>{x.get('tradition','')} — {x.get('topic','')}</b>\n{x.get('explanation','')}\nHistorical context: {x.get('historical_context','')}\n🔗 {x.get('source_url','')}\n"
     msgs.append(text)
 
@@ -78,8 +75,9 @@ def build_messages(result: dict, today: str) -> list[str]:
     seen = set()
     for s in top:
         for v in s.get("vocabulary", []):
-            if v.get('word','').lower() in seen: continue
-            seen.add(v.get('word','').lower())
+            word = v.get("word", "").strip().lower()
+            if not word or word in seen: continue
+            seen.add(word)
             text += f"\n<b>{v.get('word','')}</b> — {v.get('meaning','')}\nSimple: {v.get('simple_meaning','')}\nHindi: {v.get('hindi','')}\nExample: {v.get('example','')}\n"
     msgs.append(text)
 
@@ -88,7 +86,7 @@ def build_messages(result: dict, today: str) -> list[str]:
     msgs.append(text)
 
     text = "❓ <b>DAILY QUIZ</b>\n"
-    for i, q in enumerate(result.get("quiz", [])[:5], 1): text += f"\n<b>Q{i}.</b> {q.get('question','')}\nAnswer: ||{q.get('answer','')}||\n"
+    for i, q in enumerate(result.get("quiz", [])[:5], 1): text += f"\n<b>Q{i}.</b> {q.get('question','')}\nAnswer: {q.get('answer','')}\n"
     msgs.append(text)
     return msgs
 
@@ -96,24 +94,16 @@ def build_messages(result: dict, today: str) -> list[str]:
 def persist(result: dict, today: str):
     ensure_data(DATA)
     for s in result.get("top_stories", []):
-        for e in s.get("timeline", []):
-            append_rows(DATA / "story_timeline.csv", [{"story_id":s.get("story_id"), **e}], HEADERS["story_timeline.csv"])
-        for p in s.get("people", []):
-            append_rows(DATA / "people.csv", [{**p, "last_seen":today}], HEADERS["people.csv"])
-        for p in s.get("places", []):
-            append_rows(DATA / "places.csv", [{**p, "last_seen":today}], HEADERS["places.csv"])
-        for c in s.get("concepts", []):
-            append_rows(DATA / "knowledge_cards.csv", [{"topic_id":c.get('topic','').lower().replace(' ','_'), **c, "first_seen":today, "last_reviewed":today, "review_count":1}], HEADERS["knowledge_cards.csv"])
-        for v in s.get("vocabulary", []):
-            append_rows(DATA / "vocabulary.csv", [{**v, "first_seen":today, "review_count":0, "next_review":today}], HEADERS["vocabulary.csv"])
-    for x in result.get("current_affairs", []):
-        append_rows(DATA / "current_affairs.csv", [{"date":today, **x}], HEADERS["current_affairs.csv"])
-    for x in result.get("culture", []):
-        append_rows(DATA / "culture.csv", [{"date":today, **x}], HEADERS["culture.csv"])
-    for x in result.get("religion", []):
-        append_rows(DATA / "religion.csv", [{"date":today, **x}], HEADERS["religion.csv"])
-    for x in result.get("quiz", []):
-        append_rows(DATA / "quiz_history.csv", [{"date":today, **x}], HEADERS["quiz_history.csv"])
+        append_rows(DATA / "news_history.csv", [{"date":today, "story_id":s.get("story_id"), "headline":s.get("headline"), "source":(s.get("sources") or [""])[0], "url":(s.get("sources") or [""])[0], "category":s.get("category"), "importance":s.get("importance",0)}], HEADERS["news_history.csv"])
+        for e in s.get("timeline", []): append_rows(DATA / "story_timeline.csv", [{"story_id":s.get("story_id"), **e}], HEADERS["story_timeline.csv"])
+        for p in s.get("people", []): append_rows(DATA / "people.csv", [{**p, "last_seen":today}], HEADERS["people.csv"])
+        for p in s.get("places", []): append_rows(DATA / "places.csv", [{**p, "last_seen":today}], HEADERS["places.csv"])
+        for c in s.get("concepts", []): append_rows(DATA / "knowledge_cards.csv", [{"topic_id":c.get('topic','').lower().replace(' ','_'), **c, "first_seen":today, "last_reviewed":today, "review_count":1}], HEADERS["knowledge_cards.csv"])
+        for v in s.get("vocabulary", []): append_rows(DATA / "vocabulary.csv", [{**v, "first_seen":today, "review_count":0, "next_review":today}], HEADERS["vocabulary.csv"])
+    for x in result.get("current_affairs", []): append_rows(DATA / "current_affairs.csv", [{"date":today, **x}], HEADERS["current_affairs.csv"])
+    for x in result.get("culture", []): append_rows(DATA / "culture.csv", [{"date":today, **x}], HEADERS["culture.csv"])
+    for x in result.get("religion", []): append_rows(DATA / "religion.csv", [{"date":today, **x}], HEADERS["religion.csv"])
+    for x in result.get("quiz", []): append_rows(DATA / "quiz_history.csv", [{"date":today, **x}], HEADERS["quiz_history.csv"])
 
 
 def main():
@@ -121,13 +111,10 @@ def main():
     cfg = load_sources()
     limits = cfg.get("limits", {})
     articles = collect(cfg.get("sources", {}), limits.get("max_articles_per_source", 30), limits.get("max_total_articles", 500))
-    previous = history_snapshot()
-    result = generate([a.__dict__ for a in articles], previous, datetime.now(timezone.utc).date().isoformat())
-    today = datetime.now(timezone.utc).date().isoformat()
+    today = datetime.now(IST).date().isoformat()
+    result = generate([a.__dict__ for a in articles], history_snapshot(), today)
     persist(result, today)
-    for message in build_messages(result, today):
-        send_text(message)
-    print(json.dumps({"articles":len(articles),"stories":len(result.get('top_stories',[]))}, indent=2))
+    for message in build_messages(result, today): send_text(message)
+    print(json.dumps({"date":today,"articles":len(articles),"stories":len(result.get('top_stories',[]))}, indent=2))
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
