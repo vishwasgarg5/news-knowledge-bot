@@ -8,6 +8,7 @@ import yaml
 
 from .ai import generate
 from .news import collect
+from .research import research_stories
 from .settings import CONFIG, DATA
 from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
@@ -51,16 +52,13 @@ def build_messages(result: dict, today: str) -> list[str]:
     if len(timeline) > 60: msgs.append(timeline)
 
     text = "📅 <b>CURRENT AFFAIRS</b>\n"
-    for x in result.get("current_affairs", []):
-        text += f"\n<b>{x.get('topic','')}</b> [{x.get('category','')}]\n{x.get('summary','')}\n🎯 {x.get('why_important','')}\n🔗 {x.get('source_url','')}\n"
+    for x in result.get("current_affairs", []): text += f"\n<b>{x.get('topic','')}</b> [{x.get('category','')}]\n{x.get('summary','')}\n🎯 {x.get('why_important','')}\n🔗 {x.get('source_url','')}\n"
     msgs.append(text)
 
     text = "🎭 <b>CULTURE & HERITAGE</b>\n"
-    for x in result.get("culture", []):
-        text += f"\n<b>{x.get('topic','')}</b> — {x.get('type','')}\n{x.get('explanation','')}\nOrigin: {x.get('origin','')}\nSignificance: {x.get('significance','')}\n🔗 {x.get('source_url','')}\n"
+    for x in result.get("culture", []): text += f"\n<b>{x.get('topic','')}</b> — {x.get('type','')}\n{x.get('explanation','')}\nOrigin: {x.get('origin','')}\nSignificance: {x.get('significance','')}\n🔗 {x.get('source_url','')}\n"
     text += "\n🕉️ <b>RELIGION & PHILOSOPHY</b>\n"
-    for x in result.get("religion", []):
-        text += f"\n<b>{x.get('tradition','')} — {x.get('topic','')}</b>\n{x.get('explanation','')}\nHistorical context: {x.get('historical_context','')}\n🔗 {x.get('source_url','')}\n"
+    for x in result.get("religion", []): text += f"\n<b>{x.get('tradition','')} — {x.get('topic','')}</b>\n{x.get('explanation','')}\nHistorical context: {x.get('historical_context','')}\n🔗 {x.get('source_url','')}\n"
     msgs.append(text)
 
     text = "🧠 <b>KNOWLEDGE BUILDER</b>\n"
@@ -94,7 +92,8 @@ def build_messages(result: dict, today: str) -> list[str]:
 def persist(result: dict, today: str):
     ensure_data(DATA)
     for s in result.get("top_stories", []):
-        append_rows(DATA / "news_history.csv", [{"date":today, "story_id":s.get("story_id"), "headline":s.get("headline"), "source":(s.get("sources") or [""])[0], "url":(s.get("sources") or [""])[0], "category":s.get("category"), "importance":s.get("importance",0)}], HEADERS["news_history.csv"])
+        sources = s.get("sources") or [""]
+        append_rows(DATA / "news_history.csv", [{"date":today, "story_id":s.get("story_id"), "headline":s.get("headline"), "source":sources[0], "url":sources[0], "category":s.get("category"), "importance":s.get("importance",0)}], HEADERS["news_history.csv"])
         for e in s.get("timeline", []): append_rows(DATA / "story_timeline.csv", [{"story_id":s.get("story_id"), **e}], HEADERS["story_timeline.csv"])
         for p in s.get("people", []): append_rows(DATA / "people.csv", [{**p, "last_seen":today}], HEADERS["people.csv"])
         for p in s.get("places", []): append_rows(DATA / "places.csv", [{**p, "last_seen":today}], HEADERS["places.csv"])
@@ -112,7 +111,10 @@ def main():
     limits = cfg.get("limits", {})
     articles = collect(cfg.get("sources", {}), limits.get("max_articles_per_source", 30), limits.get("max_total_articles", 500))
     today = datetime.now(IST).date().isoformat()
-    result = generate([a.__dict__ for a in articles], history_snapshot(), today)
+    previous = history_snapshot()
+    draft = generate([a.__dict__ for a in articles], previous, today)
+    historical = research_stories(draft.get("top_stories", [])[:limits.get("top_stories", 12)])
+    result = generate([a.__dict__ for a in articles], previous, today, historical)
     persist(result, today)
     for message in build_messages(result, today): send_text(message)
     print(json.dumps({"date":today,"articles":len(articles),"stories":len(result.get('top_stories',[]))}, indent=2))
