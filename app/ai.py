@@ -16,6 +16,15 @@ def _client():
 def generate(articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
     client, model = _client()
     compact = [{k: a.get(k, "") for k in ("title", "summary", "url", "source", "category", "published")} for a in articles]
+    schema = {
+        "top_stories": [{"story_id":"stable_slug","headline":"","importance":0,"category":"","what":"","who":"","when":"","where":"","why":"","why_important":"","latest_update":"","timeline":[{"date":"","headline":"","event":"","source_url":""}],"sources":[""],"people":[{"name":"","role":"","background":"","why_in_news":""}],"places":[{"name":"","location":"","background":"","why_important":""}],"concepts":[{"topic":"","category":"","explanation":"","related_topics":""}],"vocabulary":[{"word":"","meaning":"","simple_meaning":"","hindi":"","example":""}]}],
+        "current_affairs":[{"topic":"","category":"","summary":"","why_important":"","source_url":""}],
+        "culture":[{"topic":"","type":"","explanation":"","origin":"","significance":"","source_url":""}],
+        "religion":[{"tradition":"","topic":"","explanation":"","historical_context":"","source_url":""}],
+        "connect_the_dots":[{"chain":"","explanation":""}],
+        "revision":[{"topic":"","question":"","answer":""}],
+        "quiz":[{"question":"","answer":"","topic":"","difficulty":"easy|medium|hard"}],
+    }
     prompt = f"""Today is {today}. Build the morning knowledge briefing from the supplied evidence.
 
 Existing long-term knowledge:
@@ -27,16 +36,8 @@ Today's articles:
 Historical research for important story candidates (may be empty):
 {json.dumps(research or {}, ensure_ascii=False)[:50000]}
 
-Return ONLY valid JSON with this structure:
-{{
-  "top_stories": [{{"story_id":"stable_slug","headline":"","importance":0,"category":"","what":"","who":"","when":"","where":"","why":"","why_important":"","latest_update":"","timeline":[{{"date":"","headline":"","event":"","source_url":""}}],"sources":[""],"people":[{{"name":"","role":"","background":"","why_in_news":""}}],"places":[{{"name":"","location":"","background":"","why_important":""}}],"concepts":[{{"topic":"","category":"","explanation":"","related_topics":""}}],"vocabulary":[{{"word":"","meaning":"","simple_meaning":"","hindi":"","example":""}}]}],
-  "current_affairs":[{{"topic":"","category":"","summary":"","why_important":"","source_url":""}}],
-  "culture": [{{"topic":"","type":"","explanation":"","origin":"","significance":"","source_url":""}}],
-  "religion": [{{"tradition":"","topic":"","explanation":"","historical_context":"","source_url":""}}],
-  "connect_the_dots":[{{"chain":"","explanation":""}}],
-  "revision":[{{"topic":"","question":"","answer":""}}],
-  "quiz":[{{"question":"","answer":"","topic":"","difficulty":"easy|medium|hard"}}]
-}}
+Return ONLY valid JSON matching this schema. Do not wrap it in markdown:
+{json.dumps(schema, ensure_ascii=False)}
 
 Rules:
 - Pick 10-15 consequential, diverse stories; deduplicate articles into one story.
@@ -52,5 +53,6 @@ Rules:
     response = client.responses.create(model=model, instructions=SYSTEM, input=prompt)
     text = response.output_text.strip()
     if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        lines = text.splitlines()
+        text = "\n".join(lines[1:-1]).strip()
     return json.loads(text)
