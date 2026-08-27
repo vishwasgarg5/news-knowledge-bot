@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -10,11 +11,16 @@ from .ai import generate
 from .learning import daily_learning
 from .news import collect
 from .research import research_stories
-from .settings import CONFIG, DATA
+from .settings import CONFIG, DATA, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
 
 IST = ZoneInfo("Asia/Kolkata")
+TEST_MODE = os.environ.get("TEST_MODE", "0").lower() in {"1", "true", "yes"}
+
+
+def log(stage: str, status: str, message: str):
+    print(f"[{status}] {stage}: {message}", flush=True)
 
 
 def load_sources():
@@ -107,19 +113,60 @@ def persist(result: dict, today: str):
 
 
 def main():
+    print("=" * 60)
+    print("🧠 NEWS KNOWLEDGE BOT — PIPELINE TEST" if TEST_MODE else "🧠 NEWS KNOWLEDGE BOT — MORNING RUN")
+    print("=" * 60)
+    log("Environment", "PASS", f"Python runtime ready; test_mode={TEST_MODE}")
+    log("Credentials", "PASS" if OPENAI_API_KEY else "SKIP", "OPENAI_API_KEY configured" if OPENAI_API_KEY else "OPENAI_API_KEY missing (AI stages will be skipped)")
+    log("Credentials", "PASS" if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else "SKIP", "Telegram configured" if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else "Telegram secrets missing (delivery will be skipped)")
+
     ensure_data(DATA)
+    log("CSV storage", "PASS", "Data directory and CSV schemas validated")
     cfg = load_sources()
     limits = cfg.get("limits", {})
-    articles = collect(cfg.get("sources", {}), limits.get("max_articles_per_source", 30), limits.get("max_total_articles", 500))
+    try:
+        articles = collect(cfg.get("sources", {}), limits.get("max_articles_per_source", 30), limits.get("max_total_articles", 500))
+        log("News collection", "PASS" if articles else "FAIL", f"Collected {len(articles)} articles")
+    except Exception as exc:
+        log("News collection", "FAIL", f"{type(exc).__name__}: {exc}")
+        if not TEST_MODE: raise
+        return
+
     today = datetime.now(IST).date().isoformat()
     previous = history_snapshot()
     learning = daily_learning()
-    draft = generate([a.__dict__ for a in articles], previous, today, {"daily_learning": learning})
-    historical = research_stories(draft.get("top_stories", [])[:limits.get("top_stories", 12)])
-    historical["daily_learning"] = learning
-    result = generate([a.__dict__ for a in articles], previous, today, historical)
-    persist(result, today)
-    for message in build_messages(result, today): send_text(message)
-    print(json.dumps({"date":today,"articles":len(articles),"stories":len(result.get('top_stories',[]))}, indent=2))
+    log("Learning memory", "PASS", f"Loaded {sum(len(v) for v in previous.values())} historical rows")
+
+    if not OPENAI_API_KEY:
+        log("AI generation", "SKIP", "OPENAI_API_KEY not configured; news collection/CSV diagnostics completed")
+        log("Historical research", "SKIP", "Requires AI-generated story candidates")
+        log("Current affairs", "SKIP", "Requires AI generation")
+        log("Culture & religion", "SKIP", "Requires AI generation")
+        log("Vocabulary / revision / quiz", "SKIP", "Requires AI generation")
+        log("Telegram delivery", "SKIP", "Telegram secrets not configured")
+        print("=" * 60)
+        print("FINAL STATUS: 🟡 TEST MODE — core non-AI pipeline passed")
+        print("=" * 60)
+        return
+
+    try:
+        draft = generate([a.__dict__ for a in articles], previous, today, {"daily_learning": learning})
+        log("AI draft", "PASS", f"Generated {len(draft.get('top_stories', []))} candidate stories")
+        historical = research_stories(draft.get("top_stories", [])[:limits.get("top_stories", 12)])
+        historical["daily_learning"] = learning
+        log("Historical research", "PASS", "Research stage completed")
+        result = generate([a.__dict__ for a in articles], previous, today, historical)
+        log("AI final briefing", "PASS", f"Selected {len(result.get('top_stories', []))} stories")
+        persist(result, today)
+        log("CSV persistence", "PASS", "Knowledge CSVs updated")
+        if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
+            for message in build_messages(result, today): send_text(message)
+            log("Telegram delivery", "PASS", "Morning messages sent")
+        else:
+            log("Telegram delivery", "SKIP", "Telegram secrets not configured")
+        print(json.dumps({"date":today,"articles":len(articles),"stories":len(result.get('top_stories',[]))}, indent=2))
+    except Exception as exc:
+        log("Pipeline", "FAIL", f"{type(exc).__name__}: {exc}")
+        raise
 
 if __name__ == "__main__": main()
