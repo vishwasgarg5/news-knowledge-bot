@@ -17,6 +17,7 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,6 +25,30 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama/models
+          key: ollama-qwen2.5-7b-v1
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama --version
+      - name: Start Ollama
+        run: |
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in {1..30}; do
+            curl -sf http://localhost:11434/api/tags >/dev/null && break
+            sleep 1
+          done
+          curl -sf http://localhost:11434/api/tags >/dev/null
+      - name: Ensure free local model is available
+        run: |
+          if ollama list | awk '{print $1}' | grep -Fxq 'qwen2.5:7b'; then
+            echo "[PASS] Model cached: qwen2.5:7b"
+          else
+            ollama pull qwen2.5:7b
+          fi
       - name: Determine review type
         id: type
         shell: bash
@@ -39,6 +64,10 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          AI_MODEL: qwen2.5:7b
+          OLLAMA_MODEL: qwen2.5:7b
+          OLLAMA_URL: http://localhost:11434/api/generate
         run: python -m app.review "${{ steps.type.outputs.type }}"
+      - name: Show Ollama log on failure
+        if: failure()
+        run: cat /tmp/ollama.log || true
