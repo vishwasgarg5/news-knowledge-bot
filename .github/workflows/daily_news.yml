@@ -25,31 +25,35 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Cache Ollama models
+      - name: Configure persistent Ollama model directory
+        run: |
+          echo "OLLAMA_MODELS=${{ github.workspace }}/.ollama/models" >> "$GITHUB_ENV"
+          mkdir -p "${{ github.workspace }}/.ollama/models"
+
+      - name: Restore Ollama model cache
         uses: actions/cache@v4
         with:
-          path: ~/.ollama/models
-          key: ollama-qwen2.5-7b-v1
+          path: .ollama/models
+          key: ollama-qwen2.5-7b-v2-${{ runner.os }}
+          restore-keys: |
+            ollama-qwen2.5-7b-v2-${{ runner.os }}-
+            ollama-qwen2.5-7b-v2-
 
       - name: Install Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
           ollama --version
 
-      - name: Start Ollama once
+      - name: Start Ollama
         run: |
-          if curl -sf http://localhost:11434/api/tags >/dev/null; then
-            echo "[PASS] Ollama already running"
-          else
-            nohup ollama serve > /tmp/ollama.log 2>&1 &
-            for i in {1..30}; do
-              if curl -sf http://localhost:11434/api/tags >/dev/null; then
-                echo "[PASS] Ollama service ready"
-                break
-              fi
-              sleep 1
-            done
-          fi
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in {1..45}; do
+            if curl -sf http://localhost:11434/api/tags >/dev/null; then
+              echo "[PASS] Ollama service ready"
+              break
+            fi
+            sleep 1
+          done
           curl -sf http://localhost:11434/api/tags >/dev/null
 
       - name: Ensure free local model is available
@@ -57,12 +61,13 @@ jobs:
           OLLAMA_MODEL: qwen2.5:7b
         run: |
           if ollama list | awk '{print $1}' | grep -Fxq "$OLLAMA_MODEL"; then
-            echo "[PASS] Ollama model available: $OLLAMA_MODEL"
+            echo "[PASS] Ollama model available from cache: $OLLAMA_MODEL"
           else
-            echo "[INFO] Model not cached; downloading $OLLAMA_MODEL"
+            echo "[INFO] Cache miss; downloading $OLLAMA_MODEL into $OLLAMA_MODELS"
             ollama pull "$OLLAMA_MODEL"
           fi
           ollama list
+          test -d "$OLLAMA_MODELS" || (echo "[FAIL] Model directory missing"; exit 1)
 
       - name: Generate and send morning briefing
         env:
@@ -72,9 +77,9 @@ jobs:
           AI_MODEL: qwen2.5:7b
           OLLAMA_MODEL: qwen2.5:7b
           OLLAMA_URL: http://localhost:11434/api/generate
-          AI_CONTEXT: '4096'
-          AI_MAX_OUTPUT: '1800'
-          AI_TIMEOUT_SECONDS: '360'
+          AI_CONTEXT: '2048'
+          AI_MAX_OUTPUT: '500'
+          AI_TIMEOUT_SECONDS: '120'
         run: python -m app.main
 
       - name: Show Ollama log on failure
