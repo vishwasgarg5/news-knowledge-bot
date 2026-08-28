@@ -36,16 +36,20 @@ jobs:
           curl -fsSL https://ollama.com/install.sh | sh
           ollama --version
 
-      - name: Start Ollama
+      - name: Start Ollama once
         run: |
-          nohup ollama serve > /tmp/ollama.log 2>&1 &
-          for i in {1..30}; do
-            if curl -sf http://localhost:11434/api/tags >/dev/null; then
-              echo "[PASS] Ollama service ready"
-              break
-            fi
-            sleep 1
-          done
+          if curl -sf http://localhost:11434/api/tags >/dev/null; then
+            echo "[PASS] Ollama already running"
+          else
+            nohup ollama serve > /tmp/ollama.log 2>&1 &
+            for i in {1..30}; do
+              if curl -sf http://localhost:11434/api/tags >/dev/null; then
+                echo "[PASS] Ollama service ready"
+                break
+              fi
+              sleep 1
+            done
+          fi
           curl -sf http://localhost:11434/api/tags >/dev/null
 
       - name: Ensure free local model is available
@@ -53,7 +57,7 @@ jobs:
           OLLAMA_MODEL: qwen2.5:7b
         run: |
           if ollama list | awk '{print $1}' | grep -Fxq "$OLLAMA_MODEL"; then
-            echo "[PASS] Ollama model already cached: $OLLAMA_MODEL"
+            echo "[PASS] Ollama model available: $OLLAMA_MODEL"
           else
             echo "[INFO] Model not cached; downloading $OLLAMA_MODEL"
             ollama pull "$OLLAMA_MODEL"
@@ -68,6 +72,9 @@ jobs:
           AI_MODEL: qwen2.5:7b
           OLLAMA_MODEL: qwen2.5:7b
           OLLAMA_URL: http://localhost:11434/api/generate
+          AI_CONTEXT: '4096'
+          AI_MAX_OUTPUT: '1800'
+          AI_TIMEOUT_SECONDS: '360'
         run: python -m app.main
 
       - name: Show Ollama log on failure
