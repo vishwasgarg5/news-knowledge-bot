@@ -1,22 +1,24 @@
 from __future__ import annotations
 
 import json
-from openai import OpenAI
-
-from .settings import OPENAI_API_KEY, OPENAI_MODEL
+import os
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 SYSTEM = """You are a rigorous news editor and knowledge teacher. Use ONLY supplied evidence for factual claims. Never invent facts, dates, people, numbers or quotations. If evidence is insufficient, say so. Clearly distinguish today's development from older history. Prefer multiple independent sources. The goal is long-term knowledge: explain who/what/when/where/why, relevant history, cause-effect connections, useful concepts, vocabulary, and neutral cultural/religious context. Avoid sensationalism and political persuasion."""
+DEFAULT_MODEL = "qwen2.5:7b"
+DEFAULT_OLLAMA_URL = "http://localhost:11434/api/generate"
 
 
-def _client():
-    if not OPENAI_API_KEY:
-        raise RuntimeError("OPENAI_API_KEY is not configured")
-    model = OPENAI_MODEL.strip() or "gpt-4.1-mini"
-    return OpenAI(api_key=OPENAI_API_KEY), model
+def _model_name() -> str:
+    return os.getenv("AI_MODEL", "").strip() or os.getenv("OLLAMA_MODEL", "").strip() or DEFAULT_MODEL
 
 
-def generate(articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
-    client, model = _client()
+def _ollama_url() -> str:
+    return os.getenv("OLLAMA_URL", DEFAULT_OLLAMA_URL).strip() or DEFAULT_OLLAMA_URL
+
+
+def _build_prompt(articles, previous, today, research):
     compact = [{k: a.get(k, "") for k in ("title", "summary", "url", "source", "category", "published")} for a in articles]
     schema = {
         "top_stories": [{"story_id":"stable_slug","headline":"","importance":0,"category":"","what":"","who":"","when":"","where":"","why":"","why_important":"","latest_update":"","timeline":[{"date":"","headline":"","event":"","source_url":""}],"sources":[""],"people":[{"name":"","role":"","background":"","why_in_news":""}],"places":[{"name":"","location":"","background":"","why_important":""}],"concepts":[{"topic":"","category":"","explanation":"","related_topics":""}],"vocabulary":[{"word":"","meaning":"","simple_meaning":"","hindi":"","example":""}]}],
@@ -27,37 +29,30 @@ def generate(articles: list[dict], previous: dict, today: str, research: dict | 
         "revision":[{"topic":"","question":"","answer":""}],
         "quiz":[{"question":"","answer":"","topic":"","difficulty":"easy|medium|hard"}],
     }
-    prompt = f"""Today is {today}. Build the morning knowledge briefing from the supplied evidence.
+    return f"""Today is {today}. Build the morning knowledge briefing from the supplied evidence.\n\nExisting long-term knowledge:\n{json.dumps(previous, ensure_ascii=False)[:50000]}\n\nToday's articles:\n{json.dumps(compact, ensure_ascii=False)[:100000]}\n\nHistorical research (may be empty):\n{json.dumps(research or {}, ensure_ascii=False)[:50000]}\n\nReturn ONLY valid JSON matching this schema:\n{json.dumps(schema, ensure_ascii=False)}\n\nRules:\n- Pick 10-15 consequential, diverse stories; deduplicate articles into one story.\n- Rank by India relevance, human impact, geopolitical/economic significance, future consequences, and genuine novelty.\n- For continuing stories, use 2-6 earlier milestones only when supported by supplied evidence or existing knowledge.\n- Every important story must have at least one supplied source URL.\n- Current affairs: government decisions, appointments, reports, rankings, agreements, economy, defence, science and major international developments.\n- Culture/religion: educational, neutral and respectful; do not promote or rank religions.\n- Vocabulary: useful English drawn from today's stories, with simple English and Hindi.\n- Revision: prefer older concepts that are due for review.\n- Quiz: test understanding and cause/effect, not only memorisation.\n"""
 
-Existing long-term knowledge:
-{json.dumps(previous, ensure_ascii=False)[:50000]}
 
-Today's articles:
-{json.dumps(compact, ensure_ascii=False)[:100000]}
+def generate(articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
+    prompt = _build_prompt(articles, previous, today, research)
+    payload = json.dumps({"model": _model_name(), "system": SYSTEM, "prompt": prompt, "stream": False, "format": "json"}).encode("utf-8")
+    request = Request(_ollama_url(), data=payload, headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urlopen(request, timeout=int(os.getenv("AI_TIMEOUT_SECONDS", "300"))) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Ollama HTTP {exc.code}: {body[:1000]}") from exc
+    except URLError as exc:
+        raise RuntimeError(f"Cannot reach Ollama at {_ollama_url()}: {exc.reason}") from exc
 
-Historical research for important story candidates (may be empty):
-{json.dumps(research or {}, ensure_ascii=False)[:50000]}
-
-Return ONLY valid JSON matching this schema. Do not wrap it in markdown:
-{json.dumps(schema, ensure_ascii=False)}
-
-Rules:
-- Pick 10-15 consequential, diverse stories; deduplicate articles into one story.
-- Rank by India relevance, human impact, geopolitical/economic significance, future consequences, and genuine novelty.
-- For continuing stories, use 2-6 earlier milestones from historical research or existing knowledge. Do not invent a timeline.
-- Every important story must have at least one source URL from supplied evidence.
-- Current affairs: government decisions, appointments, reports, rankings, agreements, economy, defence, science and major international developments.
-- Culture/religion: educational, neutral and respectful; do not promote or rank religions.
-- Vocabulary: useful English drawn from today's stories, with simple English and Hindi.
-- Revision: prefer older concepts that are due for review.
-- Quiz: test understanding and cause/effect, not only memorisation.
-"""
-    response = client.responses.create(model=model, instructions=SYSTEM, input=prompt)
-    text = response.output_text.strip()
-    if text.startswith("```"):
-        lines = text.splitlines()
-        text = "\n".join(lines[1:-1]).strip()
+    text = result.get("response", "").strip()
+    if not text:
+        raise RuntimeError("Ollama returned an empty response")
     try:
         return json.loads(text)
     except json.JSONDecodeError as exc:
         raise RuntimeError(f"AI returned invalid JSON: {exc}") from exc
+
+
+def configured_model() -> str:
+    return _model_name()
