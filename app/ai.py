@@ -3,14 +3,16 @@ from __future__ import annotations
 import json
 from openai import OpenAI
 
+from .settings import OPENAI_API_KEY, OPENAI_MODEL
+
 SYSTEM = """You are a rigorous news editor and knowledge teacher. Use ONLY supplied evidence for factual claims. Never invent facts, dates, people, numbers or quotations. If evidence is insufficient, say so. Clearly distinguish today's development from older history. Prefer multiple independent sources. The goal is long-term knowledge: explain who/what/when/where/why, relevant history, cause-effect connections, useful concepts, vocabulary, and neutral cultural/religious context. Avoid sensationalism and political persuasion."""
 
 
 def _client():
-    from .settings import OPENAI_API_KEY, OPENAI_MODEL
     if not OPENAI_API_KEY:
         raise RuntimeError("OPENAI_API_KEY is not configured")
-    return OpenAI(api_key=OPENAI_API_KEY), OPENAI_MODEL
+    model = OPENAI_MODEL.strip() or "gpt-4.1-mini"
+    return OpenAI(api_key=OPENAI_API_KEY), model
 
 
 def generate(articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
@@ -55,4 +57,7 @@ Rules:
     if text.startswith("```"):
         lines = text.splitlines()
         text = "\n".join(lines[1:-1]).strip()
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"AI returned invalid JSON: {exc}") from exc
