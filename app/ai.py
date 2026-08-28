@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -25,7 +26,7 @@ def _call_ollama(prompt: str, system: str = SYSTEM, as_json: bool = False, num_p
         "options": {
             "temperature": 0.1,
             "num_ctx": int(os.getenv("AI_CONTEXT", "4096")),
-            "num_predict": num_predict or int(os.getenv("AI_MAX_OUTPUT", "1800")),
+            "num_predict": num_predict or int(os.getenv("AI_MAX_OUTPUT", "1200")),
         },
     }
     if as_json:
@@ -50,19 +51,70 @@ def _call_ollama(prompt: str, system: str = SYSTEM, as_json: bool = False, num_p
         raise RuntimeError(f"AI returned invalid JSON: {exc}. Raw: {text[:800]}") from exc
 
 
-def _compact_articles(articles: list[dict], limit: int = 60) -> list[dict]:
-    return [{
-        "title": str(a.get("title", ""))[:220], "summary": str(a.get("summary", ""))[:420],
-        "source": str(a.get("source", ""))[:70], "url": str(a.get("url", ""))[:400],
-        "category": str(a.get("category", ""))[:40], "published": str(a.get("published", ""))[:35],
-    } for a in articles[:limit]]
+def _words(text: str) -> set[str]:
+    return set(re.findall(r"[a-zA-Z]{4,}", text.lower()))
+
+
+def _deterministic_score(a: dict) -> float:
+    title = str(a.get("title", ""))
+    summary = str(a.get("summary", ""))
+    source = str(a.get("source", "")).lower()
+    category = str(a.get("category", "")).lower()
+    text = f"{title} {summary}".lower()
+    score = 35.0
+    source_boost = ("reuters", "bbc", "associated press", "ap news", "the hindu", "indian express", "times of india", "pib")
+    if any(x in source for x in source_boost): score += 12
+    if category in {"india", "national", "politics", "world", "economy", "business", "defence", "science", "technology"}: score += 8
+    keywords = {
+        "government": 8, "supreme court": 10, "parliament": 9, "election": 9,
+        "prime minister": 9, "president": 8, "war": 10, "conflict": 9,
+        "ceasefire": 10, "terror": 8, "defence": 8, "military": 8,
+        "economy": 7, "inflation": 7, "interest rate": 7, "rbi": 9,
+        "budget": 8, "trade": 7, "sanction": 8, "nuclear": 9,
+        "space": 7, "isro": 9, "ai": 6, "artificial intelligence": 7,
+        "climate": 7, "earthquake": 8, "cyclone": 8, "flood": 7,
+        "health": 6, "vaccine": 6, "scam": 7, "policy": 6,
+    }
+    for term, boost in keywords.items():
+        if term in text: score += boost
+    impact_terms = ("million", "billion", "lakh", "crore", "dead", "killed", "injured", "arrested", "approved", "launched", "signed")
+    score += min(10, 2 * sum(term in text for term in impact_terms))
+    score += min(8, len(_words(title)) * 0.7)
+    return min(100.0, score)
 
 
 def select_stories(articles: list[dict], top_n: int = 12) -> list[dict]:
-    compact = _compact_articles(articles, 60)
-    prompt = f"""Select the {top_n} most consequential and diverse news stories from these candidates. Priorities: India relevance, human impact, geopolitical/economic significance, science/technology importance and future consequences. Deduplicate the same event. Return ONLY JSON: {{\"selected\":[{{\"rank\":1,\"headline\":\"exact candidate headline\",\"importance\":95,\"category\":\"India|World|Economy|Defence|Science|Technology|Culture|Other\",\"url\":\"exact candidate URL\",\"reason\":\"short reason\"}}]}}. URLs must come from candidates.\n\nCandidates:\n{json.dumps(compact, ensure_ascii=False)}"""
-    result = _call_ollama(prompt, as_json=True, num_predict=900)
-    return result.get("selected", [])[:top_n]
+    """Fast, deterministic selection. No AI call: this keeps the CPU-bound local model focused on knowledge generation."""
+    ranked = []
+    seen_words: list[set[str]] = []
+    for a in articles:
+        title = str(a.get("title", "")).strip()
+        if not title or not a.get("url"): continue
+        words = _words(title)
+        # Lightweight title similarity to suppress near-duplicate stories.
+        if any(len(words & old) / max(1, len(words | old)) >= 0.72 for old in seen_words):
+            continue
+        seen_words.append(words)
+        ranked.append((round(_deterministic_score(a), 1), a))
+    ranked.sort(key=lambda x: (-x[0], str(x[1].get("published", ""))),)
+    selected = []
+    categories = {}
+    for score, a in ranked:
+        category = str(a.get("category", "Other"))
+        # Diversity guard: no category dominates the briefing.
+        if categories.get(category, 0) >= max(3, top_n // 3):
+            continue
+        categories[category] = categories.get(category, 0) + 1
+        selected.append({
+            "rank": len(selected) + 1,
+            "headline": str(a.get("title", ""))[:240],
+            "importance": score,
+            "category": category,
+            "url": str(a.get("url", "")),
+            "reason": "Deterministic impact/source/relevance score; AI is reserved for explanation."
+        })
+        if len(selected) >= top_n: break
+    return selected
 
 
 def _story_evidence(selected: list[dict], articles: list[dict], research: dict | None) -> list[dict]:
@@ -74,39 +126,37 @@ def _story_evidence(selected: list[dict], articles: list[dict], research: dict |
         evidence.append({
             "story_id": sid, "headline": s.get("headline", ""), "importance": s.get("importance", 0),
             "category": s.get("category", ""), "source": a.get("source", ""), "url": s.get("url", ""),
-            "summary": str(a.get("summary", ""))[:550], "historical": (research or {}).get(sid, [])[:3],
+            "summary": str(a.get("summary", ""))[:450], "historical": (research or {}).get(sid, [])[:2],
         })
     return evidence
 
 
 def _story_batch(batch: list[dict], today: str) -> list[dict]:
-    prompt = f"""Today is {today}. Explain these selected news stories using ONLY the supplied evidence. Keep each story concise. Return ONLY JSON with key top_stories. Each item must contain: story_id, headline, importance, category, what, who, when, where, why, why_important, latest_update, timeline (max 3), sources, people (max 2), places (max 2), concepts (max 1), vocabulary (max 2). Never invent missing details.\n\nEvidence:\n{json.dumps(batch, ensure_ascii=False)}"""
-    result = _call_ollama(prompt, as_json=True, num_predict=1400)
+    prompt = f"""Today is {today}. Explain these selected news stories using ONLY the supplied evidence. Keep each story very concise. Return ONLY JSON with key top_stories. Each item: story_id, headline, importance, category, what, who, when, where, why, why_important, latest_update, timeline (max 2), sources, people (max 2), places (max 2), concepts (max 1), vocabulary (max 2). Missing evidence must be written as 'Not stated in supplied sources'. Never invent.\n\nEvidence:\n{json.dumps(batch, ensure_ascii=False)}"""
+    result = _call_ollama(prompt, as_json=True, num_predict=1000)
     return result.get("top_stories", [])
 
 
 def _extras(evidence: list[dict], previous: dict, today: str) -> dict:
-    # Small independent call: auxiliary learning content is separated from story generation.
-    old = {k: v[-12:] for k, v in previous.items() if k in {"knowledge_cards", "vocabulary", "current_affairs"}}
-    prompt = f"""Today is {today}. From ONLY this supplied evidence, create compact learning extras. Return ONLY JSON with keys current_affairs, culture, religion, connect_the_dots, revision, quiz. current_affairs max 5; culture max 2; religion max 2 and only if genuinely supported; connect_the_dots max 3; revision max 5 using older knowledge when relevant; quiz exactly 5. Each factual item must use a supplied source_url where available. Do not invent. Vocabulary and story explanations are handled separately.\n\nEvidence:\n{json.dumps(evidence, ensure_ascii=False)}\n\nOlder knowledge:\n{json.dumps(old, ensure_ascii=False)}"""
-    return _call_ollama(prompt, as_json=True, num_predict=1200)
+    old = {k: v[-8:] for k, v in previous.items() if k in {"knowledge_cards", "vocabulary", "current_affairs"}}
+    prompt = f"""Today is {today}. From ONLY this supplied evidence, create compact learning extras. Return ONLY JSON with keys current_affairs, culture, religion, connect_the_dots, revision, quiz. current_affairs max 3; culture max 1; religion max 1 and only if supported; connect_the_dots max 2; revision max 3; quiz exactly 3. Keep every item short. Do not invent.\n\nEvidence:\n{json.dumps(evidence, ensure_ascii=False)}\n\nOlder knowledge:\n{json.dumps(old, ensure_ascii=False)}"""
+    return _call_ollama(prompt, as_json=True, num_predict=700)
 
 
 def generate_briefing(selected: list[dict], articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
     evidence = _story_evidence(selected, articles, research)
-    # Three small story calls prevent the previous 32K-token monolithic prompt and keep CPU generation bounded.
     stories: list[dict] = []
     for i in range(0, len(evidence), 4):
         stories.extend(_story_batch(evidence[i:i + 4], today))
     extras = _extras(evidence, previous, today)
     return {
         "top_stories": stories[:12],
-        "current_affairs": extras.get("current_affairs", [])[:5],
-        "culture": extras.get("culture", [])[:2],
-        "religion": extras.get("religion", [])[:2],
-        "connect_the_dots": extras.get("connect_the_dots", [])[:3],
-        "revision": extras.get("revision", [])[:5],
-        "quiz": extras.get("quiz", [])[:5],
+        "current_affairs": extras.get("current_affairs", [])[:3],
+        "culture": extras.get("culture", [])[:1],
+        "religion": extras.get("religion", [])[:1],
+        "connect_the_dots": extras.get("connect_the_dots", [])[:2],
+        "revision": extras.get("revision", [])[:3],
+        "quiz": extras.get("quiz", [])[:3],
     }
 
 
