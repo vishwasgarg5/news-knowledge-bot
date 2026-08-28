@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, os
+import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import yaml
@@ -10,14 +10,13 @@ from .research import research_stories
 from .settings import CONFIG, DATA, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
-
 IST=ZoneInfo("Asia/Kolkata")
 TEST_MODE=os.environ.get("TEST_MODE","0").lower() in {"1","true","yes"}
 def log(stage,status,message): print(f"[{status}] {stage}: {message}",flush=True)
 def load_sources():
     with CONFIG.open(encoding="utf-8") as f:return yaml.safe_load(f)
 def history_snapshot():
-    return {"knowledge_cards":read_rows(DATA/"knowledge_cards.csv")[-80:],"vocabulary":read_rows(DATA/"vocabulary.csv")[-80:],"people":read_rows(DATA/"people.csv")[-40:],"places":read_rows(DATA/"places.csv")[-40:],"story_timeline":read_rows(DATA/"story_timeline.csv")[-100:],"current_affairs":read_rows(DATA/"current_affairs.csv")[-80:]}
+    return {"knowledge_cards":read_rows(DATA/"knowledge_cards.csv")[-80:],"vocabulary":read_rows(DATA/"vocabulary.csv")[-80:],"people":read_rows(DATA/"people.csv")[-40:],"places":read_rows(DATA/"places.csv")[-40:],"story_timeline":read_rows(DATA/"story_timeline.csv")[-100:],"current_affairs":read_rows(DATA/"current_affairs.csv")[-80:],"news_history":read_rows(DATA/"news_history.csv")[-300:]}
 def build_messages(result,today):
     msgs=[f"🧠 <b>DAILY NEWS + KNOWLEDGE BRIEF</b>\n{today}\n\nAutomatic morning briefing • zero daily input"]
     top=result.get("top_stories",[]); text="🔥 <b>TOP NEWS</b>\n"
@@ -25,17 +24,15 @@ def build_messages(result,today):
         text+=f"\n<b>{i}. {s.get('headline','')}</b> — {s.get('importance',0)}/100\n<b>What:</b> {s.get('what','')}\n<b>Who:</b> {s.get('who','')}\n<b>When:</b> {s.get('when','')}\n<b>Where:</b> {s.get('where','')}\n<b>Why:</b> {s.get('why','')}\n<b>Why important:</b> {s.get('why_important','')}\n<b>Latest:</b> {s.get('latest_update','')}\n"
         if s.get("sources"):text+="🔗 "+" | ".join(s["sources"][:3])+"\n"
     msgs.append(text)
-    rh=result.get("research_stats",{}); msgs.append(f"📚 <b>HISTORICAL CONTEXT</b>\nResearch evidence: {rh.get('ok',0)}/{rh.get('total',0)} stories\nStatus: {rh.get('status','UNKNOWN')}\n")
+    rh=result.get("research_stats",{}); msgs.append(f"📚 <b>HISTORICAL CONTEXT</b>\nResearch evidence: {rh.get('ok',0)}/{rh.get('total',0)} stories\nGDELT/GitHub memory: {rh.get('memory_ok',0)} memory matches\nStatus: {rh.get('status','UNKNOWN')}\n")
     extra=result.get("learning_text","")
     if extra:msgs.append("📅 <b>LEARNING / CURRENT AFFAIRS</b>\n"+extra)
     return msgs
-
 def persist(result,today):
     ensure_data(DATA)
     for s in result.get("top_stories",[]):
         url=(s.get("sources") or [""])[0]
         append_rows(DATA/"news_history.csv",[{"date":today,"story_id":s.get("story_id"),"headline":s.get("headline"),"source":"","url":url,"category":s.get("category"),"importance":s.get("importance",0)}],HEADERS["news_history.csv"])
-
 def main():
     print("="*60);print("🧠 NEWS KNOWLEDGE BOT — MORNING RUN");print("="*60)
     log("Environment","PASS",f"Python runtime ready; test_mode={TEST_MODE}");log("AI provider","INFO",f"Local Ollama; model={configured_model()}");log("Credentials","PASS","No paid AI API key required")
@@ -47,14 +44,14 @@ def main():
     log("News collection","PASS" if articles else "FAIL",f"Collected {len(articles)} articles")
     today=datetime.now(IST).date().isoformat();previous=history_snapshot();learning=daily_learning();log("Learning memory","PASS",f"Loaded {sum(len(v) for v in previous.values())} historical rows")
     selected=select_stories([a.__dict__ for a in articles],top_n=min(12,limits.get("top_stories",12)));log("Story selection","PASS",f"Deterministic scoring reduced {len(articles)} articles to {len(selected)} priority stories; no LLM tokens used")
-    historical=research_stories(selected); stats=historical.pop("_stats",{"ok":0,"failed":len(selected),"total":len(selected),"status":"FAIL"});log("Historical research",stats["status"],f"Research evidence {stats['ok']}/{stats['total']} stories; {stats['failed']} empty/failed")
+    historical=research_stories(selected,previous.get("news_history",[]));stats=historical.pop("_stats",{"ok":0,"memory_ok":0,"failed":len(selected),"total":len(selected),"status":"FAIL"});log("Historical research",stats["status"],f"Research evidence {stats['ok']}/{stats['total']} stories; {stats['failed']} unavailable; {stats['memory_ok']} from GitHub memory")
     result=generate_briefing(selected,[a.__dict__ for a in articles],previous,today,historical);result["research_stats"]=stats;result["learning_text"]=result.get("learning_text") or "";log("AI final briefing","PASS",f"Generated {len(result.get('top_stories',[]))} stories")
     persist(result,today);log("CSV persistence","PASS","Knowledge CSVs updated")
     if tg:
         for message in build_messages(result,today):send_text(message)
         log("Telegram delivery","PASS","Morning messages sent")
     else:log("Telegram delivery","SKIP","Telegram secrets not configured")
-    if stats["status"]=="FAIL": log("FINAL","WARN","Briefing completed, but historical research returned no evidence")
-    elif stats["status"]=="WARN": log("FINAL","WARN","Briefing completed with partial historical research")
+    if stats["status"]=="FAIL": log("FINAL","WARN","Briefing completed, but historical context was unavailable")
+    elif stats["status"]=="WARN": log("FINAL","WARN","Briefing completed with partial historical context")
     else: log("FINAL","PASS","Morning knowledge pipeline completed")
 if __name__=="__main__":main()
