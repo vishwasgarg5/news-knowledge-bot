@@ -11,7 +11,7 @@ permissions:
 jobs:
   morning-brief:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,13 +25,33 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama --version
+
+      - name: Start Ollama
+        run: |
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in {1..30}; do curl -sf http://localhost:11434/api/tags >/dev/null && break; sleep 1; done
+          curl -sf http://localhost:11434/api/tags >/dev/null
+
+      - name: Pull free local model
+        run: ollama pull qwen2.5:7b
+
       - name: Generate and send morning briefing
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          AI_PROVIDER: ollama
+          AI_MODEL: qwen2.5:7b
+          OLLAMA_MODEL: qwen2.5:7b
+          OLLAMA_URL: http://localhost:11434/api/generate
         run: python -m app.main
+
+      - name: Show Ollama log on failure
+        if: failure()
+        run: cat /tmp/ollama.log || true
 
       - name: Commit updated knowledge CSVs
         run: |
