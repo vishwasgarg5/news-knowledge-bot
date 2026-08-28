@@ -7,11 +7,11 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .ai import generate
+from .ai import configured_model, generate
 from .learning import daily_learning
 from .news import collect
 from .research import research_stories
-from .settings import CONFIG, DATA, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+from .settings import CONFIG, DATA, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
 
@@ -117,7 +117,8 @@ def main():
     print("🧠 NEWS KNOWLEDGE BOT — PIPELINE TEST" if TEST_MODE else "🧠 NEWS KNOWLEDGE BOT — MORNING RUN")
     print("=" * 60)
     log("Environment", "PASS", f"Python runtime ready; test_mode={TEST_MODE}")
-    log("Credentials", "PASS" if OPENAI_API_KEY else "SKIP", "OPENAI_API_KEY configured" if OPENAI_API_KEY else "OPENAI_API_KEY missing (AI stages will be skipped)")
+    log("AI provider", "INFO", f"Local Ollama; model={configured_model()}")
+    log("Credentials", "INFO", "No paid AI API key required")
     log("Credentials", "PASS" if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else "SKIP", "Telegram configured" if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID else "Telegram secrets missing (delivery will be skipped)")
 
     ensure_data(DATA)
@@ -136,18 +137,6 @@ def main():
     previous = history_snapshot()
     learning = daily_learning()
     log("Learning memory", "PASS", f"Loaded {sum(len(v) for v in previous.values())} historical rows")
-
-    if not OPENAI_API_KEY:
-        log("AI generation", "SKIP", "OPENAI_API_KEY not configured; news collection/CSV diagnostics completed")
-        log("Historical research", "SKIP", "Requires AI-generated story candidates")
-        log("Current affairs", "SKIP", "Requires AI generation")
-        log("Culture & religion", "SKIP", "Requires AI generation")
-        log("Vocabulary / revision / quiz", "SKIP", "Requires AI generation")
-        log("Telegram delivery", "SKIP", "Telegram secrets not configured")
-        print("=" * 60)
-        print("FINAL STATUS: 🟡 TEST MODE — core non-AI pipeline passed")
-        print("=" * 60)
-        return
 
     try:
         draft = generate([a.__dict__ for a in articles], previous, today, {"daily_learning": learning})
