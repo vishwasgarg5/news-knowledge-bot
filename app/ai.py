@@ -18,6 +18,28 @@ def _ollama_url() -> str:
     return os.getenv("OLLAMA_URL", DEFAULT_OLLAMA_URL).strip() or DEFAULT_OLLAMA_URL
 
 
+def _call_ollama(prompt: str, system: str = SYSTEM, as_json: bool = False):
+    payload = json.dumps({"model": _model_name(), "system": system, "prompt": prompt, "stream": False, **({"format": "json"} if as_json else {})}).encode("utf-8")
+    request = Request(_ollama_url(), data=payload, headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urlopen(request, timeout=int(os.getenv("AI_TIMEOUT_SECONDS", "300"))) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Ollama HTTP {exc.code}: {body[:1000]}") from exc
+    except URLError as exc:
+        raise RuntimeError(f"Cannot reach Ollama at {_ollama_url()}: {exc.reason}") from exc
+    text = result.get("response", "").strip()
+    if not text:
+        raise RuntimeError("Ollama returned an empty response")
+    if not as_json:
+        return text
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"AI returned invalid JSON: {exc}") from exc
+
+
 def _build_prompt(articles, previous, today, research):
     compact = [{k: a.get(k, "") for k in ("title", "summary", "url", "source", "category", "published")} for a in articles]
     schema = {
@@ -33,25 +55,11 @@ def _build_prompt(articles, previous, today, research):
 
 
 def generate(articles: list[dict], previous: dict, today: str, research: dict | None = None) -> dict:
-    prompt = _build_prompt(articles, previous, today, research)
-    payload = json.dumps({"model": _model_name(), "system": SYSTEM, "prompt": prompt, "stream": False, "format": "json"}).encode("utf-8")
-    request = Request(_ollama_url(), data=payload, headers={"Content-Type": "application/json"}, method="POST")
-    try:
-        with urlopen(request, timeout=int(os.getenv("AI_TIMEOUT_SECONDS", "300"))) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Ollama HTTP {exc.code}: {body[:1000]}") from exc
-    except URLError as exc:
-        raise RuntimeError(f"Cannot reach Ollama at {_ollama_url()}: {exc.reason}") from exc
+    return _call_ollama(_build_prompt(articles, previous, today, research), as_json=True)
 
-    text = result.get("response", "").strip()
-    if not text:
-        raise RuntimeError("Ollama returned an empty response")
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(f"AI returned invalid JSON: {exc}") from exc
+
+def generate_text(prompt: str, system: str = "You are a factual knowledge teacher. Use only supplied data; do not invent.") -> str:
+    return _call_ollama(prompt, system=system, as_json=False)
 
 
 def configured_model() -> str:
