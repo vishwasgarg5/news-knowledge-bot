@@ -11,7 +11,7 @@ permissions:
 jobs:
   morning-brief:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama/models
+          key: ollama-qwen2.5-7b-v1
+
       - name: Install Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
@@ -33,11 +39,26 @@ jobs:
       - name: Start Ollama
         run: |
           nohup ollama serve > /tmp/ollama.log 2>&1 &
-          for i in {1..30}; do curl -sf http://localhost:11434/api/tags >/dev/null && break; sleep 1; done
+          for i in {1..30}; do
+            if curl -sf http://localhost:11434/api/tags >/dev/null; then
+              echo "[PASS] Ollama service ready"
+              break
+            fi
+            sleep 1
+          done
           curl -sf http://localhost:11434/api/tags >/dev/null
 
-      - name: Pull free local model
-        run: ollama pull qwen2.5:7b
+      - name: Ensure free local model is available
+        env:
+          OLLAMA_MODEL: qwen2.5:7b
+        run: |
+          if ollama list | awk '{print $1}' | grep -Fxq "$OLLAMA_MODEL"; then
+            echo "[PASS] Ollama model already cached: $OLLAMA_MODEL"
+          else
+            echo "[INFO] Model not cached; downloading $OLLAMA_MODEL"
+            ollama pull "$OLLAMA_MODEL"
+          fi
+          ollama list
 
       - name: Generate and send morning briefing
         env:
@@ -54,6 +75,7 @@ jobs:
         run: cat /tmp/ollama.log || true
 
       - name: Commit updated knowledge CSVs
+        if: success()
         run: |
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
