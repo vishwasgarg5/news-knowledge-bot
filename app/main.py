@@ -16,7 +16,7 @@ def log(stage,status,message): print(f"[{status}] {stage}: {message}",flush=True
 def load_sources():
     with CONFIG.open(encoding="utf-8") as f:return yaml.safe_load(f)
 def history_snapshot():
-    return {"knowledge_cards":read_rows(DATA/"knowledge_cards.csv")[-80:],"vocabulary":read_rows(DATA/"vocabulary.csv")[-80:],"people":read_rows(DATA/"people.csv")[-40:],"places":read_rows(DATA/"places.csv")[-40:],"story_timeline":read_rows(DATA/"story_timeline.csv")[-100:],"current_affairs":read_rows(DATA/"current_affairs.csv")[-80:],"news_history":read_rows(DATA/"news_history.csv")[-300:]}
+    return {"knowledge_cards":read_rows(DATA/"knowledge_cards.csv")[-80:],"vocabulary":read_rows(DATA/"vocabulary.csv")[-80:],"people":read_rows(DATA/"people.csv")[-40:],"places":read_rows(DATA/"places.csv")[-40:],"story_timeline":read_rows(DATA/"story_timeline.csv")[-100:],"current_affairs":read_rows(DATA/"current_affairs.csv")[-80:],"news_history":read_rows(DATA/"news_history.csv")[-500:]}
 def build_messages(result,today):
     msgs=[f"🧠 <b>DAILY NEWS + KNOWLEDGE BRIEF</b>\n{today}\n\nAutomatic morning briefing • zero daily input"]
     top=result.get("top_stories",[]); text="🔥 <b>TOP NEWS</b>\n"
@@ -24,7 +24,7 @@ def build_messages(result,today):
         text+=f"\n<b>{i}. {s.get('headline','')}</b> — {s.get('importance',0)}/100\n<b>What:</b> {s.get('what','')}\n<b>Who:</b> {s.get('who','')}\n<b>When:</b> {s.get('when','')}\n<b>Where:</b> {s.get('where','')}\n<b>Why:</b> {s.get('why','')}\n<b>Why important:</b> {s.get('why_important','')}\n<b>Latest:</b> {s.get('latest_update','')}\n"
         if s.get("sources"):text+="🔗 "+" | ".join(s["sources"][:3])+"\n"
     msgs.append(text)
-    rh=result.get("research_stats",{}); msgs.append(f"📚 <b>HISTORICAL CONTEXT</b>\nResearch evidence: {rh.get('ok',0)}/{rh.get('total',0)} stories\nGDELT/GitHub memory: {rh.get('memory_ok',0)} memory matches\nStatus: {rh.get('status','UNKNOWN')}\n")
+    rh=result.get("research_stats",{}); msgs.append(f"📚 <b>HISTORICAL CONTEXT</b>\nResearch evidence: {rh.get('ok',0)}/{rh.get('total',0)} stories\nGitHub memory matches: {rh.get('memory_ok',0)}\nStatus: {rh.get('status','UNKNOWN')}\n")
     extra=result.get("learning_text","")
     if extra:msgs.append("📅 <b>LEARNING / CURRENT AFFAIRS</b>\n"+extra)
     return msgs
