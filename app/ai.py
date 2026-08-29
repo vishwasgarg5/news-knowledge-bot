@@ -6,11 +6,11 @@ SYSTEM="""You are a rigorous news editor and knowledge teacher. Use ONLY supplie
 DEFAULT_MODEL="qwen2.5:7b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 def _model_name(): return os.getenv("AI_MODEL","").strip() or os.getenv("OLLAMA_MODEL","").strip() or DEFAULT_MODEL
 def _ollama_url(): return os.getenv("OLLAMA_URL",DEFAULT_OLLAMA_URL).strip() or DEFAULT_OLLAMA_URL
-def _call_ollama(prompt,system=SYSTEM,num_predict=None):
+def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
     payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"10m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","2048")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","500"))}}
     req=Request(_ollama_url(),data=json.dumps(payload,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
     try:
-        with urlopen(req,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","120"))) as r: data=json.loads(r.read().decode())
+        with urlopen(req,timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","120"))) as r: data=json.loads(r.read().decode())
     except HTTPError as e: raise RuntimeError(f"Ollama HTTP {e.code}: {e.read().decode(errors='replace')[:300]}") from e
     except URLError as e: raise RuntimeError(f"Cannot reach Ollama: {e.reason}") from e
     text=data.get("response","").strip()
@@ -46,7 +46,7 @@ def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id") or hashlib.sha1(str(s.get("headline","")).lower().encode()).hexdigest()[:16]
-        out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:350],"historical":(research or {}).get(sid,[])[:3]})
+        out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:300],"historical":(research or {}).get(sid,[])[:3]})
     return out
 
 def _parse_batch(text,items):
@@ -63,30 +63,31 @@ def _parse_batch(text,items):
 
 def _one(item,today):
     prompt=f"Today {today}. Explain ONE news story using ONLY evidence. Return exactly these lines: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; LEARN:. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse_batch(_call_ollama(prompt,num_predict=150),[item])[0]
+    return _parse_batch(_call_ollama(prompt,num_predict=120,timeout=90),[item])[0]
+
+def _batch(items,today,batch_no):
+    prompt=f"Today {today}. Explain exactly {len(items)} news stories using ONLY supplied evidence. For each output exactly:\n### STORY N\nWHAT: short\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: short\nWHY IMPORTANT: short\nLEARN: one useful context sentence\nLATEST: short. No JSON. Evidence: {json.dumps(items,ensure_ascii=False)}"
+    print(f"[AI] batch {batch_no}: {len(items)} stories",flush=True)
+    return _parse_batch(_call_ollama(prompt,num_predict=max(500,len(items)*100),timeout=180),items)
 
 def _extras(evidence,today):
     compact=[{"headline":x["headline"],"summary":x["summary"]} for x in evidence]
     p=f"Today {today}. Based ONLY on supplied evidence, write plain text sections: CURRENT AFFAIRS (2 points); CULTURE (only if evidence supports it); RELIGION (only if evidence supports it); VOCABULARY (3 word - meaning pairs); REVISION (2 questions); QUIZ (2 questions with answers). Do not invent. Evidence: {json.dumps(compact,ensure_ascii=False)}"
-    return _call_ollama(p,num_predict=260)
+    return _call_ollama(p,num_predict=220,timeout=120)
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    # One batched Qwen request is much faster on CPU than 12 sequential requests.
-    prompt=f"Today {today}. Explain all {len(evidence)} stories using ONLY supplied evidence. For each story output exactly:\n### STORY N\nWHAT: one short sentence\nWHO: names if stated\nWHEN: date/time if stated\nWHERE: place if stated\nWHY: one short sentence\nWHY IMPORTANT: one short sentence\nLEARN: one useful context sentence\nLATEST: one short sentence. No JSON. Evidence: {json.dumps(evidence,ensure_ascii=False)}"
-    try:
-        print(f"[AI] batch 1/{len(evidence)}",flush=True); stories=_parse_batch(_call_ollama(prompt,num_predict=min(1600,max(900,len(evidence)*110))),evidence)
-        if len(stories)!=len(evidence): raise RuntimeError("batch parser returned wrong story count")
-    except Exception as exc:
-        print(f"[WARN] batch AI failed: {exc}; using per-story fallback",flush=True)
-        for i,item in enumerate(evidence,1):
-            print(f"[AI] fallback story {i}/{len(evidence)}",flush=True)
-            try: stories.append(_one(item,today))
-            except Exception as err: print(f"[WARN] story {i} AI failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
+    for start in range(0,len(evidence),4):
+        items=evidence[start:start+4]
+        try: stories.extend(_batch(items,today,start//4+1))
+        except Exception as exc:
+            print(f"[WARN] batch {start//4+1} failed: {exc}; using per-story fallback",flush=True)
+            for item in items:
+                try: stories.append(_one(item,today))
+                except Exception as err: print(f"[WARN] story fallback failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
     try: extra=_extras(evidence,today)
     except Exception as exc: print(f"[WARN] learning extras failed: {exc}",flush=True); extra=""
     return {"top_stories":stories[:12],"learning_text":extra}
-
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles,12),articles,previous,today,research)
 def generate_text(prompt,system="You are a factual knowledge teacher. Use only supplied data; do not invent."): return _call_ollama(prompt,system=system)
 def configured_model(): return _model_name()
