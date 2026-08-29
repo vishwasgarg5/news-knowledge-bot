@@ -67,18 +67,11 @@ def _one(item,today):
 
 def _batch(items,today,batch_no):
     prompt=f"Today {today}. Explain exactly {len(items)} news stories using ONLY supplied evidence. For each output exactly:\n### STORY N\nWHAT: short\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: short\nWHY IMPORTANT: short\nLEARN: one useful context sentence\nLATEST: short. No JSON. Evidence: {json.dumps(items,ensure_ascii=False)}"
-    print(f"[AI] batch {batch_no}: {len(items)} stories",flush=True)
-    return _parse_batch(_call_ollama(prompt,num_predict=max(320,len(items)*70),timeout=150),items)
-
-def _extras(evidence,today):
-    compact=[{"headline":x["headline"],"summary":x["summary"]} for x in evidence]
-    p=f"Today {today}. Based ONLY on supplied evidence, write plain text sections: CURRENT AFFAIRS (2 points); CULTURE (only if evidence supports it); RELIGION (only if evidence supports it); VOCABULARY (3 word - meaning pairs); REVISION (2 questions); QUIZ (2 questions with answers). Do not invent. Evidence: {json.dumps(compact,ensure_ascii=False)}"
-    return _call_ollama(p,num_predict=180,timeout=90)
+    print(f"[AI] deep batch {batch_no}: {len(items)} stories",flush=True)
+    return _parse_batch(_call_ollama(prompt,num_predict=max(260,len(items)*60),timeout=120),items)
 
 def generate_briefing(selected,articles,previous,today,research=None):
-    evidence=_evidence(selected,articles,research); stories=[]
-    # Qwen is used only for the five highest-priority stories; the remaining seven use source-backed deterministic summaries.
-    deep=evidence[:5]; light=evidence[5:]
+    evidence=_evidence(selected,articles,research); stories=[]; deep=evidence[:5]; light=evidence[5:]
     for start in range(0,len(deep),2):
         items=deep[start:start+2]
         try: stories.extend(_batch(items,today,start//2+1))
@@ -89,10 +82,7 @@ def generate_briefing(selected,articles,previous,today,research=None):
                 except Exception as err: print(f"[WARN] story fallback failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
     for item in light:
         stories.append({"story_id":item["story_id"],"headline":item["headline"],"importance":item["importance"],"category":item["category"],"what":item["summary"] or item["headline"],"who":"See source headline/summary","when":"See source","where":"See source","why":"Reported by the supplied source.","why_important":"Selected among today's priority news.","learn":"Read the linked source for full context.","latest_update":item["summary"],"timeline":item["historical"],"sources":[item["url"]],"people":[],"places":[],"concepts":[],"vocabulary":[]})
-    stories=stories[:12]
-    try: extra=_extras(evidence,today)
-    except Exception as exc: print(f"[WARN] learning extras failed: {exc}",flush=True); extra=""
-    return {"top_stories":stories,"learning_text":extra}
+    return {"top_stories":stories[:12],"learning_text":""}
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles,12),articles,previous,today,research)
 def generate_text(prompt,system="You are a factual knowledge teacher. Use only supplied data; do not invent."): return _call_ollama(prompt,system=system)
 def configured_model(): return _model_name()
