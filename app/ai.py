@@ -56,14 +56,14 @@ def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id") or hashlib.sha1(str(s.get("headline","")).lower().encode()).hexdigest()[:16]
-        depth=8 if float(s.get("importance",0))>=80 else (5 if float(s.get("importance",0))>=65 else 3)
+        # Expensive deep research is reserved for the most important stories.
+        rank=int(s.get("rank",99)); importance=float(s.get("importance",0)); depth=8 if rank<=3 or importance>=85 else (4 if rank<=8 or importance>=65 else 1)
         out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:500],"related_articles":_related(s,articles,depth),"historical":(research or {}).get(sid,[])[:5],"research_depth":depth})
     return out
 
 def _parse_batch(text,items):
     blocks=re.split(r"\n\s*###\s*STORY\s+\d+\s*\n",text,flags=re.I); blocks=[b.strip() for b in blocks if b.strip()]
-    result=[]
-    keys={"what","who","when","where","why","why_important","learn","latest","change","perspective","next","background","entities"}
+    result=[]; keys={"what","who","when","where","why","why_important","learn","latest","change","perspective","next","background","entities"}
     for i,item in enumerate(items):
         block=blocks[i] if i<len(blocks) else ""; values={}
         for line in block.splitlines():
@@ -74,22 +74,22 @@ def _parse_batch(text,items):
     return result
 
 def _one(item,today):
-    prompt=f"Today {today}. Deeply explain ONE important news topic using ONLY supplied evidence. Use 8-12 concise but informative sentences overall. Return exactly these lines: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; BACKGROUND:; CHANGE:; PERSPECTIVE:; NEXT:; ENTITIES:; LEARN:; LATEST:. Compare related supplied articles when they differ. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse_batch(_call_ollama(prompt,num_predict=320,timeout=120),[item])[0]
+    prompt=f"Today {today}. Give a concise but useful briefing for ONE news topic using ONLY supplied evidence. Return exactly: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; BACKGROUND:; CHANGE:; PERSPECTIVE:; NEXT:; ENTITIES:; LEARN:; LATEST:. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    return _parse_batch(_call_ollama(prompt,num_predict=220,timeout=90),[item])[0]
 
 def _batch(items,today,batch_no):
-    prompt=f"Today {today}. Deeply explain exactly {len(items)} important news topics using ONLY supplied evidence. Related articles are provided to increase depth. For each output exactly:\n### STORY N\nWHAT: 2-3 sentences\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: 2 sentences\nWHY IMPORTANT: 2 sentences\nBACKGROUND: useful historical context from evidence\nCHANGE: what is new today versus supplied history\nPERSPECTIVE: compare supplied sources; do not invent opinions\nNEXT: what is explicitly indicated or say Not stated\nENTITIES: key people/organizations/places\nLEARN: 1-2 useful knowledge sentences\nLATEST: latest development. No JSON and no unsupported facts. Evidence: {json.dumps(items,ensure_ascii=False)}"
-    print(f"[AI] deep research batch {batch_no}: {len(items)} topics",flush=True)
-    return _parse_batch(_call_ollama(prompt,num_predict=max(420,len(items)*180),timeout=180),items)
+    prompt=f"Today {today}. Explain exactly {len(items)} news topics using ONLY supplied evidence. Related articles are provided. For each output exactly:\n### STORY N\nWHAT: 2 sentences\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: 1-2 sentences\nWHY IMPORTANT: 1-2 sentences\nBACKGROUND: context from evidence\nCHANGE: what is new today versus supplied history\nPERSPECTIVE: compare supplied sources; do not invent opinions\nNEXT: explicit indicated next step or Not stated\nENTITIES: key people/organizations/places\nLEARN: 1 sentence\nLATEST: latest development. No unsupported facts. Evidence: {json.dumps(items,ensure_ascii=False)}"
+    print(f"[AI] research batch {batch_no}: {len(items)} topics",flush=True)
+    return _parse_batch(_call_ollama(prompt,num_predict=max(300,len(items)*120),timeout=120),items)
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    # Deep research for all selected stories, with larger evidence for higher-impact topics.
-    for start in range(0,len(evidence),2):
-        items=evidence[start:start+2]
-        try: stories.extend(_batch(items,today,start//2+1))
+    # V3.1 speed strategy: 3 deep, 5 medium, 4 concise. Fewer Ollama calls while preserving depth for the most important stories.
+    groups=[evidence[:3],evidence[3:8],evidence[8:12]]
+    for batch_no,items in enumerate([g for g in groups if g],1):
+        try: stories.extend(_batch(items,today,batch_no))
         except Exception as exc:
-            print(f"[WARN] deep research batch {start//2+1} failed: {exc}; using per-topic fallback",flush=True)
+            print(f"[WARN] research batch {batch_no} failed: {exc}; using per-topic fallback",flush=True)
             for item in items:
                 try: stories.append(_one(item,today))
                 except Exception as err: print(f"[WARN] topic fallback failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
