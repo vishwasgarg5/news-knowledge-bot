@@ -1,54 +1,71 @@
-# News Knowledge Bot
+# News Knowledge Bot V4
 
-An automated, zero-input Telegram morning briefing designed to build long-term knowledge, not just deliver headlines.
+Automated **Telegram news + knowledge system**. It turns daily news into useful, long-term knowledge instead of just sending headlines.
 
-## What it does
+## Daily
 
-Every morning the system collects news from multiple RSS sources, removes duplicates, clusters articles into stories, scores importance, and creates a concise learning-oriented briefing.
+- 🌅 **06:00 IST** — 12 top stories
+- 🌆 **16:00 IST** — 12 additional stories
+- 🎯 Target: **24 unique stories/day**
+- 📱 **1 story = 1 Telegram message**
+- 🔒 Same-day topic deduplication
+- 🧠 Story updates, timelines and historical context
 
-The briefing covers:
+## Learning
 
-- Top 10–15 news stories
-- Who / what / when / where / why
-- Previous major headlines and story timelines
-- Current affairs
-- India, world, economy, defence, science/AI/technology
-- Culture, heritage, religion and philosophy (neutral/educational)
-- People, places and concepts
-- Cause → effect / "connect the dots"
-- News-based vocabulary with simple English and Hindi
-- Spaced-repetition revision
-- Daily quiz
-- Breaking-news threshold alerts
+Each important story can update:
 
-Persistent memory is stored in CSV files committed to GitHub. No local database is required.
+- 📰 Current affairs
+- 📚 Knowledge cards
+- 📖 Vocabulary
+- ❓ Quiz history
+- 🔗 Related topics and timelines
+- 🧠 Connect-the-dots knowledge
+
+## Knowledge Review
+
+- Weekly and monthly revision
+- Questions with **answers immediately below**
+- Why-it-matters explanations
+- Current-affairs revision
+- Vocabulary revision
+- Quick-memory section
+- Spaced-repetition friendly knowledge history
 
 ## Architecture
 
-`RSS feeds → normalize → deduplicate → story clustering → importance scoring → AI research/explanation → knowledge update → Telegram messages → CSV persistence → GitHub commit`
+`RSS/news → normalize → deduplicate → story selection → research → AI briefing → Telegram → GitHub memory → knowledge review`
 
-## Required GitHub Actions secrets
+AI runs locally with **Ollama + Qwen**. Persistent memory is stored in GitHub CSV files; no local database is required.
+
+## GitHub Actions
+
+Separate workflows keep scheduling simple:
+
+- `.github/workflows/morning_news.yml` — 06:00 IST
+- `.github/workflows/afternoon_news.yml` — 16:00 IST
+- Knowledge review workflows run separately on their scheduled review cycle.
+
+Both daily workflows support manual execution.
+
+## Secrets
+
+Required:
 
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
-- `OPENAI_API_KEY`
 
-Optional:
-
-- `OPENAI_MODEL` (default: `gpt-5.6-mini`)
-
-## Morning schedule
-
-The workflow is scheduled for 07:00 IST (01:30 UTC) and can also be started manually from GitHub Actions.
+No OpenAI API key is required for the current local-Ollama setup.
 
 ## Local test
 
 ```bash
 pip install -r requirements.txt
-export TELEGRAM_BOT_TOKEN='...'
-export TELEGRAM_CHAT_ID='...'
-export OPENAI_API_KEY='...'
 python -m app.main
 ```
 
-The bot intentionally does not require daily user input. Telegram commands are optional helpers for later phases.
+Set the Telegram and Ollama environment variables when testing locally.
+
+## V4 goal
+
+**Read less. Learn more. Remember what matters.**
