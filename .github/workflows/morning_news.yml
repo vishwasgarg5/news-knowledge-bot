@@ -1,0 +1,68 @@
+name: Morning News Knowledge Brief
+
+on:
+  schedule:
+    - cron: '30 0 * * *' # 06:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+concurrency:
+  group: morning-news-knowledge
+  cancel-in-progress: false
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12', cache: pip}
+      - run: pip install -r requirements.txt
+      - name: Configure Ollama cache
+        run: |
+          echo "OLLAMA_MODELS=${{ github.workspace }}/.ollama/models" >> "$GITHUB_ENV"
+          mkdir -p "$GITHUB_WORKSPACE/.ollama/models"
+      - uses: actions/cache@v4
+        with:
+          path: .ollama/models
+          key: ollama-qwen2.5-7b-v4-${{ runner.os }}
+          restore-keys: ollama-qwen2.5-7b-v4-
+      - name: Install and start Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama || true
+          pkill -f 'ollama serve' || true
+          OLLAMA_MODELS="$OLLAMA_MODELS" nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in {1..45}; do curl -sf http://localhost:11434/api/tags >/dev/null && break; sleep 1; done
+          curl -sf http://localhost:11434/api/tags >/dev/null
+      - name: Ensure Qwen
+        run: |
+          if ! ollama list | awk '{print $1}' | grep -Fxq 'qwen2.5:7b'; then ollama pull qwen2.5:7b; fi
+      - name: Generate morning briefing
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          AI_PROVIDER: ollama
+          AI_MODEL: qwen2.5:7b
+          OLLAMA_MODEL: qwen2.5:7b
+          OLLAMA_URL: http://localhost:11434/api/generate
+          AI_CONTEXT: '2048'
+          AI_MAX_OUTPUT: '450'
+          AI_TIMEOUT_SECONDS: '90'
+          RUN_SLOT: morning
+        run: python -m app.main
+      - if: failure()
+        run: cat /tmp/ollama.log || true
+      - name: Commit knowledge safely
+        if: success()
+        run: |
+          git config user.name "news-knowledge-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Update morning knowledge memory"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
