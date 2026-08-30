@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+# Prevent two runs from writing knowledge memory to main simultaneously.
+concurrency:
+  group: daily-news-knowledge-main
+  cancel-in-progress: false
+
 jobs:
   morning-brief:
     runs-on: ubuntu-latest
@@ -15,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -85,11 +92,14 @@ jobs:
       - name: Show Ollama log on failure
         if: failure()
         run: cat /tmp/ollama.log || true
-      - name: Commit updated knowledge CSVs
+      - name: Commit updated knowledge CSVs safely
         if: success()
         run: |
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
           git diff --cached --quiet || git commit -m "Update daily knowledge memory"
-          git push
+          # Rebase onto the latest main so manual/queued runs cannot push stale HEAD.
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
