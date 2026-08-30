@@ -14,31 +14,49 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: knowledge-review
+  cancel-in-progress: false
+
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: pip
-      - run: pip install -r requirements.txt
-      - name: Cache Ollama models
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Configure persistent Ollama model directory
+        run: |
+          echo "OLLAMA_MODELS=${{ github.workspace }}/.ollama/models" >> "$GITHUB_ENV"
+          mkdir -p "${{ github.workspace }}/.ollama/models"
+      - name: Restore Ollama model cache
         uses: actions/cache@v4
         with:
-          path: ~/.ollama/models
-          key: ollama-qwen2.5-7b-v1
+          path: .ollama/models
+          key: ollama-qwen2.5-7b-v3-${{ runner.os }}
+          restore-keys: |
+            ollama-qwen2.5-7b-v3-${{ runner.os }}-
+            ollama-qwen2.5-7b-v3-
       - name: Install Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
           ollama --version
-      - name: Start Ollama
+      - name: Start Ollama using cached directory
         run: |
-          nohup ollama serve > /tmp/ollama.log 2>&1 &
-          for i in {1..30}; do
-            curl -sf http://localhost:11434/api/tags >/dev/null && break
+          sudo systemctl stop ollama || true
+          pkill -f 'ollama serve' || true
+          OLLAMA_MODELS="$OLLAMA_MODELS" nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in {1..45}; do
+            if curl -sf http://localhost:11434/api/tags >/dev/null; then break; fi
             sleep 1
           done
           curl -sf http://localhost:11434/api/tags >/dev/null
@@ -49,6 +67,7 @@ jobs:
           else
             ollama pull qwen2.5:7b
           fi
+          ollama list
       - name: Determine review type
         id: type
         shell: bash
@@ -67,6 +86,9 @@ jobs:
           AI_MODEL: qwen2.5:7b
           OLLAMA_MODEL: qwen2.5:7b
           OLLAMA_URL: http://localhost:11434/api/generate
+          AI_CONTEXT: '2048'
+          AI_MAX_OUTPUT: '350'
+          AI_TIMEOUT_SECONDS: '120'
         run: python -m app.review "${{ steps.type.outputs.type }}"
       - name: Show Ollama log on failure
         if: failure()
