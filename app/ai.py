@@ -2,12 +2,12 @@ from __future__ import annotations
 import hashlib,json,os,re
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
-SYSTEM="""You are a rigorous news editor and knowledge teacher. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Be concise."""
+SYSTEM="""You are a rigorous news editor and knowledge teacher. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Produce useful, structured explanations."""
 DEFAULT_MODEL="qwen2.5:7b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 def _model_name(): return os.getenv("AI_MODEL","").strip() or os.getenv("OLLAMA_MODEL","").strip() or DEFAULT_MODEL
 def _ollama_url(): return os.getenv("OLLAMA_URL",DEFAULT_OLLAMA_URL).strip() or DEFAULT_OLLAMA_URL
 def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
-    payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"10m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","2048")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","500"))}}
+    payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"10m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","3072")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","700"))}}
     req=Request(_ollama_url(),data=json.dumps(payload,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
     try:
         with urlopen(req,timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","120"))) as r: data=json.loads(r.read().decode())
@@ -42,46 +42,57 @@ def select_stories(articles,top_n=12):
         if len(selected)>=top_n: break
     return selected
 
+def _related(item,articles,limit):
+    q=_words(item.get("headline","")+" "+item.get("category","") ); scored=[]
+    for a in articles:
+        title=str(a.get("title","") or ""); url=str(a.get("url","") or "")
+        if not title or url==item.get("url"): continue
+        overlap=len(q&_words(title)); ratio=overlap/max(1,len(q|_words(title)))
+        if overlap>=2: scored.append((ratio,overlap,a))
+    scored.sort(key=lambda x:(-x[0],-x[1],str(x[2].get("published",""))))
+    return [{"title":str(a.get("title",""))[:240],"summary":str(a.get("summary","") or "")[:500],"source":a.get("source",""),"url":a.get("url","")} for _,_,a in scored[:limit]]
+
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id") or hashlib.sha1(str(s.get("headline","")).lower().encode()).hexdigest()[:16]
-        out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:300],"historical":(research or {}).get(sid,[])[:3]})
+        depth=8 if float(s.get("importance",0))>=80 else (5 if float(s.get("importance",0))>=65 else 3)
+        out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:500],"related_articles":_related(s,articles,depth),"historical":(research or {}).get(sid,[])[:5],"research_depth":depth})
     return out
 
 def _parse_batch(text,items):
     blocks=re.split(r"\n\s*###\s*STORY\s+\d+\s*\n",text,flags=re.I); blocks=[b.strip() for b in blocks if b.strip()]
     result=[]
+    keys={"what","who","when","where","why","why_important","learn","latest","change","perspective","next","background","entities"}
     for i,item in enumerate(items):
         block=blocks[i] if i<len(blocks) else ""; values={}
         for line in block.splitlines():
             if ":" in line:
                 k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip()
-                if k in {"what","who","when","where","why","why_important","learn","latest"} and v: values[k]=v
-        result.append({"story_id":item["story_id"],"headline":item["headline"],"importance":item["importance"],"category":item["category"],"what":values.get("what",item["summary"]),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("why_important","Selected by importance score"),"learn":values.get("learn",""),"latest_update":values.get("latest",item["summary"]),"timeline":item.get("historical",[]),"sources":[item["url"]],"people":[],"places":[],"concepts":[],"vocabulary":[]})
+                if k in keys and v: values[k]=v
+        result.append({"story_id":item["story_id"],"headline":item["headline"],"importance":item["importance"],"category":item["category"],"what":values.get("what",item["summary"]),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("why_important","Selected by importance score"),"learn":values.get("learn",""),"latest_update":values.get("latest",item["summary"]),"change_since_yesterday":values.get("change",""),"background":values.get("background",""),"perspective":values.get("perspective",""),"next":values.get("next",""),"entities":values.get("entities",""),"timeline":item.get("historical",[]),"related_articles":item.get("related_articles",[]),"sources":[item["url"]]+[x["url"] for x in item.get("related_articles",[]) if x.get("url")],"people":[],"places":[],"concepts":[],"vocabulary":[]})
     return result
 
 def _one(item,today):
-    prompt=f"Today {today}. Explain ONE news story using ONLY evidence. Return exactly these lines: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; LEARN:. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse_batch(_call_ollama(prompt,num_predict=120,timeout=90),[item])[0]
+    prompt=f"Today {today}. Deeply explain ONE important news topic using ONLY supplied evidence. Use 8-12 concise but informative sentences overall. Return exactly these lines: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; BACKGROUND:; CHANGE:; PERSPECTIVE:; NEXT:; ENTITIES:; LEARN:; LATEST:. Compare related supplied articles when they differ. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    return _parse_batch(_call_ollama(prompt,num_predict=320,timeout=120),[item])[0]
 
 def _batch(items,today,batch_no):
-    prompt=f"Today {today}. Explain exactly {len(items)} news stories using ONLY supplied evidence. For each output exactly:\n### STORY N\nWHAT: short\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: short\nWHY IMPORTANT: short\nLEARN: one useful context sentence\nLATEST: short. No JSON. Evidence: {json.dumps(items,ensure_ascii=False)}"
-    print(f"[AI] deep batch {batch_no}: {len(items)} stories",flush=True)
-    return _parse_batch(_call_ollama(prompt,num_predict=max(260,len(items)*60),timeout=120),items)
+    prompt=f"Today {today}. Deeply explain exactly {len(items)} important news topics using ONLY supplied evidence. Related articles are provided to increase depth. For each output exactly:\n### STORY N\nWHAT: 2-3 sentences\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: 2 sentences\nWHY IMPORTANT: 2 sentences\nBACKGROUND: useful historical context from evidence\nCHANGE: what is new today versus supplied history\nPERSPECTIVE: compare supplied sources; do not invent opinions\nNEXT: what is explicitly indicated or say Not stated\nENTITIES: key people/organizations/places\nLEARN: 1-2 useful knowledge sentences\nLATEST: latest development. No JSON and no unsupported facts. Evidence: {json.dumps(items,ensure_ascii=False)}"
+    print(f"[AI] deep research batch {batch_no}: {len(items)} topics",flush=True)
+    return _parse_batch(_call_ollama(prompt,num_predict=max(420,len(items)*180),timeout=180),items)
 
 def generate_briefing(selected,articles,previous,today,research=None):
-    evidence=_evidence(selected,articles,research); stories=[]; deep=evidence[:5]; light=evidence[5:]
-    for start in range(0,len(deep),2):
-        items=deep[start:start+2]
+    evidence=_evidence(selected,articles,research); stories=[]
+    # Deep research for all selected stories, with larger evidence for higher-impact topics.
+    for start in range(0,len(evidence),2):
+        items=evidence[start:start+2]
         try: stories.extend(_batch(items,today,start//2+1))
         except Exception as exc:
-            print(f"[WARN] deep batch {start//2+1} failed: {exc}; using per-story fallback",flush=True)
+            print(f"[WARN] deep research batch {start//2+1} failed: {exc}; using per-topic fallback",flush=True)
             for item in items:
                 try: stories.append(_one(item,today))
-                except Exception as err: print(f"[WARN] story fallback failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
-    for item in light:
-        stories.append({"story_id":item["story_id"],"headline":item["headline"],"importance":item["importance"],"category":item["category"],"what":item["summary"] or item["headline"],"who":"See source headline/summary","when":"See source","where":"See source","why":"Reported by the supplied source.","why_important":"Selected among today's priority news.","learn":"Read the linked source for full context.","latest_update":item["summary"],"timeline":item["historical"],"sources":[item["url"]],"people":[],"places":[],"concepts":[],"vocabulary":[]})
+                except Exception as err: print(f"[WARN] topic fallback failed: {err}",flush=True); stories.append(_parse_batch("",[item])[0])
     return {"top_stories":stories[:12],"learning_text":""}
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles,12),articles,previous,today,research)
 def generate_text(prompt,system="You are a factual knowledge teacher. Use only supplied data; do not invent."): return _call_ollama(prompt,system=system)
