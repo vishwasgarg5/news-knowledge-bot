@@ -21,7 +21,8 @@ def topic_id(headline):
     words=[w for w in re.findall(r"[A-Za-z]{4,}",str(headline).lower()) if w not in {"today","latest","says","after","amid","over","news","india"}]
     return hashlib.sha1((" ".join(words[:10]) or str(headline).lower()).encode()).hexdigest()[:16]
 def yesterday_changes(stories,history,today):
-    yesterday=(datetime.fromisoformat(today)-timedelta(days=1)).date().isoformat(); prev={re.sub(r"\W+"," ",str(r.get("headline","")).lower()).strip() for r in history if str(r.get("date",""))==yesterday}
+    yesterday=(datetime.fromisoformat(today)-timedelta(days=1)).date().isoformat()
+    prev={re.sub(r"\W+"," ",str(r.get("headline","")).lower()).strip() for r in history if str(r.get("date",""))==yesterday}
     for s in stories:
         h=re.sub(r"\W+"," ",str(s.get("headline","")).lower()).strip(); s["change_since_yesterday"]="New topic today" if h not in prev else "Continuing story"
     return stories
@@ -29,10 +30,10 @@ def yesterday_changes(stories,history,today):
 def build_messages(result,today):
     msgs=[f"🧠 <b>DAILY NEWS + KNOWLEDGE BRIEF</b>\n{today}\n\nAutomatic morning briefing • zero daily input"]
     for i,s in enumerate(result.get("top_stories",[]),1):
-        text=(f"🔥 <b>STORY {i}/12</b>\n\n<b>{s.get('headline','')}</b> — {s.get('importance',0)}/100\n\n"
-              f"<b>What:</b> {s.get('what','')}\n<b>Who:</b> {s.get('who','')}\n<b>When:</b> {s.get('when','')}\n"
-              f"<b>Where:</b> {s.get('where','')}\n<b>Why:</b> {s.get('why','')}\n<b>Why important:</b> {s.get('why_important','')}\n"
-              f"<b>Latest:</b> {s.get('latest_update','')}\n<b>Change:</b> {s.get('change_since_yesterday','')}\n")
+        text=(f"🔥 <b>STORY {i}/{len(result.get('top_stories',[]))}</b>\n\n<b>{s.get('headline','')}</b> — {s.get('importance',0)}/100\n\n"
+              f"<b>What:</b> {s.get('what','')}\n<b>Who:</b> {s.get('who','')}\n<b>When:</b> {s.get('when','')}\n<b>Where:</b> {s.get('where','')}\n"
+              f"<b>Why:</b> {s.get('why','')}\n<b>Why important:</b> {s.get('why_important','')}\n<b>Latest:</b> {s.get('latest_update','')}\n"
+              f"<b>Change:</b> {s.get('change_since_yesterday','')}\n")
         if s.get("timeline"):
             past=[x.get("title") or x.get("headline") or x.get("event","") for x in s["timeline"][:3]]; past=[x for x in past if x]
             if past: text += "<b>Past:</b> " + " | ".join(past) + "\n"
@@ -59,8 +60,11 @@ def main():
     print("="*60); print("🧠 NEWS KNOWLEDGE BOT — MORNING RUN"); print("="*60); log("Environment","PASS",f"Python runtime ready; test_mode={TEST_MODE}"); log("AI provider","INFO",f"Local Ollama; model={configured_model()}"); tg=bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID); log("Credentials","PASS" if tg else "SKIP","Telegram configured" if tg else "Telegram secrets missing"); ensure_data(DATA); log("CSV storage","PASS","All knowledge CSV schemas validated")
     cfg=load_sources(); limits=cfg.get("limits",{}); articles=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",30),limits.get("max_total_articles",500)); log("News collection","PASS" if articles else "FAIL",f"Collected {len(articles)} articles"); today=datetime.now(IST).date().isoformat(); previous=history_snapshot(); daily_learning(); log("Learning memory","PASS",f"Loaded {sum(len(v) for v in previous.values())} historical rows across {len(previous)} CSVs"); selected=select_stories([a.__dict__ for a in articles],top_n=min(12,limits.get("top_stories",12))); selected=yesterday_changes(selected,previous.get("news_history",[]),today); log("Story selection","PASS",f"Selected {len(selected)} priority stories"); historical=research_stories(selected,previous.get("news_history",[])); stats=historical.pop("_stats",{"ok":0,"memory_ok":0,"failed":len(selected),"total":len(selected),"status":"FAIL"}); log("Historical research",stats["status"],f"Evidence {stats['ok']}/{stats['total']}; GitHub memory {stats['memory_ok']}"); result=generate_briefing(selected,[a.__dict__ for a in articles],previous,today,historical); result["research_stats"]=stats; review_rows=read_rows(DATA/"quiz_history.csv"); result["review_questions"]=[r.get("question","") for r in review_rows[-5:][::-1]]; log("AI final briefing","PASS",f"Generated {len(result.get('top_stories',[]))} stories"); persist(result,today); log("CSV persistence","PASS","Long-term news, topic timeline, current affairs and review memory updated")
     if tg:
-        for message in build_messages(result,today): send_text(message)
-        log("Telegram delivery","PASS","One story per Telegram message + supporting knowledge messages sent")
+        messages=build_messages(result,today)
+        for idx,message in enumerate(messages):
+            send_text(message)
+            log("Telegram message","PASS",f"Sent message {idx+1}/{len(messages)}" if idx else "Sent briefing header")
+        log("Telegram delivery","PASS",f"Sent {len(result.get('top_stories',[]))} story messages individually + supporting knowledge messages")
     else: log("Telegram delivery","SKIP","Telegram secrets not configured")
     log("FINAL","PASS" if stats["status"]=="PASS" else "WARN","Morning knowledge pipeline completed"+(" with partial historical context" if stats["status"]!="PASS" else ""))
 if __name__=="__main__": main()
