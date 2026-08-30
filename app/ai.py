@@ -18,6 +18,8 @@ def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
     return text
 
 def _words(text): return set(re.findall(r"[a-zA-Z]{4,}",text.lower()))
+def _similar(a,b):
+    wa,wb=_words(a),_words(b); return len(wa&wb)/max(1,len(wa|wb))
 def _deterministic_score(a):
     title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","")).lower(),str(a.get("category","")).lower(); text=f"{title} {summary}".lower(); score=35.0
     if any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib")): score+=12
@@ -25,11 +27,12 @@ def _deterministic_score(a):
     for term,boost in {"government":8,"supreme court":10,"parliament":9,"election":9,"prime minister":9,"president":8,"war":10,"conflict":9,"ceasefire":10,"terror":8,"defence":8,"military":8,"economy":7,"inflation":7,"interest rate":7,"rbi":9,"budget":8,"trade":7,"sanction":8,"nuclear":9,"space":7,"isro":9,"ai":6,"artificial intelligence":7,"climate":7,"earthquake":8,"cyclone":8,"flood":7,"health":6,"vaccine":6,"scam":7,"policy":6}.items():
         if term in text: score+=boost
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
-def select_stories(articles,top_n=12):
-    ranked=[]; seen=[]
+def select_stories(articles,top_n=12,excluded_headlines=None):
+    excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
         title=str(a.get("title","")).strip()
         if not title or not a.get("url"): continue
+        if any(_similar(title,old)>=0.62 for old in excluded): continue
         words=_words(title)
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
@@ -51,19 +54,15 @@ def _related(item,articles,limit):
         if overlap>=2: scored.append((ratio,overlap,a))
     scored.sort(key=lambda x:(-x[0],-x[1],str(x[2].get("published",""))))
     return [{"title":str(a.get("title",""))[:240],"summary":str(a.get("summary","") or "")[:500],"source":a.get("source",""),"url":a.get("url","")} for _,_,a in scored[:limit]]
-
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id") or hashlib.sha1(str(s.get("headline","")).lower().encode()).hexdigest()[:16]
-        # Expensive deep research is reserved for the most important stories.
         rank=int(s.get("rank",99)); importance=float(s.get("importance",0)); depth=8 if rank<=3 or importance>=85 else (4 if rank<=8 or importance>=65 else 1)
         out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:500],"related_articles":_related(s,articles,depth),"historical":(research or {}).get(sid,[])[:5],"research_depth":depth})
     return out
-
 def _parse_batch(text,items):
-    blocks=re.split(r"\n\s*###\s*STORY\s+\d+\s*\n",text,flags=re.I); blocks=[b.strip() for b in blocks if b.strip()]
-    result=[]; keys={"what","who","when","where","why","why_important","learn","latest","change","perspective","next","background","entities"}
+    blocks=re.split(r"\n\s*###\s*STORY\s+\d+\s*\n",text,flags=re.I); blocks=[b.strip() for b in blocks if b.strip()]; result=[]; keys={"what","who","when","where","why","why_important","learn","latest","change","perspective","next","background","entities"}
     for i,item in enumerate(items):
         block=blocks[i] if i<len(blocks) else ""; values={}
         for line in block.splitlines():
@@ -72,19 +71,14 @@ def _parse_batch(text,items):
                 if k in keys and v: values[k]=v
         result.append({"story_id":item["story_id"],"headline":item["headline"],"importance":item["importance"],"category":item["category"],"what":values.get("what",item["summary"]),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("why_important","Selected by importance score"),"learn":values.get("learn",""),"latest_update":values.get("latest",item["summary"]),"change_since_yesterday":values.get("change",""),"background":values.get("background",""),"perspective":values.get("perspective",""),"next":values.get("next",""),"entities":values.get("entities",""),"timeline":item.get("historical",[]),"related_articles":item.get("related_articles",[]),"sources":[item["url"]]+[x["url"] for x in item.get("related_articles",[]) if x.get("url")],"people":[],"places":[],"concepts":[],"vocabulary":[]})
     return result
-
 def _one(item,today):
-    prompt=f"Today {today}. Give a concise but useful briefing for ONE news topic using ONLY supplied evidence. Return exactly: WHAT:; WHO:; WHEN:; WHERE:; WHY:; WHY IMPORTANT:; BACKGROUND:; CHANGE:; PERSPECTIVE:; NEXT:; ENTITIES:; LEARN:; LATEST:. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    prompt=f"Today {today}. Give a concise but useful briefing for ONE news topic using ONLY supplied evidence. Return exactly these fields: WHAT; WHO; WHEN; WHERE; WHY; WHY IMPORTANT; BACKGROUND; CHANGE; PERSPECTIVE; NEXT; ENTITIES; LEARN; LATEST. Evidence: {json.dumps(item,ensure_ascii=False)}"
     return _parse_batch(_call_ollama(prompt,num_predict=220,timeout=90),[item])[0]
-
 def _batch(items,today,batch_no):
     prompt=f"Today {today}. Explain exactly {len(items)} news topics using ONLY supplied evidence. Related articles are provided. For each output exactly:\n### STORY N\nWHAT: 2 sentences\nWHO: names if stated\nWHEN: date if stated\nWHERE: place if stated\nWHY: 1-2 sentences\nWHY IMPORTANT: 1-2 sentences\nBACKGROUND: context from evidence\nCHANGE: what is new today versus supplied history\nPERSPECTIVE: compare supplied sources; do not invent opinions\nNEXT: explicit indicated next step or Not stated\nENTITIES: key people/organizations/places\nLEARN: 1 sentence\nLATEST: latest development. No unsupported facts. Evidence: {json.dumps(items,ensure_ascii=False)}"
-    print(f"[AI] research batch {batch_no}: {len(items)} topics",flush=True)
-    return _parse_batch(_call_ollama(prompt,num_predict=max(300,len(items)*120),timeout=120),items)
-
+    print(f"[AI] research batch {batch_no}: {len(items)} topics",flush=True); return _parse_batch(_call_ollama(prompt,num_predict=max(300,len(items)*120),timeout=120),items)
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    # V3.1 speed strategy: 3 deep, 5 medium, 4 concise. Fewer Ollama calls while preserving depth for the most important stories.
     groups=[evidence[:3],evidence[3:8],evidence[8:12]]
     for batch_no,items in enumerate([g for g in groups if g],1):
         try: stories.extend(_batch(items,today,batch_no))
