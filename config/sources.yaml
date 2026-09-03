@@ -3,6 +3,7 @@ sources:
     - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml
     - https://www.thehindu.com/news/national/feeder/default.rss
     - https://indianexpress.com/section/india/feed/
+    - https://www.pib.gov.in/RssMain.aspx
   world:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://feeds.reuters.com/reuters/worldNews
@@ -22,10 +23,13 @@ sources:
     - https://feeds.bbci.co.uk/sport/rss.xml
 
 limits:
-  max_articles_per_source: 30
-  max_total_articles: 500
+  max_articles_per_source: 40
+  max_total_articles: 700
   top_stories: 12
+  india_stories: 6
+  world_stories: 6
   current_affairs: 15
-  vocabulary: 8
+  vocabulary: 12
   quiz_questions: 5
   timeline_events: 6
+  max_related_articles: 5
