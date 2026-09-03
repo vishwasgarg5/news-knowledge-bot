@@ -1,52 +1,76 @@
-# News Knowledge Bot V4
+# News Knowledge Bot — Stage 5
 
-Automated **Telegram news + knowledge system**. It turns daily news into useful, long-term knowledge instead of just sending headlines.
+Automated **Telegram news + long-term knowledge engine**. It converts important daily news into a simple flowchart-like learning format and continuously builds revision memory.
 
-## Daily
+## Daily briefing
 
-- 🌅 **06:00 IST** — 12 top stories
-- 🌆 **16:00 IST** — 12 additional stories
-- 🎯 Target: **24 unique stories/day**
-- 📱 **1 story = 1 Telegram message**
-- 🔒 Same-day topic deduplication
-- 🧠 Story updates, timelines and historical context
+- 🌅 **06:00 IST** — 12 stories
+- 🌆 **16:00 IST** — 12 stories / updates
+- 🇮🇳 **50% India + 🌍 50% World target** (6 + 6 per run)
+- 📱 One story per Telegram message for easy reading
+- 🔒 Same-topic and same-day deduplication
+- 🔎 Multi-source corroboration and confidence scoring
+- 🔄 Story change tracking and historical timeline
 
-## Learning
+## Memory-first story format
 
-Each important story can update:
+Each story follows:
 
-- 📰 Current affairs
-- 📚 Knowledge cards
-- 📖 Vocabulary
-- ❓ Quiz history
-- 🔗 Related topics and timelines
-- 🧠 Connect-the-dots knowledge
+`EVENT → WHO → WHEN/WHERE → WHY → IMPACT → CHANGE → NEXT → CONNECTION → REMEMBER`
 
-## Knowledge Review
+The goal is to understand the story in seconds and retain the underlying knowledge.
 
-- Weekly and monthly revision
-- Questions with **answers immediately below**
-- Why-it-matters explanations
-- Current-affairs revision
-- Vocabulary revision
-- Quick-memory section
-- Spaced-repetition friendly knowledge history
+## Stage 3 — Intelligence
 
-## Architecture
+- India/World balanced selection
+- Source diversity and credibility weighting
+- Multi-source corroboration from the collected news pool
+- Confidence score
+- Historical story matching
+- Story evolution/change tracking
+- Related-story evidence
+- Knowledge graph relationships
 
-`RSS/news → normalize → deduplicate → story selection → research → AI briefing → Telegram → GitHub memory → knowledge review`
+## Stage 4 — Adaptive learning
 
-AI runs locally with **Ollama + Qwen**. Persistent memory is stored in GitHub CSV files; no local database is required.
+- Persistent learning progress in GitHub CSVs
+- Due/overdue revision queue
+- Mastery score
+- Weak-topic prioritization
+- Adaptive review intervals
+- Vocabulary tracking
+- Weekly and monthly adaptive revision
+- Connect-the-dots learning
+
+## Stage 5 — Knowledge engine
+
+`NEWS → FILTER → BALANCE → VERIFY → EXPLAIN → CONNECT → STORE → REVISE → IMPROVE`
+
+Persistent GitHub memory includes:
+
+- `news_history.csv`
+- `story_timeline.csv`
+- `current_affairs.csv`
+- `knowledge_cards.csv`
+- `knowledge_graph.csv`
+- `learning_progress.csv`
+- `vocabulary.csv`
+- `quiz_history.csv`
+- people / places / culture / religion memory
+
+No local database is required.
 
 ## GitHub Actions
 
-Separate workflows keep scheduling simple:
-
 - `.github/workflows/morning_news.yml` — 06:00 IST
 - `.github/workflows/afternoon_news.yml` — 16:00 IST
-- Knowledge review workflows run separately on their scheduled review cycle.
+- `.github/workflows/knowledge_review.yml` — scheduled weekly/monthly revision
 
-Both daily workflows support manual execution.
+Daily workflows support manual execution. Existing CSV files are automatically migrated to the new schema when new fields are introduced.
+
+## AI
+
+AI runs locally with **Ollama + Qwen 2.5 7B**. Daily workflows use a larger context/output budget than V4 for richer evidence and memory explanations.
 
 ## Secrets
 
@@ -64,8 +88,8 @@ pip install -r requirements.txt
 python -m app.main
 ```
 
-Set the Telegram and Ollama environment variables when testing locally.
+Set Telegram and Ollama environment variables when testing locally.
 
-## V4 goal
+## Goal
 
-**Read less. Learn more. Remember what matters.**
+**Read less → understand faster → connect knowledge → remember longer → revise intelligently.**
