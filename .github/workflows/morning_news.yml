@@ -14,7 +14,7 @@ concurrency:
 jobs:
   news:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
@@ -28,8 +28,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .ollama/models
-          key: ollama-qwen2.5-7b-v4-${{ runner.os }}
-          restore-keys: ollama-qwen2.5-7b-v4-
+          key: ollama-qwen2.5-7b-v5-${{ runner.os }}
+          restore-keys: ollama-qwen2.5-7b-v5-
       - name: Install and start Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
@@ -49,9 +49,9 @@ jobs:
           AI_MODEL: qwen2.5:7b
           OLLAMA_MODEL: qwen2.5:7b
           OLLAMA_URL: http://localhost:11434/api/generate
-          AI_CONTEXT: '2048'
-          AI_MAX_OUTPUT: '450'
-          AI_TIMEOUT_SECONDS: '90'
+          AI_CONTEXT: '4096'
+          AI_MAX_OUTPUT: '900'
+          AI_TIMEOUT_SECONDS: '120'
           RUN_SLOT: morning
         run: python -m app.main
       - if: failure()
@@ -62,7 +62,7 @@ jobs:
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || git commit -m "Update morning knowledge memory"
+          git diff --cached --quiet || git commit -m "Update morning Stage 5 knowledge memory"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
