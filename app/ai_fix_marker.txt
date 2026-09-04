@@ -1,1 +1,0 @@
-Temporary marker: AI model configuration fix is pending replacement of app/ai.py through the repository contents API.
