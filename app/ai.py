@@ -25,14 +25,15 @@ def _similar(a,b):
     wa,wb=_words(a),_words(b); return len(wa&wb)/max(1,len(wa|wb))
 
 def _deterministic_score(a):
-    title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","")).lower(),str(a.get("category","")).lower(); text=f"{title} {summary}".lower(); score=35.0
+    title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","" )).lower(),str(a.get("category","" )).lower(); text=f"{title} {summary}".lower(); score=35.0
     if any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib")): score+=12
     if category in {"india","national","politics","world","economy","business","defence","science","technology"}: score+=8
     for term,boost in {"government":8,"supreme court":10,"parliament":9,"election":9,"prime minister":9,"president":8,"war":10,"conflict":9,"ceasefire":10,"terror":8,"defence":8,"military":8,"economy":7,"inflation":7,"interest rate":7,"rbi":9,"budget":8,"trade":7,"sanction":8,"nuclear":9,"space":7,"isro":9,"ai":6,"artificial intelligence":7,"climate":7,"earthquake":8,"cyclone":8,"flood":7,"health":6,"vaccine":6,"scam":7,"policy":6}.items():
         if term in text: score+=boost
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
 
-def select_stories(articles,top_n=12,excluded_headlines=None):
+def select_stories(articles,top_n=None,excluded_headlines=None):
+    """Rank all usable, non-duplicate stories. top_n is retained only for compatibility; no fixed cap is applied."""
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
         title=str(a.get("title","")).strip()
@@ -42,17 +43,21 @@ def select_stories(articles,top_n=12,excluded_headlines=None):
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
-    selected=[]; counts={"india":0,"world":0}; target=min(top_n//2,6)
-    for desired in ("india","world"):
-        for score,a in ranked:
-            region=str(a.get("region","world")).lower()
-            if region!=desired or any(x.get("url")==a.get("url") for x in selected): continue
-            if counts[desired]>=target: break
-            selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":region,"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and India/World balance."}); counts[desired]+=1
+
+    selected=[]
     for score,a in ranked:
-        if len(selected)>=top_n or any(x.get("url")==a.get("url") for x in selected): continue
-        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Fallback for source availability."})
-    return selected[:top_n]
+        region=str(a.get("region","world")).lower()
+        selected.append({
+            "story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],
+            "rank":len(selected)+1,
+            "headline":str(a.get("title",""))[:240],
+            "importance":score,
+            "category":str(a.get("category","Other")),
+            "region":region,
+            "url":str(a.get("url","")),
+            "reason":"Impact, source quality, relevance and ranking score."
+        })
+    return selected
 
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
@@ -67,13 +72,10 @@ def _evidence(selected,articles,research):
     return out
 
 def _parse(text,item):
-    values={}
-    aliases={"why_important":"impact","change_since_yesterday":"change"}
-    allowed={"what","who","when","where","why","impact","background","change","next","connection","memory"}
+    values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","when","where","why","impact","background","change","next","connection","memory"}
     for line in text.splitlines():
         if ":" not in line: continue
-        k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip()
-        k=aliases.get(k,k)
+        k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip(); k=aliases.get(k,k)
         if k in allowed and v: values[k]=v
     return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources")}
 
@@ -86,8 +88,8 @@ def generate_briefing(selected,articles,previous,today,research=None):
     for item in evidence:
         try: stories.append(_one(item,today))
         except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_parse("",item))
-    return {"top_stories":stories[:12]}
+    return {"top_stories":stories}
 
-def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles,12),articles,previous,today,research)
+def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles),articles,previous,today,research)
 def generate_text(prompt,system=SYSTEM): return _call_ollama(prompt,system=system)
 def configured_model(): return _model_name()
