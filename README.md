@@ -16,14 +16,15 @@ SCAN → SOURCE HEALTH → DEDUPLICATE → RANK
 → TELEGRAM → GITHUB NEWS MEMORY
 ```
 
-## Output
-- Up to 12 priority stories, targeting 6 India + 6 World
+## Telegram output
+- No fixed 12-story output limit; every usable, non-duplicate collected story is processed
+- **Message 1:** complete numbered headline index for the run
+- **Following messages:** exactly one detailed message per story
+- Detailed stories include event, why, impact, history, change, next step, memory hook and verification
 - Source-health and failure tracking
 - Exact + semantic duplicate filtering
 - Multi-source corroboration and confidence
 - Continuing-story and historical context
-- Concise evidence-only AI analysis
-- Clean Telegram report with run-health footer
 
 ## Memory
 - `data/news_history.csv` — delivered news history
