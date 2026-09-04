@@ -13,12 +13,14 @@ concurrency:
 jobs:
   run-news:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
       - uses: actions/setup-python@v5
-        with: {python-version: '3.12', cache: pip}
+        with:
+          python-version: '3.12'
+          cache: pip
       - run: pip install -r requirements.txt
       - name: Configure Ollama cache
         run: |
@@ -27,8 +29,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .ollama/models
-          key: ollama-qwen2.5-7b-v5-${{ runner.os }}
-          restore-keys: ollama-qwen2.5-7b-v5-
+          key: ollama-qwen2.5-7b-v6-${{ runner.os }}
+          restore-keys: ollama-qwen2.5-7b-v6-
       - name: Install and start Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
@@ -51,6 +53,9 @@ jobs:
           AI_CONTEXT: '4096'
           AI_MAX_OUTPUT: '900'
           AI_TIMEOUT_SECONDS: '120'
+          AI_STORY_BUDGET: '30'
+          AI_DEEP_IMPORTANCE: '75'
+          NEWS_MIN_IMPORTANCE: '62'
           RUN_SLOT: manual
         run: python -m app.main
       - if: failure()
