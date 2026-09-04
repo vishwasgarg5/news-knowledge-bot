@@ -16,7 +16,7 @@ from .storage import HEADERS, append_rows, ensure_data, read_rows
 from .telegram import send_text
 
 IST = ZoneInfo("Asia/Kolkata")
-RUN_SLOT = os.getenv("RUN_SLOT", "morning").lower()
+RUN_SLOT = os.getenv("RUN_SLOT", "manual").lower()
 
 
 def load_sources():
@@ -47,7 +47,8 @@ def _history_line(story):
 
 def persist(stories, today):
     path = DATA / "news_history.csv"; rows = read_rows(path); ids = {r.get("story_id") for r in rows}
-    timeline_path = DATA / "story_timeline.csv"; timeline = read_rows(timeline_path); keys = {(r.get("story_id"), r.get("date")) for r in timeline}; added = 0
+    timeline_path = DATA / "story_timeline.csv"; timeline = read_rows(timeline_path); keys = {(r.get("story_id"), r.get("date")) for r in timeline}
+    added = 0
     for story in stories:
         sid = story.get("story_id"); verification = story.get("verification") or {}
         if sid and sid not in ids:
@@ -70,14 +71,28 @@ def _story_block(story, index, total):
 
 
 def build_messages(result, today, stats):
-    stories = result.get("top_stories", []); label = "MORNING" if RUN_SLOT == "morning" else "AFTERNOON"; messages = []
-    for region, title in (("india", "🇮🇳 INDIA"), ("world", "🌍 WORLD")):
-        group = [s for s in stories if s.get("region") == region]
-        if not group: continue
-        blocks = [f"📰 <b>{title} · {label}</b>", "EVENT ↓ WHY ↓ IMPACT ↓ HISTORY ↓ CHANGE ↓ NEXT ↓ REMEMBER ↓ VERIFY", ""]
-        for index, story in enumerate(group, 1): blocks.append(_story_block(story, index, len(group)) + "\n")
-        messages.append("\n".join(blocks).strip())
-    messages.append(f"📊 <b>{label} · NEWS STATUS</b>\n🇮🇳 {sum(s.get('region') == 'india' for s in stories)} | 🌍 {sum(s.get('region') == 'world' for s in stories)}\n📰 scanned {stats['articles']} · selected {stats['stories']} · verified {stats['verified']}/{stats['total']}\n♻️ exact dup {stats['exact_duplicates']} · similar filtered {stats['semantic_filtered']} · ⚠️ sources failed {stats['source_failures']}\n⏱️ {stats['runtime']} · model {configured_model()}")
+    stories = result.get("top_stories", [])
+    total = len(stories)
+    label = "MANUAL"
+
+    # Message 1: headline index only. No story count cap and no separate status message.
+    headline_lines = [f"📰 <b>NEWS INTELLIGENCE · {label}</b>", f"{total} stories", ""]
+    for index, story in enumerate(stories, 1):
+        flag = "🇮🇳" if story.get("region") == "india" else "🌍"
+        headline_lines.append(f"{index}. {flag} {story.get('headline', '')}")
+    headline_lines.extend([
+        "",
+        f"📊 scanned {stats['articles']} · selected {stats['stories']} · verified {stats['verified']}/{stats['total']}",
+        f"♻️ exact dup {stats['exact_duplicates']} · similar filtered {stats['semantic_filtered']} · ⚠️ source failures {stats['source_failures']}",
+        f"⏱️ {stats['runtime']} · model {configured_model()}",
+        "",
+        "👇 Detailed news follows — one message per story"
+    ])
+    messages = ["\n".join(headline_lines)]
+
+    # Message 2 onward: exactly one detailed Telegram message per story.
+    for index, story in enumerate(stories, 1):
+        messages.append(_story_block(story, index, total))
     return messages
 
 
@@ -87,7 +102,8 @@ def main():
     today = datetime.now(IST).date().isoformat(); history = read_rows(DATA / "news_history.csv"); timeline = read_rows(DATA / "story_timeline.csv")
     delivered_today = [r.get("headline", "") for r in history if r.get("date") == today] if RUN_SLOT == "morning" else []
     all_articles = [a.__dict__ for a in articles]
-    selected = select_stories(all_articles, top_n=limits.get("top_stories", 12), excluded_headlines=delivered_today)
+    # No fixed story limit: process every usable, non-duplicate article from the collected universe.
+    selected = select_stories(all_articles, excluded_headlines=delivered_today)
     selected = previous_change(selected, timeline, today)
     research = research_stories(selected, timeline, all_articles); research_stats = research.pop("_stats", {})
     result = generate_briefing(selected, all_articles, timeline, today, research)
