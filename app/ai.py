@@ -3,7 +3,7 @@ import hashlib,json,os,re
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
-SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise, factual and memorable. Think in this order: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT. Add one short CONNECTION and one MEMORY line. Do not create separate learning, quiz, culture, religion, vocabulary or people/places content."""
+SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise, factual and memorable. Think in this order: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT. Do not create separate learning, quiz, culture, religion, vocabulary or people/places content. Vocabulary is allowed only when a genuinely difficult or important news term needs explanation."""
 DEFAULT_MODEL="qwen2.5:7b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 
 def _model_name(): return os.getenv("AI_MODEL","").strip() or os.getenv("OLLAMA_MODEL","").strip() or DEFAULT_MODEL
@@ -45,7 +45,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
     selected=[]; threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","48"))
     for score,a in ranked:
         if score < threshold: continue
-        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and freshness."})
+        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and ranking score."})
     return selected
 
 def _evidence(selected,articles,research):
@@ -61,16 +61,17 @@ def _evidence(selected,articles,research):
     return out
 
 def _parse(text,item):
-    values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","when","where","why","impact","background","change","next","connection","memory"}
+    values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","when","where","why","impact","background","change","next","connection","memory","vocabulary"}
     for line in text.splitlines():
         if ":" not in line: continue
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v: values[k]=v
-    return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources")}
+    vocab=values.get("vocabulary","")
+    return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":vocab}
 
 def _one(item,today):
-    prompt=f"Today: {today}\nExplain ONE news story. Use ONLY supplied evidence. Keep each field to one short sentence. Return EXACTLY 11 separate lines, one field per line, in this order:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nDo not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse(_call_ollama(prompt,num_predict=300,timeout=100),item)
+    prompt=f"Today: {today}\nExplain ONE news story using ONLY supplied evidence. Keep every field short. Return EXACTLY 12 separate lines, one field per line:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nVOCABULARY: NONE OR up to 3 genuinely difficult/important terms, formatted as term = simple meaning | news context.\nUse VOCABULARY: NONE when ordinary language is sufficient. Do not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    return _parse(_call_ollama(prompt,num_predict=340,timeout=100),item)
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
