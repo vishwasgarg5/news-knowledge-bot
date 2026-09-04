@@ -1,18 +1,17 @@
-name: Morning News Knowledge Brief
+name: News Intelligence
 
 on:
-  schedule:
-    - cron: '30 0 * * *' # 06:00 IST
   workflow_dispatch:
 
 permissions:
   contents: write
+
 concurrency:
   group: news-intelligence
   cancel-in-progress: false
 
 jobs:
-  news:
+  run-news:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -41,7 +40,7 @@ jobs:
       - name: Ensure Qwen
         run: |
           if ! ollama list | awk '{print $1}' | grep -Fxq 'qwen2.5:7b'; then ollama pull qwen2.5:7b; fi
-      - name: Generate morning briefing
+      - name: Generate news briefing
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -52,7 +51,7 @@ jobs:
           AI_CONTEXT: '4096'
           AI_MAX_OUTPUT: '900'
           AI_TIMEOUT_SECONDS: '120'
-          RUN_SLOT: morning
+          RUN_SLOT: manual
         run: python -m app.main
       - if: failure()
         run: cat /tmp/ollama.log || true
@@ -62,7 +61,7 @@ jobs:
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || git commit -m "Update morning news memory"
+          git diff --cached --quiet || git commit -m "Update news memory"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
