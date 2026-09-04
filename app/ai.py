@@ -33,7 +33,6 @@ def _deterministic_score(a):
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
-    """Rank all usable, non-duplicate stories. top_n is retained only for compatibility; no fixed cap is applied."""
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
         title=str(a.get("title","")).strip()
@@ -43,20 +42,10 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
-
-    selected=[]
+    selected=[]; threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","48"))
     for score,a in ranked:
-        region=str(a.get("region","world")).lower()
-        selected.append({
-            "story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],
-            "rank":len(selected)+1,
-            "headline":str(a.get("title",""))[:240],
-            "importance":score,
-            "category":str(a.get("category","Other")),
-            "region":region,
-            "url":str(a.get("url","")),
-            "reason":"Impact, source quality, relevance and ranking score."
-        })
+        if score < threshold: continue
+        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and freshness."})
     return selected
 
 def _evidence(selected,articles,research):
@@ -75,12 +64,12 @@ def _parse(text,item):
     values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","when","where","why","impact","background","change","next","connection","memory"}
     for line in text.splitlines():
         if ":" not in line: continue
-        k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip(); k=aliases.get(k,k)
+        k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v: values[k]=v
     return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources")}
 
 def _one(item,today):
-    prompt=f"Today: {today}\nExplain ONE news story. Use ONLY the supplied evidence. Keep each field to one short sentence. Return EXACTLY 11 separate lines, one field per line, in this order:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nDo not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    prompt=f"Today: {today}\nExplain ONE news story. Use ONLY supplied evidence. Keep each field to one short sentence. Return EXACTLY 11 separate lines, one field per line, in this order:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nDo not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
     return _parse(_call_ollama(prompt,num_predict=300,timeout=100),item)
 
 def generate_briefing(selected,articles,previous,today,research=None):
