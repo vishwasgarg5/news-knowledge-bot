@@ -42,10 +42,11 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
-    selected=[]; threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","48"))
+    threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62"))
+    selected=[]
     for score,a in ranked:
         if score < threshold: continue
-        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and ranking score."})
+        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title","")[:240]),"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and ranking score."})
     return selected
 
 def _evidence(selected,articles,research):
@@ -66,8 +67,11 @@ def _parse(text,item):
         if ":" not in line: continue
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v: values[k]=v
-    vocab=values.get("vocabulary","")
-    return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":vocab}
+    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
+
+def _fallback(item):
+    summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
+    return {**item,"what":summary[:500],"who":"Not stated in supplied sources","when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":"The available report identifies this as a significant current development.","why_important":"Selected because of its relevance, impact and source quality.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":str(item.get("headline",summary))[:180],"vocabulary":""}
 
 def _one(item,today):
     prompt=f"Today: {today}\nExplain ONE news story using ONLY supplied evidence. Keep every field short. Return EXACTLY 12 separate lines, one field per line:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nVOCABULARY: NONE OR up to 3 genuinely difficult/important terms, formatted as term = simple meaning | news context.\nUse VOCABULARY: NONE when ordinary language is sufficient. Do not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
@@ -75,9 +79,15 @@ def _one(item,today):
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","30")))
+    ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","75"))]
+    if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
+    ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
     for item in evidence:
+        if item.get("story_id") not in ai_ids:
+            stories.append(_fallback(item)); continue
         try: stories.append(_one(item,today))
-        except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_parse("",item))
+        except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_fallback(item))
     return {"top_stories":stories}
 
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles),articles,previous,today,research)
