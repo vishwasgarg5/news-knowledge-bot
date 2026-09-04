@@ -6,25 +6,27 @@ A **news-only India + World intelligence bot** for Telegram. Run it manually fro
 
 GitHub → **Actions → News Intelligence → Run workflow**.
 
-There are no automatic morning/afternoon schedules.
+There are no automatic schedules.
 
 ## Flow
 ```text
-SCAN → SOURCE HEALTH → DEDUPLICATE → RANK
-→ INDIA + WORLD BALANCE → VERIFY → HISTORY
-→ AI: EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
-→ TELEGRAM → GITHUB NEWS MEMORY
+SCAN ALL → SOURCE HEALTH → DEDUPLICATE → SMART QUALITY FILTER
+→ FRESHNESS / CHANGE DETECTION → PRIORITY → VERIFY → HISTORY
+→ TELEGRAM: HEADLINES FIRST → ONE DETAILED MESSAGE PER STORY
+→ GITHUB NEWS MEMORY
 ```
 
 ## Telegram output
-- No fixed 12-story output limit; every usable, non-duplicate collected story is processed
-- **Message 1:** complete numbered headline index for the run
+- No fixed 12-story output limit; every story above the quality threshold can be included
+- Low-value/noisy stories are filtered by importance instead of an arbitrary count
+- Unchanged stories already seen in memory are suppressed
+- Breaking/urgent stories are promoted automatically
+- **Message 1:** complete numbered headline index grouped by priority/category
 - **Following messages:** exactly one detailed message per story
 - Detailed stories include event, why, impact, history, change, next step, memory hook and verification
-- Source-health and failure tracking
-- Exact + semantic duplicate filtering
-- Multi-source corroboration and confidence
-- Continuing-story and historical context
+- Verification distinguishes **Confirmed · multi-source**, **Confirmed · official source**, **Single source** and **Unverified**
+- Confidence and source count are shown for every story
+- Source-health, duplicate filtering and run-health statistics are included
 
 ## Memory
 - `data/news_history.csv` — delivered news history
@@ -39,5 +41,5 @@ Ollama + Qwen 2.5 7B.
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-## Removed
-Old scheduled workflows and non-news modules were removed. The repository is intentionally **news only**.
+## Design rule
+The repository is intentionally **news only**. No culture, religion, quiz, vocabulary, people/places or separate learning modules.
