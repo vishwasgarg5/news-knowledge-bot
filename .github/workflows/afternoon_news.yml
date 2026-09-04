@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: afternoon-news-knowledge
+  group: news-intelligence
   cancel-in-progress: false
 
 jobs:
@@ -56,13 +56,13 @@ jobs:
         run: python -m app.main
       - if: failure()
         run: cat /tmp/ollama.log || true
-      - name: Commit knowledge safely
+      - name: Commit news memory safely
         if: success()
         run: |
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || git commit -m "Update afternoon Stage 5 knowledge memory"
+          git diff --cached --quiet || git commit -m "Update afternoon news memory"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
