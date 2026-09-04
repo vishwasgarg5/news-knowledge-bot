@@ -21,7 +21,4 @@ sources:
 limits:
   max_articles_per_source: 40
   max_total_articles: 700
-  top_stories: 12
-  india_stories: 6
-  world_stories: 6
   max_related_articles: 5
