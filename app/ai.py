@@ -3,7 +3,7 @@ import hashlib,json,os,re
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
-SYSTEM="""You are a rigorous news editor, knowledge teacher and memory coach. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Explain news as a compact flow: EVENT -> CAUSE -> IMPACT -> CHANGE -> NEXT -> CONNECTION -> MEMORY. Prefer durable understanding over headline repetition."""
+SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise, factual and memorable. Think in this order: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT. Add one short CONNECTION and one MEMORY line. Do not create separate learning, quiz, culture, religion, vocabulary or people/places content."""
 DEFAULT_MODEL="qwen2.5:7b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 
 def _model_name(): return os.getenv("AI_MODEL","").strip() or os.getenv("OLLAMA_MODEL","").strip() or DEFAULT_MODEL
@@ -42,56 +42,52 @@ def select_stories(articles,top_n=12,excluded_headlines=None):
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
-    # Strict daily balance: 6 India + 6 World. Fill from the other side only if genuinely unavailable.
-    selected=[]; counts={"india":0,"world":0}
+    selected=[]; counts={"india":0,"world":0}; target=min(top_n//2,6)
     for desired in ("india","world"):
         for score,a in ranked:
             region=str(a.get("region","world")).lower()
             if region!=desired or any(x.get("url")==a.get("url") for x in selected): continue
-            if counts[desired]>=top_n//2: break
-            selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":region,"url":str(a.get("url","")),"reason":"Impact/source/relevance score with India-World balance."})
-            counts[desired]+=1
-    if len(selected)<top_n:
-        for score,a in ranked:
-            if any(x.get("url")==a.get("url") for x in selected): continue
-            region=str(a.get("region","world")).lower(); selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":region,"url":str(a.get("url","")),"reason":"Fallback because fewer than 6 stories were available for one region."})
-            if len(selected)>=top_n: break
+            if counts[desired]>=target: break
+            selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":region,"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and India/World balance."}); counts[desired]+=1
+    for score,a in ranked:
+        if len(selected)>=top_n or any(x.get("url")==a.get("url") for x in selected): continue
+        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title",""))[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Fallback for source availability."})
     return selected[:top_n]
 
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
-        a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id")
-        related=[]
+        a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id"); related=[]
         for x in articles:
             if x.get("url")==s.get("url"): continue
             sim=_similar(s.get("headline",""),x.get("title",""))
-            if sim>=.20: related.append((sim,x))
-        related.sort(key=lambda z:-z[0])
-        r=(research or {}).get(sid,{})
+            if sim>=0.20: related.append((sim,x))
+        related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
     return out
 
 def _parse(text,item):
     values={}
+    aliases={"why_important":"impact","change_since_yesterday":"change"}
+    allowed={"what","who","when","where","why","impact","background","change","next","connection","memory"}
     for line in text.splitlines():
-        if ":" in line:
-            k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip()
-            if k in {"what","who","when","where","why","why_important","background","change","next","connection","memory","learn","latest","entities","vocabulary"} and v: values[k]=v
-    return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("why_important","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",""),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"learn":values.get("learn",""),"latest_update":values.get("latest",item.get("summary","")),"entities":values.get("entities",""),"vocabulary":values.get("vocabulary","")}
+        if ":" not in line: continue
+        k,v=line.split(":",1); k=k.strip().lower().replace(" ","_"); v=v.strip()
+        k=aliases.get(k,k)
+        if k in allowed and v: values[k]=v
+    return {**item,"what":values.get("what",item.get("summary","")),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources")}
 
 def _one(item,today):
-    prompt=f"Today {today}. Explain ONE story using ONLY evidence. Return exactly: WHAT; WHO; WHEN; WHERE; WHY; WHY IMPORTANT; BACKGROUND; CHANGE; NEXT; CONNECTION; MEMORY; LEARN; LATEST; ENTITIES; VOCABULARY. Make it easy to remember as a flowchart: EVENT -> CAUSE -> IMPACT -> NEXT. Evidence: {json.dumps(item,ensure_ascii=False)}"
+    prompt=f"Today: {today}\nExplain ONE news story. Use ONLY the supplied evidence. Keep each field to one short sentence. Return EXACTLY 11 separate lines, one field per line, in this order:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nDo not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
     return _parse(_call_ollama(prompt,num_predict=300,timeout=100),item)
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
     for item in evidence:
         try: stories.append(_one(item,today))
-        except Exception as exc:
-            print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_parse("",item))
-    return {"top_stories":stories[:12],"learning_text":""}
+        except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_parse("",item))
+    return {"top_stories":stories[:12]}
 
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles,12),articles,previous,today,research)
-def generate_text(prompt,system="You are a factual knowledge teacher. Use only supplied data; do not invent."): return _call_ollama(prompt,system=system)
+def generate_text(prompt,system=SYSTEM): return _call_ollama(prompt,system=system)
 def configured_model(): return _model_name()
