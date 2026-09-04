@@ -1,54 +1,42 @@
-# News Knowledge Bot — Final Stage
+# News Knowledge Bot
 
-Automated **India + World news intelligence bot** for Telegram. **News only.**
+A **news-only India + World intelligence bot** for Telegram. Run it manually from GitHub Actions whenever you want a fresh briefing.
 
-## Pipeline
+## Run
+
+GitHub → **Actions → News Intelligence → Run workflow**.
+
+There are no automatic morning/afternoon schedules.
+
+## Flow
 ```text
-SCAN → DEDUPLICATE → INDIA 6 + WORLD 6 → RANK
-→ VERIFY → HISTORY → AI UNDERSTAND
-→ EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
-→ TELEGRAM → NEWS MEMORY
+SCAN → SOURCE HEALTH → DEDUPLICATE → RANK
+→ INDIA + WORLD BALANCE → VERIFY → HISTORY
+→ AI: EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
+→ TELEGRAM → GITHUB NEWS MEMORY
 ```
 
-## Final capabilities
-- Up to 12 priority stories per run: target **6 India + 6 World**
-- Source/category-first India/World classification
-- Exact + semantic headline deduplication
-- Source health and failure tracking
-- Importance ranking and continuing-story detection
-- Multi-source corroboration with confidence score
-- Historical context from `story_timeline.csv`
-- Evidence-only AI briefing with concise fallback text
-- Clean India/World Telegram blocks and run-health footer
-- Morning **06:00 IST** + afternoon **16:00 IST** automation
-- Shared workflow concurrency prevents overlapping memory writes
-- GitHub-only memory; no separate learning database
-
-## Telegram format
-```text
-📰 🇮🇳 INDIA
-EVENT ↓ WHY ↓ IMPACT ↓ HISTORY ↓ CHANGE ↓ NEXT ↓ REMEMBER ↓ VERIFY
-
-📰 🌍 WORLD
-EVENT ↓ WHY ↓ IMPACT ↓ HISTORY ↓ CHANGE ↓ NEXT ↓ REMEMBER ↓ VERIFY
-
-📊 NEWS STATUS
-India | World | scanned | selected | verified
-exact dup | similar filtered | source failures | runtime
-```
+## Output
+- Up to 12 priority stories, targeting 6 India + 6 World
+- Source-health and failure tracking
+- Exact + semantic duplicate filtering
+- Multi-source corroboration and confidence
+- Continuing-story and historical context
+- Concise evidence-only AI analysis
+- Clean Telegram report with run-health footer
 
 ## Memory
-- `data/news_history.csv` — delivered story history
-- `data/story_timeline.csv` — daily evolution of important stories
+- `data/news_history.csv` — delivered news history
+- `data/story_timeline.csv` — story evolution/history
 
-No culture, religion, vocabulary, quiz, people, places, or separate learning modules.
+GitHub is the only persistent memory. No separate learning database.
 
 ## AI
-Ollama + Qwen 2.5 7B, configured for factual and concise output.
+Ollama + Qwen 2.5 7B.
 
 ## Secrets
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-## Principle
-**Less noise → better verification → clearer understanding → easier memory.**
+## Removed
+Old scheduled workflows and non-news modules were removed. The repository is intentionally **news only**.
