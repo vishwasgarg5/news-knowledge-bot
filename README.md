@@ -1,93 +1,54 @@
 # News Knowledge Bot — Final Stage
 
-Automated **India + World news intelligence bot** for Telegram. News only.
+Automated **India + World news intelligence bot** for Telegram. **News only.**
 
-## Final intelligence pipeline
-
+## Pipeline
 ```text
-RSS / NEWS
-   ↓
-COLLECT
-   ↓
-DEDUPLICATE
-   ↓
-🇮🇳 INDIA 50%  +  🌍 WORLD 50%
-   ↓
-IMPORTANCE RANKING
-   ↓
-SOURCE CORROBORATION
-   ↓
-CONTINUING-STORY CHECK
-   ↓
-AI UNDERSTANDING
-   ↓
-EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
-   ↓
-CLEAN TELEGRAM REPORT
-   ↓
-NEWS HISTORY + STORY TIMELINE
+SCAN → DEDUPLICATE → INDIA 6 + WORLD 6 → RANK
+→ VERIFY → HISTORY → AI UNDERSTAND
+→ EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
+→ TELEGRAM → NEWS MEMORY
 ```
 
-## Final-stage capabilities
-
-- 12 high-priority stories per run: target **6 India + 6 World**
-- Importance ranking using source quality, category and event-impact signals
-- Same-story and previously delivered-story filtering
-- Continuing vs new story detection
-- Multi-source corroboration and confidence score
-- Historical context from GitHub news memory
-- Strict evidence-only AI generation; no invented facts
-- Compact flowchart-style Telegram report
-- Separate India and World report blocks for fast scanning
-- Morning + afternoon automation
-- GitHub-only news memory; no learning/knowledge databases
+## Final capabilities
+- Up to 12 priority stories per run: target **6 India + 6 World**
+- Source/category-first India/World classification
+- Exact + semantic headline deduplication
+- Source health and failure tracking
+- Importance ranking and continuing-story detection
+- Multi-source corroboration with confidence score
+- Historical context from `story_timeline.csv`
+- Evidence-only AI briefing with concise fallback text
+- Clean India/World Telegram blocks and run-health footer
+- Morning **06:00 IST** + afternoon **16:00 IST** automation
+- Shared workflow concurrency prevents overlapping memory writes
+- GitHub-only memory; no separate learning database
 
 ## Telegram format
-
 ```text
 📰 🇮🇳 INDIA
-EVENT ↓
-WHY ↓
-IMPACT ↓
-CHANGE ↓
-NEXT ↓
-REMEMBER ↓
-VERIFY
+EVENT ↓ WHY ↓ IMPACT ↓ HISTORY ↓ CHANGE ↓ NEXT ↓ REMEMBER ↓ VERIFY
 
 📰 🌍 WORLD
-EVENT ↓
-WHY ↓
-IMPACT ↓
-CHANGE ↓
-NEXT ↓
-REMEMBER ↓
-VERIFY
+EVENT ↓ WHY ↓ IMPACT ↓ HISTORY ↓ CHANGE ↓ NEXT ↓ REMEMBER ↓ VERIFY
+
+📊 NEWS STATUS
+India | World | scanned | selected | verified
+exact dup | similar filtered | source failures | runtime
 ```
 
 ## Memory
+- `data/news_history.csv` — delivered story history
+- `data/story_timeline.csv` — daily evolution of important stories
 
-Only news is retained:
-
-- `data/news_history.csv` — delivered news history
-- `data/story_timeline.csv` — important-story evolution
-
-No culture, religion, vocabulary, quiz, people, places, current-affairs or separate learning modules.
-
-## Schedule
-
-- Morning: **06:00 IST**
-- Afternoon: **16:00 IST**
-- Both workflows support manual execution.
+No culture, religion, vocabulary, quiz, people, places, or separate learning modules.
 
 ## AI
-
-**Ollama + Qwen 2.5 7B**, configured for factual, low-temperature, concise output.
+Ollama + Qwen 2.5 7B, configured for factual and concise output.
 
 ## Secrets
-
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-## Design principle
-
+## Principle
 **Less noise → better verification → clearer understanding → easier memory.**
