@@ -15,12 +15,8 @@ sources:
     - https://www.thehindu.com/sci-tech/technology/feeder/default.rss
   science:
     - https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
-  culture:
-    - https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml
   defence:
     - https://www.thehindu.com/news/national/defence/feeder/default.rss
-  sports:
-    - https://feeds.bbci.co.uk/sport/rss.xml
 
 limits:
   max_articles_per_source: 40
@@ -28,8 +24,4 @@ limits:
   top_stories: 12
   india_stories: 6
   world_stories: 6
-  current_affairs: 15
-  vocabulary: 12
-  quiz_questions: 5
-  timeline_events: 6
   max_related_articles: 5
