@@ -1,73 +1,77 @@
-# News Knowledge Bot — Stage 5
+# News Knowledge Bot — Final Stage
 
-Automated **India + World news intelligence bot** for Telegram.
+Automated **India + World news intelligence bot** for Telegram. News only.
 
-## What it does
+## Final intelligence pipeline
 
 ```text
-RSS / News
+RSS / NEWS
    ↓
-Collect
+COLLECT
    ↓
-Deduplicate
+DEDUPLICATE
    ↓
-🇮🇳 India 50% + 🌍 World 50%
+🇮🇳 INDIA 50%  +  🌍 WORLD 50%
    ↓
-Rank by importance
+IMPORTANCE RANKING
    ↓
-Multi-source verification
+SOURCE CORROBORATION
    ↓
-AI explanation
+CONTINUING-STORY CHECK
    ↓
-EVENT → WHY → IMPACT → CHANGE → NEXT → CONNECTION → REMEMBER
+AI UNDERSTANDING
    ↓
-Telegram
+EVENT → WHY → IMPACT → CHANGE → NEXT → REMEMBER
    ↓
-News history + story timeline on GitHub
+CLEAN TELEGRAM REPORT
+   ↓
+NEWS HISTORY + STORY TIMELINE
 ```
 
-## Daily output
+## Final-stage capabilities
 
-- **12 important stories per run**
-- Target: **6 India + 6 World**
-- Morning and afternoon runs
-- Duplicate/same-topic filtering
-- Continuing-story detection
-- Multi-source corroboration
-- Confidence score
-- Historical story context
-- Flowchart-style, easy-to-read explanations
+- 12 high-priority stories per run: target **6 India + 6 World**
+- Importance ranking using source quality, category and event-impact signals
+- Same-story and previously delivered-story filtering
+- Continuing vs new story detection
+- Multi-source corroboration and confidence score
+- Historical context from GitHub news memory
+- Strict evidence-only AI generation; no invented facts
+- Compact flowchart-style Telegram report
+- Separate India and World report blocks for fast scanning
+- Morning + afternoon automation
+- GitHub-only news memory; no learning/knowledge databases
 
-## Telegram story format
+## Telegram format
 
 ```text
-📰 INDIA / WORLD
-        ↓
-🔴 EVENT
-        ↓
-❓ WHY
-        ↓
-💡 IMPACT
-        ↓
-🔄 CHANGE
-        ↓
-🔮 NEXT
-        ↓
-🔗 CONNECTION
-        ↓
-🧠 REMEMBER
-        ↓
-🔎 VERIFY
+📰 🇮🇳 INDIA
+EVENT ↓
+WHY ↓
+IMPACT ↓
+CHANGE ↓
+NEXT ↓
+REMEMBER ↓
+VERIFY
+
+📰 🌍 WORLD
+EVENT ↓
+WHY ↓
+IMPACT ↓
+CHANGE ↓
+NEXT ↓
+REMEMBER ↓
+VERIFY
 ```
 
 ## Memory
 
-Only **news memory** is retained:
+Only news is retained:
 
 - `data/news_history.csv` — delivered news history
-- `data/story_timeline.csv` — evolution of important stories
+- `data/story_timeline.csv` — important-story evolution
 
-No separate culture, religion, vocabulary, quiz, people, places, knowledge-card, or learning database is used.
+No culture, religion, vocabulary, quiz, people, places, current-affairs or separate learning modules.
 
 ## Schedule
 
@@ -77,13 +81,13 @@ No separate culture, religion, vocabulary, quiz, people, places, knowledge-card,
 
 ## AI
 
-Runs locally with **Ollama + Qwen 2.5 7B**. No OpenAI API key is required.
+**Ollama + Qwen 2.5 7B**, configured for factual, low-temperature, concise output.
 
 ## Secrets
 
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-## Goal
+## Design principle
 
-**50% India news + 50% World news — less noise, better understanding, easier memory.**
+**Less noise → better verification → clearer understanding → easier memory.**
