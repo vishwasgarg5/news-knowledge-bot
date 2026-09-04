@@ -30,9 +30,9 @@ def sim(a, b):
     return len(x & y) / max(1, len(x | y))
 
 
-def previous_change(stories, rows, today):
+def previous_change(stories, timeline, today):
     yesterday = (datetime.fromisoformat(today) - timedelta(days=1)).date().isoformat()
-    old = [r.get("headline", "") for r in rows if r.get("date") == yesterday]
+    old = [r.get("headline", "") for r in timeline if r.get("date") == yesterday]
     for story in stories:
         story["change_since_yesterday"] = (
             "Continuing" if any(sim(story.get("headline", ""), x) >= 0.48 for x in old) else "New today"
@@ -44,14 +44,14 @@ def _history_line(story):
     verification = story.get("verification") or {}
     history = verification.get("historical") or []
     if not history:
-        return "🕰️ History: No close prior story found"
+        return "No close prior story found"
     first = history[0]
     date = first.get("date", "") or "prior"
     source = first.get("source", "") or "memory"
     title = first.get("title", "").strip()
     if len(title) > 150:
         title = title[:147].rstrip() + "..."
-    return f"🕰️ History ({date}): {title} · {source}"
+    return f"{date}: {title} · {source}"
 
 
 def persist(stories, today):
@@ -114,7 +114,7 @@ def _story_block(story, index, total):
         f"🔴 {story.get('what', '')}\n"
         f"❓ {story.get('why', '')}\n"
         f"💡 {story.get('why_important', '')}\n"
-        f"🕰️ {_history_line(story).replace('🕰️ ', '')}\n"
+        f"🕰️ {_history_line(story)}\n"
         f"🔄 {story.get('change_since_yesterday', '')}\n"
         f"🔮 {story.get('next', '')}\n"
         f"🧠 {story.get('memory_hook', '')}\n"
@@ -162,8 +162,14 @@ def main():
     )
 
     today = datetime.now(IST).date().isoformat()
-    rows = read_rows(DATA / "news_history.csv")
-    delivered_today = [r.get("headline", "") for r in rows if r.get("date") == today]
+    history = read_rows(DATA / "news_history.csv")
+    timeline = read_rows(DATA / "story_timeline.csv")
+    # Morning avoids repeating the same delivered stories; afternoon is allowed to
+    # revisit them so continuing stories and late-day changes are not lost.
+    delivered_today = (
+        [r.get("headline", "") for r in history if r.get("date") == today]
+        if RUN_SLOT == "morning" else []
+    )
     all_articles = [article.__dict__ for article in articles]
 
     selected = select_stories(
@@ -171,11 +177,13 @@ def main():
         top_n=limits.get("top_stories", 12),
         excluded_headlines=delivered_today,
     )
-    selected = previous_change(selected, rows, today)
+    selected = previous_change(selected, timeline, today)
 
-    research = research_stories(selected, rows, all_articles)
+    # Timeline is the real historical memory: unlike news_history, it records
+    # every daily appearance of a continuing story.
+    research = research_stories(selected, timeline, all_articles)
     research_stats = research.pop("_stats", {})
-    result = generate_briefing(selected, all_articles, rows, today, research)
+    result = generate_briefing(selected, all_articles, timeline, today, research)
 
     for story in result.get("top_stories", []):
         story["verification"] = research.get(story.get("story_id"), {})
