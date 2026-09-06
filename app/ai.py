@@ -32,6 +32,9 @@ def _deterministic_score(a):
         if term in text: score+=boost
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
 
+def _event_id(title):
+    words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:24]).encode()).hexdigest()[:16]
+
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
@@ -43,10 +46,38 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62"))
-    selected=[]
+    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","80")))
+    max_stories=max(1,int(os.getenv("NEWS_MAX_STORIES","24")))
+    requested=max_stories if top_n is None else max(1,int(top_n))
+    limit=min(requested,candidate_limit)
+    selected=[]; category_counts={}; max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8")))
     for score,a in ranked:
         if score < threshold: continue
-        selected.append({"story_id":hashlib.sha1(str(a.get("title","")).lower().encode()).hexdigest()[:16],"rank":len(selected)+1,"headline":str(a.get("title","")[:240]),"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance and ranking score."})
+        category=str(a.get("category","Other")).strip().lower() or "other"
+        if category_counts.get(category,0)>=max_per_category: continue
+        title=str(a.get("title",""))
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"reason":"Impact, source quality, relevance, novelty and ranking score."})
+        category_counts[category]=category_counts.get(category,0)+1
+        if len(selected)>=limit: break
+    return selected
+
+def rerank_stories(stories,research=None):
+    """Apply confidence, source diversity, novelty and soft topic caps after verification."""
+    research=research or {}; scored=[]
+    for s in stories:
+        r=research.get(s.get("story_id"),{}) or {}; conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0)
+        importance=float(s.get("importance",0) or 0); novelty=100.0 if not r.get("historical") else 65.0
+        if r.get("verification")=="unverified": conf=min(conf,50)
+        final=0.62*importance+0.23*conf+0.10*min(100,50+indep*15)+0.05*novelty
+        scored.append((final,s))
+    scored.sort(key=lambda x:-x[0])
+    max_stories=max(1,int(os.getenv("NEWS_MAX_STORIES","24"))); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
+    for final,s in scored:
+        cat=str(s.get("category","Other")).lower() or "other"
+        if counts.get(cat,0)>=max_per_category: continue
+        if any(_similar(s.get("headline",""),x.get("headline",""))>=0.48 for x in selected): continue
+        s=dict(s); s["ranking_score"]=round(final,1); s["rank"]=len(selected)+1; selected.append(s); counts[cat]=counts.get(cat,0)+1
+        if len(selected)>=max_stories: break
     return selected
 
 def _evidence(selected,articles,research):
@@ -58,7 +89,7 @@ def _evidence(selected,articles,research):
             sim=_similar(s.get("headline",""),x.get("title",""))
             if sim>=0.20: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
-        out.append({"story_id":sid,"headline":s.get("headline",""),"importance":s.get("importance",0),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
+        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
     return out
 
 def _parse(text,item):
@@ -79,7 +110,7 @@ def _one(item,today):
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    budget=max(0,int(os.getenv("AI_STORY_BUDGET","30")))
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","24")))
     ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","75"))]
     if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
     ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
