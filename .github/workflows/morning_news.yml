@@ -53,9 +53,12 @@ jobs:
           AI_CONTEXT: '4096'
           AI_MAX_OUTPUT: '900'
           AI_TIMEOUT_SECONDS: '120'
-          AI_STORY_BUDGET: '30'
+          AI_STORY_BUDGET: '24'
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
+          NEWS_CANDIDATE_LIMIT: '80'
+          NEWS_MAX_STORIES: '24'
+          NEWS_MAX_PER_CATEGORY: '8'
           RUN_SLOT: manual
         run: python -m app.main
       - if: failure()
