@@ -2,6 +2,8 @@ name: News Intelligence
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '30 9 * * *' # 3:00 PM IST (09:30 UTC), daily
 
 permissions:
   contents: write
@@ -59,7 +61,7 @@ jobs:
           NEWS_CANDIDATE_LIMIT: '80'
           NEWS_MAX_STORIES: '24'
           NEWS_MAX_PER_CATEGORY: '8'
-          RUN_SLOT: manual
+          RUN_SLOT: afternoon
         run: python -m app.main
       - if: failure()
         run: cat /tmp/ollama.log || true
