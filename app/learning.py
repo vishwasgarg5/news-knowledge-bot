@@ -37,7 +37,7 @@ def _profile(rows):
 def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
     path=root/"news_learning.csv"; rows=read_rows(path); should_record=record_current or selected_ids is not None; selected_ids=set(selected_ids or [])
     current={str(x.get("event_id","")):str(x.get("headline","")) for x in candidates if x.get("event_id")}
-    today_d=_d(today) or date.today(); evaluated=misses=false_positive=0
+    today_d=_d(today) or date.today(); evaluated=selected_evaluated=misses=false_positive=0
     for r in rows:
         d=_d(r.get("run_date")); ev=r.get("event_id")
         if not d or not ev: continue
@@ -52,12 +52,13 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
             r["learning_value"]=f"{value:.2f}"
             if was_selected and value==0:r["false_positive"]="1";false_positive+=1
             evaluated+=1
+            if was_selected:selected_evaluated+=1
         if str(r.get("selected","")).lower()!="true" and seen and age>=2 and not r.get("missed"):
             r["missed"]="1";misses+=1
     if rows:
         with path.open("w",newline="",encoding="utf-8") as f:
             w=csv.DictWriter(f,fieldnames=HEADERS["news_learning.csv"],extrasaction="ignore");w.writeheader();w.writerows(rows)
-    if not should_record: return {"evaluated":evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(rows)}
+    if not should_record: return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(rows)}
     existing={(r.get("run_date"),r.get("event_id")) for r in rows}; new=[]
     for c in candidates:
         ev=c.get("event_id","")
