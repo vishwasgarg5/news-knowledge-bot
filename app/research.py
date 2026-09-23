@@ -35,7 +35,7 @@ def verify_article(story, articles, memory=None):
         if sim < 0.24:
             continue
         key=_source_key(a.get("source",""))
-        if not key or key in seen_sources:
+        if not key or key==primary_key or key in seen_sources:
             continue
         seen_sources.add(key)
         source_names.append(a.get("source",""))
