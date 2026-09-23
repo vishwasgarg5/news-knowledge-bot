@@ -46,9 +46,9 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62"))
-    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","80")))
-    max_stories=max(1,int(os.getenv("NEWS_MAX_STORIES","24")))
-    requested=max_stories if top_n is None else max(1,int(top_n))
+    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
+    max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
+    requested=(candidate_limit if top_n is None else max(1,int(top_n))) if max_stories <= 0 else (max_stories if top_n is None else max(1,int(top_n)))
     limit=min(requested,candidate_limit)
     selected=[]; category_counts={}; max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8")))
     for score,a in ranked:
@@ -72,13 +72,13 @@ def rerank_stories(stories,research=None):
         final=0.62*importance+0.23*conf+0.10*min(100,50+indep*15)+0.05*novelty
         scored.append((final,s))
     scored.sort(key=lambda x:-x[0])
-    max_stories=max(1,int(os.getenv("NEWS_MAX_STORIES","24"))); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
+    max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
     for final,s in scored:
         cat=str(s.get("category","Other")).lower() or "other"
-        if counts.get(cat,0)>=max_per_category: continue
+        if max_stories > 0 and counts.get(cat,0)>=max_per_category: continue
         if any(_similar(s.get("headline",""),x.get("headline",""))>=0.48 for x in selected): continue
         s=dict(s); s["ranking_score"]=round(final,1); s["rank"]=len(selected)+1; selected.append(s); counts[cat]=counts.get(cat,0)+1
-        if len(selected)>=max_stories: break
+        if max_stories > 0 and len(selected)>=max_stories: break
     return selected
 
 def _evidence(selected,articles,research):
