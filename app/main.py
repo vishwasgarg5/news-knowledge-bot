@@ -41,16 +41,16 @@ def _story_block(s,index,total):
     flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}
     importance=float(s.get("importance",0) or 0); rank=float(s.get("ranking_score",importance) or importance)
     lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100</b>",f"<b>{s.get('headline','')}</b>"]
-    if s.get("what"): lines += ["",f"WHAT\n{s.get('what')}"]
-    if s.get("why"): lines += ["",f"WHY\n{s.get('why')}"]
-    if s.get("why_important"): lines += ["",f"IMPACT\n{s.get('why_important')}"]
+    if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
+    if s.get("why"): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
+    if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
     history=(v.get("historical") or [])
     if history:
-        lines += ["",f"HISTORY\n{_history_line(s)}"]
+        lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
     change=s.get("change_since_yesterday")
     if change and change.lower() not in {"unknown","new today"}:
-        lines += ["",f"CHANGE\n{change}"]
-    if s.get("next"): lines += ["",f"NEXT\n{s.get('next')}"]
+        lines += ["",f"<b>CHANGE</b>\n{change}"]
+    if s.get("next"): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
     verification=v.get('verification','unverified'); confidence=v.get('confidence','n/a'); sources=v.get('source_count',0)
     lines += ["",f"🔎 {verification} · {confidence}% · {sources} sources · rank {rank:.0f}"]
     return "\\n".join(lines)
