@@ -65,7 +65,7 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
         if not ev or (today,ev) in existing: continue
         new.append({"run_date":today,"event_id":ev,"story_id":c.get("story_id",""),"headline":c.get("headline",""),"source":c.get("source",""),"category":c.get("category",""),"initial_score":c.get("importance",0),"selected":"true" if c.get("story_id") in selected_ids else "false","seen_again_24h":"","seen_again_48h":"","seen_again_7d":"","missed":"","false_positive":"","learning_value":""})
     append_rows(path,new,HEADERS["news_learning.csv"])
-    return {"evaluated":evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(read_rows(path))}
+    return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(read_rows(path))}
 
 def apply_learning(candidates,profile):
     source=profile.get("source",{}); category=profile.get("category",{}); out=[]
