@@ -58,10 +58,10 @@ jobs:
           AI_STORY_BUDGET: '24'
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
-          NEWS_CANDIDATE_LIMIT: '80'
-          NEWS_MAX_STORIES: '24'
+          NEWS_CANDIDATE_LIMIT: '700'
+          NEWS_MAX_STORIES: '0'
           NEWS_MAX_PER_CATEGORY: '8'
-          RUN_SLOT: afternoon
+          RUN_SLOT: morning
         run: python -m app.main
       - if: failure()
         run: cat /tmp/ollama.log || true
