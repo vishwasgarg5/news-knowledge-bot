@@ -45,6 +45,9 @@ jobs:
       - name: Ensure Qwen
         run: |
           if ! ollama list | awk '{print $1}' | grep -Fxq 'qwen2.5:7b'; then ollama pull qwen2.5:7b; fi
+      - name: Validate Python
+        run: python -m compileall -q app
+
       - name: Generate news briefing
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
