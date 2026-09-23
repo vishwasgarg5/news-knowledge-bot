@@ -19,7 +19,7 @@ def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
     return [{"title":t,"date":r.get("date","") or r.get("published",""),"source":r.get("source","") or "GitHub memory","url":r.get("url","")} for _,_,t,r in scored[:limit]]
 
 def verify_article(story, articles, memory=None):
-    headline=story.get("headline",""); matches=[]
+    headline=story.get("headline",""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source); matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
         sim=_similar(headline,a.get("title",""))
@@ -42,8 +42,6 @@ def verify_article(story, articles, memory=None):
         corroborating.append(a)
         if len(corroborating)>=8:
             break
-    primary_source=str(story.get("source","") or "")
-    primary_key=_source_key(primary_source)
     independent=len(source_names)
     official=_is_official(primary_source)
     if official:
