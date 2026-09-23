@@ -35,25 +35,39 @@ def persist(stories,today):
             append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday","")}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
     return added
 def _story_block(s,index,total):
-    flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}; rank=s.get("ranking_score",s.get("importance",0))
-    return (f"{flag} <b>{index}/{total} · {s.get('headline','')}</b>\n📰 {s.get('what','Not available')}\n❓ {s.get('why','Not available')}\n💡 {s.get('why_important','Not available')}\n🕰️ {_history_line(s)}\n🔄 {s.get('change_since_yesterday','Unknown')}\n🔮 {s.get('next','No clear next step reported')}\n🧠 {s.get('memory_hook',s.get('what',''))}\n🔎 {v.get('verification','unverified')} · {v.get('confidence','n/a')}% · {v.get('source_count',0)} src · rank {rank}")
+    flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}
+    importance=float(s.get("importance",0) or 0); rank=float(s.get("ranking_score",importance) or importance)
+    lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100</b>",f"<b>{s.get('headline','')}</b>"]
+    if s.get("what"): lines += ["",f"WHAT\n{s.get('what')}"]
+    if s.get("why"): lines += ["",f"WHY\n{s.get('why')}"]
+    if s.get("why_important"): lines += ["",f"IMPACT\n{s.get('why_important')}"]
+    history=(v.get("historical") or [])
+    if history:
+        lines += ["",f"HISTORY\n{_history_line(s)}"]
+    change=s.get("change_since_yesterday")
+    if change and change.lower() not in {"unknown","new today"}:
+        lines += ["",f"CHANGE\n{change}"]
+    if s.get("next"): lines += ["",f"NEXT\n{s.get('next')}"]
+    verification=v.get('verification','unverified'); confidence=v.get('confidence','n/a'); sources=v.get('source_count',0)
+    lines += ["",f"🔎 {verification} · {confidence}% · {sources} sources · rank {rank:.0f}"]
+    return "\\n".join(lines)
+
 def _vocab_block(s,index):
     vocab=str(s.get("vocabulary","")).strip()
     if not vocab or vocab.upper()=="NONE":return None
     terms=[]
-    for raw in re.split(r"\s*;\s*|\s*\|\s*\n",vocab):
+    for raw in re.split(r"\\s*;\\s*|\\s*\\|\\s*\\n",vocab):
         raw=raw.strip(" -•")
         if raw and raw.upper()!="NONE":terms.append(raw)
     if not terms:return None
-    lines=[f"📚 <b>VOCABULARY · NEWS {index}</b>"]
-    for n,term in enumerate(terms[:3],1):lines.append(f"{n}. {term}")
-    return "\n".join(lines)
+    return "\\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)])
+
 def build_messages(result,today,stats):
-    stories=result.get("top_stories",[]); total=len(stories); lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>",f"{total} stories",""]
-    for i,s in enumerate(stories,1):
-        flag="🇮🇳" if s.get("region")=="india" else "🌍"; lines.append(f"{i}. {flag} {s.get('headline','')}")
-    lines += ["",f"📊 scanned {stats['articles']} · candidates {stats['candidates']} · selected {stats['stories']} · verified {stats['verified']}/{stats['total']}",f"♻️ exact dup {stats['exact_duplicates']} · similar filtered {stats['semantic_filtered']} · ⚠️ source failures {stats['source_failures']}",f"🧠 learning: {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%} · miss {stats['learning_miss_rate']:.0%}",f"⏱️ {stats['runtime']} · model {configured_model()}","", "👇 Detailed news follows — one message per story"]
-    messages=["\n".join(lines)]
+    stories=sorted(result.get("top_stories",[]),key=lambda s:float(s.get("importance",0) or 0),reverse=True)
+    total=len(stories); india=sum(1 for s in stories if s.get("region")=="india"); world=total-india
+    threshold=stats.get("importance_threshold",62)
+    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Verified {stats['verified']}/{stats['total']}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
+    messages=["\\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
         if vocab:messages.append(vocab)
@@ -73,7 +87,7 @@ def main():
     added=persist(result.get("top_stories",[]),today)
     final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids={s.get("story_id") for s in result.get("top_stories",[])},record_current=True)
     lm=learning_metrics(read_rows(DATA/"news_learning.csv"))
-    stats={"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
+    stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | new={added}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
         for m in build_messages(result,today,stats):send_text(m)
