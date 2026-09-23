@@ -9,6 +9,8 @@ from .research import research_stories
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
 from .storage import HEADERS,append_rows,ensure_data,read_rows
 from .telegram import send_text
+from .learning import evaluate_and_learn,apply_learning
+
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 def load_sources():
     with CONFIG.open(encoding="utf-8") as f:return yaml.safe_load(f) or {}
@@ -28,9 +30,9 @@ def persist(stories,today):
     for s in stories:
         sid=s.get("story_id"); v=s.get("verification") or {}
         if sid and sid not in ids:
-            append_rows(path,[{"date":today,"story_id":sid,"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence","")}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
+            append_rows(path,[{"date":today,"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence","")}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
         if sid and (sid,today) not in keys:
-            append_rows(tp,[{"story_id":sid,"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday","")}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
+            append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday","")}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
     return added
 def _story_block(s,index,total):
     flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}; rank=s.get("ranking_score",s.get("importance",0))
@@ -47,23 +49,31 @@ def _vocab_block(s,index):
     for n,term in enumerate(terms[:3],1):lines.append(f"{n}. {term}")
     return "\n".join(lines)
 def build_messages(result,today,stats):
-    stories=result.get("top_stories",[]); total=len(stories); lines=[f"📰 <b>NEWS INTELLIGENCE · MANUAL</b>",f"{total} stories",""]
+    stories=result.get("top_stories",[]); total=len(stories); lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>",f"{total} stories",""]
     for i,s in enumerate(stories,1):
         flag="🇮🇳" if s.get("region")=="india" else "🌍"; lines.append(f"{i}. {flag} {s.get('headline','')}")
-    lines += ["",f"📊 scanned {stats['articles']} · candidates {stats['candidates']} · selected {stats['stories']} · verified {stats['verified']}/{stats['total']}",f"♻️ exact dup {stats['exact_duplicates']} · similar filtered {stats['semantic_filtered']} · ⚠️ source failures {stats['source_failures']}",f"⏱️ {stats['runtime']} · model {configured_model()}","","👇 Detailed news follows — one message per story"]
+    lines += ["",f"📊 scanned {stats['articles']} · candidates {stats['candidates']} · selected {stats['stories']} · verified {stats['verified']}/{stats['total']}",f"♻️ exact dup {stats['exact_duplicates']} · similar filtered {stats['semantic_filtered']} · ⚠️ source failures {stats['source_failures']}",f"🧠 learning: {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives",f"⏱️ {stats['runtime']} · model {configured_model()}","", "👇 Detailed news follows — one message per story"]
     messages=["\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
         if vocab:messages.append(vocab)
     return messages
 def main():
-    started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{}); articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700)); today=datetime.now(IST).date().isoformat(); history=read_rows(DATA/"news_history.csv"); timeline=read_rows(DATA/"story_timeline.csv"); delivered=[r.get("headline","") for r in history if r.get("date")==today] if RUN_SLOT=="morning" else []; all_articles=[a.__dict__ for a in articles]
+    started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{})
+    articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700))
+    today=datetime.now(IST).date().isoformat(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
     candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","80")))
-    candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=delivered); candidates=previous_change(candidates,timeline,today)
-    research=research_stories(candidates,timeline,all_articles); rstats=research.pop("_stats",{}); selected=rerank_stories(candidates,research)
-    result=generate_briefing(selected,all_articles,timeline,today,research); source_by_url={a.get("url"):a.get("source","") for a in all_articles}
+    candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
+    learning_stats=evaluate_and_learn(DATA,candidates,today)
+    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=previous_change(candidates,timeline,today)
+    research=research_stories(candidates,timeline,all_articles); research.pop("_stats",None)
+    selected=rerank_stories(candidates,research); result=generate_briefing(selected,all_articles,timeline,today,research)
+    source_by_url={a.get("url"):a.get("source","") for a in all_articles}
     for s in result.get("top_stories",[]):s["verification"]=research.get(s.get("story_id"),{});s["source"]=source_by_url.get(s.get("url"),s.get("source",""))
-    added=persist(result.get("top_stories",[]),today); stats={"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s"}; print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | source_failures={stats['source_failures']} | new={added}",flush=True)
+    added=persist(result.get("top_stories",[]),today)
+    final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids={s.get("story_id") for s in result.get("top_stories",[])})
+    stats={"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0)}
+    print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | new={added}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
         for m in build_messages(result,today,stats):send_text(m)
 if __name__=="__main__":main()
