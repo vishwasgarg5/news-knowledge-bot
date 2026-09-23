@@ -63,3 +63,12 @@ def apply_learning(candidates,profile):
         bonus=max(-5,min(5,2.5*s+2.5*cat))
         x=dict(c); x["learning_adjustment"]=round(bonus,1); x["importance"]=round(max(0,min(100,float(x.get("importance",0))+bonus)),1); out.append(x)
     return out
+
+
+def learning_metrics(rows):
+    labeled=[r for r in rows if r.get("learning_value")]
+    selected=[r for r in labeled if str(r.get("selected","")).lower()=="true"]
+    misses=[r for r in rows if str(r.get("missed",""))=="1"]
+    fp=[r for r in rows if str(r.get("false_positive",""))=="1"]
+    def rate(n,d): return round(n/d,3) if d else 0.0
+    return {"evaluated":len(labeled),"selected_evaluated":len(selected),"success_rate":rate(sum(_f(r.get("learning_value"))>=.45 for r in selected),len(selected)),"false_positive_rate":rate(len(fp),len(selected)),"miss_rate":rate(len(misses),max(1,len(rows)-len(selected)))}
