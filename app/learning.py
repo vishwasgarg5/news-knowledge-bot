@@ -24,8 +24,8 @@ def _profile(rows):
         return {k:max(-1,min(1,v[1]/max(1,v[0]))) for k,v in d.items()}
     return {"source":norm(by_source),"category":norm(by_cat)}
 
-def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None):
-    path=root/"news_learning.csv"; rows=read_rows(path); selected_ids=set(selected_ids or [])
+def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
+    path=root/"news_learning.csv"; rows=read_rows(path); should_record=record_current or selected_ids is not None; selected_ids=set(selected_ids or [])
     current={str(x.get("event_id","")) for x in candidates if x.get("event_id")}
     today_d=_d(today) or date.today(); evaluated=misses=false_positive=0
     for r in rows:
@@ -47,6 +47,7 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
     if rows:
         with path.open("w",newline="",encoding="utf-8") as f:
             w=csv.DictWriter(f,fieldnames=HEADERS["news_learning.csv"],extrasaction="ignore");w.writeheader();w.writerows(rows)
+    if not should_record: return {"evaluated":evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(rows)}
     existing={(r.get("run_date"),r.get("event_id")) for r in rows}; new=[]
     for c in candidates:
         ev=c.get("event_id","")
