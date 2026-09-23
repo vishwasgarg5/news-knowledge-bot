@@ -5,6 +5,7 @@ from pathlib import Path
 HEADERS={
  "news_history.csv":["date","story_id","event_id","headline","source","url","category","importance","region","verification","confidence"],
  "story_timeline.csv":["story_id","event_id","date","headline","event","importance","source","url","change_type"],
+ "news_learning_daily.csv":["date","evaluated","selected_evaluated","misses","false_positives","success_rate","false_positive_rate","miss_rate"],
  "news_learning.csv":["run_date","event_id","story_id","headline","source","category","initial_score","selected","seen_again_24h","seen_again_48h","seen_again_7d","missed","false_positive","learning_value"],
 }
 
