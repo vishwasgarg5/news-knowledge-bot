@@ -8,7 +8,7 @@ OFFICIAL={"pib","reserve bank of india","rbi","supreme court of india","prime mi
 def _tokens(text): return {x for x in re.findall(r"[a-zA-Z]{4,}",str(text).lower()) if x not in STOP}
 def _similar(a,b):
     x,y=_tokens(a),_tokens(b); return len(x&y)/max(1,len(x|y))
-def _source_key(source): return str(source or "").lower().strip()
+ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}\ndef _source_key(source):\n    raw=str(source or "").lower().strip()\n    for alias,key in ALIASES.items():\n        if alias in raw:return key\n    return raw
 def _is_official(source): return any(x in _source_key(source) for x in OFFICIAL)
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
     q=_tokens(query); scored=[]
