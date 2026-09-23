@@ -54,7 +54,8 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
     for score,a in ranked:
         if score < threshold: continue
         category=str(a.get("category","Other")).strip().lower() or "other"
-        if category_counts.get(category,0)>=max_per_category: continue
+        # Soft category cap: only skip a category when enough other categories can fill the pool.
+        if category_counts.get(category,0)>=max_per_category and len(selected) < max(1,limit-4): continue
         title=str(a.get("title",""))
         selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"reason":"Impact, source quality, relevance, novelty and ranking score."})
         category_counts[category]=category_counts.get(category,0)+1
