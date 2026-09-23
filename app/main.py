@@ -71,7 +71,7 @@ def main():
     source_by_url={a.get("url"):a.get("source","") for a in all_articles}
     for s in result.get("top_stories",[]):s["verification"]=research.get(s.get("story_id"),{});s["source"]=source_by_url.get(s.get("url"),s.get("source",""))
     added=persist(result.get("top_stories",[]),today)
-    final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids={s.get("story_id") for s in result.get("top_stories",[])})
+    final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids={s.get("story_id") for s in result.get("top_stories",[])},record_current=True)
     stats={"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0)}
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | new={added}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
