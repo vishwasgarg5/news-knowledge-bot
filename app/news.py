@@ -67,8 +67,14 @@ def _title_tokens(text: str) -> set[str]:
 
 
 def _near_duplicate(a: Article, b: Article) -> bool:
+    """Remove duplicate/near-duplicate items within the same publisher.
+    Keep similar headlines from different publishers so research can use them
+    as independent corroboration evidence.
+    """
     if a.url == b.url:
         return True
+    if str(a.source).strip().lower() != str(b.source).strip().lower():
+        return False
     x, y = _title_tokens(a.title), _title_tokens(b.title)
     return len(x & y) / max(1, len(x | y)) >= 0.62
 
