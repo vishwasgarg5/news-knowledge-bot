@@ -87,6 +87,12 @@ def main():
     added=persist(result.get("top_stories",[]),today)
     final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids={s.get("story_id") for s in result.get("top_stories",[])},record_current=True)
     lm=learning_metrics(read_rows(DATA/"news_learning.csv"))
+    daily_path=DATA/"news_learning_daily.csv"
+    daily_rows=read_rows(daily_path)
+    if not any(r.get("date")==today for r in daily_rows):
+        learning_rows=read_rows(DATA/"news_learning.csv")
+        fp_count=sum(1 for r in learning_rows if str(r.get("false_positive",""))=="1")
+        append_rows(daily_path,[{"date":today,"evaluated":lm.get("evaluated",0),"selected_evaluated":lm.get("selected_evaluated",0),"misses":lm.get("misses",0),"false_positives":fp_count,"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
     stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | new={added}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
