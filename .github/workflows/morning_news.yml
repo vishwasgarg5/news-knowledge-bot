@@ -3,7 +3,8 @@ name: News Intelligence
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 22 * * *' # 4:00 AM IST (22:30 UTC previous day), daily
+    - cron: '0 4 * * *' # 4:00 AM IST, daily
+      timezone: 'Asia/Kolkata'
 
 permissions:
   contents: write
@@ -17,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: {fetch-depth: 0}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
@@ -28,7 +29,7 @@ jobs:
         run: |
           echo "OLLAMA_MODELS=${{ github.workspace }}/.ollama/models" >> "$GITHUB_ENV"
           mkdir -p "$GITHUB_WORKSPACE/.ollama/models"
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .ollama/models
           key: ollama-qwen2.5-7b-v6-${{ runner.os }}
