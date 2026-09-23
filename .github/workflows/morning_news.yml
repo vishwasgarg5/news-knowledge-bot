@@ -3,7 +3,7 @@ name: News Intelligence
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 9 * * *' # 3:00 PM IST (09:30 UTC), daily
+    - cron: '30 22 * * *' # 4:00 AM IST (22:30 UTC previous day), daily
 
 permissions:
   contents: write
