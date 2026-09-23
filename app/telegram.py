@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import time
+import html
 import requests
 
 from .settings import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
@@ -13,8 +14,10 @@ MAX_RETRIES = 6
 _LAST_SEND = 0.0
 
 
-def _plain(text: str) -> str:
-    return re.sub(r"</?b>", "", text).replace("||", "")
+def _html(text: str) -> str:
+    # Escape dynamic news text while preserving deliberate Telegram <b> tags.
+    safe = html.escape(str(text).replace("||", ""), quote=False)
+    return safe.replace("&lt;b&gt;", "<b>").replace("&lt;/b&gt;", "</b>")
 
 
 def send(text: str):
@@ -31,7 +34,8 @@ def send(text: str):
     for attempt in range(MAX_RETRIES):
         r = requests.post(API.format(TELEGRAM_BOT_TOKEN), data={
             "chat_id": TELEGRAM_CHAT_ID,
-            "text": _plain(text),
+            "text": _html(text),
+            "parse_mode": "HTML",
             "disable_web_page_preview": True,
         }, timeout=30)
 
