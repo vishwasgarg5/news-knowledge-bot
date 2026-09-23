@@ -1,6 +1,6 @@
 # News Knowledge Bot
 
-A **news-only India + World intelligence bot** for Telegram. It scans a large article pool, reduces it to high-value event candidates, selects **up to 24 stories**, and learns from what happens to those stories after selection.
+A **news-only India + World intelligence bot** for Telegram. It scans a large article pool, reduces it to high-value event candidates, selects **every story above the importance threshold**, and learns from what happens to those stories after selection.
 
 ## Run
 GitHub → **Actions → News Intelligence → Run workflow**. The workflow also runs on its configured daily schedule.
@@ -8,7 +8,7 @@ GitHub → **Actions → News Intelligence → Run workflow**. The workflow also
 ## Intelligence flow
 ```
 SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
-→ VERIFICATION → RERANK → MAX 24 → QWEN → TELEGRAM
+→ VERIFICATION → RERANK → IMPORTANCE THRESHOLD → QWEN → TELEGRAM
 → MEMORY → FUTURE OUTCOME EVALUATION
 ```
 
@@ -24,10 +24,10 @@ SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 - Learning is deterministic and stored in GitHub CSV files; Qwen does not rewrite the ranking algorithm.
 
 ## Telegram output
-- Headline index followed by one detailed message per selected story.
+- Headline index followed by one detailed message for every story that clears the importance threshold.
 - Shows verification, confidence, source count, change/history and next step.
 - Shows learning counts: evaluated stories, misses and false positives.
-- Sends fewer than 24 when fewer stories qualify; it never pads the report.
+- No 24-story Telegram cap. `NEWS_MIN_IMPORTANCE` controls which stories are reported; `NEWS_MAX_STORIES=0` means unlimited.
 
 ## Memory
 - `data/news_history.csv` — delivered story memory
