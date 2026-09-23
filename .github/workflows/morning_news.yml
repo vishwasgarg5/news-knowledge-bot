@@ -32,8 +32,8 @@ jobs:
       - uses: actions/cache@v5
         with:
           path: .ollama/models
-          key: ollama-qwen2.5-7b-v6-${{ runner.os }}
-          restore-keys: ollama-qwen2.5-7b-v6-
+          key: ollama-qwen2.5-7b-v7-${{ runner.os }}
+          restore-keys: ollama-qwen2.5-7b-v7-
       - name: Install and start Ollama
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
@@ -59,13 +59,14 @@ jobs:
           AI_CONTEXT: '4096'
           AI_MAX_OUTPUT: '900'
           AI_TIMEOUT_SECONDS: '120'
-          AI_STORY_BUDGET: '24'
-          AI_DEEP_IMPORTANCE: '75'
+          AI_STORY_BUDGET: '12'
+          AI_DEEP_IMPORTANCE: '80'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
           NEWS_MAX_STORIES: '0'
           NEWS_MAX_PER_CATEGORY: '8'
           RUN_SLOT: morning
+          PYTHONUNBUFFERED: '1'
         run: python -m app.main
       - if: failure()
         run: cat /tmp/ollama.log || true
