@@ -33,7 +33,7 @@ def _deterministic_score(a):
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
 
 def _event_id(title):
-    words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:24]).encode()).hexdigest()[:16]
+    words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:32]).encode()).hexdigest()[:16]
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
@@ -55,7 +55,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         if score < threshold: continue
         category=str(a.get("category","Other")).strip().lower() or "other"
         # Soft category cap: only skip a category when enough other categories can fill the pool.
-        if category_counts.get(category,0)>=max_per_category and len(selected) < max(1,limit-4): continue
+        if max_stories > 0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
         selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"reason":"Impact, source quality, relevance, novelty and ranking score."})
         category_counts[category]=category_counts.get(category,0)+1
