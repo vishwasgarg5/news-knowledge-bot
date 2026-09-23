@@ -76,7 +76,9 @@ def rerank_stories(stories,research=None):
     for final,s in scored:
         cat=str(s.get("category","Other")).lower() or "other"
         if max_stories > 0 and counts.get(cat,0)>=max_per_category: continue
-        if any(_similar(s.get("headline",""),x.get("headline",""))>=0.48 for x in selected): continue
+        # Candidate selection already performs event-level deduplication.
+        # Do not remove another threshold-qualified story here: the contract
+        # is to report every story that clears NEWS_MIN_IMPORTANCE.
         s=dict(s); s["ranking_score"]=round(final,1); s["rank"]=len(selected)+1; selected.append(s); counts[cat]=counts.get(cat,0)+1
         if max_stories > 0 and len(selected)>=max_stories: break
     return selected
