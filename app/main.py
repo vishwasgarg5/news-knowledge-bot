@@ -12,6 +12,9 @@ from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
+def _safe_float(v):
+    try:return float(v)
+    except:return 0.0
 def load_sources():
     with CONFIG.open(encoding="utf-8") as f:return yaml.safe_load(f) or {}
 def sim(a,b):
@@ -76,7 +79,7 @@ def main():
     started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{})
     articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700))
     today=datetime.now(IST).date().isoformat(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
-    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","80")))
+    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
     candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
     learning_stats=evaluate_and_learn(DATA,candidates,today)
     candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=previous_change(candidates,timeline,today)
@@ -91,8 +94,12 @@ def main():
     daily_rows=read_rows(daily_path)
     if not any(r.get("date")==today for r in daily_rows):
         learning_rows=read_rows(DATA/"news_learning.csv")
-        fp_count=sum(1 for r in learning_rows if str(r.get("false_positive",""))=="1")
-        append_rows(daily_path,[{"date":today,"evaluated":lm.get("evaluated",0),"selected_evaluated":lm.get("selected_evaluated",0),"misses":lm.get("misses",0),"false_positives":fp_count,"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
+        run_evaluated=final_learning.get("evaluated",0)
+        run_selected=final_learning.get("selected_evaluated",0)
+        run_fp=final_learning.get("false_positives",0)
+        run_misses=final_learning.get("misses",0)
+        run_success=sum(1 for r in learning_rows if r.get("run_date")==today and str(r.get("selected","")).lower()=="true" and r.get("learning_value") and _safe_float(r.get("learning_value"))>=.45)/max(1,run_selected)
+        append_rows(daily_path,[{"date":today,"evaluated":run_evaluated,"selected_evaluated":run_selected,"misses":run_misses,"false_positives":run_fp,"success_rate":run_success,"false_positive_rate":run_fp/max(1,run_selected),"miss_rate":run_misses/max(1,run_evaluated-run_selected)}],HEADERS["news_learning_daily.csv"])
     stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"stories":len(result.get("top_stories",[])),"verified":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"}),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | new={added}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
