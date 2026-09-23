@@ -1,6 +1,7 @@
 from __future__ import annotations
 import csv
 from collections import defaultdict
+import re
 from datetime import date
 from pathlib import Path
 from .storage import HEADERS, append_rows, read_rows
@@ -12,6 +13,15 @@ def _f(v,default=0.0):
 def _d(v):
     try:return date.fromisoformat(str(v)[:10])
     except:return None
+
+def _event_tokens(text):
+    return set(re.findall(r"[a-zA-Z]{4,}",str(text).lower()))
+def _event_sim(a,b):
+    x,y=_event_tokens(a),_event_tokens(b)
+    return len(x&y)/max(1,len(x|y))
+def _same_event(event_id,headline,current):
+    if event_id and event_id in current: return True
+    return any(_event_sim(headline,h)>=0.55 for h in current.values())
 
 def _profile(rows):
     by_source=defaultdict(lambda:[0,0.0]); by_cat=defaultdict(lambda:[0,0.0])
@@ -26,14 +36,14 @@ def _profile(rows):
 
 def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
     path=root/"news_learning.csv"; rows=read_rows(path); should_record=record_current or selected_ids is not None; selected_ids=set(selected_ids or [])
-    current={str(x.get("event_id","")) for x in candidates if x.get("event_id")}
+    current={str(x.get("event_id","")):str(x.get("headline","")) for x in candidates if x.get("event_id")}
     today_d=_d(today) or date.today(); evaluated=misses=false_positive=0
     for r in rows:
         d=_d(r.get("run_date")); ev=r.get("event_id")
         if not d or not ev: continue
         age=(today_d-d).days
         if age<1: continue
-        seen=ev in current
+        seen=_same_event(ev,r.get("headline",""),current)
         for horizon,field in ((1,"seen_again_24h"),(2,"seen_again_48h"),(7,"seen_again_7d")):
             if age>=horizon and not r.get(field): r[field]="1" if seen else "0"
         if age>=2 and not r.get("learning_value"):
@@ -42,7 +52,7 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
             r["learning_value"]=f"{value:.2f}"
             if was_selected and value==0:r["false_positive"]="1";false_positive+=1
             evaluated+=1
-        if str(r.get("selected","")).lower()!="true" and seen and not r.get("missed"):
+        if str(r.get("selected","")).lower()!="true" and seen and age>=2 and not r.get("missed"):
             r["missed"]="1";misses+=1
     if rows:
         with path.open("w",newline="",encoding="utf-8") as f:
