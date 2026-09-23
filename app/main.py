@@ -53,7 +53,7 @@ def _story_block(s,index,total):
     if s.get("next"): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
     verification=v.get('verification','unverified'); confidence=v.get('confidence','n/a'); sources=v.get('source_count',0)
     lines += ["",f"🔎 {verification} · {confidence}% · {sources} sources · rank {rank:.0f}"]
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 def _vocab_block(s,index):
     vocab=str(s.get("vocabulary","")).strip()
@@ -63,14 +63,14 @@ def _vocab_block(s,index):
         raw=raw.strip(" -•")
         if raw and raw.upper()!="NONE":terms.append(raw)
     if not terms:return None
-    return "\\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)])
+    return "\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)])
 
 def build_messages(result,today,stats):
     stories=sorted(result.get("top_stories",[]),key=lambda s:float(s.get("importance",0) or 0),reverse=True)
     total=len(stories); india=sum(1 for s in stories if s.get("region")=="india"); world=total-india
     threshold=stats.get("importance_threshold",62)
     lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Verified {stats['verified']}/{stats['total']}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
-    messages=["\\n".join(lines)]
+    messages=["\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
         if vocab:messages.append(vocab)
