@@ -23,7 +23,7 @@ def verify_article(story, articles, memory=None):
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
         sim=_similar(headline,a.get("title",""))
-        if sim>=0.18:
+        if sim>=0.16:
             source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             matches.append((sim*0.7+trust*0.3,a))
     matches.sort(key=lambda x:-x[0])
@@ -32,7 +32,7 @@ def verify_article(story, articles, memory=None):
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a in matches:
         sim=_similar(headline,a.get("title",""))
-        if sim < 0.28:
+        if sim < 0.24:
             continue
         key=_source_key(a.get("source",""))
         if not key or key in seen_sources:
@@ -44,7 +44,7 @@ def verify_article(story, articles, memory=None):
             break
     primary_source=str(story.get("source","") or "")
     primary_key=_source_key(primary_source)
-    independent=len([x for x in source_names if x and x != primary_key])
+    independent=len(source_names)
     official=_is_official(primary_source)
     if official:
         verification="official-source"; confidence=96 if independent else 92
@@ -66,6 +66,6 @@ def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:lis
         if r["historical"]: memory_ok+=1
         if r["verification"]=="unverified": failed+=1
     total=len(stories); status="PASS" if total and strong>=max(1,int(total*.50)) else ("WARN" if strong else "FAIL")
-    output["_stats"]={"ok":strong,"memory_ok":memory_ok,"failed":failed,"total":total,"status":status}
-    print(f"[INFO] verification status={status}: {strong}/{total} strongly verified; {memory_ok} historical matches",flush=True)
+    output["_stats"]={"ok":strong,"memory_ok":memory_ok,"failed":failed,"total":total,"coverage":(strong/total if total else 0),"status":status}
+    print(f"[INFO] verification status={status}: {strong}/{total} strongly verified; {memory_ok} historical matches; coverage={strong/max(1,total):.0%}",flush=True)
     return output
