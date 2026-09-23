@@ -1,48 +1,38 @@
 # News Knowledge Bot
 
-A **news-only India + World intelligence bot** for Telegram. Run it manually from GitHub Actions whenever you want a fresh briefing.
+A **news-only India + World intelligence bot** for Telegram. It scans a large article pool, reduces it to high-value event candidates, selects **up to 24 stories**, and learns from what happens to those stories after selection.
 
 ## Run
-
-GitHub → **Actions → News Intelligence → Run workflow**.
-
-There are no automatic schedules.
+GitHub → **Actions → News Intelligence → Run workflow**. The workflow also runs on its configured daily schedule.
 
 ## Intelligence flow
-```text
-SCAN ALL → SOURCE HEALTH → ARTICLE DEDUPLICATION → EVENT CANDIDATES
-→ IMPORTANCE → MULTI-SOURCE VERIFICATION → CONFIDENCE + NOVELTY
-→ TOPIC DIVERSITY → MAX 24 HIGH-VALUE STORIES
-→ QWEN ANALYSIS → HISTORY / CHANGE → TELEGRAM
-→ GITHUB NEWS MEMORY
+```
+SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
+→ VERIFICATION → RERANK → MAX 24 → QWEN → TELEGRAM
+→ MEMORY → FUTURE OUTCOME EVALUATION
 ```
 
-## Selection model
-- Scans up to the configured source/article limits before ranking
-- Builds a larger candidate pool before final selection
-- Removes exact and semantic near-duplicates
-- Treats related coverage as one event rather than filling the report with copies
-- Separates **importance** from **confidence**
-- Rewards independent source corroboration and penalizes unverified items
-- Uses novelty/history so repeated coverage does not crowd out new developments
-- Applies soft topic diversity limits to avoid one category dominating the briefing
-- Sends **up to 24** high-value stories per run; fewer are sent when fewer meaningful stories qualify
-- Never pads the report just to reach 24
+## Learning system
+- Stores the candidate pool, not just the final 24.
+- Uses a stable event ID for outcome tracking.
+- Evaluates whether selected stories reappear after roughly 24h, 48h and 7 days.
+- Detects **misses**: a story not selected later becomes a candidate again.
+- Detects **false positives**: a selected story shows no persistence by the 48h checkpoint.
+- Learns bounded source/category adjustments from historical outcomes.
+- Uses persistence as a **proxy for impact**, not as ground truth.
+- Keeps learned adjustments small (maximum ±5 importance points) to prevent runaway self-learning.
+- Learning is deterministic and stored in GitHub CSV files; Qwen does not rewrite the ranking algorithm.
 
 ## Telegram output
-- **Message 1:** complete numbered headline index
-- **Following messages:** exactly one detailed message per selected story
-- Detailed stories include what happened, why, impact, prior context, change, next step, memory hook and verification
-- Verification distinguishes **Confirmed · multi-source**, **Confirmed · official source**, **Single source** and **Unverified**
-- Confidence and source count are shown for every story
-- Vocabulary appears only when a genuinely difficult/important news term needs explanation
-- Run-health statistics show scanned articles, candidate count, final count, duplicate filtering, verification and source failures
+- Headline index followed by one detailed message per selected story.
+- Shows verification, confidence, source count, change/history and next step.
+- Shows learning counts: evaluated stories, misses and false positives.
+- Sends fewer than 24 when fewer stories qualify; it never pads the report.
 
 ## Memory
-- `data/news_history.csv` — delivered news history
-- `data/story_timeline.csv` — story evolution/history
-
-GitHub is the only persistent memory. No separate learning database.
+- `data/news_history.csv` — delivered story memory
+- `data/story_timeline.csv` — story evolution
+- `data/news_learning.csv` — candidate/outcome learning history
 
 ## AI
 Ollama + Qwen 2.5 7B.
@@ -52,4 +42,4 @@ Ollama + Qwen 2.5 7B.
 - `TELEGRAM_CHAT_ID`
 
 ## Design rule
-The repository is intentionally **news only**. No culture, religion, quiz, people/places or separate learning modules.
+News only. No separate app or unrelated modules.
