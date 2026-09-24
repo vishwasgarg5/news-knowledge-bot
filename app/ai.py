@@ -1,5 +1,7 @@
 from __future__ import annotations
 import hashlib,json,os,re
+from datetime import datetime,timezone
+
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
@@ -24,6 +26,25 @@ def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
 def _words(text): return set(re.findall(r"[a-zA-Z]{4,}",str(text).lower()))
 def _similar(a,b):
     wa,wb=_words(a),_words(b); return len(wa&wb)/max(1,len(wa|wb))
+
+def _freshness_bonus(article):
+    """Reward genuinely recent articles and penalize stale feed entries."""
+    raw=str(article.get("published","") or "").strip()
+    if not raw:
+        return -2.0
+    try:
+        value=raw.replace("Z","+00:00")
+        dt=datetime.fromisoformat(value)
+        if dt.tzinfo is None:
+            dt=dt.replace(tzinfo=timezone.utc)
+        age_hours=max(0.0,(datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds()/3600.0)
+    except (TypeError,ValueError):
+        return -2.0
+    if age_hours <= 6: return 12.0
+    if age_hours <= 24: return 8.0
+    if age_hours <= 48: return 4.0
+    if age_hours <= 72: return 1.0
+    return -8.0
 
 def _deterministic_score(a):
     title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","")).lower(),str(a.get("category","")).lower(); text=f"{title} {summary}".lower(); score=35.0
@@ -124,38 +145,17 @@ def _explicit_who(item):
     headline=str(item.get("headline","") or "")
     summary=str(item.get("summary","") or "")
     text=f"{headline} {summary}".strip()
-    role_patterns=(
-        r"former\s+[A-Za-z -]+?chief minister",
-        r"former\s+[A-Za-z -]+?prime minister",
-        r"leader of the opposition",
-        r"chief minister",
-        r"prime minister",
-        r"president",
-        r"vice president",
-        r"finance minister",
-        r"home minister",
-        r"defence minister",
-        r"foreign minister",
-        r"minister",
-        r"chief executive officer",
-        r"ceo",
-    )
+    role_patterns=(r"former\s+[A-Za-z -]+?chief minister",r"former\s+[A-Za-z -]+?prime minister",r"leader of the opposition",r"chief minister",r"prime minister",r"president",r"vice president",r"finance minister",r"home minister",r"defence minister",r"foreign minister",r"minister",r"chief executive officer",r"ceo")
     role=""
     lower=text.lower()
     for pattern in role_patterns:
         m=re.search(pattern,lower)
-        if m:
-            role=m.group(0)
-            break
-    # Common news wording: "says NAME", "said NAME", "asks NAME", etc.
+        if m: role=m.group(0); break
     name=""
     m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]{2,})\b",headline)
-    if m:
-        name=m.group(1).strip(".,")
-    if name and role:
-        return f"{name} — {role}"
-    if name:
-        return name
+    if m: name=m.group(1).strip(".,")
+    if name and role: return f"{name} — {role}"
+    if name: return name
     return ""
 
 def _fallback(item):
@@ -184,8 +184,7 @@ No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
     result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","45"))),item)
     explicit=_explicit_who(item)
     current=str(result.get("who","")).strip()
-    if explicit and (not current or current.lower().startswith(("not stated","former ","leader ","chief ","the "))):
-        result["who"]=explicit
+    if explicit and (not current or current.lower().startswith(("not stated","former ","leader ","chief ","the "))): result["who"]=explicit
     result["ai_generated"]=True
     return result
 
@@ -196,12 +195,10 @@ def generate_briefing(selected,articles,previous,today,research=None):
     if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
     ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
     for item in evidence:
-        if item.get("story_id") not in ai_ids:
-            stories.append(_fallback(item)); continue
+        if item.get("story_id") not in ai_ids: stories.append(_fallback(item)); continue
         try: stories.append(_one(item,today))
         except Exception as exc:
-            print(f"[WARN] story generation failed: {exc}",flush=True)
-            stories.append(_fallback(item))
+            print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_fallback(item))
     return {"top_stories":stories}
 
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles),articles,previous,today,research)
