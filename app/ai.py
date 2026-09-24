@@ -80,10 +80,12 @@ def _event_similarity(a,b):
     if base>=0.50 and len(common)>=4: return max(base,0.64)
     return base
 def _same_event(a,b):
-    """Conservative event-family match for final selection."""
+    """Conservative final-selection duplicate detector."""
     ta=_content_tokens(a); tb=_content_tokens(b); common=ta&tb
     base=len(common)/max(1,len(ta|tb))
-    if base>=0.58: return True
+    # Broad lexical overlap was collapsing unrelated stories. Only collapse
+    # near-identical headlines here, plus explicit multi-token event families.
+    if base>=0.80: return True
     families=[
         {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","security"},
         {"muse","agent","wearable","glasses","launch","launched","product"},
@@ -93,7 +95,7 @@ def _same_event(a,b):
     ]
     for family in families:
         shared=common & family
-        if shared and (len(shared)>=2 or len(common)>=2):
+        if len(shared)>=3:
             return True
     return False
 
