@@ -155,12 +155,12 @@ def _evidence(selected,articles,research):
     return out
 
 def _parse(text,item):
-    values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","who_detail","when","where","why","impact","background","change","next","connection","memory","vocabulary"}
+    values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","who_detail","when","where","why","how","impact","key_data","background","change","next","connection","memory","vocabulary"}
     for line in text.splitlines():
         if ":" not in line: continue
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v: values[k]=v
-    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"who_detail":values.get("who_detail",""),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
+    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"who_detail":values.get("who_detail",""),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"how":values.get("how","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
 
 def _person_context(name, text):
     """Add concise, role-focused context for major public figures when their identity is explicit."""
@@ -253,18 +253,22 @@ def _extract_context(item):
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
     who=_explicit_who(item) or "Not stated in supplied sources"
+    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
     headline=str(item.get("headline",summary))
     when,where=_extract_context(item)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "", "how":"Not stated in supplied sources", "key_data":"","when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
 def _one(item,today):
     prompt=f"""Today: {today}
-Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 12 short lines:
+Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 15 short lines:
 WHAT: ...
 WHO: ...
+WHO_DETAIL: ...
 WHEN: ...
 WHERE: ...
 WHY: ...
+HOW: ...
 IMPACT: ...
+KEY_DATA: ...
 BACKGROUND: ...
 CHANGE: ...
 NEXT: ...
