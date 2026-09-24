@@ -87,7 +87,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         title=str(a.get("title","")).strip()
         if not title or not a.get("url"): continue
         if any(_similar(title,old)>=.62 for old in excluded): continue
-        if any(_event_similarity(title,old)>=.72 for old in seen): continue
+        if any(_event_similarity(title,old)>=.58 for old in seen): continue
         seen.append(title); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
