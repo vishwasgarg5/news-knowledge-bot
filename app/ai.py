@@ -172,8 +172,14 @@ def _parse(text,item):
     # Reject obvious AI leakage in WHO/WHEN/WHERE and fall back to deterministic facts.
     fallback_who=_explicit_who(item)
     who=values.get("who","").strip()
-    if who and (len(who)>180 or re.search(r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today)\b",who,re.I)):
-        who=fallback_who
+    who=who.strip(" .,-")
+    # WHO must describe a person/organisation, never a temporal/transition fragment.
+    invalid_who_words=r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today|tomorrow|however|also|then|after|before)\b"
+    if who and (len(who)>180 or re.search(invalid_who_words,who,re.I) or len(who.split())>16):
+        who=""
+    # Reject obvious sentence fragments that contain no likely name/entity signal.
+    if who and not re.search(r"[A-Z][A-Za-z.'-]{2,}",who):
+        who=""
     if not who and fallback_who:
         who=fallback_who
     for field in ("when","where"):
