@@ -2,7 +2,6 @@ sources:
   india:
     - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml
     - https://www.thehindu.com/news/national/feeder/default.rss
-    - https://www.ndtv.com/rss/india
     - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
   world:
     - https://feeds.bbci.co.uk/news/world/rss.xml
@@ -10,15 +9,19 @@ sources:
   business:
     - https://feeds.bbci.co.uk/news/business/rss.xml
     - https://www.thehindu.com/business/feeder/default.rss
+    - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
   technology:
     - https://feeds.bbci.co.uk/news/technology/rss.xml
     - https://www.thehindu.com/sci-tech/technology/feeder/default.rss
+    - https://techcrunch.com/feed/
   science:
     - https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
+    - https://science.nasa.gov/feed/photojournal/latest-content/
   defence:
-    - https://indianexpress.com/section/india/feed/
+    - https://feeds.bbci.co.uk/news/world/rss.xml
+    - https://www.thehindu.com/news/national/feeder/default.rss
 
 limits:
-  max_articles_per_source: 40
+  max_articles_per_source: 35
   max_total_articles: 700
   max_related_articles: 5
