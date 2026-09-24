@@ -54,6 +54,8 @@ def _story_block(s,index,total):
     if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
     if s.get("why"): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
     if s.get("who"): lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
+    if s.get("when"): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
+    if s.get("where"): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
     if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
     history=v.get("historical") or []
     if history: lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
