@@ -87,8 +87,11 @@ def _vocab_block(s,index):
     return "\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)]) if terms else None
 
 def build_messages(result,today,stats):
-    stories=sorted(result.get("top_stories",[]),key=lambda s:float(s.get("importance",0) or 0),reverse=True)
-    total=len(stories); india=sum(1 for s in stories if s.get("region")=="india"); world=total-india
+    stories=list(result.get("top_stories",[]))
+    india_stories=[s for s in stories if s.get("region")=="india"]
+    world_stories=[s for s in stories if s.get("region")!="india"]
+    stories=india_stories+world_stories
+    total=len(stories); india=len(india_stories); world=len(world_stories)
     threshold=stats.get("importance_threshold",62)
     lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Current verified {stats['verified']}/{stats['total']} · Strong {stats['strong_verified']}/{stats['total']}",f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · Health {stats.get('health','WARN')}",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
     messages=["\n".join(lines)]
