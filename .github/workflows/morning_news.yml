@@ -66,8 +66,8 @@ jobs:
           OLLAMA_URL: http://localhost:11434/api/generate
           AI_CONTEXT: '1536'
           AI_MAX_OUTPUT: '160'
-          AI_TIMEOUT_SECONDS: '12'
-          AI_STORY_BUDGET: '4'
+          AI_TIMEOUT_SECONDS: '18'
+          AI_STORY_BUDGET: '2'
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
