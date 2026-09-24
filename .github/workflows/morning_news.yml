@@ -61,8 +61,8 @@ jobs:
           sample={"headline":"Example launch announced","summary":"The company launched the product using a new manufacturing process. Previously, it had been developing the platform for years. The change could reduce production time."}
           assert _fallback_how(sample)
           assert _fallback_background(sample)
-          assert _fallback_impact(sample)
-          assert _fallback_next({"summary":"Officials said the company will now begin trials next month."})
+          assert _fallback_impact({"summary":"The change could materially reduce production time for manufacturers and affect costs."})
+          assert _fallback_next({"summary":"Officials said the company plans to begin trials next month."})
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
           PY
