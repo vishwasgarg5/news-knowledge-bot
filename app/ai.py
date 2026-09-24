@@ -206,9 +206,12 @@ def _parse(text,item):
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v and v.lower().strip(" .") not in bad: values[k]=v
     fallback_who=_explicit_who(item); who=values.get("who","").strip().strip(" .,-")
+    bad_name_tokens={"monday","tuesday","wednesday","thursday","friday","saturday","sunday","meanwhile","the","burnham","yesterday","today","tomorrow","however","also","then","after","before"}
     invalid_who_words=r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today|tomorrow|however|also|then|after|before)\b"
     if who and (len(who)>180 or re.search(invalid_who_words,who,re.I) or len(who.split())>16): who=""
     if who and not re.search(r"[A-Z][A-Za-z.'-]{2,}",who): who=""
+    if who and any(t.lower().strip(".,") in bad_name_tokens for t in who.split()): who=""
+    if who and len(who.split())==1 and who.lower() in {"the","meanwhile","monday","june","burnham"}: who=""
     if not who and fallback_who: who=fallback_who
     where_value=values.get("where","").strip(" .,-")
     month_words={"january","february","march","april","may","june","july","august","september","october","november","december","jan","feb","mar","apr","jun","jul","aug","sep","sept","oct","nov","dec"}
@@ -217,6 +220,11 @@ def _parse(text,item):
     if (where_lower in bad_where_words or re.search(r"\b(?:19|20)\d{2}\b",where_value) or re.fullmatch(r"\d{1,2}(?:st|nd|rd|th)?",where_value,re.I) or re.search(r"\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b",where_value,re.I)): where_value=""
     if not where_value:
         _,det_where=_extract_context(item); where_value=det_where or ""
+    # Re-validate deterministic location recovery too; dates/months must never
+    # reach Telegram as a location.
+    where_lower=where_value.lower().strip(" .,")
+    if (where_lower in bad_where_words or re.fullmatch(r"\\d{1,2}(?:st|nd|rd|th)?",where_lower) or re.search(r"\\b(?:19|20)\\d{2}\\b",where_value)):
+        where_value=""
     evidence=_evidence_text(item)
     for field in ("why","how","impact","background","change","next","connection","vocabulary"):
         if values.get(field) and not _field_supported(values[field],evidence,2): values[field]=""
