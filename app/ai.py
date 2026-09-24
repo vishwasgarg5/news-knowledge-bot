@@ -182,10 +182,21 @@ def _parse(text,item):
         who=""
     if not who and fallback_who:
         who=fallback_who
-    for field in ("when","where"):
-        if values.get(field,"").strip().lower() in {"june","may","april","march","china","india","cmf"}:
-            values.pop(field,None)
-    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":who,"who_detail":values.get("who_detail","") if who else "","when":values.get("when",""),"where":values.get("where",""),"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
+    # WHEN/WHERE must not swap. Reject month names, dates and temporal fragments
+    # from WHERE, then recover a location from the primary evidence when possible.
+    where_value=values.get("where","").strip(" .,-")
+    month_words={"january","february","march","april","may","june","july","august","september","october","november","december",
+                 "jan","feb","mar","apr","jun","jul","aug","sep","sept","oct","nov","dec"}
+    bad_where_words=month_words|{"today","yesterday","tomorrow","tonight","monday","tuesday","wednesday","thursday","friday","saturday","sunday","meanwhile","however","then","after","before"}
+    where_lower=where_value.lower()
+    if (where_lower in bad_where_words or re.search(r"\b(?:19|20)\d{2}\b",where_value)
+            or re.fullmatch(r"\d{1,2}(?:st|nd|rd|th)?",where_value,re.I)
+            or re.search(r"\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b",where_value,re.I)):
+        where_value=""
+    if not where_value:
+        _,det_where=_extract_context(item)
+        where_value=det_where or ""
+    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":who,"who_detail":values.get("who_detail","") if who else "","when":values.get("when",""),"where":where_value,"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
 
 def _person_context(name, text):
     """Add concise, role-focused context for major public figures when their identity is explicit."""
