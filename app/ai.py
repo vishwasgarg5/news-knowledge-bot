@@ -375,7 +375,7 @@ def _fallback_background(item):
     first=sentences[0]
     context=re.compile(r"\b(?:previously|earlier|historically|history|since|in \d{4}|last year|months earlier|had been|has been|was first|founded|launched in|for years|longstanding)\b",re.I)
     for sentence in sentences[1:]:
-        if len(sentence)>=60 and _similar(sentence,first)<0.58 and context.search(sentence):
+        if len(sentence)>=35 and _similar(sentence,first)<0.70 and context.search(sentence):
             return sentence[:500]
     return ""
 
