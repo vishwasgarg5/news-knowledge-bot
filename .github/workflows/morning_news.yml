@@ -86,6 +86,14 @@ jobs:
           RUN_SLOT: morning
           PYTHONUNBUFFERED: '1'
         run: python -m app.main
+      - name: Upload final briefing audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-briefing-audit
+          path: /tmp/news_briefing.json
+          if-no-files-found: ignore
+          retention-days: 7
       - if: failure()
         run: |
           echo "=== Ollama log ==="
