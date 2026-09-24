@@ -138,6 +138,20 @@ def rerank_stories(stories,research=None):
     if max_stories>0:
         india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
     selected=india[:india_limit] + world[:world_limit]
+    # If clustering leaves a region short, backfill from the ranked pool using
+    # a stricter title-only duplicate check. This guarantees the requested
+    # 15 India + 15 World structure without reintroducing obvious duplicates.
+    def backfill(pool, current, limit):
+        for score,item in pool:
+            if len(current)>=limit: break
+            title=str(item.get("_event_text") or item.get("headline",""))
+            if any(_event_similarity(title,str(x.get("_event_text") or x.get("headline","")))>=.80 for x in current):
+                continue
+            current.append(item)
+        return current
+    india=backfill([x for x in scored if str(x[1].get("region","")).lower()=="india"], india, india_limit)
+    world=backfill([x for x in scored if str(x[1].get("region","")).lower()!="india"], world, world_limit)
+    selected=india[:india_limit] + world[:world_limit]
     for rank,item in enumerate(selected,1): item["rank"]=rank
     return selected
 
