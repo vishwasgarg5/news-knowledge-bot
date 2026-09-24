@@ -58,13 +58,15 @@ def _region(category: str, title: str, summary: str) -> str:
 def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article], bool, str]:
     parsed = feedparser.parse(url)
     entries = getattr(parsed, "entries", [])
-    # A feed with a parser error is not considered healthy even when feedparser
-    # managed to recover some entries. Otherwise malformed feeds look healthy
-    # and contaminate freshness/verification statistics.
-    if getattr(parsed, "bozo", False):
-        return [], False, str(getattr(parsed, "bozo_exception", "malformed feed"))
+    # feedparser can recover usable entries from some imperfect RSS/XML feeds.
+    # Do not discard an entire source merely because its XML has a recoverable
+    # parsing warning. Keep the warning visible in source_status so reliability
+    # is still measurable, while preserving the usable articles.
     if not entries:
         return [], False, "empty feed"
+    parse_warning = ""
+    if getattr(parsed, "bozo", False):
+        parse_warning = str(getattr(parsed, "bozo_exception", "malformed feed"))
     source = parsed.feed.get("title", url)
     result = []
     for e in entries[:limit]:
@@ -75,7 +77,7 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         summary = _clean(e.get("summary", e.get("description", "")))
         aid = hashlib.sha256((title.lower() + "|" + link).encode()).hexdigest()[:16]
         result.append(Article(title, summary[:1600], link, source, category, _date(e), aid, _region(category, title, summary)))
-    return result, bool(result), ""
+    return result, bool(result), parse_warning
 
 
 def _freshness_score(published: str) -> float:
