@@ -81,5 +81,7 @@ def chunks(text: str, size: int = 3800):
 
 
 def send_text(text: str):
-    for part in chunks(text):
+    parts=chunks(text)
+    for part in parts:
         send(part)
+    print(f"[INFO] Telegram delivery success | messages={len(parts)}",flush=True)
