@@ -117,8 +117,8 @@ def rerank_stories(stories,research=None):
         source_diversity=min(8,indep*2)
         # Prevent a single uncorroborated report from displaying a near-certain importance.
         published_importance=importance
-        if verification=="single-source": published_importance=min(published_importance,78.0)
-        elif verification=="unverified": published_importance=min(published_importance,70.0)
+        if verification=="single-source": published_importance=min(published_importance,72.0)
+        elif verification=="unverified": published_importance=min(published_importance,68.0)
         item=dict(s); item["importance"]=round(published_importance,1)
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
         item["ranking_score"]=round(final,1); scored.append((final,item))
@@ -163,17 +163,32 @@ def rerank_stories(stories,research=None):
     for rank,item in enumerate(selected,1): item["rank"]=rank
     return selected
 
+def _corroboration_score(a,b):
+    """Require a real event match before importing facts from another article."""
+    base=_similar(a,b)
+    wa,wb=_content_tokens(a),_content_tokens(b)
+    common=wa&wb
+    named_a={x.lower() for x in re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(a))}
+    named_b={x.lower() for x in re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(b))}
+    named=named_a&named_b
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
+    event_overlap=common&event_terms
+    if base>=0.52: return base
+    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=2: return 0.55
+    if len(named)>=2 and len(common)>=2: return 0.55
+    return base
+
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
     for s in selected:
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id"); related=[]
         for x in articles:
             if x.get("url")==s.get("url"): continue
-            sim=_event_similarity(s.get("headline",""),x.get("title",""))
-            if sim>=.30: related.append((sim,x))
+            sim=_corroboration_score(s.get("headline",""),x.get("title",""))
+            if sim>=.55: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         merged=[]; seen=set()
-        for x in [x for x in (r.get("evidence") or []) if _event_similarity(s.get("headline",""),x.get("title",""))>=.30] + [x for _,x in related[:6]]:
+        for x in [x for x in (r.get("evidence") or []) if _corroboration_score(s.get("headline",""),x.get("title",""))>=.55] + [x for _,x in related[:6]]:
             key=str(x.get("url","") or x.get("title","")).strip()
             if not key or key in seen: continue
             seen.add(key); merged.append(x)
@@ -228,6 +243,8 @@ def _parse(text,item):
     evidence=_evidence_text(item)
     for field in ("why","how","impact","background","change","next","connection","vocabulary"):
         if values.get(field) and not _field_supported(values[field],evidence,2): values[field]=""
+    if values.get("memory") and _similar(str(values["memory"]),str(item.get("headline","")) or str(item.get("summary","")))>0.70:
+        values["memory"]=""
     # Reject semantically wrong enrichment even when its words happen to occur
     # in the evidence. WHY needs a causal cue; HOW needs a mechanism, not a
     # chronology fragment; BACKGROUND must add context rather than restating WHAT.
