@@ -62,6 +62,10 @@ def _story_block(s,index,total):
     change=s.get("change_since_yesterday")
     if change and change.lower() not in {"unknown","new today"}: lines += ["",f"<b>CHANGE</b>\n{change}"]
     if s.get("next"): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
+    if s.get("connection") and str(s.get("connection")).lower() not in {"not stated in supplied sources","none"}:
+        lines += ["",f"<b>CONNECTION</b>\n{s.get('connection')}"]
+    if s.get("memory_hook") and str(s.get("memory_hook")).lower() not in {"not stated in supplied sources","none"}:
+        lines += ["",f"<b>MEMORY</b>\n{s.get('memory_hook')}"]
     verification=v.get("verification","unverified"); confidence=v.get("confidence","n/a"); sources=v.get("source_count",0)
     if verification=="unverified":
         status="SINGLE SOURCE / PENDING" if sources==1 else "UNVERIFIED"
