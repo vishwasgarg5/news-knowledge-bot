@@ -276,7 +276,7 @@ CONNECTION: ...
 MEMORY: ...
 VOCABULARY: NONE
 If a person, organisation, date or location is named in the supplied evidence, include the exact name and the relevant role or place. Never replace an identifiable name with "Not stated in supplied sources". Separate reported facts from analysis or interpretation.
-No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
+WHO_DETAIL should give 1-2 concise sentences for each important named person: current role/position, relevant background, and why they matter to this event. HOW should explain the mechanism or sequence. KEY_DATA should list only important verified numbers, percentages, dates, money or quantities; otherwise write NONE. Use only supplied evidence. No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
     result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","45"))),item)
     explicit=_explicit_who(item)
     current=str(result.get("who","")).strip()
