@@ -168,8 +168,8 @@ def _corroboration_score(a,b):
     base=_similar(a,b)
     wa,wb=_content_tokens(a),_content_tokens(b)
     common=wa&wb
-    named_a={x.lower() for x in re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(a))}
-    named_b={x.lower() for x in re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(b))}
+    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a))}
+    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b))}
     named=named_a&named_b
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
     event_overlap=common&event_terms
@@ -238,7 +238,7 @@ def _parse(text,item):
     # Re-validate deterministic location recovery too; dates/months must never
     # reach Telegram as a location.
     where_lower=where_value.lower().strip(" .,")
-    if (where_lower in bad_where_words or re.fullmatch(r"\\d{1,2}(?:st|nd|rd|th)?",where_lower) or re.search(r"\\b(?:19|20)\\d{2}\\b",where_value)):
+    if (where_lower in bad_where_words or re.fullmatch(r"\d{1,2}(?:st|nd|rd|th)?",where_lower) or re.search(r"\b(?:19|20)\d{2}\b",where_value)):
         where_value=""
     evidence=_evidence_text(item)
     for field in ("why","how","impact","background","change","next","connection","vocabulary"):
@@ -333,17 +333,17 @@ def _extract_context(item):
     return when,where
 
 def _sentence_list(text):
-    return [x.strip() for x in re.split(r"(?<=[.!?])\\s+",str(text or "")) if x.strip()]
+    return [x.strip() for x in re.split(r"(?<=[.!?])\s+",str(text or "")) if x.strip()]
 
 def _fallback_how(item):
     text=str(item.get("summary","") or "").strip()
     # HOW must describe a mechanism, not merely chronology.
-    patterns=(r"\\b(?:by|through|using|via)\\s+([^.;]{20,220})",r"\\b(?:under|as part of)\\s+(?:a|an|the)\\s+([^.;]{20,220})")
+    patterns=(r"\b(?:by|through|using|via)\s+([^.;]{20,220})",r"\b(?:under|as part of)\s+(?:a|an|the)\s+([^.;]{20,220})")
     for pattern in patterns:
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(1).strip(" .,:;")
-            if not re.match(r"^(?:after|following|during|before|when|while)\\b",value,re.I) and len(value.split())>=4:
+            if not re.match(r"^(?:after|following|during|before|when|while)\b",value,re.I) and len(value.split())>=4:
                 return value[:400]
     return ""
 
@@ -373,7 +373,7 @@ def _fallback_background(item):
     sentences=_sentence_list(primary)
     if len(sentences)<2: return ""
     first=sentences[0]
-    context=re.compile(r"\\b(?:previously|earlier|historically|history|since|in \\d{4}|last year|months earlier|had been|has been|was first|founded|launched in|for years|longstanding)\\b",re.I)
+    context=re.compile(r"\b(?:previously|earlier|historically|history|since|in \d{4}|last year|months earlier|had been|has been|was first|founded|launched in|for years|longstanding)\b",re.I)
     for sentence in sentences[1:]:
         if len(sentence)>=60 and _similar(sentence,first)<0.58 and context.search(sentence):
             return sentence[:500]
@@ -381,8 +381,8 @@ def _fallback_background(item):
 
 def _fallback_impact(item):
     text=str(item.get("summary","") or "").strip()
-    for pattern in (r"\\b(?:could|may|will|would|is expected to|are expected to)\\s+([^.;]{25,260})",
-                    r"\\b(?:impact|impacts|affect|affects|risk|risks|consequence|consequences)\\s+(?:of|for|on)?\\s*([^.;]{25,260})"):
+    for pattern in (r"\b(?:could|may|will|would|is expected to|are expected to)\s+([^.;]{25,260})",
+                    r"\b(?:impact|impacts|affect|affects|risk|risks|consequence|consequences)\s+(?:of|for|on)?\s*([^.;]{25,260})"):
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(1).strip(" .,:;")
@@ -392,8 +392,8 @@ def _fallback_impact(item):
 
 def _fallback_next(item):
     text=str(item.get("summary","") or "").strip()
-    for pattern in (r"\\b(?:next|will now|plans to|plan to|is expected to|are expected to|will be)\\s+([^.;]{20,240})",
-                    r"\\b(?:on|by)\\s+([^.;]{10,80})\\s+(?:the company|officials|government|court|police)\\b"):
+    for pattern in (r"\b(?:next|will now|plans to|plan to|is expected to|are expected to|will be)\s+([^.;]{20,240})",
+                    r"\b(?:on|by)\s+([^.;]{10,80})\s+(?:the company|officials|government|court|police)\b"):
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(0).strip(" .,:;")
