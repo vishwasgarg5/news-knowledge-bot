@@ -161,7 +161,7 @@ def _explicit_who(item):
             return f"{name} — {fixed_role}" if fixed_role else name
 
     # Existing explicit attribution patterns, expanded to capture full names.
-    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\\b",text)
+    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\b",text)
     if m:
         return m.group(1).strip(" .,")
 
