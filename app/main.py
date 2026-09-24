@@ -69,7 +69,8 @@ def build_messages(result,today,stats):
     stories=sorted(result.get("top_stories",[]),key=lambda s:float(s.get("importance",0) or 0),reverse=True)
     total=len(stories); india=sum(1 for s in stories if s.get("region")=="india"); world=total-india
     threshold=stats.get("importance_threshold",62)
-    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Verified {stats['verified']}/{stats['total']}",f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · Health {stats.get('health','WARN')}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
+    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Verified {stats['verified']}/{stats['total']}",f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · Health {stats.get('health','WARN')}",
+             f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
     messages=["\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
@@ -100,7 +101,7 @@ def main():
         run_misses=final_learning.get("misses",0)
         run_success=sum(1 for r in learning_rows if r.get("run_date")==today and str(r.get("selected","")).lower()=="true" and r.get("learning_value") and _safe_float(r.get("learning_value"))>=.45)/max(1,run_selected)
         append_rows(daily_path,[{"date":today,"evaluated":run_evaluated,"selected_evaluated":run_selected,"misses":run_misses,"false_positives":run_fp,"success_rate":run_success,"false_positive_rate":run_fp/max(1,run_selected),"miss_rate":run_misses/max(1,run_evaluated-run_selected)}],HEADERS["news_learning_daily.csv"])
-    stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":len(result.get("top_stories",[])),"verified":research_stats.get("ok",sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"})),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
+    stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":cstats.get("source_failures",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":len(result.get("top_stories",[])),"verified":research_stats.get("ok",sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("verification") in {"multi-source","official-source"})),"total":len(selected),"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0)}
     coverage=stats["verified"]/max(1,stats["total"])
     stats["health"]="PASS" if stats["source_failures"]==0 and coverage>=0.50 else ("WARN" if coverage>=0.20 or stats["source_failures"]<=2 else "DEGRADED")
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | verified={stats['verified']}/{stats['total']} | learning={stats['learning_labeled']} | misses={stats['learning_misses']} | false_positive={stats['learning_false_positives']} | source_failures={stats['source_failures']} | health={stats['health']} | new={added}",flush=True)
@@ -108,5 +109,25 @@ def main():
         if not failure.get("ok"):
             print(f"[WARN] source failed | category={failure.get('category','')} | url={failure.get('url','')} | error={failure.get('error','')}",flush=True)
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
-        for m in build_messages(result,today,stats):send_text(m)
+        try:
+            for m in build_messages(result,today,stats):
+                send_text(m)
+        except Exception as exc:
+            print(f"[WARN] Telegram full briefing failed: {exc}", flush=True)
+            fallback = [
+                "📰 <b>NEWS INTELLIGENCE · FALLBACK</b>",
+                "",
+                "⚠️ <b>Full briefing was partially unavailable.</b>",
+                f"📊 Candidates {stats['candidates']} · Stories {stats['stories']}",
+                f"🔎 Verified {stats['verified']}/{stats['total']}",
+                f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · {stats.get('health','DEGRADED')}",
+                "",
+                "<b>TOP STORIES</b>"
+            ]
+            for i, s in enumerate(sorted(result.get("top_stories",[]), key=lambda x: float(x.get("importance",0) or 0), reverse=True)[:10], 1):
+                fallback.append(f"{i}. <b>{s.get('headline','')}</b> · {float(s.get('importance',0) or 0):.0f}/100")
+            try:
+                send_text("\n".join(fallback))
+            except Exception as fallback_exc:
+                print(f"[ERROR] Telegram fallback failed: {fallback_exc}", flush=True)
 if __name__=="__main__":main()
