@@ -109,11 +109,11 @@ def _fallback(item):
 
 def _one(item,today):
     prompt=f"Today: {today}\nExplain ONE news story using ONLY supplied evidence. Keep every field short. Return EXACTLY 12 separate lines, one field per line:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nVOCABULARY: NONE OR up to 3 genuinely difficult/important terms, formatted as term = simple meaning | news context.\nUse VOCABULARY: NONE when ordinary language is sufficient. Do not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse(_call_ollama(prompt,num_predict=340,timeout=100),item)
+    return _parse(_call_ollama(prompt,num_predict=340,timeout=45),item)
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    budget=max(0,int(os.getenv("AI_STORY_BUDGET","24")))
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","6")))
     ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","75"))]
     if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
     ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
