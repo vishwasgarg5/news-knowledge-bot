@@ -117,8 +117,8 @@ def rerank_stories(stories,research=None):
         source_diversity=min(8,indep*2)
         # Prevent a single uncorroborated report from displaying a near-certain importance.
         published_importance=importance
-        if verification=="single-source": published_importance=min(published_importance,82.0)
-        elif verification=="unverified": published_importance=min(published_importance,74.0)
+        if verification=="single-source": published_importance=min(published_importance,78.0)
+        elif verification=="unverified": published_importance=min(published_importance,70.0)
         item=dict(s); item["importance"]=round(published_importance,1)
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
         item["ranking_score"]=round(final,1); scored.append((final,item))
@@ -307,13 +307,19 @@ def _extract_context(item):
         sw,sl=scan(secondary); when=when or sw; where=where or sl
     return when,where
 
+def _sentence_list(text):
+    return [x.strip() for x in re.split(r"(?<=[.!?])\\s+",str(text or "")) if x.strip()]
+
 def _fallback_how(item):
     text=str(item.get("summary","") or "").strip()
-    for pattern in (r"(?:by|through|using|via) ([^.]{25,220})[.]", r"(?:was|were|is|are) ([^.]{25,220})[.]"):
+    # HOW must describe a mechanism, not merely chronology.
+    patterns=(r"\\b(?:by|through|using|via)\\s+([^.;]{20,220})",r"\\b(?:under|as part of)\\s+(?:a|an|the)\\s+([^.;]{20,220})")
+    for pattern in patterns:
         m=re.search(pattern,text,re.I)
         if m:
-            value=m.group(0).strip()
-            if not re.match(r"^(?:after|following|during)\\b",value,re.I): return value[:400]
+            value=m.group(1).strip(" .,:;")
+            if not re.match(r"^(?:after|following|during|before|when|while)\\b",value,re.I) and len(value.split())>=4:
+                return value[:400]
     return ""
 
 def _fallback_key_data(item):
@@ -339,25 +345,59 @@ def _fallback_why(item):
 def _fallback_background(item):
     primary=str(item.get("summary","") or "").strip()
     if not primary: return ""
-    sentences=[x.strip() for x in re.split(r"(?<=[.!?])\\s+",primary) if x.strip()]
+    sentences=_sentence_list(primary)
     if len(sentences)<2: return ""
     first=sentences[0]
-    context=re.compile(r"\\b(?:previously|earlier|historically|history|since|in \\d{4}|last year|months earlier|had been|has been|was first|founded|launched in)\\b",re.I)
+    context=re.compile(r"\\b(?:previously|earlier|historically|history|since|in \\d{4}|last year|months earlier|had been|has been|was first|founded|launched in|for years|longstanding)\\b",re.I)
     for sentence in sentences[1:]:
         if len(sentence)>=60 and _similar(sentence,first)<0.58 and context.search(sentence):
             return sentence[:500]
     return ""
 
-def _fallback(item):
-    summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
-    item=dict(item); item.pop("_event_text",None)
+def _fallback_impact(item):
+    text=str(item.get("summary","") or "").strip()
+    for pattern in (r"\\b(?:could|may|will|would|is expected to|are expected to)\\s+([^.;]{25,260})",
+                    r"\\b(?:impact|impacts|affect|affects|risk|risks|consequence|consequences)\\s+(?:of|for|on)?\\s*([^.;]{25,260})"):
+        m=re.search(pattern,text,re.I)
+        if m:
+            value=m.group(1).strip(" .,:;")
+            if len(value.split())>=5 and _similar(value,text)<0.78:
+                return value[:450]
+    return ""
+
+def _fallback_next(item):
+    text=str(item.get("summary","") or "").strip()
+    for pattern in (r"\\b(?:next|will now|plans to|plan to|is expected to|are expected to|will be)\\s+([^.;]{20,240})",
+                    r"\\b(?:on|by)\\s+([^.;]{10,80})\\s+(?:the company|officials|government|court|police)\\b"):
+        m=re.search(pattern,text,re.I)
+        if m:
+            value=m.group(0).strip(" .,:;")
+            if len(value.split())>=4: return value[:400]
+    return ""
+
+def _fallback_connection(item):
+    related=item.get("related_articles") or []
+    if not related: return ""
+    primary_tokens=_content_tokens(item.get("headline",""))
+    for r in related:
+        title=str(r.get("title","") or "").strip()
+        if title and _similar(title,item.get("headline",""))<0.72:
+            return "Related development: "+title[:260]
+    return ""
+
+def _fallback_memory(item):
     historical=(item.get("verification") or {}).get("historical") or []
     if historical:
         h=historical[0]
-        memory_hook=f"Prior: {h.get('date','prior')} — {h.get('title','')}"[:300]
-    else:
-        memory_hook=(summary[:220].strip() if summary.strip().rstrip(".")!=headline.strip().rstrip(".") else "")
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":memory_hook,"vocabulary":"","ai_generated":False}
+        title=str(h.get("title","") or "").strip()
+        if title: return f"Prior: {h.get('date','prior')} — {title}"[:300]
+    return ""
+
+def _fallback(item):
+    summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
+    item=dict(item); item.pop("_event_text",None)
+    memory_hook=_fallback_memory(item)
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":_fallback_impact(item),"background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":_fallback_next(item),"connection":_fallback_connection(item),"memory_hook":memory_hook,"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
     prompt=f"""Today: {today}
