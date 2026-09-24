@@ -85,7 +85,7 @@ def _same_event(a,b):
     base=len(common)/max(1,len(ta|tb))
     if base>=0.58: return True
     families=[
-        {"hack","hacked","breach","breached","infiltrated","portal","security"},
+        {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","security"},
         {"muse","agent","wearable","glasses","launch","launched","product"},
         {"cec","gyanesh","election","commission","resign","impeach","protest"},
         {"cauvery","tamil","karnataka","water","tmc","drought"},
