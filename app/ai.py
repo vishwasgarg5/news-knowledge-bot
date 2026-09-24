@@ -252,19 +252,20 @@ def _extract_context(item):
     articles=_evidence_articles(item)
     primary=articles[:1]
     secondary=articles[1:]
-    def scan(texts):
+
+    def scan(article_list):
         when=""; where=""
         date_patterns=(
-            r"\\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+\\d{1,2}(?:,\\s*\\d{4})?",
-            r"\\b\\d{1,2}\\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4}\\b",
-            r"\\b(?:today|yesterday|tonight|this morning|this evening)\\b",
+            r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",
+            r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",
+            r"\b(?:today|yesterday|tonight|this morning|this evening)\b",
         )
         location_patterns=(
-            r"\\b(?:at|in|from|near)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){0,4})(?=\\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\\b|[.,;:]|$)",
-            r"\\b(?:headquarters|headquartered)\\s+(?:in|at)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,4})",
-            r"\\b([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,4}),\\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\\b",
+            r"\b(?:at|in|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\b|[.,;:]|$)",
+            r"\b(?:headquarters|headquartered)\s+(?:in|at)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4})",
+            r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4}),\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\b",
         )
-        texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in texts]
+        texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in article_list]
         for article_text in texts:
             for pattern in date_patterns:
                 m=re.search(pattern,article_text,re.I)
@@ -280,42 +281,12 @@ def _extract_context(item):
             counts={x:candidates.count(x) for x in set(candidates)}
             where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
         return when,where
+
     when,where=scan(primary)
     if not when or not where:
         sw,sl=scan(secondary)
         when=when or sw
         where=where or sl
-    return when,where
-    date_patterns=(
-        r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",
-        r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",
-        r"\b(?:today|yesterday|tonight|this morning|this evening)\b",
-    )
-    for article_text in texts:
-        for pattern in date_patterns:
-            m=re.search(pattern,article_text,re.I)
-            if m:
-                when=m.group(0)
-                break
-        if when: break
-    location_patterns=(
-        r"\b(?:at|in|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\b|[.,;:]|$)",
-        r"\b(?:headquarters|headquartered)\s+(?:in|at)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})",
-        r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4}),\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\b",
-    )
-    # Prefer locations that occur in multiple supplied sources.
-    candidates=[]
-    for article_text in texts:
-        found=[]
-        for pattern in location_patterns:
-            found += [m.group(1).strip(" .,") for m in re.finditer(pattern,article_text)]
-        for candidate in found:
-            if candidate and len(candidate.split())<=5 and candidate.lower() not in {"the social media giant","the company"}:
-                candidates.append(candidate)
-    if candidates:
-        counts={}
-        for x in candidates: counts[x]=counts.get(x,0)+1
-        where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
     return when,where
 
 def _fallback_how(item):
@@ -348,13 +319,11 @@ def _combined_evidence_text(item):
 
 def _fallback_why(item):
     texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
-    # Prefer the primary article; use corroboration only if it has an explicit reason.
-    for text in texts:
-        # Prefer explicit purpose/reason clauses. Do not treat an isolated number as WHY.
     patterns=(
         r"(?:introduced|launched|unveiled|announced|designed|aims? to|intended to|to address|to improve|to reduce|to provide) ([^.]{20,240})[.]",
         r"(?:because|amid|over) ([^.]{20,240})[.]",
     )
+    for text in texts:
         for pattern in patterns:
             m=re.search(pattern,text,re.I)
             if m:
