@@ -150,9 +150,9 @@ def _explicit_who(item):
     # Strong, role-linked patterns first. These handle common news wording such as
     # "street dancer Wu Yufei" and "Fang Zhenghua, the art director...".
     role_name_patterns=(
-        (r"\\b(?:chinese|indian|american|british|japanese|korean)?\\s*(?:street\\s+)?dancer\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)", "dancer"),
-        (r"\\b([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+),\\s+(?:the\\s+)?(?:art\\s+director|director|founder|chief executive officer|ceo|commerciali[sz]ation lead|lead engineer)", ""),
-        (r"\\b(?:founder|director|ceo|president|minister|prime minister|chief minister|leader of the opposition)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)", ""),
+        (r"\b(?:chinese|indian|american|british|japanese|korean)?\s*(?:street\s+)?dancer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)", "dancer"),
+        (r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+),\s+(?:the\s+)?(?:art\s+director|director|founder|chief executive officer|ceo|commerciali[sz]ation lead|lead engineer)", ""),
+        (r"\b(?:founder|director|ceo|president|minister|prime minister|chief minister|leader of the opposition)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)", ""),
     )
     for pattern, fixed_role in role_name_patterns:
         m=re.search(pattern,text)
@@ -161,15 +161,15 @@ def _explicit_who(item):
             return f"{name} — {fixed_role}" if fixed_role else name
 
     # Existing explicit attribution patterns, expanded to capture full names.
-    m=re.search(r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3})\\b",text)
+    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\\b",text)
     if m:
         return m.group(1).strip(" .,")
 
     # Generic person-name fallback only when the surrounding text clearly uses a
     # person descriptor. Avoid treating ordinary title-case words as names.
     descriptor_patterns=(
-        r"\\b(?:the\\s+)?(?:27-year-old|\\d{2}-year-old)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)",
-        r"\\b(?:native|performer|engineer|artist|actor|actress|dancer)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)",
+        r"\b(?:the\s+)?(?:27-year-old|\d{2}-year-old)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)",
+        r"\b(?:native|performer|engineer|artist|actor|actress|dancer)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)",
     )
     for pattern in descriptor_patterns:
         m=re.search(pattern,text)
