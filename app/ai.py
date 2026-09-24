@@ -79,6 +79,24 @@ def _event_similarity(a,b):
     if len(named)>=1 and len(common)>=4: return max(base,0.70)
     if base>=0.50 and len(common)>=4: return max(base,0.64)
     return base
+def _same_event(a,b):
+    """Conservative event-family match for final selection."""
+    ta=_content_tokens(a); tb=_content_tokens(b); common=ta&tb
+    base=len(common)/max(1,len(ta|tb))
+    if base>=0.58: return True
+    families=[
+        {"hack","hacked","breach","breached","infiltrated","portal","security"},
+        {"muse","agent","wearable","glasses","launch","launched","product"},
+        {"cec","gyanesh","election","commission","resign","impeach","protest"},
+        {"cauvery","tamil","karnataka","water","tmc","drought"},
+        {"hilsa","bangladesh","fish","importing","exports"},
+    ]
+    for family in families:
+        shared=common & family
+        if shared and (len(shared)>=2 or len(common)>=2):
+            return True
+    return False
+
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
@@ -159,6 +177,26 @@ def rerank_stories(stories,research=None):
         [x for x in scored if str(x[1].get("region","")).lower()!="india"],
         world_selected, world_limit
     )
+    def dedup_region(items, pool, limit):
+        out=[]
+        for item in items:
+            title=str(item.get("_event_text") or item.get("headline",""))
+            if any(_same_event(title,str(x.get("_event_text") or x.get("headline",""))) for x in out):
+                continue
+            out.append(item)
+            if len(out)>=limit: return out
+        for score,item in pool:
+            if len(out)>=limit: break
+            title=str(item.get("_event_text") or item.get("headline",""))
+            if any(_same_event(title,str(x.get("_event_text") or x.get("headline",""))) for x in out):
+                continue
+            out.append(item)
+        return out
+
+    india_pool=sorted([x for x in scored if str(x[1].get("region","")).lower()=="india"],key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    world_pool=sorted([x for x in scored if str(x[1].get("region","")).lower()!="india"],key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    india_selected=dedup_region(india_selected,india_pool,india_limit)
+    world_selected=dedup_region(world_selected,world_pool,world_limit)
     selected=india_selected[:india_limit] + world_selected[:world_limit]
     for rank,item in enumerate(selected,1): item["rank"]=rank
     return selected
@@ -343,7 +381,7 @@ def _fallback_how(item):
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(1).strip(" .,:;")
-            if not re.match(r"^(?:after|following|during|before|when|while)\b",value,re.I) and len(value.split())>=4:
+            if not re.match(r"^(?:after|following|during|before|when|while)\b",value,re.I) and len(value.split())>=4 and _similar(value,text)<0.60:
                 return value[:400]
     return ""
 
@@ -386,7 +424,7 @@ def _fallback_impact(item):
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(1).strip(" .,:;")
-            if len(value.split())>=5 and _similar(value,text)<0.78:
+            if len(value.split())>=5 and _similar(value,text)<0.65:
                 return value[:450]
     return ""
 
