@@ -147,5 +147,6 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
         "exact_duplicates": len(all_articles) - len({a.article_id for a in all_articles}),
         "semantic_filtered": max(0, len({a.article_id for a in all_articles}) - len(unique)),
         "source_status": source_status,
-        "source_failures": sum(not x["ok"] for x in source_status),\n        "source_warnings": sum(bool(x.get("warning")) for x in source_status),
+        "source_failures": sum(not x["ok"] for x in source_status),
+        "source_warnings": sum(bool(x.get("warning")) for x in source_status),
     }
