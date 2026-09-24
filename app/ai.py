@@ -342,14 +342,22 @@ def _fallback_background(item):
     sentences=[x.strip() for x in re.split(r"(?<=[.!?])\\s+",primary) if x.strip()]
     if len(sentences)<2: return ""
     first=sentences[0]
+    context=re.compile(r"\\b(?:previously|earlier|historically|history|since|in \\d{4}|last year|months earlier|had been|has been|was first|founded|launched in)\\b",re.I)
     for sentence in sentences[1:]:
-        if len(sentence)>=70 and _similar(sentence,first)<0.58 and not re.search(r"\\b(?:today|announced|said|reported|launched|arrested|approved|opened|arrived|attack|breach|ban|decision)\\b",sentence,re.I): return sentence[:500]
+        if len(sentence)>=60 and _similar(sentence,first)<0.58 and context.search(sentence):
+            return sentence[:500]
     return ""
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
     item=dict(item); item.pop("_event_text",None)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":(summary[:220].strip() if summary.strip().rstrip(".")!=headline.strip().rstrip(".") else ""),"vocabulary":"","ai_generated":False}
+    historical=(item.get("verification") or {}).get("historical") or []
+    if historical:
+        h=historical[0]
+        memory_hook=f"Prior: {h.get('date','prior')} — {h.get('title','')}"[:300]
+    else:
+        memory_hook=(summary[:220].strip() if summary.strip().rstrip(".")!=headline.strip().rstrip(".") else "")
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":memory_hook,"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
     prompt=f"""Today: {today}
