@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   run-news:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
@@ -56,6 +56,16 @@ jobs:
           yaml.safe_load(Path("config/sources.yaml").read_text(encoding="utf-8"))
           print("Configuration validation passed")
           PY
+          python - <<'PY'
+          from app.ai import _fallback_how, _fallback_why, _fallback_background, _fallback_impact, _fallback_next
+          sample={"headline":"Example launch announced","summary":"The company launched the product using a new manufacturing process. Previously, it had been developing the platform for years. The change could reduce production time."}
+          assert _fallback_how(sample)
+          assert _fallback_background(sample)
+          assert _fallback_impact(sample)
+          assert _fallback_next({"summary":"Officials said the company will now begin trials next month."})
+          assert _fallback_why({"summary":"The move was made because demand increased significantly."})
+          print("News enrichment smoke tests passed")
+          PY
       - name: Generate news briefing
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -66,8 +76,8 @@ jobs:
           OLLAMA_URL: http://localhost:11434/api/generate
           AI_CONTEXT: '1536'
           AI_MAX_OUTPUT: '160'
-          AI_TIMEOUT_SECONDS: '18'
-          AI_STORY_BUDGET: '2'
+          AI_TIMEOUT_SECONDS: '10'
+          AI_STORY_BUDGET: '1'
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
