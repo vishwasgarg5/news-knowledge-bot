@@ -66,14 +66,14 @@ def verify_article(story, articles, memory=None):
         if str(a.get("url",""))==str(story.get("url","")): continue
         if not _published_recent(a.get("published",""),72): continue
         sim=_event_similarity(headline,a.get("title",""))
-        if sim>=0.12:
+        if sim>=0.28:
             source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             matches.append((sim*0.7+trust*0.3,a))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a in matches:
         sim=_event_similarity(headline,a.get("title",""))
-        if sim < 0.16: continue
+        if sim < 0.28: continue
         key=_source_key(a.get("source",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
