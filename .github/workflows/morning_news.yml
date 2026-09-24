@@ -58,7 +58,7 @@ jobs:
           PY
           python - <<'PY'
           from app.ai import _fallback_how, _fallback_why, _fallback_background, _fallback_impact, _fallback_next
-          sample={"headline":"Example launch announced","summary":"The company launched the product using a new manufacturing process. Previously, it had been developing the platform for years. The change could reduce production time."}
+          sample={"headline":"Example launch announced","summary":"The company launched the product using a new manufacturing process. The company was founded in 2018 and has operated for years."}
           assert _fallback_how(sample)
           assert _fallback_background(sample)
           assert _fallback_impact({"summary":"The change could materially reduce production time for manufacturers and affect costs."})
