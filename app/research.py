@@ -44,7 +44,11 @@ def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
     q=_tokens(query)-generic
     if len(q)<3: return []
     scored=[]
+    current_day=datetime.now(timezone.utc).date().isoformat()
     for row in memory or []:
+        row_date=str(row.get("date","") or "")[:10]
+        if row_date and row_date >= current_day:
+            continue
         title=str(row.get("headline","") or row.get("title",""))
         words=_tokens(title)-generic
         overlap=q&words
