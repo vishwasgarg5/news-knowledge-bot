@@ -220,13 +220,27 @@ def _parse(text,item):
     evidence=_evidence_text(item)
     for field in ("why","how","impact","background","change","next","connection","vocabulary"):
         if values.get(field) and not _field_supported(values[field],evidence,2): values[field]=""
-    # Do not let enrichment fields simply restate WHAT. A supported sentence can
-    # still be useless if it is almost the same sentence as the event summary.
+    # Reject semantically wrong enrichment even when its words happen to occur
+    # in the evidence. WHY needs a causal cue; HOW needs a mechanism, not a
+    # chronology fragment; BACKGROUND must add context rather than restating WHAT.
     what_text=str(item.get("summary","") or item.get("headline",""))
+    causal=re.compile(r"\b(?:because|due to|amid|after|following|in response to|to address|to prevent|to reduce|to improve|as a result|over|in the wake of)\b",re.I)
+    mechanism=re.compile(r"\b(?:by|through|using|via|with|under|under a|as part of)\b",re.I)
+    chronology_start=re.compile(r"^(?:after|following|during|before|when|while|as)\b",re.I)
     for field in ("why","impact","background","change"):
         value=str(values.get(field,"") or "").strip()
         if value and _similar(value,what_text)>=0.72:
             values[field]=""
+    if values.get("why") and not causal.search(str(values["why"])):
+        values["why"]=""
+    if values.get("how") and (chronology_start.search(str(values["how"])) or not mechanism.search(str(values["how"]))):
+        values["how"]=""
+    if values.get("background"):
+        bg=str(values["background"]).strip()
+        if chronology_start.search(bg) or re.search(r"^(?:the|this) (?:move|decision|action|announcement)\b",bg,re.I):
+            values["background"]=""
+    if values.get("connection") and _similar(str(values["connection"]),what_text)>=0.72:
+        values["connection"]=""
     # WHO_DETAIL must be tied to evidence as well.
     if values.get("who_detail"):
         who_detail=str(values["who_detail"]).strip()
