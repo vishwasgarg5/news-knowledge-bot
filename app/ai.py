@@ -245,17 +245,24 @@ def _fallback_key_data(item):
     return "; ".join(values[:8])
 
 def _fallback_why(item):
-    texts=[str(item.get("summary","") or "")]
-    patterns=(r"(?:introduced|launched|unveiled|announced|designed|aims? to|intended to|to address|to improve|to reduce|to provide) ([^.]{20,240})[.]",r"(?:because|amid|over) ([^.]{20,240})[.]")
-    for text in texts:
-        for pattern in patterns:
-            m=re.search(pattern,text,re.I)
-            if m: return m.group(1).strip().rstrip(".")
+    text=str(item.get("summary","") or "")
+    # WHY should describe a stated cause, motivation or response. Do not
+    # convert ordinary announcement wording into a fake explanation.
+    patterns=(r"(?:because|amid|over|due to|in response to|after) ([^.]{20,240})[.]",
+              r"(?:to address|to reduce|to improve|to prevent) ([^.]{20,240})[.]")
+    for pattern in patterns:
+        m=re.search(pattern,text,re.I)
+        if m: return m.group(1).strip().rstrip(".")
     return ""
 
 def _fallback_background(item):
     primary=str(item.get("summary","") or "").strip()
-    if len(primary)>=140: return re.split(r"(?<=[.!?])\s+",primary)[0].strip()[:500]
+    if not primary: return ""
+    sentences=[x.strip() for x in re.split(r"(?<=[.!?])\s+",primary) if x.strip()]
+    if len(sentences)<2: return ""
+    # Prefer a later sentence so BACKGROUND adds context instead of repeating WHAT.
+    for sentence in sentences[1:]:
+        if len(sentence)>=60: return sentence[:500]
     return ""
 
 def _fallback(item):
