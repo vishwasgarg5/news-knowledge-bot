@@ -4,7 +4,7 @@ import hashlib
 import re
 import time
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 
 import feedparser
@@ -77,6 +77,30 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         result.append(Article(title, summary[:1600], link, source, category, _date(e), aid, _region(category, title, summary)))
     return result, bool(result), ""
 
+
+def _freshness_score(published: str) -> float:
+    """Prefer genuinely current news; do not let stale feed entries dominate."""
+    try:
+        dt=datetime.fromisoformat(str(published).replace("Z","+00:00"))
+        if dt.tzinfo is None: dt=dt.replace(tzinfo=timezone.utc)
+        age=max(0.0,(datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds()/3600)
+        if age<=6: return 12.0
+        if age<=24: return 8.0
+        if age<=48: return 4.0
+        if age<=72: return 1.0
+        return -8.0
+    except Exception:
+        return -2.0
+
+def _quality_penalty(article: Article) -> float:
+    title=article.title.lower()
+    summary=article.summary.lower()
+    # Avoid feed noise: galleries, live blogs, opinion-only and very thin entries.
+    penalty=0.0
+    if len(article.title)<25: penalty+=3
+    if len(summary)<80: penalty+=2
+    if any(x in title for x in ("live updates","live:","photos","photo gallery","quiz","horoscope")): penalty+=5
+    return penalty
 
 def _title_tokens(text: str) -> set[str]:
     return set(re.findall(r"[a-z]{4,}", text.lower()))
