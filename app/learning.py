@@ -35,7 +35,7 @@ def _profile(rows):
     return {"source":norm(by_source),"category":norm(by_cat)}
 
 def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
-    path=root/"news_learning.csv"; rows=read_rows(path); should_record=record_current or selected_ids is not None; selected_ids=set(selected_ids or [])
+    path=root/"news_learning.csv"; rows=read_rows(path); should_record=bool(record_current); selected_ids=set(selected_ids or [])
     current={str(x.get("event_id","")):str(x.get("headline","")) for x in candidates if x.get("event_id")}
     today_d=_d(today) or date.today(); evaluated=selected_evaluated=misses=false_positive=0
     for r in rows:
