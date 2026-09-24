@@ -45,12 +45,21 @@ def _date(entry) -> str:
 
 
 def _region(category: str, title: str, summary: str) -> str:
-    """Classify by event geography, with feed category only as fallback."""
+    """Classify the geography of the actual event, not merely the feed category."""
     text=f"{title} {summary}".lower()
     india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal")
     world_terms=("united states","u.s.","america","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations")
-    if any(re.search(rf"\b{re.escape(x)}\b",text) for x in india_terms): return "india"
-    if any(re.search(rf"\b{re.escape(x)}\b",text) for x in world_terms): return "world"
+    india_hits=sum(bool(re.search(rf"\b{re.escape(x)}\b",text)) for x in india_terms)
+    world_hits=sum(bool(re.search(rf"\b{re.escape(x)}\b",text)) for x in world_terms)
+    # A clear international actor/event in the headline takes precedence over
+    # incidental India references in the summary.
+    title_text=str(title).lower()
+    title_world=sum(bool(re.search(rf"\b{re.escape(x)}\b",title_text)) for x in world_terms)
+    title_india=sum(bool(re.search(rf"\b{re.escape(x)}\b",title_text)) for x in india_terms)
+    if title_world and title_world >= title_india: return "world"
+    if title_india and title_india > title_world: return "india"
+    if world_hits > india_hits: return "world"
+    if india_hits > world_hits: return "india"
     cat=str(category).lower()
     return "india" if cat in {"india","national","india_business","india_technology","india_defence"} else "world"
 
