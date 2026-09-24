@@ -328,10 +328,8 @@ def _fallback_how(item):
     for text in texts:
         m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]", text, re.I)
         if m: return m.group(0).strip()
-    for x in (item.get("related_articles") or []):
-        text=str(x.get("summary","") or "")
-        m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]", text, re.I)
-        if m: return m.group(0).strip()
+    # Never borrow HOW from another article. Related articles are corroboration,
+    # not a source for a different event's mechanics.
     return ""
 
 def _fallback_key_data(item):
@@ -358,7 +356,7 @@ def _combined_evidence_text(item):
     return " ".join(x for x in parts if x).strip()
 
 def _fallback_why(item):
-    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
+    texts=[str(item.get("summary","") or "")]
     patterns=(
         r"(?:introduced|launched|unveiled|announced|designed|aims? to|intended to|to address|to improve|to reduce|to provide) ([^.]{20,240})[.]",
         r"(?:because|amid|over) ([^.]{20,240})[.]",
@@ -374,14 +372,9 @@ def _fallback_background(item):
     primary=str(item.get("summary","") or "").strip()
     if len(primary)>=140:
         return re.split(r"(?<=[.!?])\s+",primary)[0].strip()[:500]
-    related=item.get("related_articles") or []
-    parts=[]
-    for x in related[:3]:
-        summary=str(x.get("summary","") or "").strip()
-        if summary:
-            sentence=re.split(r"(?<=[.!?])\s+",summary)[0].strip()
-            if sentence and sentence not in parts: parts.append(sentence[:280])
-    return " ".join(parts)[:700]
+    # Do not synthesize background from a different article. If the primary
+    # summary is too short, leave it blank rather than risk event contamination.
+    return ""
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""
