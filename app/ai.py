@@ -131,7 +131,12 @@ def rerank_stories(stories,research=None):
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
     if max_stories>0:
         india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
-    selected=india[:india_limit] + world[:world_limit]
+    # Convert ranked tuples to story dictionaries before backfilling.
+    # Otherwise the final rank assignment would try to mutate a (score, story)
+    # tuple and crash the workflow.
+    india_selected=[item for _,item in india[:india_limit]]
+    world_selected=[item for _,item in world[:world_limit]]
+
     # If clustering leaves a region short, backfill from the ranked pool using
     # a stricter title-only duplicate check. This guarantees the requested
     # 15 India + 15 World structure without reintroducing obvious duplicates.
@@ -143,9 +148,16 @@ def rerank_stories(stories,research=None):
                 continue
             current.append(item)
         return current
-    india=backfill([x for x in scored if str(x[1].get("region","")).lower()=="india"], india, india_limit)
-    world=backfill([x for x in scored if str(x[1].get("region","")).lower()!="india"], world, world_limit)
-    selected=india[:india_limit] + world[:world_limit]
+
+    india_selected=backfill(
+        [x for x in scored if str(x[1].get("region","")).lower()=="india"],
+        india_selected, india_limit
+    )
+    world_selected=backfill(
+        [x for x in scored if str(x[1].get("region","")).lower()!="india"],
+        world_selected, world_limit
+    )
+    selected=india_selected[:india_limit] + world_selected[:world_limit]
     for rank,item in enumerate(selected,1): item["rank"]=rank
     return selected
 
