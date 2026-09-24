@@ -38,13 +38,18 @@ def _source_key(source):
 def _is_official(source): return any(x in _source_key(source) for x in OFFICIAL)
 
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
-    q=_tokens(query); scored=[]
+    """Return only close prior events; generic words must not create history links."""
+    q=_tokens(query)-{"first","time","year","people","says","said","news","latest","today","world","india"}
+    scored=[]
     for row in memory or []:
-        title=str(row.get("headline","") or row.get("title","")); words=_tokens(title); overlap=len(q&words)
-        if overlap>=2: scored.append((overlap/max(1,len(q|words)),overlap,title,row))
+        title=str(row.get("headline","") or row.get("title",""))
+        words=_tokens(title)
+        overlap=q&words
+        ratio=len(overlap)/max(1,len(q|words))
+        if len(overlap)>=3 and ratio>=0.30:
+            scored.append((ratio,len(overlap),title,row))
     scored.sort(key=lambda x:(-x[0],-x[1],str(x[3].get("date","") or x[3].get("published",""))))
     return [{"title":t,"date":r.get("date","") or r.get("published",""),"source":r.get("source","") or "GitHub memory","url":r.get("url","")} for _,_,t,r in scored[:limit]]
-
 def _parse_date(value):
     if not value: return None
     try:
