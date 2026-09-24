@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
-SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise. Think: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT."""
+SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If a detail is not supported by the supplied evidence, leave that field blank rather than writing a generic disclaimer. Keep every answer concise. Think: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT."""
 
 DEFAULT_MODEL="qwen2.5:3b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 
@@ -160,7 +160,7 @@ def _parse(text,item):
         if ":" not in line: continue
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
         if k in allowed and v: values[k]=v
-    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"who_detail":values.get("who_detail",""),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"how":values.get("how","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
+    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who",""),"who_detail":values.get("who_detail",""),"when":values.get("when",""),"where":values.get("where",""),"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
 
 def _person_context(name, text):
     """Add concise, role-focused context for major public figures when their identity is explicit."""
@@ -250,13 +250,23 @@ def _extract_context(item):
                 break
     return when,where
 
+def _fallback_how(item):
+    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    m=re.search(r"(?:after|following|when|as|during|by) ([^.]{20,180})[.]", text, re.I)
+    return m.group(0).strip() if m else ""
+
+def _fallback_key_data(item):
+    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    vals=re.findall(r"\b(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:%|\s*(?:million|billion|crore|lakh|thousand|bn|mn))?\b", text, re.I)
+    return ", ".join(dict.fromkeys(vals[:6]))
+
 def _fallback(item):
-    summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
-    who=_explicit_who(item) or "Not stated in supplied sources"
+    summary=item.get("summary") or item.get("headline") or ""
+    who=_explicit_who(item)
     text=f"{item.get('headline','')} {item.get('summary','')}".strip()
     headline=str(item.get("headline",summary))
     when,where=_extract_context(item)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "", "how":"Not stated in supplied sources", "key_data":"","when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "", "how":_fallback_how(item), "key_data":_fallback_key_data(item),"when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"","change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
 def _one(item,today):
     prompt=f"""Today: {today}
 Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 15 short lines:
