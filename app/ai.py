@@ -163,11 +163,23 @@ def _evidence(selected,articles,research):
 
 def _parse(text,item):
     values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","who_detail","when","where","why","how","impact","key_data","background","change","next","connection","memory","vocabulary"}
+    bad={"...","…","n/a","na","none","not stated","not specified","unknown"}
     for line in text.splitlines():
         if ":" not in line: continue
         k,v=line.split(":",1); k=aliases.get(k.strip().lower().replace(" ","_"),k.strip().lower().replace(" ","_")); v=v.strip()
-        if k in allowed and v: values[k]=v
-    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who",""),"who_detail":values.get("who_detail",""),"when":values.get("when",""),"where":values.get("where",""),"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
+        if k in allowed and v and v.lower().strip(" .") not in bad:
+            values[k]=v
+    # Reject obvious AI leakage in WHO/WHEN/WHERE and fall back to deterministic facts.
+    fallback_who=_explicit_who(item)
+    who=values.get("who","").strip()
+    if who and (len(who)>180 or re.search(r"\\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today)\\b",who,re.I)):
+        who=fallback_who
+    if not who and fallback_who:
+        who=fallback_who
+    for field in ("when","where"):
+        if values.get(field,"").strip().lower() in {"june","may","april","march","china","india","cmf"}:
+            values.pop(field,None)
+    return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":who,"who_detail":values.get("who_detail","") if who else "","when":values.get("when",""),"where":values.get("where",""),"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
 
 def _person_context(name, text):
     """Add concise, role-focused context for major public figures when their identity is explicit."""
@@ -235,12 +247,45 @@ def _evidence_articles(item):
     return [primary]+[x for x in (item.get("related_articles") or []) if x.get("summary") or x.get("title")]
 
 def _extract_context(item):
-    # Search ALL supplied articles, not just the primary summary. Prefer explicit
-    # event dates/locations from corroborating sources and return blank when unsupported.
+    # Use the primary article first. Corroborating sources are only a fallback
+    # when the primary article does not contain the requested fact.
     articles=_evidence_articles(item)
-    texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in articles]
-    text=" ".join(texts)
-    when=""; where=""
+    primary=articles[:1]
+    secondary=articles[1:]
+    def scan(texts):
+        when=""; where=""
+        date_patterns=(
+            r"\\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+\\d{1,2}(?:,\\s*\\d{4})?",
+            r"\\b\\d{1,2}\\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4}\\b",
+            r"\\b(?:today|yesterday|tonight|this morning|this evening)\\b",
+        )
+        location_patterns=(
+            r"\\b(?:at|in|from|near)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){0,4})(?=\\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\\b|[.,;:]|$)",
+            r"\\b(?:headquarters|headquartered)\\s+(?:in|at)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,4})",
+            r"\\b([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,4}),\\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\\b",
+        )
+        texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in texts]
+        for article_text in texts:
+            for pattern in date_patterns:
+                m=re.search(pattern,article_text,re.I)
+                if m:
+                    when=m.group(0); break
+            if when: break
+        candidates=[]
+        for article_text in texts:
+            for pattern in location_patterns:
+                candidates += [m.group(1).strip(" .,") for m in re.finditer(pattern,article_text)]
+        candidates=[x for x in candidates if x and len(x.split())<=5 and x.lower() not in {"the social media giant","the company"}]
+        if candidates:
+            counts={x:candidates.count(x) for x in set(candidates)}
+            where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
+        return when,where
+    when,where=scan(primary)
+    if not when or not where:
+        sw,sl=scan(secondary)
+        when=when or sw
+        where=where or sl
+    return when,where
     date_patterns=(
         r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",
         r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",
@@ -274,12 +319,15 @@ def _extract_context(item):
     return when,where
 
 def _fallback_how(item):
-    text=_combined_evidence_text(item)
-    m=re.search(r"(?:by|through|using|via|after|following|as|during) ([^.]{20,220})[.]", text, re.I)
-    return m.group(0).strip() if m else ""
+    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
+    for text in texts:
+        m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]", text, re.I)
+        if m: return m.group(0).strip()
+    return ""
 
 def _fallback_key_data(item):
-    text=_combined_evidence_text(item)
+    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
+    text=" ".join(texts)
     patterns=(
         r"(?:up to|starting at|weighs?|weight|battery(?: life)?|ships?|shipping|price|cost|capacity|range|duration|hours?|minutes?|percent|%|frames?|models?|combinations?)\s*(?:of\s*)?(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:\s*(?:million|billion|crore|lakh|thousand|bn|mn|hours?|minutes?|g|kg|GB|TB|%))?",
         r"(?:₹|\$|€|£)\s*\d+(?:[.,]\d+)*(?:\s*(?:million|billion))?",
@@ -299,16 +347,18 @@ def _combined_evidence_text(item):
     return " ".join(x for x in parts if x).strip()
 
 def _fallback_why(item):
-    text=_combined_evidence_text(item)
-    # Prefer explicit purpose/reason clauses. Do not treat an isolated number as WHY.
+    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
+    # Prefer the primary article; use corroboration only if it has an explicit reason.
+    for text in texts:
+        # Prefer explicit purpose/reason clauses. Do not treat an isolated number as WHY.
     patterns=(
         r"(?:introduced|launched|unveiled|announced|designed|aims? to|intended to|to address|to improve|to reduce|to provide) ([^.]{20,240})[.]",
         r"(?:because|amid|over) ([^.]{20,240})[.]",
     )
-    for pattern in patterns:
-        m=re.search(pattern,text,re.I)
-        if m:
-            return m.group(1).strip().rstrip(".")
+        for pattern in patterns:
+            m=re.search(pattern,text,re.I)
+            if m:
+                return m.group(1).strip().rstrip(".")
     return ""
 
 def _fallback_background(item):
