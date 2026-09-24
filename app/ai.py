@@ -96,9 +96,50 @@ def _parse(text,item):
         if k in allowed and v: values[k]=v
     return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
 
+def _explicit_who(item):
+    """Extract a named person/role from supplied headline/summary only; never invent a name."""
+    headline=str(item.get("headline","") or "")
+    summary=str(item.get("summary","") or "")
+    text=f"{headline} {summary}".strip()
+    role_patterns=(
+        r"former\\s+[A-Za-z -]+?chief minister",
+        r"former\\s+[A-Za-z -]+?prime minister",
+        r"leader of the opposition",
+        r"chief minister",
+        r"prime minister",
+        r"president",
+        r"vice president",
+        r"finance minister",
+        r"home minister",
+        r"defence minister",
+        r"foreign minister",
+        r"minister",
+        r"chief executive officer",
+        r"ceo",
+    )
+    role=""
+    lower=text.lower()
+    for pattern in role_patterns:
+        m=re.search(pattern,lower)
+        if m:
+            role=m.group(0)
+            break
+    # Common news wording: "says NAME", "said NAME", "asks NAME", etc.
+    name=""
+    m=re.search(r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]{2,})\\b",headline)
+    if m:
+        name=m.group(1).strip(".,")
+    if name and role:
+        return f"{name} — {role}"
+    if name:
+        return name
+    return ""
+
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
-    return {**item,"what":summary[:500],"who":"Not stated in supplied sources","when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":"The available report identifies this as a significant current development.","why_important":"Selected because of its relevance, impact and source quality.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":str(item.get("headline",summary))[:180],"vocabulary":"","ai_generated":False}
+    who=_explicit_who(item) or "Not stated in supplied sources"
+    headline=str(item.get("headline",summary))
+    return {**item,"what":summary[:500],"who":who,"when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":f"The available report concerns: {headline[:220]}.","why_important":"The report was selected because its importance score met the configured news threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
     prompt=f"""Today: {today}
@@ -117,7 +158,11 @@ MEMORY: ...
 VOCABULARY: NONE
 If a person is named in the supplied evidence, identify their role and organisation only when stated or clearly established by the supplied source. Separate reported facts from analysis or interpretation.
 No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
-    result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","25"))),item)
+    result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","45"))),item)
+    explicit=_explicit_who(item)
+    current=str(result.get("who","")).strip()
+    if explicit and (not current or current.lower().startswith(("not stated","former ","leader ","chief ","the "))):
+        result["who"]=explicit
     result["ai_generated"]=True
     return result
 
@@ -131,7 +176,9 @@ def generate_briefing(selected,articles,previous,today,research=None):
         if item.get("story_id") not in ai_ids:
             stories.append(_fallback(item)); continue
         try: stories.append(_one(item,today))
-        except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_fallback(item))
+        except Exception as exc:
+            print(f"[WARN] story generation failed: {exc}",flush=True)
+            stories.append(_fallback(item))
     return {"top_stories":stories}
 
 def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles),articles,previous,today,research)
