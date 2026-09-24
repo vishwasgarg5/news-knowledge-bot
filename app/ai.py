@@ -102,8 +102,8 @@ def _explicit_who(item):
     summary=str(item.get("summary","") or "")
     text=f"{headline} {summary}".strip()
     role_patterns=(
-        r"former\\s+[A-Za-z -]+?chief minister",
-        r"former\\s+[A-Za-z -]+?prime minister",
+        r"former\s+[A-Za-z -]+?chief minister",
+        r"former\s+[A-Za-z -]+?prime minister",
         r"leader of the opposition",
         r"chief minister",
         r"prime minister",
@@ -126,7 +126,7 @@ def _explicit_who(item):
             break
     # Common news wording: "says NAME", "said NAME", "asks NAME", etc.
     name=""
-    m=re.search(r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]{2,})\\b",headline)
+    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]{2,})\\b",headline)
     if m:
         name=m.group(1).strip(".,")
     if name and role:
