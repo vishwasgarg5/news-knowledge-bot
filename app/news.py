@@ -45,15 +45,14 @@ def _date(entry) -> str:
 
 
 def _region(category: str, title: str, summary: str) -> str:
-    cat = str(category).lower()
-    if cat in {"india", "national", "india_business", "india_technology", "india_defence"}:
-        return "india"
-    if cat in {"world", "international"}:
-        return "world"
-    text = f"{title} {summary}".lower()
-    india_terms = ("india", "indian", "delhi", "mumbai", "bengaluru", "karnataka", "modi", "parliament", "rbi", "isro")
-    return "india" if any(re.search(rf"\b{re.escape(x)}\b", text) for x in india_terms) else "world"
-
+    """Classify by event geography, with feed category only as fallback."""
+    text=f"{title} {summary}".lower()
+    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal")
+    world_terms=("united states","u.s.","america","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations")
+    if any(re.search(rf"\b{re.escape(x)}\b",text) for x in india_terms): return "india"
+    if any(re.search(rf"\b{re.escape(x)}\b",text) for x in world_terms): return "world"
+    cat=str(category).lower()
+    return "india" if cat in {"india","national","india_business","india_technology","india_defence"} else "world"
 
 def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article], bool, str]:
     parsed = feedparser.parse(url)
