@@ -31,7 +31,11 @@ def _deterministic_score(a):
     if category in {"india","national","politics","world","economy","business","defence","science","technology"}: score+=8
     for term,boost in {"government":8,"supreme court":10,"parliament":9,"election":9,"prime minister":9,"president":8,"war":10,"conflict":9,"ceasefire":10,"terror":8,"defence":8,"military":8,"economy":7,"inflation":7,"interest rate":7,"rbi":9,"budget":8,"trade":7,"sanction":8,"nuclear":9,"space":7,"isro":9,"ai":6,"artificial intelligence":7,"climate":7,"earthquake":8,"cyclone":8,"flood":7,"health":6,"vaccine":6,"scam":7,"policy":6}.items():
         if term in text: score+=boost
-    score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); return min(100.0,score)
+    score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); score+=_freshness_bonus(a)
+    summary=str(a.get("summary",""))
+    if len(summary)<80: score-=2
+    if any(x in text for x in ("live updates","live blog","photo gallery","horoscope","quiz")): score-=6
+    return min(100.0,score)
 
 def _event_id(title):
     words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:32]).encode()).hexdigest()[:16]
@@ -162,7 +166,7 @@ def _fallback(item):
 
 def _one(item,today):
     prompt=f"""Today: {today}
-Explain ONE news story using ONLY supplied evidence. Return EXACTLY 12 short lines:
+Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 12 short lines:
 WHAT: ...
 WHO: ...
 WHEN: ...
