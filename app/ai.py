@@ -172,7 +172,7 @@ def _parse(text,item):
     # Reject obvious AI leakage in WHO/WHEN/WHERE and fall back to deterministic facts.
     fallback_who=_explicit_who(item)
     who=values.get("who","").strip()
-    if who and (len(who)>180 or re.search(r"\\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today)\\b",who,re.I)):
+    if who and (len(who)>180 or re.search(r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today)\b",who,re.I)):
         who=fallback_who
     if not who and fallback_who:
         who=fallback_who
