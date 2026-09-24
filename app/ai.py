@@ -221,44 +221,69 @@ def _explicit_who(item):
             return m.group(1).strip(" .,")
 
     return ""
+def _evidence_articles(item):
+    """Return primary + corroborating articles as the fact pool for deterministic extraction."""
+    primary={"title":item.get("headline",""),"source":item.get("source",""),"url":item.get("url",""),
+             "published":item.get("published",""),"summary":item.get("summary","")}
+    return [primary]+[x for x in (item.get("related_articles") or []) if x.get("summary") or x.get("title")]
+
 def _extract_context(item):
-    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
-    when="Not stated in supplied sources"
-    where="Not stated in supplied sources"
-    for pattern in (
+    # Search ALL supplied articles, not just the primary summary. Prefer explicit
+    # event dates/locations from corroborating sources and return blank when unsupported.
+    articles=_evidence_articles(item)
+    texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in articles]
+    text=" ".join(texts)
+    when=""; where=""
+    date_patterns=(
         r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",
         r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",
         r"\b(?:today|yesterday|tonight|this morning|this evening)\b",
-    ):
-        m=re.search(pattern,text,re.I)
-        if m:
-            when=m.group(0)
-            break
-
-    # Prefer explicit location constructions and common news datelines. Avoid
-    # broad "in ..." matching, which can incorrectly capture event titles.
-    location_patterns=(
-        r"\b(?:in|at|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,3})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according)\b|[.,;:]|$)",
-        r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3}),\s+(?:India|China|Japan|the United States|UK|Britain)\b",
     )
-    for pattern in location_patterns:
-        m=re.search(pattern,text)
-        if m:
-            candidate=m.group(1).strip(" .,")
-            if candidate and len(candidate.split())<=4:
-                where=candidate
+    for article_text in texts:
+        for pattern in date_patterns:
+            m=re.search(pattern,article_text,re.I)
+            if m:
+                when=m.group(0)
                 break
+        if when: break
+    location_patterns=(
+        r"\b(?:at|in|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\b|[.,;:]|$)",
+        r"\b(?:headquarters|headquartered)\s+(?:in|at)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})",
+        r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4}),\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\b",
+    )
+    # Prefer locations that occur in multiple supplied sources.
+    candidates=[]
+    for article_text in texts:
+        found=[]
+        for pattern in location_patterns:
+            found += [m.group(1).strip(" .,") for m in re.finditer(pattern,article_text)]
+        for candidate in found:
+            if candidate and len(candidate.split())<=5 and candidate.lower() not in {"the social media giant","the company"}:
+                candidates.append(candidate)
+    if candidates:
+        counts={}
+        for x in candidates: counts[x]=counts.get(x,0)+1
+        where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
     return when,where
 
 def _fallback_how(item):
     text=_combined_evidence_text(item)
-    m=re.search(r"(?:after|following|when|as|during|by) ([^.]{20,180})[.]", text, re.I)
+    m=re.search(r"(?:by|through|using|via|after|following|as|during) ([^.]{20,220})[.]", text, re.I)
     return m.group(0).strip() if m else ""
 
 def _fallback_key_data(item):
     text=_combined_evidence_text(item)
-    vals=re.findall(r"\b(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:%|\s*(?:million|billion|crore|lakh|thousand|bn|mn))?\b", text, re.I)
-    return ", ".join(dict.fromkeys(vals[:6]))
+    patterns=(
+        r"(?:up to|starting at|weighs?|weight|battery(?: life)?|ships?|shipping|price|cost|capacity|range|duration|hours?|minutes?|percent|%|frames?|models?|combinations?)\s*(?:of\s*)?(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:\s*(?:million|billion|crore|lakh|thousand|bn|mn|hours?|minutes?|g|kg|GB|TB|%))?",
+        r"(?:₹|\$|€|£)\s*\d+(?:[.,]\d+)*(?:\s*(?:million|billion))?",
+        r"\b\d+(?:[.,]\d+)*\s*(?:million|billion|crore|lakh|thousand|hours?|minutes?|g|kg|GB|TB|%)\b",
+    )
+    values=[]
+    for pattern in patterns:
+        for m in re.finditer(pattern,text,re.I):
+            value=" ".join(m.group(0).split())
+            if value not in values: values.append(value)
+    return "; ".join(values[:8])
 
 def _combined_evidence_text(item):
     parts=[str(item.get("headline","") or ""),str(item.get("summary","") or "")]
@@ -268,16 +293,27 @@ def _combined_evidence_text(item):
 
 def _fallback_why(item):
     text=_combined_evidence_text(item)
-    m=re.search(r"(?:because|to|after|following|amid|over|as) ([^.]{20,220})[.]", text, re.I)
-    return m.group(1).strip().rstrip(".") if m else ""
+    # Prefer explicit purpose/reason clauses. Do not treat an isolated number as WHY.
+    patterns=(
+        r"(?:introduced|launched|unveiled|announced|designed|aims? to|intended to|to address|to improve|to reduce|to provide) ([^.]{20,240})[.]",
+        r"(?:because|amid|over) ([^.]{20,240})[.]",
+    )
+    for pattern in patterns:
+        m=re.search(pattern,text,re.I)
+        if m:
+            return m.group(1).strip().rstrip(".")
+    return ""
 
 def _fallback_background(item):
     related=item.get("related_articles") or []
+    # Keep the most useful corroborating context, but avoid dumping whole summaries.
     parts=[]
     for x in related[:3]:
         summary=str(x.get("summary","") or "").strip()
-        if summary: parts.append(summary[:350])
-    return " ".join(parts)[:900]
+        if summary:
+            sentence=re.split(r"(?<=[.!?])\s+",summary)[0].strip()
+            if sentence and sentence not in parts: parts.append(sentence[:280])
+    return " ".join(parts)[:700]
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""
