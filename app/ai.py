@@ -124,15 +124,9 @@ def rerank_stories(stories,research=None):
     india=[x for x in scored if str(x[1].get("region","")).lower()=="india"]; world=[x for x in scored if str(x[1].get("region","")).lower()!="india"]
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0))); world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
 
-    def distinct_events(pool):
-        chosen=[]
-        for score,item in pool:
-            title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_event_similarity(title,str(existing.get("_event_text") or existing.get("headline","")) )>=0.72 for existing in chosen): continue
-            chosen.append(item)
-        return chosen
-
-    india=distinct_events(india); world=distinct_events(world)
+    # Candidate selection already performs event deduplication. Do not run a
+    # second broad clustering pass here: the same person/company can legitimately
+    # appear in several unrelated events on the same day.
     india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
     if max_stories>0:
