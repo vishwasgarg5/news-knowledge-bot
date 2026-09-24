@@ -141,23 +141,42 @@ def _parse(text,item):
     return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
 
 def _explicit_who(item):
-    """Extract a named person/role from supplied headline/summary only; never invent a name."""
+    """Extract named people/roles from supplied headline/summary only; never invent a name."""
     headline=str(item.get("headline","") or "")
     summary=str(item.get("summary","") or "")
     text=f"{headline} {summary}".strip()
-    role_patterns=(r"former\s+[A-Za-z -]+?chief minister",r"former\s+[A-Za-z -]+?prime minister",r"leader of the opposition",r"chief minister",r"prime minister",r"president",r"vice president",r"finance minister",r"home minister",r"defence minister",r"foreign minister",r"minister",r"chief executive officer",r"ceo")
-    role=""
     lower=text.lower()
-    for pattern in role_patterns:
-        m=re.search(pattern,lower)
-        if m: role=m.group(0); break
-    name=""
-    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]{2,})\b",headline)
-    if m: name=m.group(1).strip(".,")
-    if name and role: return f"{name} — {role}"
-    if name: return name
-    return ""
 
+    # Strong, role-linked patterns first. These handle common news wording such as
+    # "street dancer Wu Yufei" and "Fang Zhenghua, the art director...".
+    role_name_patterns=(
+        (r"\\b(?:chinese|indian|american|british|japanese|korean)?\\s*(?:street\\s+)?dancer\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)", "dancer"),
+        (r"\\b([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+),\\s+(?:the\\s+)?(?:art\\s+director|director|founder|chief executive officer|ceo|commerciali[sz]ation lead|lead engineer)", ""),
+        (r"\\b(?:founder|director|ceo|president|minister|prime minister|chief minister|leader of the opposition)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)", ""),
+    )
+    for pattern, fixed_role in role_name_patterns:
+        m=re.search(pattern,text)
+        if m:
+            name=m.group(1).strip(" .,")
+            return f"{name} — {fixed_role}" if fixed_role else name
+
+    # Existing explicit attribution patterns, expanded to capture full names.
+    m=re.search(r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3})\\b",text)
+    if m:
+        return m.group(1).strip(" .,")
+
+    # Generic person-name fallback only when the surrounding text clearly uses a
+    # person descriptor. Avoid treating ordinary title-case words as names.
+    descriptor_patterns=(
+        r"\\b(?:the\\s+)?(?:27-year-old|\\d{2}-year-old)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)",
+        r"\\b(?:native|performer|engineer|artist|actor|actress|dancer)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+)+)",
+    )
+    for pattern in descriptor_patterns:
+        m=re.search(pattern,text)
+        if m:
+            return m.group(1).strip(" .,")
+
+    return ""
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
     who=_explicit_who(item) or "Not stated in supplied sources"
