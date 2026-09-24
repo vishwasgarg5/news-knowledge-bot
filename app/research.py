@@ -81,17 +81,14 @@ def verify_article(story, articles, memory=None):
     independent=len(source_names)
     official=_is_official(primary_source)
     if official:
-        verification="official-source"; confidence=96 if independent else 92
+        verification="official-source"
+        confidence=96 if independent else 92
     elif independent>=1:
-        verification="multi-source"; confidence=78 if independent==1 else min(99,82+5*min(independent-2,3))
-    elif independent==0:
-        verification="unverified"; confidence=35
-    if False:
-        verification="multi-source"; confidence=min(99,82+5*min(independent-2,3))
-    elif independent==1:
-        verification="single-source"; confidence=68
+        verification="multi-source"
+        confidence=min(99,78+5*min(independent-1,4))
     else:
-        verification="unverified"; confidence=35
+        verification="unverified"
+        confidence=35
     return {
         "evidence":[{"title":a.get("title",""),"source":a.get("source",""),"url":a.get("url","")} for a in corroborating[:5]],
         "historical":_memory_fallback(headline,memory or [],5),
