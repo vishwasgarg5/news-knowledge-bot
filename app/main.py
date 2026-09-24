@@ -57,9 +57,14 @@ def _story_block(s,index,total):
         lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
     if s.get("who_detail") and str(s.get("who_detail")).lower() not in {"not stated in supplied sources","none"}:
         lines += ["",f"<b>PERSON / ROLE</b>\n{s.get('who_detail')}"]
+    if s.get("how") and str(s.get("how")).lower() not in {"not stated in supplied sources","none"}:
+        lines += ["",f"<b>HOW</b>\n{s.get('how')}"]
     if s.get("when"): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
     if s.get("where"): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
     if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
+    key_data=str(s.get("key_data","")).strip()
+    if key_data and key_data.upper() not in {"NONE","NOT STATED IN SUPPLIED SOURCES"}:
+        lines += ["",f"<b>KEY DATA</b>\n{key_data}"]
     background=str(s.get("background","")).strip()
     if background and background.lower() not in {"not stated in supplied sources","none"}:
         lines += ["",f"<b>BACKGROUND</b>\n{background}"]
