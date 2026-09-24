@@ -18,16 +18,17 @@ def _named_tokens(text):
     return {w.lower().strip(".,") for w in words if w.lower() not in STOP}
 
 def _event_similarity(a,b):
-    """More tolerant corroboration: handles headline paraphrases while requiring meaningful overlap."""
+    """Conservative event match for corroboration; avoid same-topic false matches."""
     base=_similar(a,b)
     na,nb=_named_tokens(a),_named_tokens(b)
     named_overlap=len(na&nb)
     ta,tb=_tokens(a),_tokens(b)
-    common=len(ta&tb)
-    if named_overlap>=1 and common>=2:
-        return max(base,0.22)
-    if common>=3:
-        return max(base,0.18)
+    common=ta&tb
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
+    event_overlap=len(common & event_terms)
+    if base>=0.52: return base
+    if named_overlap>=1 and event_overlap>=1 and len(common)>=2: return 0.55
+    if named_overlap>=2 and len(common)>=2: return 0.55
     return base
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source):
@@ -75,14 +76,14 @@ def verify_article(story, articles, memory=None):
         if str(a.get("url",""))==str(story.get("url","")): continue
         if not _published_recent(a.get("published",""),72): continue
         sim=_event_similarity(headline,a.get("title",""))
-        if sim>=0.28:
+        if sim>=0.55:
             source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             matches.append((sim*0.7+trust*0.3,a))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a in matches:
         sim=_event_similarity(headline,a.get("title",""))
-        if sim < 0.28: continue
+        if sim < 0.55: continue
         key=_source_key(a.get("source",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
