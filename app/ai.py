@@ -151,7 +151,14 @@ def _evidence(selected,articles,research):
             sim=_event_similarity(s.get("headline",""),x.get("title",""))
             if sim>=.20: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
-        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for _,x in related[:5]],"verification":r})
+        # Prefer the research layer's corroboration because it has already passed freshness/source checks.
+        evidence=r.get("evidence") or []
+        merged=[]; seen=set()
+        for x in evidence + [x for _,x in related[:8]]:
+            key=str(x.get("url","") or x.get("title","")).strip()
+            if not key or key in seen: continue
+            seen.add(key); merged.append(x)
+        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for x in merged[:8]],"verification":r})
     return out
 
 def _parse(text,item):
