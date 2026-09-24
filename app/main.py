@@ -138,7 +138,7 @@ def main():
     stats["health"]="PASS" if source_failures==0 and current_coverage>=0.50 else ("WARN" if current_coverage>=0.20 or source_failures<=2 else "DEGRADED")
 
     daily_path=DATA/"news_learning_daily.csv"; daily_rows=read_rows(daily_path)
-    if not any(r.get("date")==today for r in daily_rows):
+    if quality_ok and not any(r.get("date")==today for r in daily_rows):
         append_rows(daily_path,[{"date":today,"evaluated":final_learning.get("evaluated",0),"selected_evaluated":final_learning.get("selected_evaluated",0),"misses":final_learning.get("misses",0),"false_positives":final_learning.get("false_positives",0),"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
 
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
