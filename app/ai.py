@@ -260,45 +260,62 @@ def _fallback_key_data(item):
     vals=re.findall(r"\b(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:%|\s*(?:million|billion|crore|lakh|thousand|bn|mn))?\b", text, re.I)
     return ", ".join(dict.fromkeys(vals[:6]))
 
+def _fallback_why(item):
+    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    m=re.search(r"(?:because|to|after|following|amid|over|as) ([^.]{20,220})[.]", text, re.I)
+    return m.group(1).strip().rstrip(".") if m else ""
+
+def _fallback_background(item):
+    related=item.get("related_articles") or []
+    if related:
+        titles=[str(x.get("title","")).strip() for x in related[:2] if x.get("title")]
+        if titles:
+            return "Related reporting: " + " | ".join(titles)
+    return ""
+
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""
     who=_explicit_who(item)
     text=f"{item.get('headline','')} {item.get('summary','')}".strip()
     headline=str(item.get("headline",summary))
     when,where=_extract_context(item)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "", "how":_fallback_how(item), "key_data":_fallback_key_data(item),"when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"","change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "",
+            "how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,
+            "why":_fallback_why(item),"why_important":"","background":_fallback_background(item),
+            "change_since_yesterday":item.get("change_since_yesterday",""),"next":"",
+            "connection":"","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
+
 def _one(item,today):
     prompt=f"""Today: {today}
-Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 15 short lines:
-WHAT: ...
-WHO: ...
+Use ONLY the supplied evidence to enrich ONE news story. Core facts are already extracted deterministically.
+Return EXACTLY 6 short lines:
 WHO_DETAIL: ...
-WHEN: ...
-WHERE: ...
-WHY: ...
-HOW: ...
 IMPACT: ...
-KEY_DATA: ...
 BACKGROUND: ...
 CHANGE: ...
-NEXT: ...
 CONNECTION: ...
-MEMORY: ...
-VOCABULARY: NONE
-If a person, organisation, date or location is named in the supplied evidence, include the exact name and the relevant role or place. Never replace an identifiable name with "Not stated in supplied sources". Separate reported facts from analysis or interpretation.
-WHO_DETAIL should give 1-2 concise sentences for each important named person: current role/position, relevant background, and why they matter to this event. HOW should explain the mechanism or sequence. KEY_DATA should list only important verified numbers, percentages, dates, money or quantities; otherwise write NONE. Use only supplied evidence. No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
-    result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","45"))),item)
+NEXT: ...
+WHO_DETAIL: for each important named person, give current role/position, relevant background and why they matter here.
+IMPACT: concrete significance or consequences supported by the evidence.
+BACKGROUND: only useful prior context supported by the supplied evidence or related articles.
+CHANGE: what is newly different versus the prior timeline/evidence.
+CONNECTION: a concrete link to another verified development in the supplied evidence.
+NEXT: the most relevant expected/announced next step, or leave blank if unsupported.
+If a field is unsupported, leave it blank. Never write "Not stated in supplied sources". Never invent facts. No bullets or commentary.
+Evidence: {json.dumps(item,ensure_ascii=False)}"""
+    result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","20"))),item)
     explicit=_explicit_who(item)
     current=str(result.get("who","")).strip()
-    if explicit and (not current or current.lower().startswith(("not stated","former ","leader ","chief ","the "))): result["who"]=explicit
-    if explicit and not str(result.get("who_detail","")).strip(): result["who_detail"]=_person_context(explicit,item.get("headline",""))
+    if explicit and not current: result["who"]=explicit
+    if explicit and not str(result.get("who_detail","")).strip():
+        result["who_detail"]=_person_context(explicit,item.get("headline",""))
     result["ai_generated"]=True
     return result
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    budget=max(0,int(os.getenv("AI_STORY_BUDGET","2")))
-    ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","75"))]
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","8")))
+    ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","70"))]
     if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
     ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
     for item in evidence:
