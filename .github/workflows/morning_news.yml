@@ -64,11 +64,11 @@ jobs:
           AI_MODEL: qwen2.5:3b
           OLLAMA_MODEL: qwen2.5:3b
           OLLAMA_URL: http://localhost:11434/api/generate
-          AI_CONTEXT: '2048'
-          AI_MAX_OUTPUT: '300'
-          AI_TIMEOUT_SECONDS: '45'
-          AI_STORY_BUDGET: '15'
-          AI_DEEP_IMPORTANCE: '62'
+          AI_CONTEXT: '1536'
+          AI_MAX_OUTPUT: '160'
+          AI_TIMEOUT_SECONDS: '20'
+          AI_STORY_BUDGET: '8'
+          AI_DEEP_IMPORTANCE: '70'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
           NEWS_MAX_STORIES: '0'
