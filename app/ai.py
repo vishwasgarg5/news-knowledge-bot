@@ -218,6 +218,18 @@ def _parse(text,item):
     evidence=_evidence_text(item)
     for field in ("why","how","impact","background","change","next","connection","vocabulary"):
         if values.get(field) and not _field_supported(values[field],evidence,2): values[field]=""
+    # Do not let enrichment fields simply restate WHAT. A supported sentence can
+    # still be useless if it is almost the same sentence as the event summary.
+    what_text=str(item.get("summary","") or item.get("headline",""))
+    for field in ("why","impact","background","change"):
+        value=str(values.get(field,"") or "").strip()
+        if value and _similar(value,what_text)>=0.72:
+            values[field]=""
+    # WHO_DETAIL must be tied to evidence as well.
+    if values.get("who_detail"):
+        who_detail=str(values["who_detail"]).strip()
+        if not _field_supported(who_detail,evidence,2):
+            values["who_detail"]=""
     if values.get("key_data") and not _number_supported(values["key_data"],evidence): values["key_data"]=""
     if values.get("who"):
         who_tokens=_content_tokens(values["who"])
@@ -314,8 +326,10 @@ def _fallback_background(item):
     sentences=[x.strip() for x in re.split(r"(?<=[.!?])\s+",primary) if x.strip()]
     if len(sentences)<2: return ""
     # Prefer a later sentence so BACKGROUND adds context instead of repeating WHAT.
+    what_text=sentences[0]
     for sentence in sentences[1:]:
-        if len(sentence)>=60: return sentence[:500]
+        if len(sentence)>=60 and _similar(sentence,what_text)<0.72:
+            return sentence[:500]
     return ""
 
 def _fallback(item):
