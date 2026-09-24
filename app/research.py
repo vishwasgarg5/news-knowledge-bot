@@ -14,7 +14,7 @@ def _similar(a,b):
     return len(x&y)/max(1,len(x|y))
 
 def _named_tokens(text):
-    words=re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(text))
+    words=re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\\b",str(text))
     return {w.lower().strip(".,") for w in words if w.lower() not in STOP}
 
 def _event_similarity(a,b):
