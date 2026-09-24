@@ -53,6 +53,7 @@ def _story_block(s,index,total):
     lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100</b>",f"<b>{s.get('headline','')}</b>"]
     if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
     if s.get("why"): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
+    if s.get("who"): lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
     if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
     history=v.get("historical") or []
     if history: lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
@@ -60,8 +61,20 @@ def _story_block(s,index,total):
     if change and change.lower() not in {"unknown","new today"}: lines += ["",f"<b>CHANGE</b>\n{change}"]
     if s.get("next"): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
     verification=v.get("verification","unverified"); confidence=v.get("confidence","n/a"); sources=v.get("source_count",0)
+    if verification=="unverified":
+        status="SINGLE SOURCE / PENDING" if sources==1 else "UNVERIFIED"
+    elif verification=="single-source":
+        status="SINGLE SOURCE"
+    elif verification=="multi-source":
+        status="CONFIRMED · MULTI-SOURCE"
+    elif verification=="official-source":
+        status="OFFICIAL SOURCE"
+    else:
+        status=str(verification).upper()
     ai="AI" if s.get("ai_generated") else "FALLBACK"
-    lines += ["",f"🔎 {verification} · {confidence}% · {sources} sources · {ai} · rank {rank:.0f}"]
+    lines += ["",f"🔎 {status} · {confidence}% · {sources} source{'s' if sources!=1 else ''} · {ai} · rank {rank:.0f}"]
+    if verification=="unverified" and sources==1:
+        lines += ["", "<b>VERIFICATION</b>\nCredible single-source report; independent confirmation is pending. This does not mean the report is false."]
     return "\n".join(lines)
 
 def _vocab_block(s,index):
