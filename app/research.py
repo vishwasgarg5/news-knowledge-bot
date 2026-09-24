@@ -93,7 +93,7 @@ def verify_article(story, articles, memory=None):
         verification="unverified"
         confidence=35
     return {
-        "evidence":[{"title":a.get("title",""),"source":a.get("source",""),"url":a.get("url","")} for a in corroborating[:5]],
+        "evidence":[{"title":a.get("title",""),"source":a.get("source",""),"url":a.get("url",""),"published":a.get("published",""),"summary":a.get("summary","")} for a in corroborating[:8]],
         "historical":_memory_fallback(headline,memory or [],5),
         "verification":verification,
         "confidence":confidence,
