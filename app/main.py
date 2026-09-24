@@ -57,6 +57,9 @@ def _story_block(s,index,total):
     if s.get("when"): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
     if s.get("where"): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
     if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
+    background=str(s.get("background","")).strip()
+    if background and background.lower() not in {"not stated in supplied sources","none"}:
+        lines += ["",f"<b>BACKGROUND</b>\n{background}"]
     history=v.get("historical") or []
     if history: lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
     change=s.get("change_since_yesterday")
@@ -78,7 +81,7 @@ def _story_block(s,index,total):
     else:
         status=str(verification).upper()
     ai="AI" if s.get("ai_generated") else "FALLBACK"
-    lines += ["",f"🔎 {status} · {confidence}% · {sources} source{'s' if sources!=1 else ''} · {ai} · rank {rank:.0f}"]
+    lines += ["",f"🔎 {status} · {confidence}% · {sources} source{'s' if sources!=1 else ''} · {ai}"]
     if verification=="unverified" and sources==1:
         lines += ["", "<b>VERIFICATION</b>\nCredible single-source report; independent confirmation is pending. This does not mean the report is false."]
     return "\n".join(lines)
@@ -99,7 +102,7 @@ def build_messages(result,today,stats):
     stories=india_stories+world_stories
     total=len(stories); india=len(india_stories); world=len(world_stories)
     threshold=stats.get("importance_threshold",62)
-    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Current verified {stats['verified']}/{stats['total']} · Strong {stats['strong_verified']}/{stats['total']}",f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · Warnings {stats.get('source_warnings',0)} · Health {stats.get('health','WARN')}",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
+    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Story verification: {stats['verified']}/{stats['total']} current · {stats['strong_verified']}/{stats['total']} strong",f"📡 Source health: {stats.get('source_ok',0)}/{stats.get('source_total',0)} OK · {stats.get('source_warnings',0)} warnings · {stats.get('source_failures',0)} failed",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
     messages=["\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
