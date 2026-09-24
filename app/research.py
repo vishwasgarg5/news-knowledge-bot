@@ -38,15 +38,19 @@ def _source_key(source):
 def _is_official(source): return any(x in _source_key(source) for x in OFFICIAL)
 
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
-    """Return only close prior events; generic words must not create history links."""
-    q=_tokens(query)-{"first","time","year","people","says","said","news","latest","today","world","india"}
+    """Link only to a genuinely similar prior event, never to generic topic overlap."""
+    generic={"first","time","year","people","says","said","news","latest","today","world","india","government","company","report","reports","according"}
+    q=_tokens(query)-generic
+    if len(q)<3: return []
     scored=[]
     for row in memory or []:
         title=str(row.get("headline","") or row.get("title",""))
-        words=_tokens(title)
+        words=_tokens(title)-generic
         overlap=q&words
         ratio=len(overlap)/max(1,len(q|words))
-        if len(overlap)>=3 and ratio>=0.30:
+        # Require several distinctive terms and substantial overlap. This keeps
+        # unrelated stories about the same broad topic out of HISTORY.
+        if len(overlap)>=3 and ratio>=0.34:
             scored.append((ratio,len(overlap),title,row))
     scored.sort(key=lambda x:(-x[0],-x[1],str(x[3].get("date","") or x[3].get("published",""))))
     return [{"title":t,"date":r.get("date","") or r.get("published",""),"source":r.get("source","") or "GitHub memory","url":r.get("url","")} for _,_,t,r in scored[:limit]]
