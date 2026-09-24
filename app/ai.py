@@ -364,7 +364,7 @@ def _fallback_why(item):
         m=re.search(pattern,text,re.I)
         if m:
             value=m.group(1).strip().rstrip(".")
-            if len(value.split())>=5: return value[:400]
+            if len(value.split())>=3: return value[:400]
     return ""
 
 def _fallback_background(item):
