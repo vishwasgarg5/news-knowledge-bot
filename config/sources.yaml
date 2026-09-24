@@ -3,9 +3,13 @@ sources:
     - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml
     - https://www.thehindu.com/news/national/feeder/default.rss
     - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
+    - https://www.ndtv.com/rss/feeds
+    - https://indianexpress.com/section/india/feed/
   world:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://rss.dw.com/xml/rss-en-world
+    - https://www.ndtv.com/rss/world
+    - https://indianexpress.com/section/world/feed/
   business:
     - https://feeds.bbci.co.uk/news/business/rss.xml
     - https://www.thehindu.com/business/feeder/default.rss
