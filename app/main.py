@@ -53,7 +53,10 @@ def _story_block(s,index,total):
     lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100</b>",f"<b>{s.get('headline','')}</b>"]
     if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
     if s.get("why"): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
-    if s.get("who"): lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
+    if s.get("who"):
+        lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
+    if s.get("who_detail") and str(s.get("who_detail")).lower() not in {"not stated in supplied sources","none"}:
+        lines += ["",f"<b>PERSON / ROLE</b>\n{s.get('who_detail')}"]
     if s.get("when"): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
     if s.get("where"): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
     if s.get("why_important"): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
