@@ -125,9 +125,9 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
             try:
                 items, ok, error = fetch_feed(url, category, per_source)
                 all_articles.extend(items)
-                source_status.append({"url": url, "category": category, "ok": ok, "count": len(items), "error": error})
+                source_status.append({"url": url, "category": category, "ok": ok, "count": len(items), "error": error, "warning": bool(ok and error)})
             except Exception as exc:
-                source_status.append({"url": url, "category": category, "ok": False, "count": 0, "error": str(exc)})
+                source_status.append({"url": url, "category": category, "ok": False, "count": 0, "error": str(exc), "warning": False})
                 print(f"feed failed: {url}: {exc}", flush=True)
             time.sleep(0.05)
 
@@ -147,5 +147,5 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
         "exact_duplicates": len(all_articles) - len({a.article_id for a in all_articles}),
         "semantic_filtered": max(0, len({a.article_id for a in all_articles}) - len(unique)),
         "source_status": source_status,
-        "source_failures": sum(not x["ok"] for x in source_status),
+        "source_failures": sum(not x["ok"] for x in source_status),\n        "source_warnings": sum(bool(x.get("warning")) for x in source_status),
     }
