@@ -102,24 +102,27 @@ def verify_article(story, articles, memory=None):
     }
 
 def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:list[dict]|None=None)->dict:
-    output={}; strong=current=historical=0; pool=articles or []
+    output={}; strong=current=historical=historical_only=0; pool=articles or []
     for s in stories:
         sid=s.get("story_id","")
         if not sid: continue
         r=verify_article(s,pool,memory); output[sid]=r
+        is_current=r["verification"] in {"multi-source","official-source","single-source"}
         if r["verification"] in {"multi-source","official-source"}: strong+=1
-        if r["verification"] in {"multi-source","official-source","single-source"}: current+=1
+        if is_current: current+=1
         if r["historical"]: historical+=1
+        if r["historical"] and not is_current: historical_only+=1
     total=len(stories)
     output["_stats"]={
         "strong":strong,
         "current":current,
         "historical":historical,
+        "historical_only":historical_only,
         "failed":sum(1 for x in output.values() if isinstance(x,dict) and x.get("verification")=="unverified"),
         "total":total,
         "coverage":current/total if total else 0,
         "strong_coverage":strong/total if total else 0,
         "status":"PASS" if total and current>=max(1,int(total*.50)) else ("WARN" if current else "FAIL"),
     }
-    print(f"[INFO] verification current={current}/{total}; strong={strong}/{total}; historical-only={historical}; coverage={current/max(1,total):.0%}",flush=True)
+    print(f"[INFO] verification current={current}/{total}; strong={strong}/{total}; historical_matches={historical}; historical_only={historical_only}; coverage={current/max(1,total):.0%}",flush=True)
     return output
