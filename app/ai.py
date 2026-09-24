@@ -162,12 +162,34 @@ def _parse(text,item):
         if k in allowed and v: values[k]=v
     return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":values.get("who","Not stated in supplied sources"),"when":values.get("when","Not stated in supplied sources"),"where":values.get("where","Not stated in supplied sources"),"why":values.get("why","Not stated in supplied sources"),"why_important":values.get("impact","Not stated in supplied sources"),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next","Not stated in supplied sources"),"connection":values.get("connection","Not stated in supplied sources"),"memory_hook":values.get("memory","Not stated in supplied sources"),"vocabulary":values.get("vocabulary","")}
 
+def _person_context(name, text):
+    """Add concise, role-focused context for major public figures when their identity is explicit."""
+    key=re.sub(r"[^a-z ]","",str(name).lower()).strip()
+    profiles={
+        "donald trump":"Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+        "trump":"Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+        "xi jinping":"Xi Jinping — President of China, General Secretary of the Communist Party of China and Chairman of the Central Military Commission; China's top political leader.",
+        "xi":"Xi Jinping — President of China, General Secretary of the Communist Party of China and Chairman of the Central Military Commission; China's top political leader.",
+    }
+    return profiles.get(key, "")
+
 def _explicit_who(item):
-    """Extract named people/roles from supplied headline/summary only; never invent a name."""
+    """Extract named people/roles and add concise identity context without inventing event facts."""
     headline=str(item.get("headline","") or "")
     summary=str(item.get("summary","") or "")
     text=f"{headline} {summary}".strip()
     lower=text.lower()
+
+    # For major leaders, use a maintained role profile so the Telegram briefing
+    # answers "who is this person?" rather than only repeating the name.
+    named_profiles=[]
+    if re.search(r"\b(?:donald\s+)?trump\b", text, re.I):
+        named_profiles.append(_person_context("donald trump",text))
+    if re.search(r"\bxi\s+jinping\b|\bxi\b", text, re.I):
+        named_profiles.append(_person_context("xi jinping",text))
+    named_profiles=[x for x in named_profiles if x]
+    if named_profiles:
+        return " ".join(dict.fromEntries(named_profiles.map(x=>[x,x])).keys())
 
     # Strong, role-linked patterns first. These handle common news wording such as
     # "street dancer Wu Yufei" and "Fang Zhenghua, the art director...".
