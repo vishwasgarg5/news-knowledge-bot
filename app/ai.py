@@ -61,19 +61,38 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
     return selected
 
 def rerank_stories(stories,research=None):
+    """Rank by importance, verification, source diversity and novelty; India first, then World."""
     research=research or {}; scored=[]
     for s in stories:
-        r=research.get(s.get("story_id"),{}) or {}; conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0)
-        importance=float(s.get("importance",0) or 0); novelty=100.0 if not r.get("historical") else 65.0
-        if r.get("verification")=="unverified": conf=min(conf,50)
-        final=0.62*importance+0.23*conf+0.10*min(100,50+indep*15)+0.05*novelty
-        scored.append((final,s))
-    scored.sort(key=lambda x:-x[0]); max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
-    for final,s in scored:
-        cat=str(s.get("category","Other")).lower() or "other"
-        if max_stories>0 and counts.get(cat,0)>=max_per_category: continue
-        s=dict(s); s["ranking_score"]=round(final,1); s["rank"]=len(selected)+1; selected.append(s); counts[cat]=counts.get(cat,0)+1
-        if max_stories>0 and len(selected)>=max_stories: break
+        r=research.get(s.get("story_id"),{}) or {}
+        conf=float(r.get("confidence",0) or 0)
+        indep=int(r.get("independent_sources",0) or 0)
+        importance=float(s.get("importance",0) or 0)
+        novelty=100.0 if not r.get("historical") else 65.0
+        verification=r.get("verification","unverified")
+        if verification=="unverified": conf=min(conf,50)
+        verification_bonus={"multi-source":12,"official-source":9,"single-source":4}.get(verification,0)
+        source_diversity=min(8,indep*2)
+        final=(0.56*importance + 0.24*conf + 0.08*min(100,50+indep*15)
+               + 0.06*novelty + verification_bonus + source_diversity)
+        item=dict(s); item["ranking_score"]=round(final,1)
+        scored.append((final,item))
+
+    india=[x for x in scored if str(x[1].get("region","")).lower()=="india"]
+    world=[x for x in scored if str(x[1].get("region","")).lower()!="india"]
+    india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+
+    india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15")))
+    world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
+    max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
+    if max_stories>0:
+        india_limit=min(india_limit,max_stories)
+        world_limit=min(world_limit,max(0,max_stories-india_limit))
+
+    selected=[item for _,item in india[:india_limit]] + [item for _,item in world[:world_limit]]
+    for rank,item in enumerate(selected,1):
+        item["rank"]=rank
     return selected
 
 def _evidence(selected,articles,research):
