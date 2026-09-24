@@ -88,8 +88,11 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         title=str(a.get("title","")).strip()
         if not title or not a.get("url"): continue
         if any(_similar(title,old)>=.62 for old in excluded): continue
-        event_text=f"{title} {str(a.get('summary','') or '')[:900]}".strip()
-        if any(_event_similarity(event_text,old)>=.61 for old in seen): continue
+        # Deduplicate only when the headline itself strongly indicates the same event.
+        # Do not use the full summary here: broad summaries can share generic words
+        # and incorrectly collapse unrelated stories.
+        event_text=title
+        if any(_event_similarity(event_text,old)>=.72 for old in seen): continue
         seen.append(event_text); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
@@ -125,7 +128,7 @@ def rerank_stories(stories,research=None):
         chosen=[]
         for score,item in pool:
             title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_event_similarity(title,str(existing.get("_event_text") or existing.get("headline","")) )>=0.61 for existing in chosen): continue
+            if any(_event_similarity(title,str(existing.get("_event_text") or existing.get("headline","")) )>=0.72 for existing in chosen): continue
             chosen.append(item)
         return chosen
 
