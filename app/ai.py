@@ -181,14 +181,29 @@ def _extract_context(item):
     text=f"{item.get('headline','')} {item.get('summary','')}".strip()
     when="Not stated in supplied sources"
     where="Not stated in supplied sources"
-    for pattern in (r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?", r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b"):
+    for pattern in (
+        r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",
+        r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",
+        r"\b(?:today|yesterday|tonight|this morning|this evening)\b",
+    ):
         m=re.search(pattern,text,re.I)
         if m:
             when=m.group(0)
             break
-    m=re.search(r"\b(?:in|at|from|near)\s+([A-Z][A-Za-z.-]+(?:\s+[A-Z][A-Za-z.-]+){0,4})",text)
-    if m:
-        where=m.group(1).strip(" .,")
+
+    # Prefer explicit location constructions and common news datelines. Avoid
+    # broad "in ..." matching, which can incorrectly capture event titles.
+    location_patterns=(
+        r"\b(?:in|at|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,3})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according)\b|[.,;:]|$)",
+        r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3}),\s+(?:India|China|Japan|the United States|UK|Britain)\b",
+    )
+    for pattern in location_patterns:
+        m=re.search(pattern,text)
+        if m:
+            candidate=m.group(1).strip(" .,")
+            if candidate and len(candidate.split())<=4:
+                where=candidate
+                break
     return when,where
 
 def _fallback(item):
