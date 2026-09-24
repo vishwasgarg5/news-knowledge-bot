@@ -65,23 +65,20 @@ def _event_id(title):
     words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:32]).encode()).hexdigest()[:16]
 
 def _event_similarity(a,b):
-    """Estimate whether two headlines/texts describe the same concrete event."""
+    """Conservative same-event score: shared entities plus the concrete event."""
     wa,wb=_words(a),_words(b)
     if not wa or not wb: return 0.0
-    common=len(wa&wb); base=common/max(1,len(wa|wb))
-    named_a=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)))
-    named_b=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)))
-    named=len({x.lower() for x in named_a}&{x.lower() for x in named_b})
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions"}
-    event_overlap=len((wa&wb)&event_terms)
-    if base>=0.62: return max(base,0.82)
-    if named>=2 and common>=2: return max(base,0.74)
-    if named>=1 and common>=4: return max(base,0.70)
-    if named>=1 and common>=3: return max(base,0.66)
-    if named>=1 and common>=2 and event_overlap>=1: return max(base,0.61)
-    if common>=5: return max(base,0.56)
+    common=wa&wb; base=len(common)/max(1,len(wa|wb))
+    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a))}
+    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b))}
+    named=named_a&named_b
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","timeline"}
+    event_overlap=common&event_terms
+    if base>=0.72: return 0.90
+    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=2: return max(base,0.76)
+    if len(named)>=1 and len(common)>=4: return max(base,0.70)
+    if base>=0.50 and len(common)>=4: return max(base,0.64)
     return base
-
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
@@ -92,7 +89,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         # Do not use the full summary here: broad summaries can share generic words
         # and incorrectly collapse unrelated stories.
         event_text=title
-        if any(_event_similarity(event_text,old)>=.72 for old in seen): continue
+        if any(_event_similarity(event_text,old)>=.70 for old in seen): continue
         seen.append(event_text); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
