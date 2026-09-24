@@ -177,12 +177,26 @@ def _explicit_who(item):
             return m.group(1).strip(" .,")
 
     return ""
+def _extract_context(item):
+    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    when="Not stated in supplied sources"
+    where="Not stated in supplied sources"
+    for pattern in (r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?", r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b"):
+        m=re.search(pattern,text,re.I)
+        if m:
+            when=m.group(0)
+            break
+    m=re.search(r"\b(?:in|at|from|near)\s+([A-Z][A-Za-z.-]+(?:\s+[A-Z][A-Za-z.-]+){0,4})",text)
+    if m:
+        where=m.group(1).strip(" .,")
+    return when,where
+
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
     who=_explicit_who(item) or "Not stated in supplied sources"
     headline=str(item.get("headline",summary))
-    return {**item,"what":summary[:500],"who":who,"when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":f"The available report concerns: {headline[:220]}.","why_important":"The report was selected because its importance score met the configured news threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
-
+    when,where=_extract_context(item)
+    return {**item,"what":summary[:500],"who":who,"when":when,"where":where,"why":f"The report concerns the development described in the headline: {headline[:180]}.","why_important":"Selected because the story met the configured importance threshold.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
 def _one(item,today):
     prompt=f"""Today: {today}
 Explain ONE news story using ONLY supplied evidence. Prioritize the newest, concrete facts and distinguish confirmed facts from reported claims. Return EXACTLY 12 short lines:
