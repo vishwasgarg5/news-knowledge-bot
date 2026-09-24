@@ -151,7 +151,7 @@ def _evidence(selected,articles,research):
             sim=_event_similarity(s.get("headline",""),x.get("title",""))
             if sim>=.20: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
-        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
+        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for _,x in related[:5]],"verification":r})
     return out
 
 def _parse(text,item):
@@ -251,27 +251,33 @@ def _extract_context(item):
     return when,where
 
 def _fallback_how(item):
-    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    text=_combined_evidence_text(item)
     m=re.search(r"(?:after|following|when|as|during|by) ([^.]{20,180})[.]", text, re.I)
     return m.group(0).strip() if m else ""
 
 def _fallback_key_data(item):
-    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    text=_combined_evidence_text(item)
     vals=re.findall(r"\b(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:%|\s*(?:million|billion|crore|lakh|thousand|bn|mn))?\b", text, re.I)
     return ", ".join(dict.fromkeys(vals[:6]))
 
+def _combined_evidence_text(item):
+    parts=[str(item.get("headline","") or ""),str(item.get("summary","") or "")]
+    for x in item.get("related_articles") or []:
+        parts += [str(x.get("title","") or ""),str(x.get("summary","") or "")]
+    return " ".join(x for x in parts if x).strip()
+
 def _fallback_why(item):
-    text=f"{item.get('headline','')} {item.get('summary','')}".strip()
+    text=_combined_evidence_text(item)
     m=re.search(r"(?:because|to|after|following|amid|over|as) ([^.]{20,220})[.]", text, re.I)
     return m.group(1).strip().rstrip(".") if m else ""
 
 def _fallback_background(item):
     related=item.get("related_articles") or []
-    if related:
-        titles=[str(x.get("title","")).strip() for x in related[:2] if x.get("title")]
-        if titles:
-            return "Related reporting: " + " | ".join(titles)
-    return ""
+    parts=[]
+    for x in related[:3]:
+        summary=str(x.get("summary","") or "").strip()
+        if summary: parts.append(summary[:350])
+    return " ".join(parts)[:900]
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""
@@ -301,7 +307,7 @@ BACKGROUND: only useful prior context supported by the supplied evidence or rela
 CHANGE: what is newly different versus the prior timeline/evidence.
 CONNECTION: a concrete link to another verified development in the supplied evidence.
 NEXT: the most relevant expected/announced next step, or leave blank if unsupported.
-If a field is unsupported, leave it blank. Never write "Not stated in supplied sources". Never invent facts. No bullets or commentary.
+Use corroborating related articles when the primary article does not contain enough detail. Prefer facts repeated or supported across multiple sources. Attribute conflicting claims instead of merging them. If a field remains unsupported after checking all supplied sources, leave it blank. Never write "Not stated in supplied sources". Never invent facts. No bullets or commentary.
 Evidence: {json.dumps(item,ensure_ascii=False)}"""
     result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","20"))),item)
     explicit=_explicit_who(item)
