@@ -146,59 +146,29 @@ def rerank_stories(stories,research=None):
     india=[x for x in scored if str(x[1].get("region","")).lower()=="india"]; world=[x for x in scored if str(x[1].get("region","")).lower()!="india"]
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0))); world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
 
-    # Candidate selection already performs event deduplication. Do not run a
-    # second broad clustering pass here: the same person/company can legitimately
-    # appear in several unrelated events on the same day.
+    # Candidate selection removes only near-identical headlines. Do not run a
+    # second topic/family deduplication pass here: different developments can
+    # legitimately share the same people, companies or institutions.
     india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
     if max_stories>0:
         india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
-    # Convert ranked tuples to story dictionaries before backfilling.
-    # Otherwise the final rank assignment would try to mutate a (score, story)
-    # tuple and crash the workflow.
+
     india_selected=[item for _,item in india[:india_limit]]
     world_selected=[item for _,item in world[:world_limit]]
 
-    # If clustering leaves a region short, backfill from the ranked pool using
-    # a stricter title-only duplicate check. This guarantees the requested
-    # 15 India + 15 World structure without reintroducing obvious duplicates.
-    def backfill(pool, current, limit):
+    def backfill(pool,current,limit):
         for score,item in pool:
             if len(current)>=limit: break
             title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_event_similarity(title,str(x.get("_event_text") or x.get("headline","")))>=.80 for x in current):
+            if any(_event_similarity(title,str(x.get("_event_text") or x.get("headline","")))>=.88 for x in current):
                 continue
             current.append(item)
         return current
 
-    india_selected=backfill(
-        [x for x in scored if str(x[1].get("region","")).lower()=="india"],
-        india_selected, india_limit
-    )
-    world_selected=backfill(
-        [x for x in scored if str(x[1].get("region","")).lower()!="india"],
-        world_selected, world_limit
-    )
-    def dedup_region(items, pool, limit):
-        out=[]
-        for item in items:
-            title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_same_event(title,str(x.get("_event_text") or x.get("headline",""))) for x in out):
-                continue
-            out.append(item)
-            if len(out)>=limit: return out
-        for score,item in pool:
-            if len(out)>=limit: break
-            title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_same_event(title,str(x.get("_event_text") or x.get("headline",""))) for x in out):
-                continue
-            out.append(item)
-        return out
+    india_selected=backfill(india,india_selected,india_limit)
+    world_selected=backfill(world,world_selected,world_limit)
 
-    india_pool=sorted([x for x in scored if str(x[1].get("region","")).lower()=="india"],key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
-    world_pool=sorted([x for x in scored if str(x[1].get("region","")).lower()!="india"],key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
-    india_selected=dedup_region(india_selected,india_pool,india_limit)
-    world_selected=dedup_region(world_selected,world_pool,world_limit)
     selected=india_selected[:india_limit] + world_selected[:world_limit]
     for rank,item in enumerate(selected,1): item["rank"]=rank
     return selected
