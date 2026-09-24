@@ -289,10 +289,12 @@ def _extract_context(item):
     return when,where
 
 def _fallback_how(item):
-    texts=[str(item.get("summary","") or "")]
-    for text in texts:
-        m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]",text,re.I)
-        if m: return m.group(0).strip()
+    text=str(item.get("summary","") or "").strip()
+    for pattern in (r"(?:by|through|using|via) ([^.]{25,220})[.]", r"(?:was|were|is|are) ([^.]{25,220})[.]"):
+        m=re.search(pattern,text,re.I)
+        if m:
+            value=m.group(0).strip()
+            if not re.match(r"^(?:after|following|during)\\b",value,re.I): return value[:400]
     return ""
 
 def _fallback_key_data(item):
@@ -307,32 +309,28 @@ def _fallback_key_data(item):
     return "; ".join(values[:8])
 
 def _fallback_why(item):
-    text=str(item.get("summary","") or "")
-    # WHY should describe a stated cause, motivation or response. Do not
-    # convert ordinary announcement wording into a fake explanation.
-    patterns=(r"(?:because|amid|over|due to|in response to|after) ([^.]{20,240})[.]",
-              r"(?:to address|to reduce|to improve|to prevent) ([^.]{20,240})[.]")
-    for pattern in patterns:
+    text=str(item.get("summary","") or "").strip()
+    for pattern in (r"(?:because|due to|in response to|to address|to reduce|to improve|to prevent) ([^.]{25,240})[.]", r"(?:the move|decision|action) (?:came|comes) (?:after|amid) ([^.]{25,240})[.]"):
         m=re.search(pattern,text,re.I)
-        if m: return m.group(1).strip().rstrip(".")
+        if m:
+            value=m.group(1).strip().rstrip(".")
+            if len(value.split())>=5: return value[:400]
     return ""
 
 def _fallback_background(item):
     primary=str(item.get("summary","") or "").strip()
     if not primary: return ""
-    sentences=[x.strip() for x in re.split(r"(?<=[.!?])\s+",primary) if x.strip()]
+    sentences=[x.strip() for x in re.split(r"(?<=[.!?])\\s+",primary) if x.strip()]
     if len(sentences)<2: return ""
-    # Prefer a later sentence so BACKGROUND adds context instead of repeating WHAT.
-    what_text=sentences[0]
+    first=sentences[0]
     for sentence in sentences[1:]:
-        if len(sentence)>=60 and _similar(sentence,what_text)<0.72:
-            return sentence[:500]
+        if len(sentence)>=70 and _similar(sentence,first)<0.58 and not re.search(r"\\b(?:today|announced|said|reported|launched|arrested|approved|opened|arrived|attack|breach|ban|decision)\\b",sentence,re.I): return sentence[:500]
     return ""
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
     item=dict(item); item.pop("_event_text",None)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
+    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":(summary[:220].strip() if summary.strip().rstrip(".")!=headline.strip().rstrip(".") else ""),"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
     prompt=f"""Today: {today}
