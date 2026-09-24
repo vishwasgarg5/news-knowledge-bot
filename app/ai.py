@@ -56,10 +56,32 @@ def _deterministic_score(a):
     summary=str(a.get("summary",""))
     if len(summary)<80: score-=2
     if any(x in text for x in ("live updates","live blog","photo gallery","horoscope","quiz","opinion:","editorial:","opinion |")): score-=7
+    # A hard freshness floor prevents old feed items from entering the final pool.
+    raw=str(a.get("published","") or "").strip()
+    if raw:
+        try:
+            value=raw.replace("Z","+00:00"); dt=datetime.fromisoformat(value)
+            if dt.tzinfo is None: dt=dt.replace(tzinfo=timezone.utc)
+            age=(datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds()/3600
+            if age>120: score-=12
+            if age>168: score-=35
+        except (TypeError,ValueError): pass
     return min(100.0,score)
 
 def _event_id(title):
     words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:32]).encode()).hexdigest()[:16]
+
+def _event_similarity(a,b):
+    """Headline similarity that tolerates paraphrases while requiring meaningful overlap."""
+    wa,wb=_words(a),_words(b)
+    if not wa or not wb: return 0.0
+    common=len(wa&wb); base=common/max(1,len(wa|wb))
+    named_a=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)))
+    named_b=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)))
+    named=len({x.lower() for x in named_a}&{x.lower() for x in named_b})
+    if named>=1 and common>=2: return max(base,0.24)
+    if common>=4: return max(base,0.20)
+    return base
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
@@ -68,7 +90,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         if not title or not a.get("url"): continue
         if any(_similar(title,old)>=.62 for old in excluded): continue
         words=_words(title)
-        if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
+        if any(_event_similarity(title,old)>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
@@ -126,7 +148,7 @@ def _evidence(selected,articles,research):
         a=by_url.get(str(s.get("url","")),{}); sid=s.get("story_id"); related=[]
         for x in articles:
             if x.get("url")==s.get("url"): continue
-            sim=_similar(s.get("headline",""),x.get("title",""))
+            sim=_event_similarity(s.get("headline",""),x.get("title",""))
             if sim>=.20: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
