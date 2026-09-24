@@ -131,22 +131,41 @@ def main():
     total_selected=len(result.get("top_stories",[]))
     current_coverage=current_verified/max(1,total_selected)
     source_failures=cstats.get("source_failures",0)
-    quality_ok=source_failures==0 and current_coverage>=0.20
+    source_warnings=cstats.get("source_warnings",0)
 
-    # Only learn today's candidates when source health and fresh verification are adequate.
+    # Final story-quality gate: never send malformed/duplicate/under-threshold stories.
+    clean=[]; seen_ids=set(); seen_urls=set()
+    for s in result.get("top_stories",[]):
+        sid=str(s.get("story_id","")).strip(); url=str(s.get("url","")).strip()
+        imp=_safe_float(s.get("importance",0))
+        if not sid or not url or sid in seen_ids or url in seen_urls or imp < float(os.getenv("NEWS_MIN_IMPORTANCE","62")):
+            continue
+        if str(s.get("region","")).lower() not in {"india","world"}: continue
+        if not str(s.get("headline","")).strip(): continue
+        if not (research.get(sid) or {}).get("verification"): continue
+        seen_ids.add(sid); seen_urls.add(url); clean.append(s)
+    result["top_stories"]=clean
+    current_ids={s.get("story_id") for s in clean}
+    current_research=[research.get(sid,{}) for sid in current_ids]
+    current_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source","single-source"})
+    strong_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source"})
+    total_selected=len(clean)
+    current_coverage=current_verified/max(1,total_selected)
+
+    # Learning is recorded only when source collection is clean and fresh verification is adequate.
+    quality_ok=(source_failures==0 and source_warnings==0 and current_coverage>=0.20)
     final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids=current_ids,record_current=quality_ok)
     added=persist(result.get("top_stories",[]),today)
     lm=learning_metrics(read_rows(DATA/"news_learning.csv"))
 
     stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated"))}
-    source_warnings=stats.get("source_warnings",0)
-    stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 else ("WARN" if current_coverage>=0.20 or source_failures<=2 else "DEGRADED")
+    stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 else ("WARN" if current_coverage>=0.20 and source_failures<=2 else "DEGRADED")
 
     daily_path=DATA/"news_learning_daily.csv"; daily_rows=read_rows(daily_path)
     if quality_ok and not any(r.get("date")==today for r in daily_rows):
         append_rows(daily_path,[{"date":today,"evaluated":final_learning.get("evaluated",0),"selected_evaluated":final_learning.get("selected_evaluated",0),"misses":final_learning.get("misses",0),"false_positives":final_learning.get("false_positives",0),"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
 
-    print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
+    print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
         if not failure.get("ok"): print(f"[WARN] source failed | category={failure.get('category','')} | url={failure.get('url','')} | error={failure.get('error','')}",flush=True)
     for warning in (cstats.get("source_status") or []):
