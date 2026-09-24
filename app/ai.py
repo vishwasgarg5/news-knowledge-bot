@@ -34,7 +34,7 @@ def _deterministic_score(a):
     score+=min(10,2*sum(x in text for x in ("million","billion","lakh","crore","dead","killed","injured","arrested","approved","launched","signed"))); score+=min(8,len(_words(title))*.7); score+=_freshness_bonus(a)
     summary=str(a.get("summary",""))
     if len(summary)<80: score-=2
-    if any(x in text for x in ("live updates","live blog","photo gallery","horoscope","quiz")): score-=6
+    if any(x in text for x in ("live updates","live blog","photo gallery","horoscope","quiz","opinion:","editorial:","opinion |")): score-=7
     return min(100.0,score)
 
 def _event_id(title):
