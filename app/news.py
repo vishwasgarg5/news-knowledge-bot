@@ -48,7 +48,7 @@ def _region(category: str, title: str, summary: str) -> str:
     """Classify the geography of the actual event, not merely the feed category."""
     text=f"{title} {summary}".lower()
     india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal")
-    world_terms=("united states","u.s.","america","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations")
+    world_terms=("united states","u.s.","america","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada")
     india_hits=sum(bool(re.search(rf"\b{re.escape(x)}\b",text)) for x in india_terms)
     world_hits=sum(bool(re.search(rf"\b{re.escape(x)}\b",text)) for x in world_terms)
     # A clear international actor/event in the headline takes precedence over
@@ -58,7 +58,7 @@ def _region(category: str, title: str, summary: str) -> str:
     title_india=sum(bool(re.search(rf"\b{re.escape(x)}\b",title_text)) for x in india_terms)
     # Strong international actors/events in the headline are World stories even
     # when an India feed or an incidental India reference appears in the summary.
-    world_primary=("trump","xi jinping","united states","u.s.","china","ukraine","russia","gaza","israel","nato","united nations","australia","britain","europe")
+    world_primary=("trump","xi jinping","united states","u.s.","china","ukraine","russia","gaza","israel","nato","united nations","australia","britain","europe","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada")
     india_primary=("modi","rbi","isro","parliament","supreme court","delhi","mumbai","bengaluru","karnataka","west bengal","tamil nadu","uttar pradesh","trinamool")
     if any(re.search(rf"\b{re.escape(x)}\b",title_text) for x in world_primary): return "world"
     if any(re.search(rf"\b{re.escape(x)}\b",title_text) for x in india_primary) and not title_world: return "india"
