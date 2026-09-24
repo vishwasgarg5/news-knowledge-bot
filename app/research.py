@@ -9,7 +9,26 @@ OFFICIAL={"pib","reserve bank of india","rbi","supreme court of india","prime mi
 
 def _tokens(text): return {x for x in re.findall(r"[a-zA-Z]{4,}",str(text).lower()) if x not in STOP}
 def _similar(a,b):
-    x,y=_tokens(a),_tokens(b); return len(x&y)/max(1,len(x|y))
+    x,y=_tokens(a),_tokens(b)
+    if not x or not y: return 0.0
+    return len(x&y)/max(1,len(x|y))
+
+def _named_tokens(text):
+    words=re.findall(r"\\b[A-Z][A-Za-z.'-]{2,}\\b",str(text))
+    return {w.lower().strip(".,") for w in words if w.lower() not in STOP}
+
+def _event_similarity(a,b):
+    """More tolerant corroboration: handles headline paraphrases while requiring meaningful overlap."""
+    base=_similar(a,b)
+    na,nb=_named_tokens(a),_named_tokens(b)
+    named_overlap=len(na&nb)
+    ta,tb=_tokens(a),_tokens(b)
+    common=len(ta&tb)
+    if named_overlap>=1 and common>=2:
+        return max(base,0.22)
+    if common>=3:
+        return max(base,0.18)
+    return base
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source):
     raw=str(source or "").lower().strip()
@@ -46,15 +65,15 @@ def verify_article(story, articles, memory=None):
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
         if not _published_recent(a.get("published",""),72): continue
-        sim=_similar(headline,a.get("title",""))
-        if sim>=0.16:
+        sim=_event_similarity(headline,a.get("title",""))
+        if sim>=0.12:
             source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             matches.append((sim*0.7+trust*0.3,a))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a in matches:
-        sim=_similar(headline,a.get("title",""))
-        if sim < 0.20: continue
+        sim=_event_similarity(headline,a.get("title",""))
+        if sim < 0.16: continue
         key=_source_key(a.get("source",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
@@ -63,7 +82,11 @@ def verify_article(story, articles, memory=None):
     official=_is_official(primary_source)
     if official:
         verification="official-source"; confidence=96 if independent else 92
-    elif independent>=2:
+    elif independent>=1:
+        verification="multi-source"; confidence=78 if independent==1 else min(99,82+5*min(independent-2,3))
+    elif independent==0:
+        verification="unverified"; confidence=35
+    if False:
         verification="multi-source"; confidence=min(99,82+5*min(independent-2,3))
     elif independent==1:
         verification="single-source"; confidence=68
