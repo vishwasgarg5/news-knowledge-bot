@@ -1,5 +1,6 @@
 from __future__ import annotations
 import re
+from datetime import datetime, timedelta, timezone
 
 STOP={"gets","says","this","that","with","from","into","after","about","will","have","been","their","they","what","when","where","which","today","latest","india","news"}
 TRUST={"reuters":1.0,"associated press":1.0,"ap news":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"isro":0.98,"sebi":0.98}
@@ -23,10 +24,22 @@ def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
     scored.sort(key=lambda x:(-x[0],-x[1],str(x[3].get("date","") or x[3].get("published",""))))
     return [{"title":t,"date":r.get("date","") or r.get("published",""),"source":r.get("source","") or "GitHub memory","url":r.get("url","")} for _,_,t,r in scored[:limit]]
 
+def _published_recent(value, hours=72):
+    if not value:
+        return False
+    try:
+        dt=datetime.fromisoformat(str(value).replace("Z","+00:00"))
+        if dt.tzinfo is None:
+            dt=dt.replace(tzinfo=timezone.utc)
+        return datetime.now(timezone.utc)-dt <= timedelta(hours=hours)
+    except Exception:
+        return False
+
 def verify_article(story, articles, memory=None):
     headline=story.get("headline",""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source); matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
+        if not _published_recent(a.get("published",""), 72): continue
         sim=_similar(headline,a.get("title",""))
         if sim>=0.16:
             source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
