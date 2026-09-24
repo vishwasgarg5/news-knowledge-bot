@@ -86,6 +86,9 @@ def verify_article(story, articles, memory=None):
     elif independent>=1:
         verification="multi-source"
         confidence=min(99,78+5*min(independent-1,4))
+    elif primary_source:
+        verification="single-source"
+        confidence=55
     else:
         verification="unverified"
         confidence=35
