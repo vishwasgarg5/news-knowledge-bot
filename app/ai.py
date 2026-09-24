@@ -79,8 +79,11 @@ def _event_similarity(a,b):
     named_a=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)))
     named_b=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)))
     named=len({x.lower() for x in named_a}&{x.lower() for x in named_b})
-    if named>=1 and common>=2: return max(base,0.24)
-    if common>=4: return max(base,0.20)
+    # Do not manufacture similarity merely because two stories mention the same
+    # person/topic. Corroboration requires substantial shared event wording.
+    if named>=2 and common>=3: return max(base,0.30)
+    if named>=1 and common>=4: return max(base,0.28)
+    if common>=5: return max(base,0.28)
     return base
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
@@ -130,6 +133,20 @@ def rerank_stories(stories,research=None):
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
     world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
 
+    # Select distinct EVENTS, not merely distinct articles. Keep the strongest
+    # representative of each event and let corroborating articles support it.
+    def distinct_events(pool):
+        chosen=[]
+        for score,item in pool:
+            title=str(item.get("headline",""))
+            if any(_event_similarity(title,str(existing.get("headline","")))>=0.60 for existing in chosen):
+                continue
+            chosen.append(item)
+        return chosen
+
+    india=distinct_events(india)
+    world=distinct_events(world)
+
     india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15")))
     world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
@@ -149,12 +166,12 @@ def _evidence(selected,articles,research):
         for x in articles:
             if x.get("url")==s.get("url"): continue
             sim=_event_similarity(s.get("headline",""),x.get("title",""))
-            if sim>=.28: related.append((sim,x))
+            if sim>=.30: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         # Prefer the research layer's corroboration because it has already passed freshness/source checks.
         evidence=r.get("evidence") or []
         merged=[]; seen=set()
-        for x in [x for x in (r.get("evidence") or []) if _event_similarity(s.get("headline",""),x.get("title",""))>=.28] + [x for _,x in related[:6]]:
+        for x in [x for x in (r.get("evidence") or []) if _event_similarity(s.get("headline",""),x.get("title",""))>=.30] + [x for _,x in related[:6]]:
             key=str(x.get("url","") or x.get("title","")).strip()
             if not key or key in seen: continue
             seen.add(key); merged.append(x)
