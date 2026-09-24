@@ -281,6 +281,7 @@ WHO_DETAIL should give 1-2 concise sentences for each important named person: cu
     explicit=_explicit_who(item)
     current=str(result.get("who","")).strip()
     if explicit and (not current or current.lower().startswith(("not stated","former ","leader ","chief ","the "))): result["who"]=explicit
+    if explicit and not str(result.get("who_detail","")).strip(): result["who_detail"]=_person_context(explicit,item.get("headline",""))
     result["ai_generated"]=True
     return result
 
