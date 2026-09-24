@@ -65,20 +65,21 @@ def _event_id(title):
     words=sorted(_words(title)); return hashlib.sha1(" ".join(words[:32]).encode()).hexdigest()[:16]
 
 def _event_similarity(a,b):
+    """Estimate whether two headlines/texts describe the same concrete event."""
     wa,wb=_words(a),_words(b)
     if not wa or not wb: return 0.0
     common=len(wa&wb); base=common/max(1,len(wa|wb))
     named_a=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)))
     named_b=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)))
     named=len({x.lower() for x in named_a}&{x.lower() for x in named_b})
-    # Strong same-event signal: at least one shared named entity plus
-    # several shared content words. This catches differently worded reports
-    # of the same event without merging generic stories that merely mention
-    # the same person.
-    if named>=1 and common>=4: return max(base,0.68)
-    if named>=1 and common>=3: return max(base,0.58)
-    if named>=2 and common>=2: return max(base,0.62)
-    if common>=5: return max(base,0.45)
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions"}
+    event_overlap=len((wa&wb)&event_terms)
+    if base>=0.62: return max(base,0.82)
+    if named>=2 and common>=2: return max(base,0.74)
+    if named>=1 and common>=4: return max(base,0.70)
+    if named>=1 and common>=3: return max(base,0.66)
+    if named>=1 and common>=2 and event_overlap>=1: return max(base,0.61)
+    if common>=5: return max(base,0.56)
     return base
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
@@ -87,8 +88,9 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         title=str(a.get("title","")).strip()
         if not title or not a.get("url"): continue
         if any(_similar(title,old)>=.62 for old in excluded): continue
-        if any(_event_similarity(title,old)>=.58 for old in seen): continue
-        seen.append(title); ranked.append((round(_deterministic_score(a),1),a))
+        event_text=f"{title} {str(a.get('summary','') or '')[:900]}".strip()
+        if any(_event_similarity(event_text,old)>=.61 for old in seen): continue
+        seen.append(event_text); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
     threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); requested=candidate_limit if top_n is None else max(1,int(top_n))
@@ -99,7 +101,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         category=str(a.get("category","Other")).strip().lower() or "other"
         if max_stories>0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
-        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"reason":"Impact, source quality, relevance and novelty."})
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
         category_counts[category]=category_counts.get(category,0)+1
         if len(selected)>=limit: break
     return selected
@@ -111,7 +113,7 @@ def rerank_stories(stories,research=None):
         conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0); importance=float(s.get("importance",0) or 0)
         novelty=100.0 if not r.get("historical") else 65.0; verification=r.get("verification","unverified")
         if verification=="unverified": conf=min(conf,50)
-        verification_bonus={"multi-source":12,"official-source":9,"single-source":4}.get(verification,0)
+        verification_bonus={"multi-source":12,"official-source":9,"single-source":-4}.get(verification,0)
         source_diversity=min(8,indep*2)
         final=(0.56*importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
         item=dict(s); item["ranking_score"]=round(final,1); scored.append((final,item))
@@ -122,8 +124,8 @@ def rerank_stories(stories,research=None):
     def distinct_events(pool):
         chosen=[]
         for score,item in pool:
-            title=str(item.get("headline",""))
-            if any(_event_similarity(title,str(existing.get("headline","")))>=0.60 for existing in chosen): continue
+            title=str(item.get("_event_text") or item.get("headline",""))
+            if any(_event_similarity(title,str(existing.get("_event_text") or existing.get("headline","")) )>=0.61 for existing in chosen): continue
             chosen.append(item)
         return chosen
 
@@ -153,6 +155,25 @@ def _evidence(selected,articles,research):
         out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for x in merged[:8]],"verification":r})
     return out
 
+def _evidence_text(item):
+    parts=[str(item.get("headline","") or ""),str(item.get("summary","") or "")]
+    for x in item.get("related_articles") or []:
+        parts.extend([str(x.get("title","") or ""),str(x.get("summary","") or "")])
+    return " ".join(parts)
+
+def _content_tokens(text):
+    return set(re.findall(r"[a-zA-Z]{4,}",str(text).lower()))
+
+def _field_supported(value,evidence,min_overlap=2):
+    v=_content_tokens(value); e=_content_tokens(evidence)
+    return bool(v and e and len(v&e)>=min_overlap)
+
+def _number_supported(value,evidence):
+    nums=re.findall(r"(?:₹|\$|€|£)?\s*\d+(?:[.,]\d+)*(?:\s*(?:million|billion|crore|lakh|thousand|bn|mn|hours?|minutes?|g|kg|GB|TB|%))?",str(value),re.I)
+    if not nums: return True
+    normalized=re.sub(r"\s+","",str(evidence).lower())
+    return all(re.sub(r"\s+","",n.lower()) in normalized for n in nums)
+
 def _parse(text,item):
     values={}; aliases={"why_important":"impact","change_since_yesterday":"change"}; allowed={"what","who","who_detail","when","where","why","how","impact","key_data","background","change","next","connection","memory","vocabulary"}; bad={"...","…","n/a","na","none","not stated","not specified","unknown"}
     for line in text.splitlines():
@@ -171,6 +192,15 @@ def _parse(text,item):
     if (where_lower in bad_where_words or re.search(r"\b(?:19|20)\d{2}\b",where_value) or re.fullmatch(r"\d{1,2}(?:st|nd|rd|th)?",where_value,re.I) or re.search(r"\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b",where_value,re.I)): where_value=""
     if not where_value:
         _,det_where=_extract_context(item); where_value=det_where or ""
+    evidence=_evidence_text(item)
+    for field in ("why","how","impact","background","change","next","connection","vocabulary"):
+        if values.get(field) and not _field_supported(values[field],evidence,2): values[field]=""
+    if values.get("key_data") and not _number_supported(values["key_data"],evidence): values["key_data"]=""
+    if values.get("who"):
+        who_tokens=_content_tokens(values["who"])
+        named_evidence={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",evidence)}
+        if not (who_tokens & named_evidence): values["who"]=""
+    if where_value and not _field_supported(where_value,evidence,1): where_value=""
     return {**item,"what":values.get("what",item.get("summary",item.get("headline",""))),"who":who,"who_detail":values.get("who_detail","") if who else "","when":values.get("when",""),"where":where_value,"why":values.get("why",""),"how":values.get("how",""),"why_important":values.get("impact",""),"key_data":values.get("key_data",""),"background":values.get("background",""),"change_since_yesterday":values.get("change",item.get("change_since_yesterday","")),"next":values.get("next",""),"connection":values.get("connection",""),"memory_hook":values.get("memory",""),"vocabulary":values.get("vocabulary","")}
 
 def _person_context(name,text):
@@ -267,6 +297,7 @@ def _fallback_background(item):
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
+    item=dict(item); item.pop("_event_text",None)
     return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":"","background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":"","connection":"","memory_hook":headline[:180],"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
@@ -291,6 +322,7 @@ Evidence: {json.dumps(item,ensure_ascii=False)}"""
     explicit=_explicit_who(item); current=str(result.get("who","")).strip()
     if explicit and not current: result["who"]=explicit
     if explicit and not str(result.get("who_detail","")).strip(): result["who_detail"]=_person_context(explicit,item.get("headline",""))
+    result.pop("_event_text",None)
     result["ai_generated"]=True; return result
 
 def generate_briefing(selected,articles,previous,today,research=None):
