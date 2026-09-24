@@ -117,8 +117,8 @@ def rerank_stories(stories,research=None):
         source_diversity=min(8,indep*2)
         # Prevent a single uncorroborated report from displaying a near-certain importance.
         published_importance=importance
-        if verification=="single-source": published_importance=min(published_importance,88.0)
-        elif verification=="unverified": published_importance=min(published_importance,80.0)
+        if verification=="single-source": published_importance=min(published_importance,82.0)
+        elif verification=="unverified": published_importance=min(published_importance,74.0)
         item=dict(s); item["importance"]=round(published_importance,1)
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
         item["ranking_score"]=round(final,1); scored.append((final,item))
