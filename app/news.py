@@ -4,6 +4,7 @@ import hashlib
 import re
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 
 import feedparser
@@ -27,10 +28,20 @@ def _clean(value: str) -> str:
 
 def _date(entry) -> str:
     raw = entry.get("published") or entry.get("updated") or ""
+    parsed = entry.get("published_parsed") or entry.get("updated_parsed")
+    if parsed:
+        try:
+            dt = datetime(*parsed[:6], tzinfo=timezone.utc)
+            return dt.isoformat()
+        except Exception:
+            pass
     try:
-        return parsedate_to_datetime(raw).isoformat()
+        dt = parsedate_to_datetime(raw)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc).isoformat()
     except Exception:
-        return raw
+        return str(raw)
 
 
 def _region(category: str, title: str, summary: str) -> str:
@@ -47,8 +58,13 @@ def _region(category: str, title: str, summary: str) -> str:
 def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article], bool, str]:
     parsed = feedparser.parse(url)
     entries = getattr(parsed, "entries", [])
-    if getattr(parsed, "bozo", False) and not entries:
-        return [], False, str(getattr(parsed, "bozo_exception", "invalid/empty feed"))
+    # A feed with a parser error is not considered healthy even when feedparser
+    # managed to recover some entries. Otherwise malformed feeds look healthy
+    # and contaminate freshness/verification statistics.
+    if getattr(parsed, "bozo", False):
+        return [], False, str(getattr(parsed, "bozo_exception", "malformed feed"))
+    if not entries:
+        return [], False, "empty feed"
     source = parsed.feed.get("title", url)
     result = []
     for e in entries[:limit]:
@@ -67,10 +83,6 @@ def _title_tokens(text: str) -> set[str]:
 
 
 def _near_duplicate(a: Article, b: Article) -> bool:
-    """Remove duplicate/near-duplicate items within the same publisher.
-    Keep similar headlines from different publishers so research can use them
-    as independent corroboration evidence.
-    """
     if a.url == b.url:
         return True
     if str(a.source).strip().lower() != str(b.source).strip().lower():
