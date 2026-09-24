@@ -189,7 +189,7 @@ def _explicit_who(item):
         named_profiles.append(_person_context("xi jinping",text))
     named_profiles=[x for x in named_profiles if x]
     if named_profiles:
-        return " ".join(dict.fromEntries(named_profiles.map(x=>[x,x])).keys())
+        return " ".join(dict.fromkeys(named_profiles))
 
     # Strong, role-linked patterns first. These handle common news wording such as
     # "street dancer Wu Yufei" and "Fang Zhenghua, the art director...".
