@@ -71,9 +71,14 @@ def _event_similarity(a,b):
     named_a=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)))
     named_b=set(re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)))
     named=len({x.lower() for x in named_a}&{x.lower() for x in named_b})
-    if named>=2 and common>=3: return max(base,0.30)
-    if named>=1 and common>=4: return max(base,0.28)
-    if common>=5: return max(base,0.28)
+    # Strong same-event signal: at least one shared named entity plus
+    # several shared content words. This catches differently worded reports
+    # of the same event without merging generic stories that merely mention
+    # the same person.
+    if named>=1 and common>=4: return max(base,0.68)
+    if named>=1 and common>=3: return max(base,0.58)
+    if named>=2 and common>=2: return max(base,0.62)
+    if common>=5: return max(base,0.45)
     return base
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
