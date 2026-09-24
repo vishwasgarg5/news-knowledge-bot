@@ -3,13 +3,13 @@ sources:
     - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml
     - https://www.thehindu.com/news/national/feeder/default.rss
     - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
-    - https://www.ndtv.com/rss/feeds
-    - https://indianexpress.com/section/india/feed/
+    - https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml
+    - https://www.hindustantimes.com/feeds/rss/latest/rssfeed.xml
   world:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://rss.dw.com/xml/rss-en-world
-    - https://www.ndtv.com/rss/world
-    - https://indianexpress.com/section/world/feed/
+    - https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml
+    - https://www.hindustantimes.com/feeds/rss/geopolitics/rssfeed.xml
   business:
     - https://feeds.bbci.co.uk/news/business/rss.xml
     - https://www.thehindu.com/business/feeder/default.rss
@@ -20,7 +20,6 @@ sources:
     - https://techcrunch.com/feed/
   science:
     - https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
-    - https://www.jpl.nasa.gov/feeds/news/
   defence:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://www.thehindu.com/news/national/feeder/default.rss
