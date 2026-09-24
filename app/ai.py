@@ -3,17 +3,18 @@ import hashlib,json,os,re
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
-SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise, factual and memorable. Think in this order: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT. Do not create separate learning, quiz, culture, religion, vocabulary or people/places content. Vocabulary is allowed only when a genuinely difficult or important news term needs explanation."""
-DEFAULT_MODEL="qwen2.5:7b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
+SYSTEM="""You are the final-stage news intelligence editor. Use ONLY supplied evidence. Never invent facts, dates, people, numbers or quotations. If evidence is missing, say 'Not stated in supplied sources'. Keep every answer concise. Think: EVENT -> WHY -> IMPACT -> CHANGE -> NEXT."""
+
+DEFAULT_MODEL="qwen2.5:3b"; DEFAULT_OLLAMA_URL="http://localhost:11434/api/generate"
 
 def _model_name(): return os.getenv("AI_MODEL","").strip() or os.getenv("OLLAMA_MODEL","").strip() or DEFAULT_MODEL
 def _ollama_url(): return os.getenv("OLLAMA_URL",DEFAULT_OLLAMA_URL).strip() or DEFAULT_OLLAMA_URL
 
 def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
-    payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"10m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","4096")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","900"))}}
+    payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"5m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","2048")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","300"))}}
     req=Request(_ollama_url(),data=json.dumps(payload,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
     try:
-        with urlopen(req,timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","120"))) as r:data=json.loads(r.read().decode())
+        with urlopen(req,timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","25"))) as r:data=json.loads(r.read().decode())
     except HTTPError as e: raise RuntimeError(f"Ollama HTTP {e.code}: {e.read().decode(errors='replace')[:300]}") from e
     except URLError as e: raise RuntimeError(f"Cannot reach Ollama: {e.reason}") from e
     text=data.get("response","").strip()
@@ -25,8 +26,8 @@ def _similar(a,b):
     wa,wb=_words(a),_words(b); return len(wa&wb)/max(1,len(wa|wb))
 
 def _deterministic_score(a):
-    title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","" )).lower(),str(a.get("category","" )).lower(); text=f"{title} {summary}".lower(); score=35.0
-    if any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib")): score+=12
+    title,summary=str(a.get("title","")),str(a.get("summary","")); source,category=str(a.get("source","")).lower(),str(a.get("category","")).lower(); text=f"{title} {summary}".lower(); score=35.0
+    if any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","techcrunch","nasa")): score+=12
     if category in {"india","national","politics","world","economy","business","defence","science","technology"}: score+=8
     for term,boost in {"government":8,"supreme court":10,"parliament":9,"election":9,"prime minister":9,"president":8,"war":10,"conflict":9,"ceasefire":10,"terror":8,"defence":8,"military":8,"economy":7,"inflation":7,"interest rate":7,"rbi":9,"budget":8,"trade":7,"sanction":8,"nuclear":9,"space":7,"isro":9,"ai":6,"artificial intelligence":7,"climate":7,"earthquake":8,"cyclone":8,"flood":7,"health":6,"vaccine":6,"scam":7,"policy":6}.items():
         if term in text: score+=boost
@@ -45,25 +46,21 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         if any(len(words&old)/max(1,len(words|old))>=.72 for old in seen): continue
         seen.append(words); ranked.append((round(_deterministic_score(a),1),a))
     ranked.sort(key=lambda x:(-x[0],str(x[1].get("published",""))))
-    threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62"))
-    candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
-    max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
-    requested=(candidate_limit if top_n is None else max(1,int(top_n))) if max_stories <= 0 else (max_stories if top_n is None else max(1,int(top_n)))
-    limit=min(requested,candidate_limit)
-    selected=[]; category_counts={}; max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8")))
+    threshold=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
+    max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); requested=candidate_limit if top_n is None else max(1,int(top_n))
+    if max_stories>0: requested=max_stories if top_n is None else max(1,int(top_n))
+    limit=min(requested,candidate_limit); selected=[]; category_counts={}; max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8")))
     for score,a in ranked:
         if score < threshold: continue
         category=str(a.get("category","Other")).strip().lower() or "other"
-        # Soft category cap: only skip a category when enough other categories can fill the pool.
-        if max_stories > 0 and category_counts.get(category,0)>=max_per_category: continue
+        if max_stories>0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
-        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"reason":"Impact, source quality, relevance, novelty and ranking score."})
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"reason":"Impact, source quality, relevance and novelty."})
         category_counts[category]=category_counts.get(category,0)+1
         if len(selected)>=limit: break
     return selected
 
 def rerank_stories(stories,research=None):
-    """Apply confidence, source diversity, novelty and soft topic caps after verification."""
     research=research or {}; scored=[]
     for s in stories:
         r=research.get(s.get("story_id"),{}) or {}; conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0)
@@ -71,16 +68,12 @@ def rerank_stories(stories,research=None):
         if r.get("verification")=="unverified": conf=min(conf,50)
         final=0.62*importance+0.23*conf+0.10*min(100,50+indep*15)+0.05*novelty
         scored.append((final,s))
-    scored.sort(key=lambda x:-x[0])
-    max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
+    scored.sort(key=lambda x:-x[0]); max_stories=int(os.getenv("NEWS_MAX_STORIES","0")); max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8"))); counts={}; selected=[]
     for final,s in scored:
         cat=str(s.get("category","Other")).lower() or "other"
-        if max_stories > 0 and counts.get(cat,0)>=max_per_category: continue
-        # Candidate selection already performs event-level deduplication.
-        # Do not remove another threshold-qualified story here: the contract
-        # is to report every story that clears NEWS_MIN_IMPORTANCE.
+        if max_stories>0 and counts.get(cat,0)>=max_per_category: continue
         s=dict(s); s["ranking_score"]=round(final,1); s["rank"]=len(selected)+1; selected.append(s); counts[cat]=counts.get(cat,0)+1
-        if max_stories > 0 and len(selected)>=max_stories: break
+        if max_stories>0 and len(selected)>=max_stories: break
     return selected
 
 def _evidence(selected,articles,research):
@@ -90,7 +83,7 @@ def _evidence(selected,articles,research):
         for x in articles:
             if x.get("url")==s.get("url"): continue
             sim=_similar(s.get("headline",""),x.get("title",""))
-            if sim>=0.20: related.append((sim,x))
+            if sim>=.20: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url","")} for _,x in related[:5]],"verification":r})
     return out
@@ -105,15 +98,31 @@ def _parse(text,item):
 
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or "Not stated in supplied sources"
-    return {**item,"what":summary[:500],"who":"Not stated in supplied sources","when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":"The available report identifies this as a significant current development.","why_important":"Selected because of its relevance, impact and source quality.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":str(item.get("headline",summary))[:180],"vocabulary":""}
+    return {**item,"what":summary[:500],"who":"Not stated in supplied sources","when":"Not stated in supplied sources","where":"Not stated in supplied sources","why":"The available report identifies this as a significant current development.","why_important":"Selected because of its relevance, impact and source quality.","background":"Not stated in supplied sources","change_since_yesterday":item.get("change_since_yesterday",""),"next":"Watch for further official or independent updates.","connection":"Not stated in supplied sources","memory_hook":str(item.get("headline",summary))[:180],"vocabulary":"","ai_generated":False}
 
 def _one(item,today):
-    prompt=f"Today: {today}\nExplain ONE news story using ONLY supplied evidence. Keep every field short. Return EXACTLY 12 separate lines, one field per line:\nWHAT: ...\nWHO: ...\nWHEN: ...\nWHERE: ...\nWHY: ...\nIMPACT: ...\nBACKGROUND: ...\nCHANGE: ...\nNEXT: ...\nCONNECTION: ...\nMEMORY: ...\nVOCABULARY: NONE OR up to 3 genuinely difficult/important terms, formatted as term = simple meaning | news context.\nUse VOCABULARY: NONE when ordinary language is sufficient. Do not add headings, bullets, extra fields or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"
-    return _parse(_call_ollama(prompt,num_predict=340,timeout=45),item)
+    prompt=f"""Today: {today}
+Explain ONE news story using ONLY supplied evidence. Return EXACTLY 12 short lines:
+WHAT: ...
+WHO: ...
+WHEN: ...
+WHERE: ...
+WHY: ...
+IMPACT: ...
+BACKGROUND: ...
+CHANGE: ...
+NEXT: ...
+CONNECTION: ...
+MEMORY: ...
+VOCABULARY: NONE
+No bullets or commentary. Evidence: {json.dumps(item,ensure_ascii=False)}"""
+    result=_parse(_call_ollama(prompt,num_predict=220,timeout=int(os.getenv("AI_TIMEOUT_SECONDS","25"))),item)
+    result["ai_generated"]=True
+    return result
 
 def generate_briefing(selected,articles,previous,today,research=None):
     evidence=_evidence(selected,articles,research); stories=[]
-    budget=max(0,int(os.getenv("AI_STORY_BUDGET","6")))
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","2")))
     ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","75"))]
     if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
     ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
