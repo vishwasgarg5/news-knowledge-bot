@@ -149,12 +149,12 @@ def _evidence(selected,articles,research):
         for x in articles:
             if x.get("url")==s.get("url"): continue
             sim=_event_similarity(s.get("headline",""),x.get("title",""))
-            if sim>=.20: related.append((sim,x))
+            if sim>=.28: related.append((sim,x))
         related.sort(key=lambda z:-z[0]); r=(research or {}).get(sid,{})
         # Prefer the research layer's corroboration because it has already passed freshness/source checks.
         evidence=r.get("evidence") or []
         merged=[]; seen=set()
-        for x in evidence + [x for _,x in related[:8]]:
+        for x in [x for x in (r.get("evidence") or []) if _event_similarity(s.get("headline",""),x.get("title",""))>=.28] + [x for _,x in related[:6]]:
             key=str(x.get("url","") or x.get("title","")).strip()
             if not key or key in seen: continue
             seen.add(key); merged.append(x)
@@ -290,15 +290,21 @@ def _extract_context(item):
     return when,where
 
 def _fallback_how(item):
-    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
+    texts=[str(item.get("summary","") or "")]
     for text in texts:
+        m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]", text, re.I)
+        if m: return m.group(0).strip()
+    for x in (item.get("related_articles") or []):
+        text=str(x.get("summary","") or "")
         m=re.search(r"(?:by|through|using|via|after|following|during) ([^.]{20,220})[.]", text, re.I)
         if m: return m.group(0).strip()
     return ""
 
 def _fallback_key_data(item):
-    texts=[str(item.get("summary","") or ""), *[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]]
-    text=" ".join(texts)
+    texts=[str(item.get("summary","") or "")]
+    primary_text=" ".join(texts)
+    secondary=[str(x.get("summary","") or "") for x in (item.get("related_articles") or [])]
+    text=primary_text if primary_text.strip() else " ".join(secondary)
     patterns=(
         r"(?:up to|starting at|weighs?|weight|battery(?: life)?|ships?|shipping|price|cost|capacity|range|duration|hours?|minutes?|percent|%|frames?|models?|combinations?)\s*(?:of\s*)?(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:\s*(?:million|billion|crore|lakh|thousand|bn|mn|hours?|minutes?|g|kg|GB|TB|%))?",
         r"(?:₹|\$|€|£)\s*\d+(?:[.,]\d+)*(?:\s*(?:million|billion))?",
@@ -331,8 +337,10 @@ def _fallback_why(item):
     return ""
 
 def _fallback_background(item):
+    primary=str(item.get("summary","") or "").strip()
+    if len(primary)>=140:
+        return re.split(r"(?<=[.!?])\s+",primary)[0].strip()[:500]
     related=item.get("related_articles") or []
-    # Keep the most useful corroborating context, but avoid dumping whole summaries.
     parts=[]
     for x in related[:3]:
         summary=str(x.get("summary","") or "").strip()
