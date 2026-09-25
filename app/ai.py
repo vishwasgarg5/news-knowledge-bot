@@ -72,7 +72,7 @@ def _event_similarity(a,b):
     named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a))}
     named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b))}
     named=named_a&named_b
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","timeline"}
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","hurricane","storm","fire","flood","death","dies","killed","injured","student","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","timeline"}
     event_overlap=common&event_terms
     if base>=0.72: return 0.90
     if len(named)>=1 and len(event_overlap)>=1 and len(common)>=2: return max(base,0.76)
