@@ -164,6 +164,13 @@ def _event_family_key(title):
         ("asian_games",{"asian","games","medal","medallist","medallists","shooters","table","tennis"}),
         ("obc_creamy_layer",{"obc","creamy","layer","supreme","court","retrospective","verdict"}),
     ]
+    # High-signal anchors can identify a recurring family even when a
+    # headline omits one of the usual terms. This is important for CEC/ECI/SIR
+    # coverage where different outlets describe the same controversy differently.
+    if (t & {"cec","eci","gyanesh"}) and (t & {"election","commission","sir","voter","voters","electoral","rolls","protest","removal","resign","resignation"}):
+        return "election_commission_sir"
+    if "sir" in t and (t & {"election","voter","voters","rolls","electoral","commission","cec","eci"}):
+        return "election_commission_sir"
     for key,family in families:
         if len(t & family)>=2:
             return key
