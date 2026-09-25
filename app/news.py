@@ -55,7 +55,7 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
     """
     title_text=str(title or "").lower()
     body_text=f"{title} {summary}".lower()
-    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","supreme court","election commission of india","cec")
+    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","haryana","supreme court","election commission of india","cec")
     world_terms=("united states","u.s.","america","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","iran","japan","korea","taiwan")
     def hits(text, terms):
         return [x for x in terms if re.search(rf"\b{re.escape(x)}\b", text)]
