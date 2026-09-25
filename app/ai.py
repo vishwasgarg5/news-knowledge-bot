@@ -153,12 +153,12 @@ def _event_family_key(title):
     families=[
         ("openai_australia",{"openai","australia","hack","hacked","breach","infiltrated","portal"}),
         ("meta_muse",{"muse","meta","wearable","glasses","tamagotchi"}),
-        ("cec_sir",{"gyanesh","cec","eci","election","commission","sir","voter","voters"}),
-        ("rahul_vote_row",{"rahul","gandhi","vote","voter","chori","cec","election","commission"}),
+        ("election_commission_sir",{"gyanesh","cec","eci","election","commission","sir","voter","voters","rolls","electoral","poll","polls"}),
+        ("election_commission_sir",{"rahul","gandhi","vote","voter","chori","cec","election","commission","sir","rolls"}),
         ("iit_bombay",{"iit","bombay","student","death","professor","director","azad","maidan"}),
         ("hurricane_polo",{"polo","hurricane","mexico","hawaii","storm","landfall","nolo"}),
         ("trump_xi",{"xi","jinping","trump","china","white","house","dinner"}),
-        ("netanyahu_un",{"netanyahu","iran","unga","israel","united","nations","gaza"}),
+        ("netanyahu_un",{"netanyahu","iran","unga","israel","united","nations","gaza","speech","address","delegates","walkout"}),
         ("cauvery",{"cauvery","tamil","karnataka","water","cusecs","reservoir"}),
         ("hilsa",{"hilsa","bangladesh","fish","importing","exports"}),
         ("asian_games",{"asian","games","medal","medallist","medallists","shooters","table","tennis"}),
@@ -177,6 +177,10 @@ def _same_event_family(a,b):
     kb=_event_family_key(b.get("headline",""))
     if ka and kb and ka==kb:
         return True
+    # Known families are intentionally broad: one regional slot should
+    # represent one distinct development, not several reports on it.
+    if ka or kb:
+        return False
     return _same_event(a.get("headline",""),b.get("headline","")) or _event_similarity(a.get("headline",""),b.get("headline",""))>=0.76
 
 def _genuinely_new_development(a,b):
