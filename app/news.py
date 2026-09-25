@@ -47,42 +47,43 @@ def _date(entry) -> str:
 
 
 def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
-    """Classify the geography of the actual event using explicit evidence.
-
-    Feed category is only a weak fallback. Explicit international locations/actors
-    override incidental India mentions, and ambiguous items remain World rather than
-    being forced into the India quota.
-    """
+    """Classify the geography of the actual event, not the feed it came from."""
     title_text=str(title or "").lower()
     body_text=f"{title} {summary}".lower()
-    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","haryana","supreme court","election commission of india","cec")
+    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","central government","assembly constituency","lok sabha","rajya sabha","rupee","crore","lakh")
     world_terms=("united states","u.s.","america","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","iran","japan","korea","taiwan")
+    strong_india=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","modi","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","azad maidan","cbi","mahadev","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","lok sabha","rajya sabha")
+    strong_world=("mexico","hawaii","china","xi jinping","trump","australia","ukraine","russia","gaza","israel","nato","iran","japan","taiwan","united states","u.s.","united nations")
     def hits(text, terms):
         return [x for x in terms if re.search(rf"\b{re.escape(x)}\b", text)]
     ti=hits(title_text,india_terms); tw=hits(title_text,world_terms)
     bi=hits(body_text,india_terms); bw=hits(body_text,world_terms)
-    # Headline geography is strongest: a concrete foreign place/actor in the
-    # headline must not become an India story just because the feed is Indian.
-    if tw and not ti:
-        return "world", min(1.0, 0.72 + 0.08*len(tw)), "headline: " + ", ".join(tw[:4])
+    si=hits(title_text,strong_india); sw=hits(title_text,strong_world)
+    if si and not sw:
+        return "india",min(1.0,0.86+0.04*len(si)),"headline India anchors: "+", ".join(si[:5])
+    if sw and not si:
+        return "world",min(1.0,0.86+0.04*len(sw)),"headline World anchors: "+", ".join(sw[:5])
+    if si and sw:
+        if len(sw)>len(si): return "world",0.88,"headline mixed; stronger World anchors: "+", ".join(sw[:5])
+        return "india",0.88,"headline mixed; stronger India anchors: "+", ".join(si[:5])
     if ti and not tw:
-        return "india", min(1.0, 0.78 + 0.07*len(ti)), "headline: " + ", ".join(ti[:4])
-    if tw and ti:
-        # A foreign event plus only an incidental India reference is World.
-        if len(tw) > len(ti) or any(x in tw for x in ("mexico","hawaii","china","australia","united states","u.s.","israel","iran")):
-            return "world", 0.82, "headline mixed; foreign anchor: " + ", ".join(tw[:4])
-        return "india", 0.76, "headline mixed; India anchor: " + ", ".join(ti[:4])
-    if bw and not bi:
-        return "world", min(0.95, 0.60 + 0.07*len(bw)), "body: " + ", ".join(bw[:5])
+        return "india",min(0.86,0.76+0.05*len(ti)),"headline India evidence: "+", ".join(ti[:5])
+    if tw and not ti:
+        return "world",min(0.86,0.76+0.05*len(tw)),"headline World evidence: "+", ".join(tw[:5])
     if bi and not bw:
-        return "india", min(0.94, 0.64 + 0.07*len(bi)), "body: " + ", ".join(bi[:5])
-    if bw and bi:
-        return ("world", 0.68, "body mixed; foreign anchors: " + ", ".join(bw[:4])) if len(bw) >= len(bi) else ("india", 0.66, "body mixed; India anchors: " + ", ".join(bi[:4]))
-    # No geographic evidence: do not manufacture India relevance from the feed.
-    # World is the safe bucket for the 15+15 selector; low-confidence items can
-    # be inspected in the audit rather than silently filling the India quota.
-    return "world", 0.35, "no explicit geographic evidence"
-
+        return "india",min(0.90,0.70+0.05*len(bi)),"body India evidence: "+", ".join(bi[:6])
+    if bw and not bi:
+        return "world",min(0.90,0.70+0.05*len(bw)),"body World evidence: "+", ".join(bw[:6])
+    if bi and bw:
+        india_score=sum(3 if x in strong_india else 1 for x in bi)
+        world_score=sum(3 if x in strong_world else 1 for x in bw)
+        if str(category or "").lower() in {"india","national","politics","business"}: india_score += 2
+        if world_score > india_score:
+            return "world",0.76,"body mixed; World anchors: "+", ".join(bw[:5])
+        return "india",0.76,"body mixed; India anchors: "+", ".join(bi[:5])
+    if str(category or "").lower() in {"india","national","politics"}:
+        return "india",0.58,"category fallback: "+str(category)
+    return "world",0.35,"no explicit geographic evidence"
 
 
 def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article], bool, str]:
