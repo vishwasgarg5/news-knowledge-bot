@@ -87,15 +87,18 @@ def _same_event(a,b):
     # near-identical headlines here, plus explicit multi-token event families.
     if base>=0.80: return True
     families=[
-        {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","security"},
-        {"muse","agent","wearable","glasses","launch","launched","product"},
-        {"gyanesh","election","commission","cec","resign","removal","remove","notice","motion"},
-        {"iit","bombay","student","death","professor","director"},
-        {"polo","hurricane","mexico","hawaii","storm","landfall"},
+        {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","cyber"},
+        {"muse","agent","wearable","glasses","meta","tamagotchi"},
+        {"gyanesh","cec","eci","election","commission","resign","resignation","removal","remove","notice","motion","vote","voter"},
+        {"rahul","gandhi","vote","voter","chori","cec","election","commission"},
+        {"iit","bombay","student","death","professor","director","azad","maidan"},
+        {"polo","hurricane","mexico","hawaii","storm","landfall","nolo"},
         {"xi","jinping","trump","china","white","house","dinner"},
-        {"netanyahu","iran","un","ungA","israel"},
+        {"netanyahu","iran","unga","israel","united","nations","gaza"},
         {"cauvery","tamil","karnataka","water","tmc","drought"},
         {"hilsa","bangladesh","fish","importing","exports"},
+        {"asian","games","medal","medallist","medallists","shooters","table","tennis"},
+        {"obc","creamy","layer","supreme","court","retrospective","verdict"},
     ]
     for family in families:
         shared=common & family
@@ -251,7 +254,8 @@ def _evidence_text(item):
     return " ".join(parts)
 
 def _content_tokens(text):
-    return set(re.findall(r"[a-zA-Z]{4,}",str(text).lower()))
+    # Keep meaningful short acronyms/names such as CEC, RBI, ECI and IIT.
+    return set(re.findall(r"[a-zA-Z]{3,}",str(text).lower()))
 
 def _field_supported(value,evidence,min_overlap=2):
     v=_content_tokens(value); e=_content_tokens(evidence)
