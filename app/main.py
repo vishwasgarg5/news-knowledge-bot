@@ -83,7 +83,8 @@ def _story_block(s,index,total):
     elif verification=="single-source":
         status="SINGLE SOURCE"
     elif verification=="multi-source":
-        status="CONFIRMED · MULTI-SOURCE"
+        independent=int(v.get("independent_sources",0) or 0)
+        status="CONFIRMED · MULTI-SOURCE" if independent>=2 else "MULTI-REPORT · 1 INDEPENDENT SOURCE"
     elif verification=="official-source":
         status="OFFICIAL SOURCE"
     else:
