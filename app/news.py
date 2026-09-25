@@ -58,7 +58,7 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
     india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","supreme court","election commission of india","cec")
     world_terms=("united states","u.s.","america","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","iran","japan","korea","taiwan")
     def hits(text, terms):
-        return [x for x in terms if re.search(rf"\\b{re.escape(x)}\\b", text)]
+        return [x for x in terms if re.search(rf"\b{re.escape(x)}\b", text)]
     ti=hits(title_text,india_terms); tw=hits(title_text,world_terms)
     bi=hits(body_text,india_terms); bw=hits(body_text,world_terms)
     # Headline geography is strongest: a concrete foreign place/actor in the
