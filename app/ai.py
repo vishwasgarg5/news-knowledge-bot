@@ -391,6 +391,8 @@ def _explicit_who(item):
     if re.search(r"\bxi\s+jinping\b|\bxi\b",text,re.I): named_profiles.append(_person_context("xi jinping",text))
     named_profiles=[x for x in named_profiles if x]
     if named_profiles: return " ".join(dict.fromkeys(named_profiles))
+    if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b|\bPM Modi\b",text,re.I):
+        return "Narendra Modi — Prime Minister of India"
     role_patterns=(
         r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
         r"\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General|president|minister)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3})",
@@ -526,11 +528,17 @@ def _fallback_memory(item):
         if title: return f"Prior: {h.get('date','prior')} — {title}"[:300]
     return ""
 
+def _fallback_vocab(item):
+    text=f"{item.get('headline','')} {item.get('summary','')}".lower()
+    glossary={"sir":"Special Intensive Revision of electoral rolls","pli":"Production Linked Incentive","mdr":"Merchant Discount Rate","unga":"United Nations General Assembly","cec":"Chief Election Commissioner","eci":"Election Commission of India","obc":"Other Backward Classes"}
+    hits=[f"{k.upper()} — {v}" for k,v in glossary.items() if re.search(rf"\b{re.escape(k)}\b",text)]
+    return "; ".join(hits[:2])
+
 def _fallback(item):
     summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
     item=dict(item); item.pop("_event_text",None)
     memory_hook=_fallback_memory(item)
-    return {**item,"what":summary[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":_fallback_impact(item),"background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":_fallback_next(item),"connection":_fallback_connection(item),"memory_hook":memory_hook,"vocabulary":"","ai_generated":False}
+    return {**item,"what":str(item.get("headline") or summary)[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":_fallback_impact(item),"background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":_fallback_next(item),"connection":_fallback_connection(item),"memory_hook":memory_hook,"vocabulary":_fallback_vocab(item),"ai_generated":False}
 
 def _one(item,today):
     prompt=f"""Today: {today}
