@@ -121,9 +121,53 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         category=str(a.get("category","Other")).strip().lower() or "other"
         if max_stories>0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
-        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"region_confidence":round(float(a.get("region_confidence",0) or 0),2),"region_evidence":str(a.get("region_evidence","") or ""),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
         category_counts[category]=category_counts.get(category,0)+1
         if len(selected)>=limit: break
+    return selected
+
+def _development_signature(title):
+    """Extract concrete action/development words for event-family diversity."""
+    tokens=_content_tokens(title)
+    actions={
+        "arrest","arrested","detained","charged","indicted","killed","dies","death","injured",
+        "resign","resigns","resignation","remove","removal","impeach","impeachment","protest","protests",
+        "launch","launched","launches","unveils","unveiled","releases","release","deploy","deployed",
+        "hack","hacked","breach","breached","infiltrated","attack","attacked","strike","strikes",
+        "ban","bans","banned","block","blocked","approve","approved","rule","rules","ruling","verdict",
+        "sign","signed","deal","agreement","summit","visit","hosts","hosted","warn","warns","warning",
+        "landfall","tracks","strengthens","surge","surges","election","vote","voters","results"
+    }
+    return tokens & actions
+
+def _same_event_family(a,b):
+    """Detect the same underlying event without collapsing an entire topic."""
+    if str(a.get("event_id","")) and str(a.get("event_id",""))==str(b.get("event_id","")):
+        return True
+    if _same_event(a.get("headline",""),b.get("headline","")):
+        return True
+    return _event_similarity(a.get("headline",""),b.get("headline",""))>=0.76
+
+def _genuinely_new_development(a,b):
+    """Allow a second story only when the headline describes a concrete new action."""
+    aa=_development_signature(a.get("headline","")); bb=_development_signature(b.get("headline",""))
+    if not aa or not bb: return False
+    # Same action words normally describe the same development.
+    if aa == bb or len(aa & bb) >= 2: return False
+    # Require a meaningful action change and materially different headlines.
+    return len(aa ^ bb) >= 2 and _similar(a.get("headline",""),b.get("headline","")) < 0.58
+
+def _select_diverse(pool,limit):
+    selected=[]; family_counts=[]
+    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","1")))
+    for score,item in pool:
+        if len(selected)>=limit: break
+        same=[x for x in selected if _same_event_family(item,x)]
+        if not same:
+            selected.append(item); continue
+        if len(same) < max_family and all(_genuinely_new_development(item,x) for x in same):
+            item=dict(item); item["selection_reason"]="New development within an existing event family: distinct concrete action."
+            selected.append(item)
     return selected
 
 def rerank_stories(stories,research=None):
@@ -135,7 +179,6 @@ def rerank_stories(stories,research=None):
         if verification=="unverified": conf=min(conf,50)
         verification_bonus={"multi-source":12,"official-source":9,"single-source":-4}.get(verification,0)
         source_diversity=min(8,indep*2)
-        # Prevent a single uncorroborated report from displaying a near-certain importance.
         published_importance=importance
         if verification=="single-source": published_importance=min(published_importance,72.0)
         elif verification=="unverified": published_importance=min(published_importance,68.0)
@@ -143,34 +186,26 @@ def rerank_stories(stories,research=None):
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    india=[x for x in scored if str(x[1].get("region","")).lower()=="india"]; world=[x for x in scored if str(x[1].get("region","")).lower()!="india"]
-    india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0))); world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    india=[x for x in scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
+    world=[x for x in scored if str(x[1].get("region","")).lower()=="world"]
+    india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
 
-    # Candidate selection removes only near-identical headlines. Do not run a
-    # second topic/family deduplication pass here: different developments can
-    # legitimately share the same people, companies or institutions.
     india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
     if max_stories>0:
         india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
 
-    india_selected=[item for _,item in india[:india_limit]]
-    world_selected=[item for _,item in world[:world_limit]]
+    india_selected=_select_diverse(india,india_limit)
+    world_selected=_select_diverse(world,world_limit)
 
-    def backfill(pool,current,limit):
-        for score,item in pool:
-            if len(current)>=limit: break
-            title=str(item.get("_event_text") or item.get("headline",""))
-            if any(_event_similarity(title,str(x.get("_event_text") or x.get("headline","")))>=.88 for x in current):
-                continue
-            current.append(item)
-        return current
-
-    india_selected=backfill(india,india_selected,india_limit)
-    world_selected=backfill(world,world_selected,world_limit)
-
+    # Backfill only from candidates that pass the same geographic and event-family
+    # rules. Never fill an India slot with an item whose geography is uncertain.
     selected=india_selected[:india_limit] + world_selected[:world_limit]
-    for rank,item in enumerate(selected,1): item["rank"]=rank
+    for rank,item in enumerate(selected,1):
+        item["rank"]=rank
+        if not item.get("selection_reason"):
+            item["selection_reason"]="Highest verified ranking within the regional and event-family diversity constraints."
     return selected
 
 def _corroboration_score(a,b):
