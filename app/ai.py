@@ -147,13 +147,37 @@ def _development_signature(title):
     }
     return tokens & actions
 
+def _event_family_key(title):
+    """Return a stable family key for known recurring event clusters."""
+    t=_content_tokens(title)
+    families=[
+        ("openai_australia",{"openai","australia","hack","hacked","breach","infiltrated","portal"}),
+        ("meta_muse",{"muse","meta","wearable","glasses","tamagotchi"}),
+        ("cec_sir",{"gyanesh","cec","eci","election","commission","sir","voter","voters"}),
+        ("rahul_vote_row",{"rahul","gandhi","vote","voter","chori","cec","election","commission"}),
+        ("iit_bombay",{"iit","bombay","student","death","professor","director","azad","maidan"}),
+        ("hurricane_polo",{"polo","hurricane","mexico","hawaii","storm","landfall","nolo"}),
+        ("trump_xi",{"xi","jinping","trump","china","white","house","dinner"}),
+        ("netanyahu_un",{"netanyahu","iran","unga","israel","united","nations","gaza"}),
+        ("cauvery",{"cauvery","tamil","karnataka","water","cusecs","reservoir"}),
+        ("hilsa",{"hilsa","bangladesh","fish","importing","exports"}),
+        ("asian_games",{"asian","games","medal","medallist","medallists","shooters","table","tennis"}),
+        ("obc_creamy_layer",{"obc","creamy","layer","supreme","court","retrospective","verdict"}),
+    ]
+    for key,family in families:
+        if len(t & family)>=2:
+            return key
+    return ""
+
 def _same_event_family(a,b):
-    """Detect the same underlying event without collapsing an entire topic."""
+    """Detect the same underlying event family deterministically."""
     if str(a.get("event_id","")) and str(a.get("event_id",""))==str(b.get("event_id","")):
         return True
-    if _same_event(a.get("headline",""),b.get("headline","")):
+    ka=_event_family_key(a.get("headline",""))
+    kb=_event_family_key(b.get("headline",""))
+    if ka and kb and ka==kb:
         return True
-    return _event_similarity(a.get("headline",""),b.get("headline",""))>=0.76
+    return _same_event(a.get("headline",""),b.get("headline","")) or _event_similarity(a.get("headline",""),b.get("headline",""))>=0.76
 
 def _genuinely_new_development(a,b):
     """Allow a second story only when the headline describes a concrete new action."""
@@ -165,16 +189,24 @@ def _genuinely_new_development(a,b):
     return len(aa ^ bb) >= 2 and _similar(a.get("headline",""),b.get("headline","")) < 0.58
 
 def _select_diverse(pool,limit):
-    selected=[]; family_counts=[]
+    selected=[]; family_counts={}
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","1")))
     for score,item in pool:
         if len(selected)>=limit: break
-        same=[x for x in selected if _same_event_family(item,x)]
-        if not same:
-            selected.append(item); continue
-        if len(same) < max_family and all(_genuinely_new_development(item,x) for x in same):
-            item=dict(item); item["selection_reason"]="New development within an existing event family: distinct concrete action."
+        key=_event_family_key(item.get("headline",""))
+        if key:
+            count=family_counts.get(key,0)
+            if count>=max_family:
+                continue
+            family_counts[key]=count+1
+        else:
+            same=[x for x in selected if _same_event_family(item,x)]
+            if same:
+                if len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same):
+                    continue
             selected.append(item)
+            continue
+        selected.append(item)
     return selected
 
 def rerank_stories(stories,research=None):
