@@ -89,13 +89,17 @@ def _same_event(a,b):
     families=[
         {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","security"},
         {"muse","agent","wearable","glasses","launch","launched","product"},
-        {"cec","gyanesh","election","commission","resign","impeach","protest"},
+        {"gyanesh","election","commission","cec","resign","removal","remove","notice","motion"},
+        {"iit","bombay","student","death","professor","director"},
+        {"polo","hurricane","mexico","hawaii","storm","landfall"},
+        {"xi","jinping","trump","china","white","house","dinner"},
+        {"netanyahu","iran","un","ungA","israel"},
         {"cauvery","tamil","karnataka","water","tmc","drought"},
         {"hilsa","bangladesh","fish","importing","exports"},
     ]
     for family in families:
         shared=common & family
-        if len(shared)>=3:
+        if len(shared)>=2:
             return True
     return False
 
