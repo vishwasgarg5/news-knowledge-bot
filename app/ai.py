@@ -153,6 +153,7 @@ def _event_family_key(title):
     families=[
         ("openai_australia",{"openai","australia","hack","hacked","breach","infiltrated","portal"}),
         ("meta_muse",{"muse","meta","wearable","glasses","tamagotchi"}),
+        ("sennheiser_momentum5",{"sennheiser","momentum","wireless","earbuds","headphones"}),
         ("election_commission_sir",{"gyanesh","cec","eci","election","commission","sir","voter","voters","rolls","electoral","poll","polls"}),
         ("election_commission_sir",{"rahul","gandhi","vote","voter","chori","cec","election","commission","sir","rolls"}),
         ("iit_bombay",{"iit","bombay","student","death","professor","director","azad","maidan"}),
@@ -169,7 +170,7 @@ def _event_family_key(title):
     # coverage where different outlets describe the same controversy differently.
     if (t & {"cec","eci","gyanesh"}) and (t & {"election","commission","sir","voter","voters","electoral","rolls","protest","removal","resign","resignation"}):
         return "election_commission_sir"
-    if "sir" in t and (t & {"election","voter","voters","rolls","electoral","commission","cec","eci"}):
+    if "sir" in t and (t & {"election","voter","voters","rolls","electoral","commission","cec","eci","protest","barricaded","barricade","jantar","mantar"}):
         return "election_commission_sir"
     for key,family in families:
         if len(t & family)>=2:
@@ -199,8 +200,8 @@ def _genuinely_new_development(a,b):
     # Require a meaningful action change and materially different headlines.
     return len(aa ^ bb) >= 2 and _similar(a.get("headline",""),b.get("headline","")) < 0.58
 
-def _select_diverse(pool,limit):
-    selected=[]; family_counts={}
+def _select_diverse(pool,limit,family_counts=None):
+    selected=[]; family_counts=family_counts if family_counts is not None else {}
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","1")))
     for score,item in pool:
         if len(selected)>=limit: break
@@ -246,8 +247,11 @@ def rerank_stories(stories,research=None):
     if max_stories>0:
         india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
 
-    india_selected=_select_diverse(india,india_limit)
-    world_selected=_select_diverse(world,world_limit)
+    # One shared family ledger prevents the same development from occupying
+    # both an India slot and a World slot.
+    family_counts={}
+    india_selected=_select_diverse(india,india_limit,family_counts)
+    world_selected=_select_diverse(world,world_limit,family_counts)
 
     # Backfill only from candidates that pass the same geographic and event-family
     # rules. Never fill an India slot with an item whose geography is uncertain.
@@ -387,6 +391,14 @@ def _explicit_who(item):
     if re.search(r"\bxi\s+jinping\b|\bxi\b",text,re.I): named_profiles.append(_person_context("xi jinping",text))
     named_profiles=[x for x in named_profiles if x]
     if named_profiles: return " ".join(dict.fromkeys(named_profiles))
+    role_patterns=(
+        r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
+        r"\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General|president|minister)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3})",
+        r":\s*([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\s*$",
+    )
+    for pattern in role_patterns:
+        m=re.search(pattern,headline)
+        if m: return m.group(1).strip(" .,")
     role_name_patterns=((r"\b(?:chinese|indian|american|british|japanese|korean)?\s*(?:street\s+)?dancer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)","dancer"),(r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+)+),\s+(?:the\s+)?(?:art\s+director|director|founder|chief executive officer|ceo|commerciali[sz]ation lead|lead engineer)",""),(r"\b(?:founder|director|ceo|president|minister|prime minister|chief minister|leader of the opposition)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)",""))
     for pattern,fixed_role in role_name_patterns:
         m=re.search(pattern,text)
@@ -423,9 +435,9 @@ def _extract_context(item):
         if candidates:
             counts={x:candidates.count(x) for x in set(candidates)}; where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
         return when,where
+    # Related stories may corroborate the event but can describe a different
+    # action, place, or scheduled date. Keep WHEN/WHERE tied to the primary item.
     when,where=scan(primary)
-    if not when or not where:
-        sw,sl=scan(secondary); when=when or sw; where=where or sl
     return when,where
 
 def _sentence_list(text):
@@ -537,8 +549,20 @@ CHANGE: what is newly different versus the prior timeline/evidence.
 CONNECTION: a concrete link to another verified development in the supplied evidence.
 NEXT: the most relevant expected/announced next step, or leave blank if unsupported.
 Use corroborating related articles when the primary article does not contain enough detail. Prefer facts repeated or supported across multiple sources. Attribute conflicting claims instead of merging them. If a field remains unsupported after checking all supplied sources, leave it blank. Never write "Not stated in supplied sources". Never invent facts. No bullets or commentary.
-Evidence: {json.dumps(item,ensure_ascii=False)}"""
-    result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","20"))),item)
+Evidence: {json.dumps({
+    "headline": item.get("headline",""),
+    "source": item.get("source",""),
+    "summary": str(item.get("summary","") or "")[:650],
+    "related_articles": [
+        {"title": x.get("title",""), "source": x.get("source",""), "summary": str(x.get("summary","") or "")[:500]}
+        for x in (item.get("related_articles") or [])[:4]
+    ],
+    "verification": {
+        "verification": (item.get("verification") or {}).get("verification",""),
+        "independent_sources": (item.get("verification") or {}).get("independent_sources",0)
+    }
+},ensure_ascii=False)}"""
+    result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","25"))),item)
     explicit=_explicit_who(item); current=str(result.get("who","")).strip()
     if explicit and not current: result["who"]=explicit
     if explicit and not str(result.get("who_detail","")).strip(): result["who_detail"]=_person_context(explicit,item.get("headline",""))
