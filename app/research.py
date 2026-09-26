@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urlparse
 
 STOP={"gets","says","this","that","with","from","into","after","about","will","have","been","their","they","what","when","where","which","today","latest","india","news"}
 TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90}
@@ -32,11 +33,42 @@ def _event_similarity(a,b):
     if named_overlap>=2 and len(common)>=3: return 0.55
     return base
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
-def _source_key(source):
+def _source_key(source, url=""):
+    try:
+        host=urlparse(str(url or "")).netloc.lower().split(":")[0]
+        if host.startswith("www."): host=host[4:]
+        if host:
+            if host.endswith("bbc.co.uk") or host.endswith("bbc.com"): return "bbc"
+            if host.endswith("reuters.com"): return "reuters"
+            if host.endswith("thehindu.com"): return "the hindu"
+            if host.endswith("indianexpress.com"): return "indian express"
+            if host.endswith("apnews.com"): return "associated press"
+            if host.endswith("pib.gov.in"): return "pib"
+            if host.endswith("rbi.org.in"): return "reserve bank of india"
+            if host.endswith("isro.gov.in"): return "isro"
+            if host.endswith("nasa.gov"): return "nasa"
+            if host.endswith("sebi.gov.in"): return "sebi"
+            return host
+    except Exception:
+        pass
     raw=str(source or "").lower().strip()
     for alias,key in ALIASES.items():
         if alias in raw:return key
     return raw
+
+_ROUNDUP_RE=re.compile(
+    r"\b(?:evening|morning|daily)\s+news\s+(?:brief|briefing|roundup|round-up)\b|"
+    r"\b(?:top|main)\s+(?:stories|news)\b|"
+    r"\b(?:news\s+)?(?:roundup|round-up|digest)\b|"
+    r"\bnews\s+brief\b",
+    re.I,
+)
+
+def _is_derivative_report(article):
+    """Roundups/briefs may be useful for discovery but never count as independent corroboration."""
+    title=str(article.get("title","") or article.get("headline","") or "")
+    source=str(article.get("source","") or "")
+    return bool(_ROUNDUP_RE.search(title) or _ROUNDUP_RE.search(source))
 def _is_official(source): return any(x in _source_key(source) for x in OFFICIAL)
 
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
@@ -75,14 +107,15 @@ def _published_recent(value, hours=72):
     return timedelta(hours=-6) <= age <= timedelta(hours=hours)
 
 def verify_article(story, articles, memory=None):
-    headline=story.get("headline",""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source)
+    headline=story.get("headline",""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source, story.get("url",""))
     matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
+        if _is_derivative_report(a): continue
         if not _published_recent(a.get("published",""),72): continue
         sim=_event_similarity(headline,a.get("title",""))
         if sim>=0.55:
-            source=_source_key(a.get("source","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
+            source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             matches.append((sim*0.7+trust*0.3,a))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
@@ -99,6 +132,7 @@ def verify_article(story, articles, memory=None):
         if len(corroborating)>=8: break
     independent=len(source_names)
     official=_is_official(primary_source)
+    primary_derivative=_is_derivative_report({"title":headline,"source":primary_source})
     if official:
         verification="official-source"
         confidence=96 if independent else 92
@@ -124,6 +158,7 @@ def verify_article(story, articles, memory=None):
         "fresh_sources":source_names[:5],
         "current_sources":independent+(1 if primary_source else 0),
         "official_source":official,
+        "primary_derivative":primary_derivative,
     }
 
 def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:list[dict]|None=None)->dict:
