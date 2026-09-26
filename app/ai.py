@@ -107,11 +107,31 @@ def _same_event(a,b):
             return True
     return False
 
+def _is_non_news_content(article):
+    """Exclude service, promotional and lifestyle content from intelligence selection."""
+    title=str(article.get("title","") or "").lower()
+    summary=str(article.get("summary","") or "").lower()
+    text=f"{title} {summary}"
+    hard_patterns=(
+        r"\\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\\+|early[- ]bird)\\b",
+        r"\\b(?:coming to|joins us at|will be at|meet .* at)\\b",
+        r"\\b(?:buy|shop|subscribe|register|book now|sign up)\\b",
+        r"\\b(?:horoscope|quiz|photo gallery|live updates|live blog)\\b",
+        r"\\b(?:weekend|daily)\\s+(?:weather|forecast)\\b",
+    )
+    if any(re.search(p,text,re.I) for p in hard_patterns):
+        return True
+    # A plain weather forecast is a service item; an actual storm/flood event remains eligible.
+    if re.search(r"\\b(?:forecast|weather outlook)\\b",title,re.I) and not re.search(r"\\b(?:storm|cyclone|hurricane|flood|landfall|evacuat|warning)\\b",title,re.I):
+        return True
+    return False
+
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
     for a in articles:
         title=str(a.get("title","")).strip()
         if not title or not a.get("url"): continue
+        if _is_non_news_content(a): continue
         if any(_similar(title,old)>=.62 for old in excluded): continue
         # Deduplicate only when the headline itself strongly indicates the same event.
         # Do not use the full summary here: broad summaries can share generic words
