@@ -281,19 +281,20 @@ def rerank_stories(stories,research=None):
     return selected
 
 def _corroboration_score(a,b):
-    """Require a real event match before importing facts from another article."""
+    """Conservative event match; related evidence must describe the same concrete development."""
     base=_similar(a,b)
     wa,wb=_content_tokens(a),_content_tokens(b)
     common=wa&wb
-    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a))}
-    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b))}
+    generic={"supreme","court","government","president","prime","minister","chief","election","commission","india","world","news","today","latest","report"}
+    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)) if x.lower() not in generic}
+    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)) if x.lower() not in generic}
     named=named_a&named_b
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","judge","verdict","trial","crash","earthquake","cyclone","hurricane","storm","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","renamed","rename","bars","barred","opens","reopens","offer","appoint","appointed"}
     event_overlap=common&event_terms
-    if base>=0.52: return base
-    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=3: return 0.55
-    if len(named)>=2 and len(common)>=3: return 0.55
-    return base
+    if base>=0.58 and len(common)>=5: return base
+    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=4: return max(base,0.56)
+    if len(named)>=2 and len(common)>=4: return max(base,0.56)
+    return 0.0
 
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
@@ -342,9 +343,11 @@ def _parse(text,item):
     bad_name_tokens={"monday","tuesday","wednesday","thursday","friday","saturday","sunday","meanwhile","the","burnham","yesterday","today","tomorrow","however","also","then","after","before"}
     invalid_who_words=r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|meanwhile|yesterday|today|tomorrow|however|also|then|after|before)\b"
     if who and (len(who)>180 or re.search(invalid_who_words,who,re.I) or len(who.split())>16): who=""
+    org_words={"court","commission","government","house","parliament","board","agency","company","games","organization","organisation","nasa","isro","cbse"}
     if who and not re.search(r"[A-Z][A-Za-z.'-]{2,}",who): who=""
     if who and any(t.lower().strip(".,") in bad_name_tokens for t in who.split()): who=""
-    if who and len(who.split())==1 and who.lower() in {"the","meanwhile","monday","june","burnham"}: who=""
+    if who and any(t.lower().strip(".,") in org_words for t in who.split()): who=""
+    if who and len(who.split())==1 and who.lower() in {"the","meanwhile","monday","june","burnham","supreme"}: who=""
     if not who and fallback_who: who=fallback_who
     where_value=values.get("where","").strip(" .,-")
     month_words={"january","february","march","april","may","june","july","august","september","october","november","december","jan","feb","mar","apr","jun","jul","aug","sep","sept","oct","nov","dec"}
@@ -404,216 +407,41 @@ def _person_context(name,text):
 
 def _explicit_who(item):
     headline=str(item.get("headline","") or ""); summary=str(item.get("summary","") or ""); text=f"{headline} {summary}".strip()
-    named_profiles=[]
-    if re.search(r"\b(?:donald\s+)?trump\b",text,re.I): named_profiles.append(_person_context("donald trump",text))
-    if re.search(r"\bxi\s+jinping\b|\bxi\b",text,re.I): named_profiles.append(_person_context("xi jinping",text))
-    named_profiles=[x for x in named_profiles if x]
-    if named_profiles: return " ".join(dict.fromkeys(named_profiles))
-    if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b|\bPM Modi\b",text,re.I):
-        return "Narendra Modi — Prime Minister of India"
+    # Known organizations/institutions must never be emitted as a person.
+    org_phrases={
+        "supreme court","high court","supreme court of india","election commission",
+        "election commission of india","white house","parliament","government",
+        "bigg boss","asian games","techcrunch","bbc","cnn","openai","meta",
+        "nasa","isro","cbse","united nations","world health organization"
+    }
+    def valid_name(name):
+        n=re.sub(r"\\s+"," ",name.strip(" .,;:-"))
+        if not n or len(n.split())<2: return False
+        low=n.lower()
+        if any(p==low or p in low for p in org_phrases): return False
+        if any(w in low.split() for w in {"court","commission","government","house","parliament","agency","board","games","company","ministerial"}): return False
+        return bool(re.fullmatch(r"[A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3}",n))
+    if re.search(r"\\b(?:donald\\s+)?trump\\b",text,re.I): return _person_context("donald trump",text)
+    if re.search(r"\\bxi\\s+jinping\\b|\\bxi\\b",text,re.I): return _person_context("xi jinping",text)
+    if re.search(r"\\b(?:PM|Prime Minister)\\s+Modi\\b",text,re.I): return "Narendra Modi — Prime Minister of India"
     role_patterns=(
-        r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
-        r"\b(?:IAS|IPS|IFS)\s+officer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})",
-        r"\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General|president|minister)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3})",
-        r":\s*([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\s*$",
+        r"\\b(?:CEC|Chief Election Commissioner)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3})",
+        r"\\b(?:IAS|IPS|IFS)\\s+officer\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){1,3})",
+        r"\\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,3})",
     )
     for pattern in role_patterns:
         m=re.search(pattern,headline)
-        if m: return m.group(1).strip(" .,")
-    role_name_patterns=((r"\b(?:chinese|indian|american|british|japanese|korean)?\s*(?:street\s+)?dancer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)","dancer"),(r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+)+),\s+(?:the\s+)?(?:art\s+director|director|founder|chief executive officer|ceo|commerciali[sz]ation lead|lead engineer)",""),(r"\b(?:founder|director|ceo|president|minister|prime minister|chief minister|leader of the opposition)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)",""))
-    for pattern,fixed_role in role_name_patterns:
+        if m and valid_name(m.group(1)): return m.group(1).strip(" .,")
+    # Prefer explicit named people in the headline, avoiding title/org phrases.
+    for m in re.finditer(r"\\b[A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3}\\b",headline):
+        name=m.group(0)
+        if valid_name(name):
+            return name.strip(" .,")
+    for pattern in (
+        r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){1,3})\\b",
+        r"\\b(?:the\\s+)?(?:27-year-old|\\d{2}-year-old)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+)+)"
+    ):
         m=re.search(pattern,text)
-        if m:
-            name=m.group(1).strip(" .,"); return f"{name} — {fixed_role}" if fixed_role else name
-    m=re.search(r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\b",text)
-    if m: return m.group(1).strip(" .,")
-    descriptor_patterns=(r"\b(?:the\s+)?(?:27-year-old|\d{2}-year-old)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)+)",r"\b(?:native|performer|engineer|artist|actor|actress|dancer)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+)+)")
-    for pattern in descriptor_patterns:
-        m=re.search(pattern,text)
-        if m: return m.group(1).strip(" .,")
+        if m and valid_name(m.group(1)): return m.group(1).strip(" .,")
     return ""
 
-def _evidence_articles(item):
-    primary={"title":item.get("headline",""),"source":item.get("source",""),"url":item.get("url",""),"published":item.get("published",""),"summary":item.get("summary","")}
-    return [primary]+[x for x in (item.get("related_articles") or []) if x.get("summary") or x.get("title")]
-
-def _extract_context(item):
-    articles=_evidence_articles(item); primary=articles[:1]; secondary=articles[1:]
-    def scan(article_list):
-        when=""; where=""
-        date_patterns=(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2}(?:,\s*\d{4})?",r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b",r"\b(?:today|yesterday|tonight|this morning|this evening)\b")
-        location_patterns=(r"\b(?:at|in|from|near)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){0,4})(?=\s+(?:on|after|before|where|which|has|have|was|were|is|are|said|according|headquarters|headquartered)\b|[.,;:]|$)",r"\b(?:headquarters|headquartered)\s+(?:in|at)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4})",r"\b([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,4}),\s+(?:India|China|Japan|the United States|UK|Britain|California|New York)\b")
-        texts=[str(x.get("title","") or "")+" "+str(x.get("summary","") or "") for x in article_list]
-        for article_text in texts:
-            for pattern in date_patterns:
-                m=re.search(pattern,article_text,re.I)
-                if m: when=m.group(0); break
-            if when: break
-        candidates=[]
-        for article_text in texts:
-            for pattern in location_patterns: candidates += [m.group(1).strip(" .,") for m in re.finditer(pattern,article_text)]
-        candidates=[x for x in candidates if x and len(x.split())<=5 and x.lower() not in {"the social media giant","the company"}]
-        if candidates:
-            counts={x:candidates.count(x) for x in set(candidates)}; where=max(candidates,key=lambda x:(counts[x],-len(x.split())))
-        return when,where
-    # Related stories may corroborate the event but can describe a different
-    # action, place, or scheduled date. Keep WHEN/WHERE tied to the primary item.
-    when,where=scan(primary)
-    return when,where
-
-def _sentence_list(text):
-    return [x.strip() for x in re.split(r"(?<=[.!?])\s+",str(text or "")) if x.strip()]
-
-def _fallback_how(item):
-    text=str(item.get("summary","") or "").strip()
-    # HOW must describe a mechanism, not merely chronology.
-    patterns=(r"\b(?:by|through|using|via)\s+([^.;]{20,220})",r"\b(?:under|as part of)\s+(?:a|an|the)\s+([^.;]{20,220})")
-    for pattern in patterns:
-        m=re.search(pattern,text,re.I)
-        if m:
-            value=m.group(1).strip(" .,:;")
-            if not re.match(r"^(?:after|following|during|before|when|while)\b",value,re.I) and len(value.split())>=4 and _similar(value,text)<0.60:
-                return value[:400]
-    return ""
-
-def _fallback_key_data(item):
-    primary_text=str(item.get("summary","") or "")
-    text=primary_text
-    patterns=(r"(?:up to|starting at|weighs?|weight|battery(?: life)?|ships?|shipping|price|cost|capacity|range|duration|hours?|minutes?|percent|%|frames?|models?|combinations?)\s*(?:of\s*)?(?:₹|\$|€|£)?\d+(?:[.,]\d+)*(?:\s*(?:million|billion|crore|lakh|thousand|bn|mn|hours?|minutes?|g|kg|GB|TB|%))?",r"(?:₹|\$|€|£)\s*\d+(?:[.,]\d+)*(?:\s*(?:million|billion))?",r"\b\d+(?:[.,]\d+)*\s*(?:million|billion|crore|lakh|thousand|hours?|minutes?|g|kg|GB|TB|%)\b")
-    values=[]
-    for pattern in patterns:
-        for m in re.finditer(pattern,text,re.I):
-            value=" ".join(m.group(0).split())
-            if value not in values: values.append(value)
-    return "; ".join(values[:8])
-
-def _fallback_why(item):
-    text=str(item.get("summary","") or "").strip()
-    for pattern in (r"(?:because|due to|in response to|to address|to reduce|to improve|to prevent) ([^.]{25,240})[.]", r"(?:the move|decision|action) (?:came|comes) (?:after|amid) ([^.]{25,240})[.]"):
-        m=re.search(pattern,text,re.I)
-        if m:
-            value=m.group(1).strip().rstrip(".")
-            if len(value.split())>=3: return value[:400]
-    return ""
-
-def _fallback_background(item):
-    primary=str(item.get("summary","") or "").strip()
-    if not primary: return ""
-    sentences=_sentence_list(primary)
-    if len(sentences)<2: return ""
-    first=sentences[0]
-    context=re.compile(r"\b(?:previously|earlier|historically|history|since|in \d{4}|last year|months earlier|had been|has been|was first|founded|launched in|for years|longstanding)\b",re.I)
-    for sentence in sentences[1:]:
-        if len(sentence)>=35 and _similar(sentence,first)<0.70 and context.search(sentence):
-            return sentence[:500]
-    return ""
-
-def _fallback_impact(item):
-    text=str(item.get("summary","") or "").strip()
-    for pattern in (r"\b(?:could|may|will|would|is expected to|are expected to)\s+([^.;]{25,260})",
-                    r"\b(?:impact|impacts|affect|affects|risk|risks|consequence|consequences)\s+(?:of|for|on)?\s*([^.;]{25,260})"):
-        m=re.search(pattern,text,re.I)
-        if m:
-            value=m.group(1).strip(" .,:;")
-            if len(value.split())>=5 and _similar(value,text)<0.65:
-                return value[:450]
-    return ""
-
-def _fallback_next(item):
-    text=str(item.get("summary","") or "").strip()
-    for pattern in (r"\b(?:next|will now|plans to|plan to|is expected to|are expected to|will be)\s+([^.;]{20,240})",
-                    r"\b(?:on|by)\s+([^.;]{10,80})\s+(?:the company|officials|government|court|police)\b"):
-        m=re.search(pattern,text,re.I)
-        if m:
-            value=m.group(0).strip(" .,:;")
-            if len(value.split())>=4: return value[:400]
-    return ""
-
-def _fallback_connection(item):
-    related=item.get("related_articles") or []
-    if not related: return ""
-    primary_tokens=_content_tokens(item.get("headline",""))
-    for r in related:
-        title=str(r.get("title","") or "").strip()
-        if title and _similar(title,item.get("headline",""))<0.72:
-            return "Related development: "+title[:260]
-    return ""
-
-def _fallback_memory(item):
-    historical=(item.get("verification") or {}).get("historical") or []
-    if historical:
-        h=historical[0]
-        title=str(h.get("title","") or "").strip()
-        if title: return f"Prior: {h.get('date','prior')} — {title}"[:300]
-    return ""
-
-def _fallback_vocab(item):
-    text=f"{item.get('headline','')} {item.get('summary','')}".lower()
-    glossary={"sir":"Special Intensive Revision of electoral rolls","pli":"Production Linked Incentive","mdr":"Merchant Discount Rate","unga":"United Nations General Assembly","cec":"Chief Election Commissioner","eci":"Election Commission of India","obc":"Other Backward Classes"}
-    hits=[f"{k.upper()} — {v}" for k,v in glossary.items() if re.search(rf"\b{re.escape(k)}\b",text)]
-    return "; ".join(hits[:2])
-
-def _fallback(item):
-    summary=item.get("summary") or item.get("headline") or ""; who=_explicit_who(item); text=f"{item.get('headline','')} {item.get('summary','')}".strip(); headline=str(item.get("headline",summary)); when,where=_extract_context(item)
-    item=dict(item); item.pop("_event_text",None)
-    memory_hook=_fallback_memory(item)
-    return {**item,"what":str(item.get("headline") or summary)[:500],"who":who,"who_detail":_person_context(who,text) if who else "","how":_fallback_how(item),"key_data":_fallback_key_data(item),"when":when,"where":where,"why":_fallback_why(item),"why_important":_fallback_impact(item),"background":_fallback_background(item),"change_since_yesterday":item.get("change_since_yesterday",""),"next":_fallback_next(item),"connection":_fallback_connection(item),"memory_hook":memory_hook,"vocabulary":_fallback_vocab(item),"ai_generated":False}
-
-def _one(item,today):
-    prompt=f"""Today: {today}
-Use ONLY the supplied evidence to enrich ONE news story. Core facts are already extracted deterministically.
-Return EXACTLY 6 short lines:
-WHO_DETAIL: ...
-IMPACT: ...
-BACKGROUND: ...
-CHANGE: ...
-CONNECTION: ...
-NEXT: ...
-WHO_DETAIL: for each important named person, give current role/position, relevant background and why they matter here.
-IMPACT: concrete significance or consequences supported by the evidence.
-BACKGROUND: only useful prior context supported by the supplied evidence or related articles.
-CHANGE: what is newly different versus the prior timeline/evidence.
-CONNECTION: a concrete link to another verified development in the supplied evidence.
-NEXT: the most relevant expected/announced next step, or leave blank if unsupported.
-Use corroborating related articles when the primary article does not contain enough detail. Prefer facts repeated or supported across multiple sources. Attribute conflicting claims instead of merging them. If a field remains unsupported after checking all supplied sources, leave it blank. Never write "Not stated in supplied sources". Never invent facts. No bullets or commentary.
-Evidence: {json.dumps({
-    "headline": item.get("headline",""),
-    "source": item.get("source",""),
-    "summary": str(item.get("summary","") or "")[:650],
-    "related_articles": [
-        {"title": x.get("title",""), "source": x.get("source",""), "summary": str(x.get("summary","") or "")[:500]}
-        for x in (item.get("related_articles") or [])[:4]
-    ],
-    "verification": {
-        "verification": (item.get("verification") or {}).get("verification",""),
-        "independent_sources": (item.get("verification") or {}).get("independent_sources",0)
-    }
-},ensure_ascii=False)}"""
-    result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","25"))),item)
-    explicit=_explicit_who(item); current=str(result.get("who","")).strip()
-    result["what"]=str(item.get("headline","") or item.get("summary",""))[:500]
-    if explicit:
-        result["who"]=explicit
-        if not str(result.get("who_detail","")).strip():
-            result["who_detail"]=_person_context(explicit,item.get("headline",""))
-    elif current:
-        evidence=_evidence_text(item)
-        if not _field_supported(current,evidence,1):
-            result["who"]=""; result["who_detail"]=""
-    result.pop("_event_text",None)
-    result["ai_generated"]=True; return result
-
-def generate_briefing(selected,articles,previous,today,research=None):
-    evidence=_evidence(selected,articles,research); stories=[]; budget=max(0,int(os.getenv("AI_STORY_BUDGET","8")))
-    ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","70"))]
-    if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
-    ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
-    for item in evidence:
-        if item.get("story_id") not in ai_ids: stories.append(_fallback(item)); continue
-        try: stories.append(_one(item,today))
-        except Exception as exc: print(f"[WARN] story generation failed: {exc}",flush=True); stories.append(_fallback(item))
-    return {"top_stories":stories}
-
-def generate(articles,previous,today,research=None): return generate_briefing(select_stories(articles),articles,previous,today,research)
-def generate_text(prompt,system=SYSTEM): return _call_ollama(prompt,system=system)
-def configured_model(): return _model_name()
