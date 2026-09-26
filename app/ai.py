@@ -144,7 +144,10 @@ def _development_signature(title):
         "hack","hacked","breach","breached","infiltrated","attack","attacked","strike","strikes",
         "ban","bans","banned","block","blocked","approve","approved","rule","rules","ruling","verdict",
         "sign","signed","deal","agreement","summit","visit","hosts","hosted","warn","warns","warning",
-        "landfall","tracks","strengthens","surge","surges","election","vote","voters","results"
+        "landfall","tracks","strengthens","surge","surges","election","vote","voters","results",
+        "wins","won","enters","entered","seeks","says","said","shares","shared","backs","backed",
+        "posts","posted","admits","admitted","announces","announced","suspends","suspended",
+        "extends","extended","opens","opened","closes","closed","approves","approved","orders","ordered"
     }
     return tokens & actions
 
@@ -212,7 +215,10 @@ def _genuinely_new_development(a,b):
 
 def _select_diverse(pool,limit,family_counts=None):
     selected=[]; family_counts=family_counts if family_counts is not None else {}
-    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","1")))
+    # A family can contain several genuinely different developments
+    # (for example, multiple separate Asian Games results). The concrete
+    # development check below still blocks duplicate coverage.
+    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","3")))
     for score,item in pool:
         if len(selected)>=limit: break
         # Always run the pairwise event-family check, even when the candidate
