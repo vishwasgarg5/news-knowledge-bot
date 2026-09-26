@@ -28,10 +28,10 @@ def _event_similarity(a,b):
     common=ta&tb
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
     event_overlap=len(common & event_terms)
-    if base>=0.52: return base
-    if named_overlap>=1 and event_overlap>=1 and len(common)>=3: return 0.55
-    if named_overlap>=2 and len(common)>=3: return 0.55
-    return base
+    if base>=0.62 and len(common)>=5: return base
+    if named_overlap>=1 and event_overlap>=1 and len(common)>=4: return max(base,0.55)
+    if named_overlap>=2 and len(common)>=4: return max(base,0.55)
+    return 0.0
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source, url=""):
     try:
