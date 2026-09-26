@@ -69,8 +69,9 @@ def _event_similarity(a,b):
     wa,wb=_words(a),_words(b)
     if not wa or not wb: return 0.0
     common=wa&wb; base=len(common)/max(1,len(wa|wb))
-    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a))}
-    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b))}
+    generic_names={"supreme","court","high","delhi","assembly","government","president","prime","minister","chief","election","commission","police","video","india","indian","american","united","states","white","house","china"}
+    named_a={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(a)) if x.lower() not in generic_names}
+    named_b={x.lower() for x in re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(b)) if x.lower() not in generic_names}
     named=named_a&named_b
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","super","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","hurricane","storm","fire","flood","death","dies","killed","injured","student","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","timeline"}
     event_overlap=common&event_terms
