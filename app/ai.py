@@ -429,10 +429,12 @@ def _explicit_who(item):
     if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b",text,re.I): return "Narendra Modi — Prime Minister of India"
     if re.search(r"\belon\s+musk\b",text,re.I): return "Elon Musk"
     # If the primary headline has no full person name, inspect corroborating headlines.
+    related_name_stop={"india","asian","games","bags","double","gold","silver","medal","medals","teams","team","latest","news","today","body","seeks","seeks","panel","crash","probe","pilots","government","website","president","prime","minister","united","states","china","australia","openai","musk","fine","european","union","us"}
     for rel in item.get("related_articles") or []:
         rel_text=str(rel.get("title","") or "")
         for m in re.finditer(r"\b[A-Z][A-Za-z.'-]+\s+[A-Z][A-Za-z.'-]+\b",rel_text):
             candidate=m.group(0).strip(" .,;:-")
+            if any(w.lower().strip(".,;:-") in related_name_stop for w in candidate.split()): continue
             if valid_name(candidate): return candidate
     role_patterns=(
         r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
