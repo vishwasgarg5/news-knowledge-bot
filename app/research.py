@@ -20,17 +20,23 @@ def _named_tokens(text):
     return {w.lower().strip(".,") for w in words if w.lower() not in STOP and w.lower() not in generic}
 
 def _event_similarity(a,b):
-    """Conservative event match for corroboration; avoid same-topic false matches."""
+    """Conservative-but-practical event match for corroboration.
+    Headlines often describe the same event with different wording, so
+    require distinctive overlap rather than relying only on raw similarity."""
     base=_similar(a,b)
     na,nb=_named_tokens(a),_named_tokens(b)
     named_overlap=len(na&nb)
     ta,tb=_tokens(a),_tokens(b)
     common=ta&tb
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","warn","warning","suspended","suspension","wins","won","silver","gold","medal","meeting","decision","decisions"}
     event_overlap=len(common & event_terms)
+    generic={"supreme","court","government","president","prime","minister","chief","election","commission","india","world","news","today","latest","report","reports","officials"}
+    distinctive=common-generic
     if base>=0.62 and len(common)>=5: return base
-    if named_overlap>=1 and event_overlap>=1 and len(common)>=4: return max(base,0.55)
-    if named_overlap>=2 and len(common)>=4: return max(base,0.55)
+    if named_overlap>=1 and event_overlap>=1 and len(common)>=3: return max(base,0.55)
+    if named_overlap>=2 and len(common)>=3: return max(base,0.55)
+    if len(distinctive)>=3 and len(common)>=4 and base>=0.34: return max(base,0.55)
+    if event_overlap>=1 and len(distinctive)>=3 and len(common)>=3 and base>=0.38: return max(base,0.55)
     return 0.0
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source, url=""):
@@ -126,7 +132,7 @@ def verify_article(story, articles, memory=None):
         article_tokens=_tokens(a.get("title",""))
         distinctive=len((headline_tokens & article_tokens) - {"supreme","court","government","president","commission","election","india","world"})
         if distinctive < 2: continue
-        key=_source_key(a.get("source",""))
+        key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
         if len(corroborating)>=8: break
