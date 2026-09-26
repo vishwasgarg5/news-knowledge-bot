@@ -113,16 +113,16 @@ def _is_non_news_content(article):
     summary=str(article.get("summary","") or "").lower()
     text=f"{title} {summary}"
     hard_patterns=(
-        r"\\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\\+|early[- ]bird)\\b",
-        r"\\b(?:coming to|joins us at|will be at|meet .* at)\\b",
-        r"\\b(?:buy|shop|subscribe|register|book now|sign up)\\b",
-        r"\\b(?:horoscope|quiz|photo gallery|live updates|live blog)\\b",
-        r"\\b(?:weekend|daily)\\s+(?:weather|forecast)\\b",
+        r"\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\\+|early[- ]bird)\b",
+        r"\b(?:coming to|joins us at|will be at|meet .* at)\b",
+        r"\b(?:buy|shop|subscribe|register|book now|sign up)\b",
+        r"\b(?:horoscope|quiz|photo gallery|live updates|live blog)\b",
+        r"\b(?:weekend|daily)\s+(?:weather|forecast)\b",
     )
     if any(re.search(p,text,re.I) for p in hard_patterns):
         return True
     # A plain weather forecast is a service item; an actual storm/flood event remains eligible.
-    if re.search(r"\\b(?:forecast|weather outlook)\\b",title,re.I) and not re.search(r"\\b(?:storm|cyclone|hurricane|flood|landfall|evacuat|warning)\\b",title,re.I):
+    if re.search(r"\b(?:forecast|weather outlook)\b",title,re.I) and not re.search(r"\b(?:storm|cyclone|hurricane|flood|landfall|evacuat|warning)\b",title,re.I):
         return True
     return False
 
@@ -435,31 +435,31 @@ def _explicit_who(item):
         "nasa","isro","cbse","united nations","world health organization"
     }
     def valid_name(name):
-        n=re.sub(r"\\s+"," ",name.strip(" .,;:-"))
+        n=re.sub(r"\s+"," ",name.strip(" .,;:-"))
         if not n or len(n.split())<2: return False
         low=n.lower()
         if any(p==low or p in low for p in org_phrases): return False
         if any(w in low.split() for w in {"court","commission","government","house","parliament","agency","board","games","company","ministerial"}): return False
-        return bool(re.fullmatch(r"[A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3}",n))
-    if re.search(r"\\b(?:donald\\s+)?trump\\b",text,re.I): return _person_context("donald trump",text)
-    if re.search(r"\\bxi\\s+jinping\\b|\\bxi\\b",text,re.I): return _person_context("xi jinping",text)
-    if re.search(r"\\b(?:PM|Prime Minister)\\s+Modi\\b",text,re.I): return "Narendra Modi — Prime Minister of India"
+        return bool(re.fullmatch(r"[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3}",n))
+    if re.search(r"\b(?:donald\s+)?trump\b",text,re.I): return _person_context("donald trump",text)
+    if re.search(r"\bxi\s+jinping\b|\bxi\b",text,re.I): return _person_context("xi jinping",text)
+    if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b",text,re.I): return "Narendra Modi — Prime Minister of India"
     role_patterns=(
-        r"\\b(?:CEC|Chief Election Commissioner)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3})",
-        r"\\b(?:IAS|IPS|IFS)\\s+officer\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){1,3})",
-        r"\\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){0,3})",
+        r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
+        r"\b(?:IAS|IPS|IFS)\s+officer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})",
+        r"\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3})",
     )
     for pattern in role_patterns:
         m=re.search(pattern,headline)
         if m and valid_name(m.group(1)): return m.group(1).strip(" .,")
     # Prefer explicit named people in the headline, avoiding title/org phrases.
-    for m in re.finditer(r"\\b[A-Z][A-Za-z.'-]+(?:\\s+[A-Z][A-Za-z.'-]+){1,3}\\b",headline):
+    for m in re.finditer(r"\b[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3}\b",headline):
         name=m.group(0)
         if valid_name(name):
             return name.strip(" .,")
     for pattern in (
-        r"\\b(?:says|said|asks|asked|warns|warned|according to|by)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+){1,3})\\b",
-        r"\\b(?:the\\s+)?(?:27-year-old|\\d{2}-year-old)\\s+([A-Z][A-Za-z.'-]+(?:\\s+[A-Za-z.'-]+)+)"
+        r"\b(?:says|said|asks|asked|warns|warned|according to|by)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})\b",
+        r"\b(?:the\s+)?(?:27-year-old|\d{2}-year-old)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+)+)"
     ):
         m=re.search(pattern,text)
         if m and valid_name(m.group(1)): return m.group(1).strip(" .,")
