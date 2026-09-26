@@ -50,9 +50,9 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
     """Classify the geography of the actual event, not the feed it came from."""
     title_text=str(title or "").lower()
     body_text=f"{title} {summary}".lower()
-    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","central government","assembly constituency","lok sabha","rajya sabha","rupee","crore","lakh")
+    india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","tamil nadu","t.n.","coimbatore","chennai","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","election commission of india","cec","eci","obc","creamy layer","union government","central government","assembly constituency","lok sabha","rajya sabha","rupee","crore","lakh")
     world_terms=("united states","u.s.","america","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","iran","japan","korea","taiwan","nebraska","new york city","new york","california","texas","florida","washington","washington dc","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco","washington state")
-    strong_india=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","modi","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","azad maidan","cbi","mahadev","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","lok sabha","rajya sabha")
+    strong_india=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","modi","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","azad maidan","cbi","mahadev","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","lok sabha","rajya sabha","t.n.","coimbatore","chennai")
     strong_world=("mexico","hawaii","china","xi jinping","trump","australia","ukraine","russia","gaza","israel","nato","iran","japan","taiwan","united states","u.s.","united nations","nebraska","new york city","california","texas","florida","washington","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco")
     def hits(text, terms):
         return [x for x in terms if re.search(rf"\b{re.escape(x)}\b", text)]
@@ -63,6 +63,9 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
         return "india",min(1.0,0.86+0.04*len(si)),"headline India anchors: "+", ".join(si[:5])
     if sw and not si:
         return "world",min(1.0,0.86+0.04*len(sw)),"headline World anchors: "+", ".join(sw[:5])
+    # A U.S./international Trump story mentioning the U.S. Supreme Court must not be classified as India merely because "Supreme Court" is present.
+    if "trump" in title_text and not any(x in title_text for x in ("india","indian","modi","delhi","mumbai")):
+        return "world",0.94,"headline World anchor: trump"
     if si and sw:
         if len(sw)>len(si): return "world",0.88,"headline mixed; stronger World anchors: "+", ".join(sw[:5])
         return "india",0.88,"headline mixed; stronger India anchors: "+", ".join(si[:5])
