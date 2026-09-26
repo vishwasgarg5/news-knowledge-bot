@@ -311,7 +311,7 @@ def _evidence(selected,articles,research):
             key=str(x.get("url","") or x.get("title","")).strip()
             if not key or key in seen: continue
             seen.add(key); merged.append(x)
-        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900],"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for x in merged[:8]],"verification":r})
+        out.append({"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"importance":s.get("importance",0),"ranking_score":s.get("ranking_score",s.get("importance",0)),"category":s.get("category",""),"region":s.get("region","world"),"source":a.get("source",""),"url":s.get("url",""),"summary":str(a.get("summary","") or "")[:900] or next((str(x.get("summary","") or "")[:900] for x in merged if str(x.get("summary","") or "").strip()),""),"related_articles":[{"title":x.get("title",""),"source":x.get("source",""),"url":x.get("url",""),"published":x.get("published",""),"summary":str(x.get("summary","") or "")[:900]} for x in merged[:8]],"verification":r})
     return out
 
 def _evidence_text(item):
@@ -412,10 +412,13 @@ def _explicit_who(item):
         "supreme court","high court","supreme court of india","election commission",
         "election commission of india","white house","parliament","government",
         "bigg boss","asian games","techcrunch","bbc","cnn","openai","meta",
-        "nasa","isro","cbse","united nations","world health organization"
+        "nasa","isro","cbse","united nations","world health organization",
+        "air india","federation of indian pilots","times of india","hindustan times",
+        "the hindu","deutsche welle"
     }
     def valid_name(name):
         n=re.sub(r"\s+"," ",name.strip(" .,;:-"))
+        n=re.sub(r"[’']s$", "", n).strip()
         if not n or len(n.split())<2: return False
         low=n.lower()
         if any(p==low or p in low for p in org_phrases): return False
@@ -424,6 +427,13 @@ def _explicit_who(item):
     if re.search(r"\b(?:donald\s+)?trump\b",text,re.I): return _person_context("donald trump",text)
     if re.search(r"\bxi\s+jinping\b|\bxi\b",text,re.I): return _person_context("xi jinping",text)
     if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b",text,re.I): return "Narendra Modi — Prime Minister of India"
+    if re.search(r"\belon\s+musk\b",text,re.I): return "Elon Musk"
+    # If the primary headline has no full person name, inspect corroborating headlines.
+    for rel in item.get("related_articles") or []:
+        rel_text=str(rel.get("title","") or "")
+        for m in re.finditer(r"\b[A-Z][A-Za-z.'-]+\s+[A-Z][A-Za-z.'-]+\b",rel_text):
+            candidate=m.group(0).strip(" .,;:-")
+            if valid_name(candidate): return candidate
     role_patterns=(
         r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
         r"\b(?:IAS|IPS|IFS)\s+officer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})",
