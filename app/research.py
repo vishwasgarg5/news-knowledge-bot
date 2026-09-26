@@ -15,7 +15,8 @@ def _similar(a,b):
 
 def _named_tokens(text):
     words=re.findall(r"\b[A-Z][A-Za-z.'-]{2,}\b",str(text))
-    return {w.lower().strip(".,") for w in words if w.lower() not in STOP}
+    generic={"supreme","court","high","delhi","assembly","government","president","prime","minister","chief","election","commission","police","video","india","indian","american","united","states","white","house","china"}
+    return {w.lower().strip(".,") for w in words if w.lower() not in STOP and w.lower() not in generic}
 
 def _event_similarity(a,b):
     """Conservative event match for corroboration; avoid same-topic false matches."""
@@ -27,8 +28,8 @@ def _event_similarity(a,b):
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
     event_overlap=len(common & event_terms)
     if base>=0.52: return base
-    if named_overlap>=1 and event_overlap>=1 and len(common)>=2: return 0.55
-    if named_overlap>=2 and len(common)>=2: return 0.55
+    if named_overlap>=1 and event_overlap>=1 and len(common)>=3: return 0.55
+    if named_overlap>=2 and len(common)>=3: return 0.55
     return base
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source):
@@ -88,6 +89,10 @@ def verify_article(story, articles, memory=None):
     for score,a in matches:
         sim=_event_similarity(headline,a.get("title",""))
         if sim < 0.55: continue
+        headline_tokens=_tokens(headline)
+        article_tokens=_tokens(a.get("title",""))
+        distinctive=len((headline_tokens & article_tokens) - {"supreme","court","government","president","commission","election","india","world"})
+        if distinctive < 2: continue
         key=_source_key(a.get("source",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
