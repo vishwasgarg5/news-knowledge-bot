@@ -206,19 +206,19 @@ def _select_diverse(pool,limit,family_counts=None):
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","1")))
     for score,item in pool:
         if len(selected)>=limit: break
+        # Always run the pairwise event-family check, even when the candidate
+        # has a family key. This catches variants whose token pattern produces
+        # different keys but still describes the same development.
+        same=[x for x in selected if _same_event_family(item,x)]
+        if same:
+            if len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same):
+                continue
         key=_event_family_key(item.get("headline",""))
         if key:
             count=family_counts.get(key,0)
             if count>=max_family:
                 continue
             family_counts[key]=count+1
-        else:
-            same=[x for x in selected if _same_event_family(item,x)]
-            if same:
-                if len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same):
-                    continue
-            selected.append(item)
-            continue
         selected.append(item)
     return selected
 
