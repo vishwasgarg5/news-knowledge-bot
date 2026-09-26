@@ -465,3 +465,36 @@ def _explicit_who(item):
         if m and valid_name(m.group(1)): return m.group(1).strip(" .,")
     return ""
 
+
+
+# Backward-compatible deterministic enrichment helpers used by workflow smoke tests.
+def _fallback_how(item):
+    text=str(item.get("summary","") or "").strip()
+    for pattern in (r"\b(?:by|through|using|via)\s+([^.;]{20,220})",r"\b(?:under|as part of)\s+(?:a|an|the)\s+([^.;]{20,220})"):
+        m=re.search(pattern,text,re.I)
+        if m and len(m.group(1).split())>=4: return m.group(1).strip(" .,:;")[:400]
+    return ""
+
+def _fallback_why(item):
+    text=str(item.get("summary","") or "").strip()
+    m=re.search(r"(?:because|due to|in response to|to address|to reduce|to improve|to prevent)\s+([^.;]{15,240})",text,re.I)
+    return m.group(1).strip(" .,:;")[:400] if m else ""
+
+def _fallback_background(item):
+    text=str(item.get("summary","") or "").strip()
+    sentences=[x.strip() for x in re.split(r"(?<=[.!?])\s+",text) if x.strip()]
+    if len(sentences)<2: return ""
+    for s in sentences[1:]:
+        if re.search(r"\b(?:previously|earlier|historically|history|since|in \d{4}|last year|months earlier|founded|launched in|for years)\b",s,re.I):
+            return s[:500]
+    return ""
+
+def _fallback_impact(item):
+    text=str(item.get("summary","") or "").strip()
+    m=re.search(r"\b(?:could|may|will|would|is expected to|are expected to)\s+([^.;]{25,260})",text,re.I)
+    return m.group(1).strip(" .,:;")[:450] if m else ""
+
+def _fallback_next(item):
+    text=str(item.get("summary","") or "").strip()
+    m=re.search(r"\b(?:plans to|plan to|will now|is expected to|are expected to)\s+([^.;]{15,240})",text,re.I)
+    return m.group(1).strip(" .,:;")[:400] if m else ""
