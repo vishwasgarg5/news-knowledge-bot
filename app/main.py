@@ -4,7 +4,7 @@ from datetime import datetime,timedelta
 from zoneinfo import ZoneInfo
 import yaml
 from .ai import configured_model,generate_briefing,rerank_stories,select_stories
-from .news import collect
+from .news import collect, _region
 from .research import research_stories
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
 from .storage import HEADERS,append_rows,ensure_data,read_rows
@@ -23,6 +23,20 @@ def load_sources():
 def sim(a,b):
     x=set(re.findall(r"[a-z]{4,}",str(a).lower())); y=set(re.findall(r"[a-z]{4,}",str(b).lower()))
     return len(x&y)/max(1,len(x|y))
+
+def normalize_regions(candidates, articles_by_url):
+    """Recompute event geography from the actual headline/body before ranking.
+    Feed category is not reliable enough for regional ordering."""
+    out=[]
+    for c in candidates:
+        a=articles_by_url.get(str(c.get("url","")), {})
+        region, confidence, evidence = _region(c.get("category",""), c.get("headline",""), a.get("summary",""))
+        x=dict(c)
+        x["region"]=region
+        x["region_confidence"]=round(float(confidence or 0),2)
+        x["region_evidence"]=evidence
+        out.append(x)
+    return out
 
 def previous_change(stories,timeline,today):
     yesterday=(datetime.fromisoformat(today)-timedelta(days=1)).date().isoformat()
@@ -127,7 +141,7 @@ def main():
 
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
-    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=previous_change(candidates,timeline,today)
+    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
     selected=rerank_stories(candidates,research); result=generate_briefing(selected,all_articles,timeline,today,research)
