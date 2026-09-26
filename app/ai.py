@@ -165,7 +165,6 @@ def _event_family_key(title):
         ("asian_games",{"asian","games","medal","medallist","medallists","shooters","table","tennis"}),
         ("obc_creamy_layer",{"obc","creamy","layer","supreme","court","retrospective","verdict"}),
         ("ethiopia_tigray",{"ethiopia","tigray","eritrea","fighting","conflict","internet","restricted","army","attacks"}),
-        ("trump_xi",{"trump","xi","jinping","autopen","white","house","presidential","portraits"}),
     ]
     # High-signal anchors can identify a recurring family even when a
     # headline omits one of the usual terms. This is important for CEC/ECI/SIR
