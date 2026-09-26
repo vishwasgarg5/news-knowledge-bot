@@ -166,9 +166,13 @@ def _event_family_key(title):
         ("obc_creamy_layer",{"obc","creamy","layer","supreme","court","retrospective","verdict"}),
         ("ethiopia_tigray",{"ethiopia","tigray","eritrea","fighting","conflict","internet","restricted","army","attacks"}),
     ]
-    # High-signal anchors can identify a recurring family even when a
-    # headline omits one of the usual terms. This is important for CEC/ECI/SIR
-    # coverage where different outlets describe the same controversy differently.
+    # High-signal anchors prevent two reports of the same development from occupying separate slots.
+    if {"trump","xi"} <= t:
+        return "trump_xi"
+    if {"openai","australia"} <= t:
+        return "openai_australia"
+    if {"meta","muse"} <= t:
+        return "meta_muse"
     if (t & {"cec","eci","gyanesh"}) and (t & {"election","commission","sir","voter","voters","electoral","rolls","protest","removal","resign","resignation"}):
         return "election_commission_sir"
     if "sir" in t and (t & {"election","voter","voters","rolls","electoral","commission","cec","eci","protest","barricaded","barricade","jantar","mantar"}):
@@ -229,7 +233,7 @@ def rerank_stories(stories,research=None):
         conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0); importance=float(s.get("importance",0) or 0)
         novelty=100.0 if not r.get("historical") else 65.0; verification=r.get("verification","unverified")
         if verification=="unverified": conf=min(conf,50)
-        verification_bonus={"multi-source":12,"official-source":9,"single-source":-4}.get(verification,0)
+        verification_bonus={"multi-source":12,"official-source":9,"multi-report":2,"single-source":-4}.get(verification,0)
         source_diversity=min(8,indep*2)
         published_importance=importance
         if verification=="single-source": published_importance=min(published_importance,72.0)
@@ -274,8 +278,8 @@ def _corroboration_score(a,b):
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order"}
     event_overlap=common&event_terms
     if base>=0.52: return base
-    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=2: return 0.55
-    if len(named)>=2 and len(common)>=2: return 0.55
+    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=3: return 0.55
+    if len(named)>=2 and len(common)>=3: return 0.55
     return base
 
 def _evidence(selected,articles,research):
