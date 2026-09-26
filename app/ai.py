@@ -254,7 +254,7 @@ def rerank_stories(stories,research=None):
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","78"))
+    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","70"))
     def eligible(pair):
         score,item=pair
         r=research.get(item.get("story_id"),{}) or {}
@@ -454,13 +454,15 @@ def _explicit_who(item):
     if re.search(r"\b(?:PM|Prime Minister)\s+Modi\b",text,re.I): return "Narendra Modi — Prime Minister of India"
     if re.search(r"\belon\s+musk\b",text,re.I): return "Elon Musk"
     # If the primary headline has no full person name, inspect corroborating headlines.
-    related_name_stop={"india","asian","games","bags","double","gold","silver","medal","medals","teams","team","latest","news","today","body","seeks","seeks","panel","crash","probe","pilots","government","website","president","prime","minister","united","states","china","australia","openai","musk","fine","european","union","us"}
+    related_name_stop={"india","asian","games","bags","double","gold","silver","medal","medals","teams","team","latest","news","today","body","seeks","seeks","panel","crash","probe","pilots","government","website","president","prime","minister","united","states","china","australia","openai","musk","fine","european","union","us","ht","evening","brief","newsroom","update","updates","live"}
     for rel in item.get("related_articles") or []:
         rel_text=str(rel.get("title","") or "")
-        for m in re.finditer(r"\b[A-Z][A-Za-z.'-]+\s+[A-Z][A-Za-z.'-]+\b",rel_text):
-            candidate=m.group(0).strip(" .,;:-")
-            if any(w.lower().strip(".,;:-") in related_name_stop for w in candidate.split()): continue
-            if valid_name(candidate): return candidate
+        rel_summary=str(rel.get("summary","") or "")
+        for source_text in (rel_text, rel_summary):
+            for m in re.finditer(r"\b[A-Z][A-Za-z.'-]+\s+[A-Z][A-Za-z.'-]+\b",source_text):
+                candidate=m.group(0).strip(" .,;:-")
+                if any(w.lower().strip(".,;:-") in related_name_stop for w in candidate.split()): continue
+                if valid_name(candidate): return candidate
     role_patterns=(
         r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
         r"\b(?:IAS|IPS|IFS)\s+officer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})",
