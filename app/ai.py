@@ -263,7 +263,18 @@ def rerank_stories(stories,research=None):
         if v=="single-source": return float(item.get("importance",0) or 0) >= min_single_importance
         if v=="unverified": return False
         return True
-    quality_scored=[x for x in scored if eligible(x)]
+    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"unverified":0}
+    quality_scored=[]
+    for pair in scored:
+        score,item=pair; rr=research.get(item.get("story_id"),{}) or {}; vv=rr.get("verification","unverified")
+        if rr.get("primary_derivative"):
+            rejection_counts["primary_derivative"]+=1; continue
+        if vv=="single-source" and float(item.get("importance",0) or 0)<min_single_importance:
+            rejection_counts["single_source_below_gate"]+=1; continue
+        if vv=="unverified":
+            rejection_counts["unverified"]+=1; continue
+        quality_scored.append(pair)
+    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source={rejection_counts['single_source_below_gate']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
