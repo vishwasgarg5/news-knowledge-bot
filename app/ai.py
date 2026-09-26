@@ -161,6 +161,7 @@ def _event_family_key(title):
         ("iit_bombay",{"iit","bombay","student","death","professor","director","azad","maidan"}),
         ("hurricane_polo",{"polo","hurricane","mexico","hawaii","storm","landfall","nolo"}),
         ("trump_xi",{"xi","jinping","trump","china","white","house","dinner"}),
+        ("us_china_ai_channel",{"united","states","u.s.","china","communication","channel","ai","incidents","artificial","intelligence"}),
         ("netanyahu_un",{"netanyahu","iran","unga","israel","united","nations","gaza","speech","address","delegates","walkout"}),
         ("cauvery",{"cauvery","tamil","karnataka","water","cusecs","reservoir"}),
         ("hilsa",{"hilsa","bangladesh","fish","importing","exports"}),
@@ -171,6 +172,8 @@ def _event_family_key(title):
     # High-signal anchors prevent two reports of the same development from occupying separate slots.
     if re.search(r"\btrump\b",raw) and re.search(r"\bxi\b",raw):
         return "trump_xi"
+    if re.search(r"\b(?:u\.s\.?|united states)\b",raw) and re.search(r"\bchina\b",raw) and re.search(r"\b(?:ai|artificial intelligence)\b",raw) and re.search(r"\b(?:communication|channel|incidents?)\b",raw):
+        return "us_china_ai_channel"
     if re.search(r"\bopenai\b",raw) and re.search(r"\baustralia\b",raw):
         return "openai_australia"
     if re.search(r"\bmeta\b",raw) and re.search(r"\bmuse\b",raw):
@@ -640,8 +643,8 @@ def _is_non_news_content(article):
         r"\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\+|early[- ]bird)\b",
         r"\b(?:coming to|joins us at|will be at|meet .* at)\b",
         r"\b(?:buy|shop|subscribe|register|book now|sign up)\b",
-        r"\b(?:horoscope|quiz|photo gallery|live updates|live blog)\b",
-        r"\b(?:weekend|daily)\s+(?:weather|forecast)\b",
+        r"\b(?:horoscope|quiz|photo gallery|live updates|live blog|compilation)\b",
+        r"\b(?:weekend|daily|today|current)\s+(?:weather|forecast|updates?)\b|\bweather\s+updates?\b",
     )
     if any(re.search(p,text,re.I) for p in hard_patterns):
         return True
