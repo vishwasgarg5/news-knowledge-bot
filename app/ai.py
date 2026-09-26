@@ -150,6 +150,7 @@ def _development_signature(title):
 
 def _event_family_key(title):
     """Return a stable family key for known recurring event clusters."""
+    raw=str(title or "").lower()
     t=_content_tokens(title)
     families=[
         ("openai_australia",{"openai","australia","hack","hacked","breach","infiltrated","portal"}),
@@ -168,11 +169,11 @@ def _event_family_key(title):
         ("ethiopia_tigray",{"ethiopia","tigray","eritrea","fighting","conflict","internet","restricted","army","attacks"}),
     ]
     # High-signal anchors prevent two reports of the same development from occupying separate slots.
-    if {"trump","xi"} <= t:
+    if re.search(r"\btrump\b",raw) and re.search(r"\bxi\b",raw):
         return "trump_xi"
-    if {"openai","australia"} <= t:
+    if re.search(r"\bopenai\b",raw) and re.search(r"\baustralia\b",raw):
         return "openai_australia"
-    if {"meta","muse"} <= t:
+    if re.search(r"\bmeta\b",raw) and re.search(r"\bmuse\b",raw):
         return "meta_muse"
     if (t & {"cec","eci","gyanesh"}) and (t & {"election","commission","sir","voter","voters","electoral","rolls","protest","removal","resign","resignation"}):
         return "election_commission_sir"
