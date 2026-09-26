@@ -113,7 +113,7 @@ def _is_non_news_content(article):
     summary=str(article.get("summary","") or "").lower()
     text=f"{title} {summary}"
     hard_patterns=(
-        r"\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\\+|early[- ]bird)\b",
+        r"\b(?:discount|deal|offer|save|coupon|promo(?:tion)?|sale|tickets?|pass|expo\+|early[- ]bird)\b",
         r"\b(?:coming to|joins us at|will be at|meet .* at)\b",
         r"\b(?:buy|shop|subscribe|register|book now|sign up)\b",
         r"\b(?:horoscope|quiz|photo gallery|live updates|live blog)\b",
