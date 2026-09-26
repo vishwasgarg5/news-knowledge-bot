@@ -240,12 +240,23 @@ def rerank_stories(stories,research=None):
         published_importance=importance
         if verification=="single-source": published_importance=min(published_importance,72.0)
         elif verification=="unverified": published_importance=min(published_importance,68.0)
+        quality_penalty=10 if r.get("primary_derivative") else 0
         item=dict(s); item["importance"]=round(published_importance,1)
-        final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity)
+        final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    india=[x for x in scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
-    world=[x for x in scored if str(x[1].get("region","")).lower()=="world"]
+    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","85"))
+    def eligible(pair):
+        score,item=pair
+        r=research.get(item.get("story_id"),{}) or {}
+        v=r.get("verification","unverified")
+        if r.get("primary_derivative"): return False
+        if v=="single-source": return float(item.get("importance",0) or 0) >= min_single_importance
+        if v=="unverified": return False
+        return True
+    quality_scored=[x for x in scored if eligible(x)]
+    india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
+    world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
     world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
 
@@ -402,6 +413,7 @@ def _explicit_who(item):
         return "Narendra Modi — Prime Minister of India"
     role_patterns=(
         r"\b(?:CEC|Chief Election Commissioner)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})",
+        r"\b(?:IAS|IPS|IFS)\s+officer\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){1,3})",
         r"\b(?:President|Prime Minister|PM|Chief Minister|CM|Minister|Justice|Judge|Professor|CEO|Founder|Secretary General|president|minister)\s+([A-Z][A-Za-z.'-]+(?:\s+[A-Za-z.'-]+){0,3})",
         r":\s*([A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3})\s*$",
     )
@@ -579,8 +591,15 @@ Evidence: {json.dumps({
 },ensure_ascii=False)}"""
     result=_parse(_call_ollama(prompt,num_predict=int(os.getenv("AI_ENRICH_OUTPUT","120")),timeout=int(os.getenv("AI_TIMEOUT_SECONDS","25"))),item)
     explicit=_explicit_who(item); current=str(result.get("who","")).strip()
-    if explicit and not current: result["who"]=explicit
-    if explicit and not str(result.get("who_detail","")).strip(): result["who_detail"]=_person_context(explicit,item.get("headline",""))
+    result["what"]=str(item.get("headline","") or item.get("summary",""))[:500]
+    if explicit:
+        result["who"]=explicit
+        if not str(result.get("who_detail","")).strip():
+            result["who_detail"]=_person_context(explicit,item.get("headline",""))
+    elif current:
+        evidence=_evidence_text(item)
+        if not _field_supported(current,evidence,1):
+            result["who"]=""; result["who_detail"]=""
     result.pop("_event_text",None)
     result["ai_generated"]=True; return result
 
