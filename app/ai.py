@@ -254,27 +254,35 @@ def rerank_stories(stories,research=None):
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","85"))
+    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","78"))
     def eligible(pair):
         score,item=pair
         r=research.get(item.get("story_id"),{}) or {}
         v=r.get("verification","unverified")
         if r.get("primary_derivative"): return False
-        if v=="single-source": return float(item.get("importance",0) or 0) >= min_single_importance
+        if v=="single-source":
+            source=str(item.get("source","") or "").lower()
+            trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
+            return float(item.get("importance",0) or 0) >= min_single_importance and trusted
         if v=="unverified": return False
         return True
-    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"unverified":0}
+    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"single_source_untrusted":0,"unverified":0}
     quality_scored=[]
     for pair in scored:
         score,item=pair; rr=research.get(item.get("story_id"),{}) or {}; vv=rr.get("verification","unverified")
         if rr.get("primary_derivative"):
             rejection_counts["primary_derivative"]+=1; continue
-        if vv=="single-source" and float(item.get("importance",0) or 0)<min_single_importance:
-            rejection_counts["single_source_below_gate"]+=1; continue
+        if vv=="single-source":
+            source=str(item.get("source","") or "").lower()
+            trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
+            if float(item.get("importance",0) or 0)<min_single_importance:
+                rejection_counts["single_source_below_gate"]+=1; continue
+            if not trusted:
+                rejection_counts["single_source_untrusted"]+=1; continue
         if vv=="unverified":
             rejection_counts["unverified"]+=1; continue
         quality_scored.append(pair)
-    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source={rejection_counts['single_source_below_gate']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
+    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
