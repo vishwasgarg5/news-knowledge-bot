@@ -129,10 +129,12 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
     limit=min(requested,candidate_limit); selected=[]; category_counts={}; max_per_category=max(1,int(os.getenv("NEWS_MAX_PER_CATEGORY","8")))
     for score,a in ranked:
         if score < threshold: continue
-        category=str(a.get("category","Other")).strip().lower() or "other"
+        raw_category=str(a.get("category","Other")).strip().lower() or "other"
+        region=str(a.get("region","world")).strip().lower() or "world"
+        category="world" if raw_category=="india" and region=="world" else ("india" if raw_category=="world" and region=="india" else raw_category)
         if max_stories>0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
-        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":str(a.get("category","Other")),"region":str(a.get("region","world")).lower(),"region_confidence":round(float(a.get("region_confidence",0) or 0),2),"region_evidence":str(a.get("region_evidence","") or ""),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":category,"region":region,"region_confidence":round(float(a.get("region_confidence",0) or 0),2),"region_evidence":str(a.get("region_evidence","") or ""),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
         category_counts[category]=category_counts.get(category,0)+1
         if len(selected)>=limit: break
     return selected
@@ -213,7 +215,10 @@ def _same_event_family(a,b):
     return _same_event(a.get("headline",""),b.get("headline","")) or _event_similarity(a.get("headline",""),b.get("headline",""))>=0.76
 
 def _genuinely_new_development(a,b):
-    """Allow a second story only when the headline describes a concrete new action."""
+    """Allow distinct developments within broad families, but never duplicate strict event families."""
+    ka=_event_family_key(a.get("headline","")); kb=_event_family_key(b.get("headline",""))
+    if ka and ka==kb and ka in {"hormuz_iran_us","south_africa_killings","openai_australia","us_china_ai_channel"}:
+        return False
     aa=_development_signature(a.get("headline","")); bb=_development_signature(b.get("headline",""))
     if not aa or not bb: return False
     # Same action words normally describe the same development.
