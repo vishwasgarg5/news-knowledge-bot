@@ -37,6 +37,12 @@ def _event_similarity(a,b):
     if named_overlap>=2 and len(common)>=3: return max(base,0.55)
     if len(distinctive)>=3 and len(common)>=4 and base>=0.34: return max(base,0.55)
     if event_overlap>=1 and len(distinctive)>=3 and len(common)>=3 and base>=0.38: return max(base,0.55)
+    # Different publishers frequently use different verbs for the same event.
+    # Permit one named actor plus a strong cluster of distinctive event terms.
+    if named_overlap>=1 and len(distinctive)>=3 and base>=0.28: return max(base,0.55)
+    # Summary-expanded matching can recover reports whose headlines omit the
+    # actor, provided several concrete terms still identify the same event.
+    if len(distinctive)>=4 and event_overlap>=1 and base>=0.25: return max(base,0.55)
     return 0.0
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source, url=""):
