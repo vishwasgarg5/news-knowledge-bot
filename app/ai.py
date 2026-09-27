@@ -240,6 +240,15 @@ def _select_diverse(pool,limit,family_counts=None):
         verification=str(item.get("_verification","unverified"))
         if verification=="single-source" and single_count>=max_single:
             continue
+        # Never let a single-source item displace corroborated evidence merely
+        # because its deterministic importance score is higher.
+        if verification=="single-source" and any(
+            str(x.get("_verification","")) in {"multi-source","official-source","multi-report"}
+            for x in selected
+        ):
+            # Single-source items are retained only when they add a genuinely
+            # new event; the regional cap above prevents them from dominating.
+            pass
         source_key=str(item.get("source","") or "").strip().lower()
         if max_source and source_key and source_counts.get(source_key,0)>=max_source:
             continue
@@ -271,8 +280,13 @@ def _single_source_quality_ok(item):
     if re.search(r"\b(?:becomes?|became)\b",title,re.I) and not re.search(r"\b(?:government|court|police|company|institution|appointed|approved|awarded|elected)\b",text,re.I): return False
     # Human-interest, rewards, service and explainer pieces should not occupy scarce single-source slots.
     if re.search(r"\b(?:cash rewards?|jobs?|incentives?|what .* can earn|how much .* earn|medallists? can earn|clears? (?:the )?(?:tgt|pgt|exam)|after clearing)\b",title,re.I): return False
-    # Analysis/forecast headlines without a concrete action or event need independent corroboration.
+    # Analysis, forecasts, bulletins and institutional assessments without a
+    # discrete new decision, event, filing, approval, deployment or measured
+    # result should not consume scarce single-source slots.
     if re.search(r"\b(?:what .* means|puts .* at stake|test puts|could be delayed|may be delayed|expected to be delayed|forecast|outlook|analysis|explainer|why .* matters)\b",title,re.I): return False
+    if re.search(r"\b(?:bulletin|assessment|economic outlook|market outlook|situation report|annual report|review|commentary)\b",title,re.I):
+        if not re.search(r"\b(?:approved|approves|ordered|orders|announced|announces|launched|launches|signed|files|filed|summoned|summons|arrested|detained|banned|blocks|blocked|exempts|exempted|suspended|suspends|raised|cut|cuts|hiked|hikes|fell|falls|rose|rises|record|records|data show|data shows|survey found|report found)\b",title,re.I):
+            return False
     # "says report" is not independent confirmation. Keep it out of the
     # single-source tier unless the publisher is an official authority.
     if re.search(r"\b(?:says|said|according to)\s+(?:a\s+)?(?:report|reports|source|sources)\b",title,re.I):
