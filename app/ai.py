@@ -228,15 +228,14 @@ def _genuinely_new_development(a,b):
 
 def _select_diverse(pool,limit,family_counts=None):
     selected=[]; family_counts=family_counts if family_counts is not None else {}
-    # A family can contain several genuinely different developments
-    # (for example, multiple separate Asian Games results). The concrete
-    # development check below still blocks duplicate coverage.
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","2")))
+    max_single=max(0,int(os.getenv("NEWS_MAX_SINGLE_SOURCE_PER_REGION","3")))
+    single_count=0
     for score,item in pool:
         if len(selected)>=limit: break
-        # Always run the pairwise event-family check, even when the candidate
-        # has a family key. This catches variants whose token pattern produces
-        # different keys but still describes the same development.
+        verification=str(item.get("_verification","unverified"))
+        if verification=="single-source" and single_count>=max_single:
+            continue
         same=[x for x in selected if _same_event_family(item,x)]
         if same:
             if len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same):
@@ -248,6 +247,7 @@ def _select_diverse(pool,limit,family_counts=None):
                 continue
             family_counts[key]=count+1
         selected.append(item)
+        if verification=="single-source": single_count+=1
     return selected
 
 def rerank_stories(stories,research=None):
@@ -264,7 +264,9 @@ def rerank_stories(stories,research=None):
         quality_penalty=10 if r.get("primary_derivative") else 0
         item=dict(s); item["importance"]=round(published_importance,1)
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
-        item["ranking_score"]=round(final,1); scored.append((final,item))
+        item["ranking_score"]=round(final,1)
+        item["_verification"]=verification
+        scored.append((final,item))
 
     min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","85"))
     def eligible(pair):
@@ -297,8 +299,15 @@ def rerank_stories(stories,research=None):
     print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
-    india.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
-    world.sort(key=lambda x:(-x[0],-float(x[1].get("importance",0) or 0)))
+    # Corroborated evidence must outrank high-scoring single-source items.
+    # Importance remains the primary score within each verification class.
+    def _quality_key(pair):
+        score,item=pair
+        v=str((research.get(item.get("story_id"),{}) or {}).get("verification","unverified"))
+        verification_rank={"multi-source":0,"official-source":0,"multi-report":1,"single-source":2}.get(v,3)
+        return (verification_rank,-score,-float(item.get("importance",0) or 0))
+    india.sort(key=_quality_key)
+    world.sort(key=_quality_key)
 
     india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
