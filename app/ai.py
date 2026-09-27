@@ -228,7 +228,9 @@ def _genuinely_new_development(a,b):
 
 def _select_diverse(pool,limit,family_counts=None):
     selected=[]; family_counts=family_counts if family_counts is not None else {}
-    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","2")))
+    # Allow up to three distinct developments in a broad family; duplicate
+    # coverage is still blocked by _genuinely_new_development().
+    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","3")))
     max_single=max(0,int(os.getenv("NEWS_MAX_SINGLE_SOURCE_PER_REGION","2")))
     max_source=max(0,int(os.getenv("NEWS_MAX_STORIES_PER_SOURCE","2")))
     single_count=0
@@ -271,6 +273,12 @@ def _single_source_quality_ok(item):
     if re.search(r"\b(?:cash rewards?|jobs?|incentives?|what .* can earn|how much .* earn|medallists? can earn|clears? (?:the )?(?:tgt|pgt|exam)|after clearing)\b",title,re.I): return False
     # Analysis/forecast headlines without a concrete action or event need independent corroboration.
     if re.search(r"\b(?:what .* means|puts .* at stake|test puts|could be delayed|may be delayed|expected to be delayed|forecast|outlook|analysis|explainer|why .* matters)\b",title,re.I): return False
+    # "says report" is not independent confirmation. Keep it out of the
+    # single-source tier unless the publisher is an official authority.
+    if re.search(r"\b(?:says|said|according to)\s+(?:a\s+)?(?:report|reports|source|sources)\b",title,re.I):
+        source=str(item.get("source","") or "").lower()
+        if not any(x in source for x in ("pib","nasa","isro","sebi","reserve bank of india","supreme court")):
+            return False
     return True
 
 def rerank_stories(stories,research=None):
