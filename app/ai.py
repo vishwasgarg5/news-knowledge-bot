@@ -267,6 +267,10 @@ def _single_source_quality_ok(item):
     if claim and not concrete: return False
     if re.search(r"\b(?:warning|warns?|warned|strike against|responsible for)\b",title,re.I) and not concrete: return False
     if re.search(r"\b(?:becomes?|became)\b",title,re.I) and not re.search(r"\b(?:government|court|police|company|institution|appointed|approved|awarded|elected)\b",text,re.I): return False
+    # Human-interest, rewards, service and explainer pieces should not occupy scarce single-source slots.
+    if re.search(r"\b(?:cash rewards?|jobs?|incentives?|what .* can earn|how much .* earn|medallists? can earn|clears? (?:the )?(?:tgt|pgt|exam)|after clearing)\b",title,re.I): return False
+    # Analysis/forecast headlines without a concrete action or event need independent corroboration.
+    if re.search(r"\b(?:what .* means|puts .* at stake|test puts|could be delayed|may be delayed|expected to be delayed|forecast|outlook|analysis|explainer|why .* matters)\b",title,re.I): return False
     return True
 
 def rerank_stories(stories,research=None):
