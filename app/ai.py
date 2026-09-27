@@ -283,7 +283,10 @@ def _single_source_quality_ok(item):
     # Analysis, forecasts, bulletins and institutional assessments without a
     # discrete new decision, event, filing, approval, deployment or measured
     # result should not consume scarce single-source slots.
-    if re.search(r"\b(?:what .* means|puts .* at stake|test puts|could be delayed|may be delayed|expected to be delayed|forecast|outlook|analysis|explainer|why .* matters)\b",title,re.I): return False
+    if re.search(r"\b(?:what .* means|puts .* at stake|test puts|could be delayed|may be delayed|expected to be delayed|forecast|outlook|analysis|explainer|why .* matters|what to know|what happened|what we know|key questions|here's what)\b",title,re.I): return False
+    # Statement-amplification headlines are not enough for the single-source tier.
+    if re.search(r"\b(?:echoes?|invokes?|quotes?|cites?|reiterates?|repeats?|hails?|praises?|slams?)\b",title,re.I) and not re.search(r"\b(?:arrested|detained|killed|injured|banned|approved|ordered|filed|summoned|launched|signed|blocked|suspended)\b",title,re.I):
+        return False
     if re.search(r"\b(?:bulletin|assessment|economic outlook|market outlook|situation report|annual report|review|commentary)\b",title,re.I):
         if not re.search(r"\b(?:approved|approves|ordered|orders|announced|announces|launched|launches|signed|files|filed|summoned|summons|arrested|detained|banned|blocks|blocked|exempts|exempted|suspended|suspends|raised|cut|cuts|hiked|hikes|fell|falls|rose|rises|record|records|data show|data shows|survey found|report found)\b",title,re.I):
             return False
