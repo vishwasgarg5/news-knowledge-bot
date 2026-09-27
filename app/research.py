@@ -113,25 +113,33 @@ def _published_recent(value, hours=72):
     return timedelta(hours=-6) <= age <= timedelta(hours=hours)
 
 def verify_article(story, articles, memory=None):
-    headline=story.get("headline",""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source, story.get("url",""))
+    headline=story.get("headline",""); primary_summary=str(story.get("summary","") or ""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source, story.get("url",""))
     matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
         if _is_derivative_report(a): continue
         if not _published_recent(a.get("published",""),72): continue
-        sim=_event_similarity(headline,a.get("title",""))
+        title_sim=_event_similarity(headline,a.get("title",""))
+        primary_context=f"{headline} {primary_summary}".strip()
+        article_context=f"{a.get('title','')} {a.get('summary','')}".strip()
+        context_sim=_event_similarity(primary_context,article_context)
+        sim=max(title_sim, context_sim*0.92)
         if sim>=0.55:
             source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
-            matches.append((sim*0.7+trust*0.3,a))
+            matches.append((sim*0.7+trust*0.3,a,title_sim,context_sim))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
-    for score,a in matches:
-        sim=_event_similarity(headline,a.get("title",""))
-        if sim < 0.55: continue
-        headline_tokens=_tokens(headline)
-        article_tokens=_tokens(a.get("title",""))
-        distinctive=len((headline_tokens & article_tokens) - {"supreme","court","government","president","commission","election","india","world"})
-        if distinctive < 2: continue
+    for score,a,title_sim,context_sim in matches:
+        headline_tokens=_tokens(headline); primary_tokens=_tokens(primary_summary)
+        article_tokens=_tokens(a.get("title","")); article_summary_tokens=_tokens(a.get("summary",""))
+        distinctive_title=len((headline_tokens & article_tokens) - {"supreme","court","government","president","commission","election","india","world"})
+        distinctive_context=len(((headline_tokens|primary_tokens) & (article_tokens|article_summary_tokens)) - {"supreme","court","government","president","commission","election","india","world","news","report","today","latest"})
+        # A summary can recover differently-worded reports, but it still needs
+        # concrete overlap; this avoids turning broad topical similarity into corroboration.
+        if title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
+        if title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
+        key=_source_key(a.get("source",""), a.get("url",""))
+        if not key or key==primary_key or key in seen_sources: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
