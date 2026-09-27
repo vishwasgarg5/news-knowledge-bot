@@ -229,12 +229,17 @@ def _genuinely_new_development(a,b):
 def _select_diverse(pool,limit,family_counts=None):
     selected=[]; family_counts=family_counts if family_counts is not None else {}
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","2")))
-    max_single=max(0,int(os.getenv("NEWS_MAX_SINGLE_SOURCE_PER_REGION","3")))
+    max_single=max(0,int(os.getenv("NEWS_MAX_SINGLE_SOURCE_PER_REGION","2")))
+    max_source=max(0,int(os.getenv("NEWS_MAX_STORIES_PER_SOURCE","2")))
     single_count=0
+    source_counts={}
     for score,item in pool:
         if len(selected)>=limit: break
         verification=str(item.get("_verification","unverified"))
         if verification=="single-source" and single_count>=max_single:
+            continue
+        source_key=str(item.get("source","") or "").strip().lower()
+        if max_source and source_key and source_counts.get(source_key,0)>=max_source:
             continue
         same=[x for x in selected if _same_event_family(item,x)]
         if same:
@@ -248,7 +253,21 @@ def _select_diverse(pool,limit,family_counts=None):
             family_counts[key]=count+1
         selected.append(item)
         if verification=="single-source": single_count+=1
+        if source_key:
+            source_counts[source_key]=source_counts.get(source_key,0)+1
     return selected
+
+def _single_source_quality_ok(item):
+    """Allow uncorroborated stories only when they report a concrete development."""
+    title=str(item.get("headline","") or "").strip().lower()
+    summary=str(item.get("summary","") or "").strip().lower()
+    text=title+" "+summary
+    claim=re.search(r"\b(?:claims?|alleges?|accuses?|says?|said|warns?|warned|slams?|criticises?|criticizes?|calls? for|urges?|urged|blames?|blamed|denies?|denied|predicts?|predicted)\b",title,re.I)
+    concrete=re.search(r"\b(?:arrest(?:ed)?|detain(?:ed)?|kill(?:ed)?|dies?|injur(?:ed)?|ban(?:s|ned)?|approve(?:d|s)?|orders?|ordered|extends?|extended|suspends?|suspended|opens?|opened|closes?|closed|launch(?:es|ed)?|signed?|appoint(?:s|ed)?|resign(?:s|ed)?|removed?|acquitt(?:ed)?|convict(?:ed)?|files?|filed|summon(?:s|ed)?|seizes?|seized|blocks?|blocked|lifts?|lifted|exempts?|exempted|announces?|announced|becomes?|became)\b",title,re.I)
+    if claim and not concrete: return False
+    if re.search(r"\b(?:warning|warns?|warned|strike against|responsible for)\b",title,re.I) and not concrete: return False
+    if re.search(r"\b(?:becomes?|became)\b",title,re.I) and not re.search(r"\b(?:government|court|police|company|institution|appointed|approved|awarded|elected)\b",text,re.I): return False
+    return True
 
 def rerank_stories(stories,research=None):
     research=research or {}; scored=[]
@@ -280,7 +299,7 @@ def rerank_stories(stories,research=None):
             return float(item.get("importance",0) or 0) >= min_single_importance and trusted
         if v=="unverified": return False
         return True
-    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"single_source_untrusted":0,"unverified":0}
+    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"single_source_untrusted":0,"single_source_commentary":0,"unverified":0}
     quality_scored=[]
     for pair in scored:
         score,item=pair; rr=research.get(item.get("story_id"),{}) or {}; vv=rr.get("verification","unverified")
@@ -293,10 +312,12 @@ def rerank_stories(stories,research=None):
                 rejection_counts["single_source_below_gate"]+=1; continue
             if not trusted:
                 rejection_counts["single_source_untrusted"]+=1; continue
+            if not _single_source_quality_ok(item):
+                rejection_counts["single_source_commentary"]+=1; continue
         if vv=="unverified":
             rejection_counts["unverified"]+=1; continue
         quality_scored.append(pair)
-    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
+    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     # Corroborated evidence must outrank high-scoring single-source items.
