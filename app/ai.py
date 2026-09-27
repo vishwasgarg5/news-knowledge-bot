@@ -217,7 +217,7 @@ def _same_event_family(a,b):
 def _genuinely_new_development(a,b):
     """Allow distinct developments within broad families, but never duplicate strict event families."""
     ka=_event_family_key(a.get("headline","")); kb=_event_family_key(b.get("headline",""))
-    if ka and ka==kb and ka in {"hormuz_iran_us","south_africa_killings","openai_australia","us_china_ai_channel"}:
+    if ka and ka==kb and ka in {"hormuz_iran_us","south_africa_killings","openai_australia","us_china_ai_channel","election_commission_sir","trump_xi"}:
         return False
     aa=_development_signature(a.get("headline","")); bb=_development_signature(b.get("headline",""))
     if not aa or not bb: return False
@@ -231,7 +231,7 @@ def _select_diverse(pool,limit,family_counts=None):
     # A family can contain several genuinely different developments
     # (for example, multiple separate Asian Games results). The concrete
     # development check below still blocks duplicate coverage.
-    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","3")))
+    max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","2")))
     for score,item in pool:
         if len(selected)>=limit: break
         # Always run the pairwise event-family check, even when the candidate
@@ -266,7 +266,7 @@ def rerank_stories(stories,research=None):
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","78"))
+    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","85"))
     def eligible(pair):
         score,item=pair
         r=research.get(item.get("story_id"),{}) or {}
