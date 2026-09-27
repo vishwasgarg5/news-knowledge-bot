@@ -20,30 +20,41 @@ def _named_tokens(text):
     return {w.lower().strip(".,") for w in words if w.lower() not in STOP and w.lower() not in generic}
 
 def _event_similarity(a,b):
-    """Conservative-but-practical event match for corroboration.
-    Headlines often describe the same event with different wording, so
-    require distinctive overlap rather than relying only on raw similarity."""
+    """Match the same concrete event across differently worded publisher reports."""
     base=_similar(a,b)
     na,nb=_named_tokens(a),_named_tokens(b)
     named_overlap=len(na&nb)
     ta,tb=_tokens(a),_tokens(b)
     common=ta&tb
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","court","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","warn","warning","suspended","suspension","wins","won","silver","gold","medal","meeting","decision","decisions"}
+    event_terms={"breach","hack","attack","arrest","ban","blocked","access","launch","launched","deal","trade","truce","visit","arrives","arrived","intelligence","result","results","election","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","warn","warning","suspended","suspension","wins","won","silver","gold","medal","meeting","decision","decisions","appointed","summoned","filed","signed","reopens","reopened","withdraws","withdrawn","rolls","voters","names","probe"}
     event_overlap=len(common & event_terms)
-    generic={"supreme","court","government","president","prime","minister","chief","election","commission","india","world","news","today","latest","report","reports","officials"}
+    generic={"supreme","court","government","president","prime","minister","chief","election","commission","india","world","news","today","latest","report","reports","officials","official"}
     distinctive=common-generic
     if base>=0.62 and len(common)>=5: return base
-    if named_overlap>=1 and event_overlap>=1 and len(common)>=3: return max(base,0.55)
-    if named_overlap>=2 and len(common)>=3: return max(base,0.55)
-    if len(distinctive)>=3 and len(common)>=4 and base>=0.34: return max(base,0.55)
-    if event_overlap>=1 and len(distinctive)>=3 and len(common)>=3 and base>=0.38: return max(base,0.55)
-    # Different publishers frequently use different verbs for the same event.
-    # Permit one named actor plus a strong cluster of distinctive event terms.
-    if named_overlap>=1 and len(distinctive)>=3 and base>=0.28: return max(base,0.55)
-    # Summary-expanded matching can recover reports whose headlines omit the
-    # actor, provided several concrete terms still identify the same event.
-    if len(distinctive)>=4 and event_overlap>=1 and base>=0.25: return max(base,0.55)
+    if named_overlap>=1 and event_overlap>=1 and len(common)>=2: return max(base,0.56)
+    if named_overlap>=2 and len(common)>=3: return max(base,0.56)
+    if len(distinctive)>=3 and len(common)>=4 and base>=0.28: return max(base,0.56)
+    if event_overlap>=1 and len(distinctive)>=3 and len(common)>=3 and base>=0.32: return max(base,0.56)
+    if named_overlap>=1 and len(distinctive)>=3 and base>=0.22: return max(base,0.56)
+    if len(distinctive)>=4 and event_overlap>=1 and base>=0.20: return max(base,0.56)
     return 0.0
+
+def _strong_event_match(headline, primary_summary, article):
+    """Evidence-level match for differently worded reports of one concrete event."""
+    other=f"{article.get('title','')} {article.get('summary','')}"
+    primary=f"{headline} {primary_summary}"
+    na,nb=_named_tokens(primary),_named_tokens(other)
+    common=_tokens(primary)&_tokens(other)
+    event_terms={"attack","attacked","arrest","arrested","ban","banned","blocked","breach","breached","hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone","landfall","protest","protested","ruling","verdict","order","ordered","approved","announced","launched","signed","summoned","filed","probe","investigation","withdrawn","reopened","election","vote","voters","medal","gold","silver"}
+    events=common & event_terms
+    named=na&nb
+    distinctive=common-{"government","president","minister","court","election","commission","india","world","news","today","latest","report","reports","official"}
+    # One shared named actor + one concrete action + two additional shared terms
+    # is enough when both reports are fresh and from different publishers.
+    if named and events and len(distinctive)>=4: return True
+    if len(named)>=2 and len(distinctive)>=3: return True
+    if events and len(distinctive)>=5: return True
+    return False
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source, url=""):
     try:
@@ -130,9 +141,11 @@ def verify_article(story, articles, memory=None):
         article_context=f"{a.get('title','')} {a.get('summary','')}".strip()
         context_sim=_event_similarity(primary_context,article_context)
         sim=max(title_sim, context_sim*0.92)
-        if sim>=0.55:
+        strong_match=_strong_event_match(headline,primary_summary,a)
+        if sim>=0.55 or strong_match:
             source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
-            matches.append((sim*0.7+trust*0.3,a,title_sim,context_sim))
+            match_score=max(sim,0.58 if strong_match else sim)
+            matches.append((match_score*0.7+trust*0.3,a,title_sim,context_sim))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a,title_sim,context_sim in matches:
@@ -142,8 +155,9 @@ def verify_article(story, articles, memory=None):
         distinctive_context=len(((headline_tokens|primary_tokens) & (article_tokens|article_summary_tokens)) - {"supreme","court","government","president","commission","election","india","world","news","report","today","latest"})
         # A summary can recover differently-worded reports, but it still needs
         # concrete overlap; this avoids turning broad topical similarity into corroboration.
-        if title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
-        if title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
+        strong_match=_strong_event_match(headline,primary_summary,a)
+        if not strong_match and title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
+        if not strong_match and title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
         key=_source_key(a.get("source",""), a.get("url",""))
