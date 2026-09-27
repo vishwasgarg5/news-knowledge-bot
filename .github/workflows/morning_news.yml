@@ -2,6 +2,12 @@ name: News Intelligence
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "app/**"
+      - "config/**"
+      - ".github/workflows/morning_news.yml"
+      - "requirements.txt"
   schedule:
     - cron: '0 4 * * *'
       timezone: 'Asia/Kolkata'
