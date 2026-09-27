@@ -100,6 +100,8 @@ def _same_event(a,b):
         {"hilsa","bangladesh","fish","importing","exports"},
         {"asian","games","medal","medallist","medallists","shooters","table","tennis"},
         {"obc","creamy","layer","supreme","court","retrospective","verdict"},
+        {"hormuz","iran","trump","strait","proposal","reopen","talks"},
+        {"south","africa","women","killings","ekurhuleni","body"},
     ]
     for family in families:
         shared=common & family
@@ -170,6 +172,8 @@ def _event_family_key(title):
         ("hilsa",{"hilsa","bangladesh","fish","importing","exports"}),
         ("asian_games",{"asian","games","medal","medallist","medallists","shooters","table","tennis"}),
         ("obc_creamy_layer",{"obc","creamy","layer","supreme","court","retrospective","verdict"}),
+        ("hormuz_iran_us",{"hormuz","iran","trump","strait","proposal","reopen","talks"}),
+        ("south_africa_killings",{"south","africa","women","killings","ekurhuleni","body"}),
         ("ethiopia_tigray",{"ethiopia","tigray","eritrea","fighting","conflict","internet","restricted","army","attacks"}),
     ]
     # High-signal anchors prevent two reports of the same development from occupying separate slots.
@@ -177,6 +181,10 @@ def _event_family_key(title):
         return "trump_xi"
     if re.search(r"\b(?:u\.s\.?|united states)\b",raw) and re.search(r"\bchina\b",raw) and re.search(r"\b(?:ai|artificial intelligence)\b",raw) and re.search(r"\b(?:communication|channel|incidents?)\b",raw):
         return "us_china_ai_channel"
+    if re.search(r"\b(?:hormuz|strait of hormuz)\b",raw) and re.search(r"\b(?:iran|trump)\b",raw) and re.search(r"\b(?:proposal|reopen|talks|map|strait)\b",raw):
+        return "hormuz_iran_us"
+    if re.search(r"\bsouth africa\b",raw) and re.search(r"\b(?:women|killings|ekurhuleni)\b",raw):
+        return "south_africa_killings"
     if re.search(r"\bopenai\b",raw) and re.search(r"\baustralia\b",raw):
         return "openai_australia"
     if re.search(r"\bmeta\b",raw) and re.search(r"\bmuse\b",raw):
@@ -247,14 +255,13 @@ def rerank_stories(stories,research=None):
         verification_bonus={"multi-source":12,"official-source":9,"multi-report":2,"single-source":-4}.get(verification,0)
         source_diversity=min(8,indep*2)
         published_importance=importance
-        if verification=="single-source": published_importance=min(published_importance,72.0)
-        elif verification=="unverified": published_importance=min(published_importance,68.0)
+        if verification=="unverified": published_importance=min(published_importance,68.0)
         quality_penalty=10 if r.get("primary_derivative") else 0
         item=dict(s); item["importance"]=round(published_importance,1)
         final=(0.56*published_importance + 0.24*conf + 0.08*min(100,50+indep*15) + 0.06*novelty + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1); scored.append((final,item))
 
-    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","70"))
+    min_single_importance=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","78"))
     def eligible(pair):
         score,item=pair
         r=research.get(item.get("story_id"),{}) or {}
@@ -683,10 +690,19 @@ def _is_non_news_content(article):
         r"\b(?:coming to|joins us at|will be at|meet .* at)\b",
         r"\b(?:buy|shop|subscribe|register|book now|sign up)\b",
         r"\b(?:horoscope|quiz|photo gallery|live updates|live blog|compilation)\b",
+        r"\b(?:viral|watch video|celebrity|villa|villas|luxury real estate|sold for \$|sold for €|sold for £)\b",
         r"\b(?:weekend|daily|today|current)\s+(?:weather|forecast|updates?)\b|\bweather\s+updates?\b",
     )
     if any(re.search(p,text,re.I) for p in hard_patterns):
         return True
+    raw=str(article.get("published","") or "").strip()
+    if raw:
+        try:
+            value=raw.replace("Z","+00:00"); dt=datetime.fromisoformat(value)
+            if dt.tzinfo is None: dt=dt.replace(tzinfo=timezone.utc)
+            age_hours=(datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds()/3600.0
+            if age_hours > 72: return True
+        except (TypeError,ValueError): pass
     # A plain weather forecast is a service item; an actual storm/flood event remains eligible.
     if re.search(r"\b(?:forecast|weather outlook)\b",title,re.I) and not re.search(r"\b(?:storm|cyclone|hurricane|flood|landfall|evacuat|warning)\b",title,re.I):
         return True
