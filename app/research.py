@@ -201,7 +201,10 @@ def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:lis
         sid=s.get("story_id","")
         if not sid: continue
         r=verify_article(s,pool,memory); output[sid]=r
-        is_current=r["verification"] in {"multi-source","official-source","single-source"}
+        # A multi-report result is current evidence: it has one fresh independent
+        # publisher corroborating the event. "Strong" remains reserved for
+        # multi-source/official evidence.
+        is_current=r["verification"] in {"multi-source","official-source","multi-report","single-source"}
         if r["verification"] in {"multi-source","official-source"}: strong+=1
         if is_current: current+=1
         if r["historical"]: historical+=1
