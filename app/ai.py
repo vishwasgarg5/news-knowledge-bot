@@ -298,6 +298,19 @@ def _single_source_quality_ok(item):
             return False
     return True
 
+def _story_content_quality_ok(item):
+    """Reject service/explainer/commentary framing regardless of evidence tier."""
+    title=str(item.get("headline","") or "").strip().lower()
+    if not title:
+        return False
+    # These are useful articles, but not the concrete news events this briefing is designed to rank.
+    if re.search(r"\b(?:what to know|what happened|what we know|key questions|here's what|explained|explainer|analysis|why .* denied|why .* matters|what .* means)\b",title,re.I):
+        return False
+    # Political positioning without a separately reported underlying event is not enough.
+    if re.search(r"\b(?:opposition|delegation|all-party|centre|central government)\b",title,re.I) and re.search(r"\b(?:refuses?|declines?|boycotts?|walks? out|won't|will not|won't be|opposes?)\b",title,re.I):
+        return False
+    return True
+
 def rerank_stories(stories,research=None):
     research=research or {}; scored=[]
     for s in stories:
@@ -328,12 +341,14 @@ def rerank_stories(stories,research=None):
             return float(item.get("importance",0) or 0) >= min_single_importance and trusted
         if v=="unverified": return False
         return True
-    rejection_counts={"primary_derivative":0,"single_source_below_gate":0,"single_source_untrusted":0,"single_source_commentary":0,"unverified":0}
+    rejection_counts={"primary_derivative":0,"content_quality":0,"single_source_below_gate":0,"single_source_untrusted":0,"single_source_commentary":0,"unverified":0}
     quality_scored=[]
     for pair in scored:
         score,item=pair; rr=research.get(item.get("story_id"),{}) or {}; vv=rr.get("verification","unverified")
         if rr.get("primary_derivative"):
             rejection_counts["primary_derivative"]+=1; continue
+        if not _story_content_quality_ok(item):
+            rejection_counts.setdefault("content_quality",0); rejection_counts["content_quality"]+=1; continue
         if vv=="single-source":
             source=str(item.get("source","") or "").lower()
             trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
@@ -346,7 +361,7 @@ def rerank_stories(stories,research=None):
         if vv=="unverified":
             rejection_counts["unverified"]+=1; continue
         quality_scored.append(pair)
-    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
+    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} content_quality={rejection_counts['content_quality']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     # Corroborated evidence must outrank high-scoring single-source items.
