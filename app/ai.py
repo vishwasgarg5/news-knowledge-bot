@@ -226,6 +226,22 @@ def _genuinely_new_development(a,b):
     # Require a meaningful action change and materially different headlines.
     return len(aa ^ bb) >= 2 and _similar(a.get("headline",""),b.get("headline","")) < 0.58
 
+def _publisher_key(item):
+    """Normalize publisher identity so aliases/URL hosts share one diversity cap."""
+    source=str(item.get("source","") or "").strip().lower()
+    url=str(item.get("url","") or "").lower()
+    host=re.sub(r"^https?://(?:www\\.)?", "", url).split("/",1)[0].split(":",1)[0]
+    aliases=(
+        ("bbc", "bbc"), ("reuters", "reuters"), ("the hindu", "the hindu"),
+        ("indian express", "indian express"), ("associated press", "associated press"),
+        ("ap news", "associated press"), ("ndtv", "ndtv"), ("hindustan times", "hindustan times"),
+        ("times of india", "times of india"), ("pib", "pib"), ("nasa", "nasa"), ("isro", "isro"),
+    )
+    for needle,key in aliases:
+        if needle in source or needle.replace(" ", "") in host.replace("-", ""):
+            return key
+    return host or source
+
 def _select_diverse(pool,limit,family_counts=None):
     selected=[]; family_counts=family_counts if family_counts is not None else {}
     # Allow up to three distinct developments in a broad family; duplicate
@@ -249,7 +265,7 @@ def _select_diverse(pool,limit,family_counts=None):
             # Single-source items are retained only when they add a genuinely
             # new event; the regional cap above prevents them from dominating.
             pass
-        source_key=str(item.get("source","") or "").strip().lower()
+        source_key=_publisher_key(item)
         if max_source and source_key and source_counts.get(source_key,0)>=max_source:
             continue
         same=[x for x in selected if _same_event_family(item,x)]
