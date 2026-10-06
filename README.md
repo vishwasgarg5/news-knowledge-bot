@@ -60,3 +60,10 @@ Personalization is bounded and additive: it does not bypass verification or the 
 ## Phase 8: Analytics
 
 Each run produces machine-readable analytics covering learning samples, outcome calibration, source/category reliability and topic/category frequency. The analytics summary is included in the final audit artifact and uses the same persisted memory as the learning pipeline.
+
+
+## Production hardening
+
+The final ranking incorporates personalization, breaking-news and trend signals while retaining verification gates. Event memory now supports NEW, DEVELOPING, ESCALATING, CONFIRMED and RESOLVED states. CSV writes use atomic replacement to reduce partial-write corruption, and the workflow compiles the complete application and runs cross-module smoke validation before delivery.
+
+The latest successful scheduled production run should be treated as the baseline; subsequent code changes require the next scheduled/manual run to validate the new code in GitHub Actions.
