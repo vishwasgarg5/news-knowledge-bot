@@ -55,6 +55,17 @@ jobs:
           import yaml
           yaml.safe_load(Path("config/sources.yaml").read_text(encoding="utf-8"))
           print("Configuration validation passed")
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+          p=Path("config/preferences.yaml")
+          assert yaml.safe_load(p.read_text(encoding="utf-8")) is not None
+          from app.intelligence import enrich_trends, personalize
+          sample=[{"headline":"India economy update","importance":70,"category":"economy","region":"india"}]
+          x=personalize(enrich_trends(sample,[]), yaml.safe_load(p.read_text(encoding="utf-8")))
+          assert x and "personalized_score" in x[0] and "breaking_score" in x[0]
+          print("Intelligence and personalization validation passed")
+          PY
           PY
           python - <<'PY'
           from app.ai import _fallback_how, _fallback_why, _fallback_background, _fallback_impact, _fallback_next
