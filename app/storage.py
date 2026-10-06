@@ -69,8 +69,30 @@ def sync_sqlite(root: Path):
     with sqlite3.connect(db) as con:
         con.executescript(SQL_SCHEMA)
         for r in read_rows(root / "news_history.csv"):
-            con.execute("INSERT OR REPLACE INTO articles VALUES (?,?,?,?,?,?,?,?)", (r.get("story_id",""),r.get("event_id",""),r.get("date",""),r.get("headline",""),r.get("source",""),r.get("url",""),r.get("category",""),float(r.get("importance") or 0)))
-            con.execute("INSERT OR REPLACE INTO events VALUES (?,?,?,?,?,?,?,?,?)", (r.get("event_id",""),r.get("date",""),r.get("date",""),r.get("headline",""),r.get("category",""),r.get("region",""),float(r.get("importance") or 0),r.get("event_status") or "NEW",int(float(r.get("source_count") or 0))))
-            con.execute("INSERT OR IGNORE INTO event_sources VALUES (?,?,?,?)", (r.get("event_id",""),r.get("source",""),r.get("url",""),r.get("date","")))
+            event_id=r.get("event_id","")
+            article_id=r.get("story_id","")
+            if article_id:
+                con.execute("INSERT OR REPLACE INTO articles VALUES (?,?,?,?,?,?,?,?)", (article_id,event_id,r.get("date",""),r.get("headline",""),r.get("source",""),r.get("url",""),r.get("category",""),float(r.get("importance") or 0)))
+            if event_id:
+                con.execute("""INSERT INTO events(event_id,first_seen,last_seen,headline,category,region,importance,status,source_count)
+                               VALUES (?,?,?,?,?,?,?,?,?)
+                               ON CONFLICT(event_id) DO UPDATE SET
+                                 first_seen=MIN(events.first_seen,excluded.first_seen),
+                                 last_seen=MAX(events.last_seen,excluded.last_seen),
+                                 headline=excluded.headline,category=excluded.category,region=excluded.region,
+                                 importance=excluded.importance,status=excluded.status,source_count=MAX(events.source_count,excluded.source_count)""",
+                            (event_id,r.get("date",""),r.get("date",""),r.get("headline",""),r.get("category",""),r.get("region",""),float(r.get("importance") or 0),r.get("event_status") or "NEW",int(float(r.get("source_count") or 0))))
+                con.execute("INSERT OR IGNORE INTO event_sources VALUES (?,?,?,?)", (event_id,r.get("source",""),r.get("url",""),r.get("date","")))
+        for r in read_rows(root / "news_learning.csv"):
+            event_id=r.get("event_id","")
+            if not event_id: continue
+            con.execute("""INSERT OR REPLACE INTO learning_outcomes
+                (run_date,event_id,story_id,source,category,initial_score,selected,outcome_score,seen_24h,seen_48h,seen_7d,missed,false_positive)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (r.get("run_date",""),event_id,r.get("story_id",""),r.get("source",""),r.get("category",""),float(r.get("initial_score") or 0),
+                 1 if str(r.get("selected","")).lower() in {"true","1","yes"} else 0,
+                 float(r.get("outcome_score") or r.get("learning_value") or 0),
+                 1 if r.get("seen_again_24h")=="1" else 0,1 if r.get("seen_again_48h")=="1" else 0,1 if r.get("seen_again_7d")=="1" else 0,
+                 1 if r.get("missed")=="1" else 0,1 if r.get("false_positive")=="1" else 0))
         con.commit()
     return db
