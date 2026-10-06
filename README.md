@@ -45,3 +45,13 @@ Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
 
 ## Design rule
 News only. No separate app or unrelated modules.
+
+
+## Phase 6-7: Intelligence and personalization
+
+The production pipeline now adds an intelligence layer after learning and regional normalization. It calculates breaking-news signals, historical topic/trend signals, emerging-topic flags, and a personalized score. Preferences are stored in `config/preferences.yaml` and are applied before research, re-ranking, final AI briefing, persistence, and Telegram delivery.
+
+Flow:
+`RSS → dedup → event/learning → region → trends/breaking → personalization → research → rerank → AI briefing → quality gate → memory/SQLite → Telegram`.
+
+Personalization is bounded and additive: it does not bypass verification or the minimum importance quality gate.
