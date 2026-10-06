@@ -1,6 +1,8 @@
 from __future__ import annotations
 import csv
-import sqlite3\nimport os\nimport tempfile
+import sqlite3
+import os
+import tempfile
 from pathlib import Path
 
 HEADERS={
