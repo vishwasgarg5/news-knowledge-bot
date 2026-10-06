@@ -13,8 +13,20 @@ HEADERS={
 }
 
 def _write(path,rows,fields):
-    with path.open("w",newline="",encoding="utf-8") as f:
-        w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore");w.writeheader();w.writerows(rows)
+    path=Path(path)
+    path.parent.mkdir(parents=True,exist_ok=True)
+    tmp=path.with_name(f".{path.name}.tmp")
+    try:
+        with tmp.open("w",newline="",encoding="utf-8") as f:
+            w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
+            w.writeheader()
+            w.writerows(rows)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp,path)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
 
 def ensure_data(root:Path):
     root.mkdir(parents=True,exist_ok=True)
