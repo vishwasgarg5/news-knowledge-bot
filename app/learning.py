@@ -27,7 +27,7 @@ def _profile(rows):
     by_source=defaultdict(lambda:[0,0.0]); by_cat=defaultdict(lambda:[0,0.0])
     for r in rows:
         if str(r.get("selected","")).lower()!="true": continue
-        val=_f(r.get("learning_value"),0)
+        val=_f(r.get("outcome_score") or r.get("learning_value"),0)
         by_source[r.get("source","unknown") or "unknown"][0]+=1; by_source[r.get("source","unknown") or "unknown"][1]+=val
         by_cat[r.get("category","other") or "other"][0]+=1; by_cat[r.get("category","other") or "other"][1]+=val
     def norm(d):
@@ -49,7 +49,9 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
         if age>=2 and not r.get("learning_value"):
             was_selected=str(r.get("selected","")).lower()=="true"
             value=(0.45 if r.get("seen_again_24h")=="1" else 0)+(0.35 if r.get("seen_again_48h")=="1" else 0)+(0.20 if r.get("seen_again_7d")=="1" else 0)
+            outcome=min(1.0,value + (0.05 if r.get("seen_again_24h")=="1" and r.get("seen_again_48h")=="1" else 0.0))
             r["learning_value"]=f"{value:.2f}"
+            r["outcome_score"]=f"{outcome:.2f}"
             if was_selected and value==0:r["false_positive"]="1";false_positive+=1
             evaluated+=1
             if was_selected:selected_evaluated+=1
@@ -63,7 +65,7 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
     for c in candidates:
         ev=c.get("event_id","")
         if not ev or (today,ev) in existing: continue
-        new.append({"run_date":today,"event_id":ev,"story_id":c.get("story_id",""),"headline":c.get("headline",""),"source":c.get("source",""),"category":c.get("category",""),"initial_score":c.get("importance",0),"selected":"true" if c.get("story_id") in selected_ids else "false","seen_again_24h":"","seen_again_48h":"","seen_again_7d":"","missed":"","false_positive":"","learning_value":""})
+        new.append({"run_date":today,"event_id":ev,"story_id":c.get("story_id",""),"headline":c.get("headline",""),"source":c.get("source",""),"category":c.get("category",""),"initial_score":c.get("importance",0),"selected":"true" if c.get("story_id") in selected_ids else "false","seen_again_24h":"","seen_again_48h":"","seen_again_7d":"","missed":"","false_positive":"","learning_value":"","outcome_score":""})
     append_rows(path,new,HEADERS["news_learning.csv"])
     return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(read_rows(path))}
 
