@@ -209,7 +209,7 @@ def main():
     # quality can be audited after every run instead of relying only on counters.
     audit_path="/tmp/news_briefing.json"
     try:
-        audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"stories":result.get("top_stories",[])}
+        audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
         with open(audit_path,"w",encoding="utf-8") as fh:
             json.dump(audit,fh,ensure_ascii=False,indent=2)
         print("[AUDIT] FINAL STORY SNAPSHOT",flush=True)
@@ -224,7 +224,7 @@ def main():
         append_rows(daily_path,[{"date":today,"evaluated":final_learning.get("evaluated",0),"selected_evaluated":final_learning.get("selected_evaluated",0),"misses":final_learning.get("misses",0),"false_positives":final_learning.get("false_positives",0),"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
 
     report=build_report(DATA)
-    print(f"[ANALYTICS] samples={report["learning_samples"]} avg_outcome={report["avg_outcome"]} top_categories={report["top_categories"][:5]}",flush=True)
+    print(f"[ANALYTICS] samples={report['learning_samples']} avg_outcome={report['avg_outcome']} top_categories={report['top_categories'][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
         if not failure.get("ok"): print(f"[WARN] source failed | category={failure.get('category','')} | url={failure.get('url','')} | error={failure.get('error','')}",flush=True)
