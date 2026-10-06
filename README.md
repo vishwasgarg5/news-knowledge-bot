@@ -9,7 +9,7 @@ GitHub → **Actions → News Intelligence → Run workflow**. The production wo
 ```
 SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 → VERIFICATION → RERANK → IMPORTANCE THRESHOLD → QWEN → TELEGRAM
-→ MEMORY → FUTURE OUTCOME EVALUATION
+→ MEMORY / SQLITE → FUTURE OUTCOME EVALUATION
 ```
 
 ## Learning system
@@ -20,6 +20,7 @@ SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 - Detects **false positives**: a selected story shows no persistence by the 48h checkpoint.
 - Learns bounded source/category adjustments from historical outcomes.
 - Uses persistence as a **proxy for impact**, not as ground truth.
+- Adds a bounded outcome score for calibration and keeps the ranking deterministic.
 - Keeps learned adjustments small (maximum ±5 importance points) to prevent runaway self-learning.
 - Learning is deterministic and stored in GitHub CSV files; Qwen does not rewrite the ranking algorithm.
 
@@ -33,6 +34,7 @@ SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 - `data/news_history.csv` — delivered story memory
 - `data/story_timeline.csv` — story evolution
 - `data/news_learning.csv` — candidate/outcome learning history
+- `data/news_knowledge.db` — indexed SQLite knowledge store mirrored from the CSV memory
 
 ## AI
 Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
