@@ -7,7 +7,7 @@ from .ai import configured_model,generate_briefing,rerank_stories,select_stories
 from .news import collect, _region
 from .research import research_stories
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
-from .storage import HEADERS,append_rows,ensure_data,read_rows
+from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
 
@@ -50,15 +50,21 @@ def _history_line(story):
     first=history[0]; title=str(first.get("title","")).strip(); title=title[:127].rstrip()+"..." if len(title)>130 else title
     return f"{first.get('date','prior')}: {title} · {first.get('source','memory')}"
 
+def _event_status(story):
+    v=story.get("verification") or {}
+    if v.get("verification")=="official-source" or int(v.get("independent_sources",0) or 0)>=2: return "CONFIRMED"
+    if int(v.get("independent_sources",0) or 0)>=1: return "DEVELOPING"
+    return "NEW"
+
 def persist(stories,today):
     path=DATA/"news_history.csv"; rows=read_rows(path); ids={r.get("story_id") for r in rows}
     tp=DATA/"story_timeline.csv"; timeline=read_rows(tp); keys={(r.get("story_id"),r.get("date")) for r in timeline}; added=0
     for s in stories:
         sid=s.get("story_id"); v=s.get("verification") or {}
         if sid and sid not in ids:
-            append_rows(path,[{"date":today,"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence","")}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
+            append_rows(path,[{"date":today,"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence",""),"event_status":_event_status(s),"source_count":v.get("source_count",1)}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
         if sid and (sid,today) not in keys:
-            append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday","")}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
+            append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday",""),"event_status":_event_status(s)}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
     return added
 
 def _story_block(s,index,total):
@@ -184,6 +190,7 @@ def main():
     quality_ok=(source_failures==0 and source_warnings==0 and current_coverage>=0.20)
     final_learning=evaluate_and_learn(DATA,candidates,today,selected_ids=current_ids,record_current=quality_ok)
     added=persist(result.get("top_stories",[]),today)
+    sync_sqlite(DATA)
     lm=learning_metrics(read_rows(DATA/"news_learning.csv"))
 
     stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"current_evidence":current_evidence,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated"))}
