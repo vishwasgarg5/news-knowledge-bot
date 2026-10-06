@@ -10,12 +10,18 @@ from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
 from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
+from .intelligence import enrich_trends,personalize,intelligence_summary
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
 def _safe_float(v):
     try:return float(v)
     except:return 0.0
+
+def load_preferences():
+    p=CONFIG.parent/"preferences.yaml"
+    if not p.exists(): return {}
+    with p.open(encoding="utf-8") as f:return yaml.safe_load(f) or {}
 
 def load_sources():
     with CONFIG.open(encoding="utf-8") as f:return yaml.safe_load(f) or {}
@@ -131,7 +137,7 @@ def build_messages(result,today,stats):
     stories=india_stories+world_stories
     total=len(stories); india=len(india_stories); world=len(world_stories)
     threshold=stats.get("importance_threshold",62)
-    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Evidence: {stats.get('current_evidence',stats['verified'])}/{stats['total']} current · Independent: {stats['verified']}/{stats['total']} · Strong: {stats['strong_verified']}/{stats['total']}",f"📡 Source health: {stats.get('source_ok',0)}/{stats.get('source_total',0)} OK · {stats.get('source_warnings',0)} warnings · {stats.get('source_failures',0)} failed",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
+    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Evidence: {stats.get('current_evidence',stats['verified'])}/{stats['total']} current · Independent: {stats['verified']}/{stats['total']} · Strong: {stats['strong_verified']}/{stats['total']}",f"📡 Source health: {stats.get('source_ok',0)}/{stats.get('source_total',0)} OK · {stats.get('source_warnings',0)} warnings · {stats.get('source_failures',0)} failed",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⚡ Breaking {stats.get('breaking_stories',0)} · Emerging {stats.get('emerging_topics',0)} · Personal score {stats.get('avg_personalized_score',0):.1f}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
     messages=["\n".join(lines)]
     for i,s in enumerate(stories,1):
         messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
@@ -141,13 +147,13 @@ def build_messages(result,today,stats):
 def main():
     started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{})
     articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700))
-    today=datetime.now(IST).date().isoformat(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
+    today=datetime.now(IST).date().isoformat(); preferences=load_preferences(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
     candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
     candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
 
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
-    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today)
+    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today); candidates=enrich_trends(candidates,read_rows(DATA/"news_history.csv")); candidates=personalize(candidates,preferences)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
     selected=rerank_stories(candidates,research); result=generate_briefing(selected,all_articles,timeline,today,research)
@@ -193,7 +199,8 @@ def main():
     sync_sqlite(DATA)
     lm=learning_metrics(read_rows(DATA/"news_learning.csv"))
 
-    stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"current_evidence":current_evidence,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated"))}
+    intel=intelligence_summary(result.get("top_stories",[]))
+    stats={"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"current_evidence":current_evidence,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated")),"breaking_stories":intel["breaking"],"emerging_topics":intel["emerging"],"avg_personalized_score":intel["avg_personalized"]}
     stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 else ("WARN" if current_coverage>=0.20 and source_failures<=2 else "DEGRADED")
 
     # Keep an exact, machine-readable snapshot of the final briefing outside the
