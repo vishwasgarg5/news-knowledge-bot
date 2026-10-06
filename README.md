@@ -55,3 +55,8 @@ Flow:
 `RSS → dedup → event/learning → region → trends/breaking → personalization → research → rerank → AI briefing → quality gate → memory/SQLite → Telegram`.
 
 Personalization is bounded and additive: it does not bypass verification or the minimum importance quality gate.
+
+
+## Phase 8: Analytics
+
+Each run produces machine-readable analytics covering learning samples, outcome calibration, source/category reliability and topic/category frequency. The analytics summary is included in the final audit artifact and uses the same persisted memory as the learning pipeline.
