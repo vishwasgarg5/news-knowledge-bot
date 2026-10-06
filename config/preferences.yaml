@@ -1,0 +1,11 @@
+priority_categories:
+  - india
+  - economy
+  - business
+  - technology
+  - science
+  - defence
+preferred_regions:
+  - india
+  - world
+minimum_personal_score: 58
