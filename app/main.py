@@ -11,6 +11,7 @@ from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
 from .intelligence import enrich_trends,personalize,intelligence_summary
+from .analytics import build_report
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -222,6 +223,8 @@ def main():
     if quality_ok and not any(r.get("date")==today for r in daily_rows):
         append_rows(daily_path,[{"date":today,"evaluated":final_learning.get("evaluated",0),"selected_evaluated":final_learning.get("selected_evaluated",0),"misses":final_learning.get("misses",0),"false_positives":final_learning.get("false_positives",0),"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
 
+    report=build_report(DATA)
+    print(f"[ANALYTICS] samples={report["learning_samples"]} avg_outcome={report["avg_outcome"]} top_categories={report["top_categories"][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
         if not failure.get("ok"): print(f"[WARN] source failed | category={failure.get('category','')} | url={failure.get('url','')} | error={failure.get('error','')}",flush=True)
