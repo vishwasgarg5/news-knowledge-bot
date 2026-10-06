@@ -57,11 +57,21 @@ def _history_line(story):
     first=history[0]; title=str(first.get("title","")).strip(); title=title[:127].rstrip()+"..." if len(title)>130 else title
     return f"{first.get('date','prior')}: {title} · {first.get('source','memory')}"
 
-def _event_status(story):
+def _event_status(story, timeline=None):
     v=story.get("verification") or {}
-    if v.get("verification")=="official-source" or int(v.get("independent_sources",0) or 0)>=2: return "CONFIRMED"
-    if int(v.get("independent_sources",0) or 0)>=1: return "DEVELOPING"
-    return "NEW"
+    headline=str(story.get("headline","") or "").lower()
+    if any(x in headline for x in ("resolved","resolution","ended","ends","withdrawn","withdraws","settled","settlement")):
+        return "RESOLVED"
+    base="CONFIRMED" if v.get("verification")=="official-source" or int(v.get("independent_sources",0) or 0)>=2 else ("DEVELOPING" if int(v.get("independent_sources",0) or 0)>=1 else "NEW")
+    prior=[]
+    event_id=str(story.get("event_id","") or "")
+    for row in (timeline or []):
+        if event_id and str(row.get("event_id",""))==event_id: prior.append(row)
+    if prior:
+        old=max(float(x.get("importance",0) or 0) for x in prior)
+        current=float(story.get("importance",0) or 0)
+        if current-old>=8 and base in {"DEVELOPING","CONFIRMED"}: return "ESCALATING"
+    return base
 
 def persist(stories,today):
     path=DATA/"news_history.csv"; rows=read_rows(path); ids={r.get("story_id") for r in rows}
@@ -69,9 +79,9 @@ def persist(stories,today):
     for s in stories:
         sid=s.get("story_id"); v=s.get("verification") or {}
         if sid and sid not in ids:
-            append_rows(path,[{"date":today,"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence",""),"event_status":_event_status(s),"source_count":v.get("source_count",1)}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
+            append_rows(path,[{"date":today,"story_id":sid,"event_id":s.get("event_id",""),"headline":s.get("headline",""),"source":s.get("source",""),"url":s.get("url",""),"category":s.get("category",""),"importance":s.get("importance",0),"region":s.get("region","world"),"verification":v.get("verification",""),"confidence":v.get("confidence",""),"event_status":_event_status(s,timeline),"source_count":v.get("source_count",1)}],HEADERS["news_history.csv"]); ids.add(sid); added+=1
         if sid and (sid,today) not in keys:
-            append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday",""),"event_status":_event_status(s)}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
+            append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday",""),"event_status":_event_status(s,timeline)}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
     return added
 
 def _story_block(s,index,total):
