@@ -340,7 +340,8 @@ def rerank_stories(stories,research=None):
         if verification=="unverified": published_importance=min(published_importance,68.0)
         quality_penalty=10 if r.get("primary_derivative") else 0
         item=dict(s); item["importance"]=round(published_importance,1)
-        personal=float(s.get("personalized_score",importance) or importance); breaking=float(s.get("breaking_score",0) or 0); trend=float(s.get("trend_score",0) or 0)\n        final=(0.50*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.05*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity - quality_penalty)
+        personal=float(s.get("personalized_score",importance) or importance); breaking=float(s.get("breaking_score",0) or 0); trend=float(s.get("trend_score",0) or 0)
+        final=(0.50*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.05*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity - quality_penalty)
         item["ranking_score"]=round(final,1)\n        item["personalization_applied"]=round(personal,1)
         item["_verification"]=verification
         scored.append((final,item))
