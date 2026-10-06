@@ -54,38 +54,23 @@ jobs:
           from pathlib import Path
           import yaml
           yaml.safe_load(Path("config/sources.yaml").read_text(encoding="utf-8"))
-          print("Configuration validation passed")
-          python - <<'PY'
-          import yaml
-          from pathlib import Path
-          p=Path("config/preferences.yaml")
-          assert yaml.safe_load(p.read_text(encoding="utf-8")) is not None
+          yaml.safe_load(Path("config/preferences.yaml").read_text(encoding="utf-8"))
           from app.intelligence import enrich_trends, personalize
           sample=[{"headline":"India economy update","importance":70,"category":"economy","region":"india"}]
-          x=personalize(enrich_trends(sample,[]), yaml.safe_load(p.read_text(encoding="utf-8")))
+          x=personalize(enrich_trends(sample,[]), yaml.safe_load(Path("config/preferences.yaml").read_text(encoding="utf-8")))
           assert x and "personalized_score" in x[0] and "breaking_score" in x[0]
-          print("Intelligence and personalization validation passed")
-          PY
+          from app.storage import ensure_data, sync_sqlite
+          root=Path("data"); ensure_data(root); assert sync_sqlite(root).exists()
+          print("Configuration, intelligence, personalization and SQLite validation passed")
           PY
           python - <<'PY'
           from app.ai import _fallback_how, _fallback_why, _fallback_background, _fallback_impact, _fallback_next
           sample={"headline":"Example launch announced","summary":"The company launched the product using a new manufacturing process. The company was founded in 2018 and has operated for years."}
-          assert _fallback_how(sample)
-          assert _fallback_background(sample)
-          impact_sample={"summary":"The company changed its manufacturing process. The change could materially reduce production time for manufacturers and affect costs."}
-          assert _fallback_impact(impact_sample)
+          assert _fallback_how(sample) and _fallback_background(sample)
+          assert _fallback_impact({"summary":"The company changed its manufacturing process. The change could materially reduce production time for manufacturers and affect costs."})
           assert _fallback_next({"summary":"Officials said the company plans to begin trials next month."})
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
-          PY
-          python - <<'PY'
-          from pathlib import Path
-          from app.storage import ensure_data, sync_sqlite
-          root=Path("data")
-          ensure_data(root)
-          db=sync_sqlite(root)
-          assert db.exists()
-          print(f"SQLite knowledge store validation passed: {db}")
           PY
       - name: Validate runtime configuration
         env:
