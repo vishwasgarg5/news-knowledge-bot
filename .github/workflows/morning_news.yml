@@ -2,12 +2,6 @@ name: News Intelligence
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "app/**"
-      - "config/**"
-      - ".github/workflows/morning_news.yml"
-      - "requirements.txt"
   schedule:
     - cron: '0 4 * * *'
       timezone: 'Asia/Kolkata'
@@ -73,6 +67,18 @@ jobs:
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
           PY
+      - name: Validate runtime configuration
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          AI_MODEL: qwen2.5:3b
+          OLLAMA_URL: http://localhost:11434/api/generate
+        run: |
+          test -n "$TELEGRAM_BOT_TOKEN" || { echo "::error::TELEGRAM_BOT_TOKEN is missing"; exit 1; }
+          test -n "$TELEGRAM_CHAT_ID" || { echo "::error::TELEGRAM_CHAT_ID is missing"; exit 1; }
+          ollama list | awk '{print $1}' | grep -Fxq "$AI_MODEL" || { echo "::error::Required model $AI_MODEL is not installed"; exit 1; }
+          curl -sf "$OLLAMA_URL" -H 'Content-Type: application/json' -d "{\"model\":\"$AI_MODEL\",\"prompt\":\"Reply with OK only\",\"stream\":false,\"options\":{\"num_predict\":8}}" | grep -q 'response' || { echo "::error::Ollama inference health check failed"; exit 1; }
+          echo "Runtime configuration validation passed"
       - name: Generate news briefing
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
