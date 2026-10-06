@@ -60,7 +60,10 @@ jobs:
           x=personalize(enrich_trends(sample,[]), yaml.safe_load(Path("config/preferences.yaml").read_text(encoding="utf-8")))
           assert x and "personalized_score" in x[0] and "breaking_score" in x[0]
           from app.storage import ensure_data, sync_sqlite
-          root=Path("data"); ensure_data(root); assert sync_sqlite(root).exists()
+          root=Path("data"); ensure_data(root); db=sync_sqlite(root); assert db.exists()
+          import sqlite3
+          with sqlite3.connect(db) as con:
+              assert con.execute("select name from sqlite_master where type='table' and name='learning_outcomes'").fetchone() is not None
           from app.analytics import build_report
           report=build_report(root)
           assert "avg_outcome" in report and "source_reliability" in report and "category_reliability" in report
@@ -104,7 +107,7 @@ jobs:
           AI_CONTEXT: '1536'
           AI_MAX_OUTPUT: '160'
           AI_TIMEOUT_SECONDS: '25'
-          AI_STORY_BUDGET: '3'
+          AI_STORY_BUDGET: '6'
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
