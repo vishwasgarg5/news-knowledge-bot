@@ -1,5 +1,7 @@
 from __future__ import annotations
 from collections import Counter,defaultdict
+import json
+from datetime import date, timedelta
 from .storage import read_rows
 
 def build_report(data_path):
@@ -24,3 +26,20 @@ def build_report(data_path):
         "source_reliability":averages(source),"category_reliability":averages(category),
         "top_categories":topics.most_common(10),
     }
+
+
+def write_reports(data_path):
+    report=build_report(data_path)
+    (data_path/"analytics_report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
+    today=date.today()
+    cutoff=today-timedelta(days=7)
+    daily=read_rows(data_path/"news_learning_daily.csv")
+    recent=[r for r in daily if str(r.get("date",""))[:10] >= cutoff.isoformat()]
+    report["last_7_days"]={
+        "runs":len(recent),
+        "avg_success_rate":round(sum(float(r.get("success_rate") or 0) for r in recent)/len(recent),3) if recent else 0,
+        "avg_false_positive_rate":round(sum(float(r.get("false_positive_rate") or 0) for r in recent)/len(recent),3) if recent else 0,
+        "avg_miss_rate":round(sum(float(r.get("miss_rate") or 0) for r in recent)/len(recent),3) if recent else 0,
+    }
+    (data_path/"analytics_weekly.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
+    return report
