@@ -3,7 +3,7 @@
 A **news-only India + World intelligence bot** for Telegram. It scans a large article pool, reduces it to high-value event candidates, selects **every story above the importance threshold**, and learns from what happens to those stories after selection.
 
 ## Run
-GitHub → **Actions → News Intelligence → Run workflow**. The workflow also runs on its configured daily schedule.
+GitHub → **Actions → News Intelligence → Run workflow**. The production workflow runs only by manual dispatch or its configured daily schedule; repository pushes do not trigger news delivery.
 
 ## Intelligence flow
 ```
@@ -35,7 +35,7 @@ SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 - `data/news_learning.csv` — candidate/outcome learning history
 
 ## AI
-Ollama + Qwen 2.5 7B.
+Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
 
 ## Secrets
 - `TELEGRAM_BOT_TOKEN`
