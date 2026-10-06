@@ -61,7 +61,10 @@ jobs:
           assert x and "personalized_score" in x[0] and "breaking_score" in x[0]
           from app.storage import ensure_data, sync_sqlite
           root=Path("data"); ensure_data(root); assert sync_sqlite(root).exists()
-          print("Configuration, intelligence, personalization and SQLite validation passed")
+          from app.analytics import build_report
+          report=build_report(root)
+          assert "avg_outcome" in report and "source_reliability" in report and "category_reliability" in report
+          print("Configuration, intelligence, personalization, SQLite and analytics validation passed")
           PY
           python - <<'PY'
           from app.ai import _fallback_how, _fallback_why, _fallback_background, _fallback_impact, _fallback_next
