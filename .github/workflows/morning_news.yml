@@ -66,6 +66,15 @@ jobs:
           assert _fallback_next({"summary":"Officials said the company plans to begin trials next month."})
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
+          python - <<'PY'
+          from pathlib import Path
+          from app.storage import ensure_data, sync_sqlite
+          root=Path("data")
+          ensure_data(root)
+          db=sync_sqlite(root)
+          assert db.exists()
+          print(f"SQLite knowledge store validation passed: {db}")
+          PY
           PY
       - name: Validate runtime configuration
         env:
