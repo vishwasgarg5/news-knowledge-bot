@@ -467,6 +467,8 @@ def main():
     stats["v5_research_agent"]=v5_agent
     stats["v5_research_reports"]=v5_reports
     stats["v5_production_evaluation"]=v5_eval
+    stats["v5_quality_gate"]=v5_eval.get("quality_gate",{})
+    stats["research_completion_rate"]=round(sum(1 for x in v5plus["research_queue"] if x.get("evidence_count",0)>0)/max(1,len(v5plus["research_queue"])),3)
 
     for s in result.get("top_stories",[]):
         s["event_id"]=s.get("event_id") or next((x.get("event_id") for x in v5plus["stories"] if x.get("headline")==s.get("headline")), "")
@@ -491,12 +493,12 @@ def main():
     stats["quality_dashboard"]=quality_dashboard(DATA)
     # Persistent knowledge layer: one daily snapshot plus a rolling weekly summary.
     daily_knowledge={"date":today,"stories":len(v5plus["stories"]),"high_impact":sum(1 for s in v5plus["stories"] if (s.get("impact") or {}).get("level")=="HIGH"),"new_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="NEW"),"developing_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="DEVELOPING"),"confirmed_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="CONFIRMED"),"contradictions":len(v5plus["contradictions"]),"research_items":len(v5plus["research_queue"])}
-    append_rows(DATA/"knowledge_daily.csv",[daily_knowledge],HEADERS["knowledge_daily.csv"])
+    dpath=DATA/"knowledge_daily.csv"; drows=read_rows(dpath); drows=[r for r in drows if r.get("date")!=today]; drows.append(daily_knowledge); from .storage import replace_rows; replace_rows(dpath,drows,HEADERS["knowledge_daily.csv"])
     week=today[:4]+"-W"+datetime.fromisoformat(today).strftime("%V")
     hist7=[r for r in read_rows(DATA/"news_history.csv") if str(r.get("date",""))>= (datetime.fromisoformat(today)-timedelta(days=6)).date().isoformat()]
     cat=__import__("collections").Counter(str(r.get("category","unknown")) for r in hist7)
-    ent=__import__("collections").Counter(str(r.get("headline","")) for r in hist7)
-    weekly={"week":week,"stories":len(hist7),"top_categories":json.dumps(cat.most_common(5),ensure_ascii=False),"top_entities":json.dumps([x[0] for x in ent.most_common(5)],ensure_ascii=False),"new_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="NEW"),"developing_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="DEVELOPING"),"confirmed_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="CONFIRMED"),"anomalies":len(v5plus["weekly_report"].get("anomalies",[])),"research_items":len(v5plus["research_queue"])}
+    entity_trends=v5plus["weekly_report"].get("top_entities",[])
+    weekly={"week":week,"stories":len(hist7),"top_categories":json.dumps(cat.most_common(5),ensure_ascii=False),"top_entities":json.dumps(entity_trends[:10],ensure_ascii=False),"new_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="NEW"),"developing_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="DEVELOPING"),"confirmed_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="CONFIRMED"),"anomalies":len(v5plus["weekly_report"].get("anomalies",[])),"research_items":len(v5plus["research_queue"])}
     wkpath=DATA/"knowledge_weekly.csv"; wkrows=read_rows(wkpath)
     if not any(r.get("week")==week for r in wkrows): append_rows(wkpath,[weekly],HEADERS["knowledge_weekly.csv"])
     stats["confidence_snapshot"]=confidence_snapshot(result.get("top_stories",[]))
