@@ -64,6 +64,26 @@ CREATE INDEX IF NOT EXISTS idx_articles_event ON articles(event_id);
 CREATE INDEX IF NOT EXISTS idx_articles_date ON articles(date);
 """
 
+
+def validate_data(root: Path):
+    """Validate persisted CSV schemas and required SQLite tables."""
+    root=Path(root); issues=[]
+    for name,fields in HEADERS.items():
+        path=root/name
+        if not path.exists(): issues.append(f"missing:{name}"); continue
+        try:
+            with path.open(newline="",encoding="utf-8") as f:
+                if (csv.DictReader(f).fieldnames or []) != fields: issues.append(f"schema:{name}")
+        except Exception as exc: issues.append(f"read:{name}:{exc}")
+    db=root/"news_knowledge.db"
+    if db.exists():
+        try:
+            with sqlite3.connect(db) as con:
+                tables={x[0] for x in con.execute("select name from sqlite_master where type='table'")}
+            for table in ("events","articles","event_sources","learning_outcomes"):
+                if table not in tables: issues.append(f"sqlite_table:{table}")
+        except Exception as exc: issues.append(f"sqlite:{exc}")
+    return {"ok":not issues,"issues":issues}
 def sync_sqlite(root: Path):
     db = root / "news_knowledge.db"
     with sqlite3.connect(db) as con:
