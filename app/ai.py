@@ -337,6 +337,7 @@ def rerank_stories(stories,research=None):
         verification_bonus={"multi-source":16,"official-source":14,"multi-report":6,"single-source":-12,"unverified":-35}.get(verification,0)
         source_diversity=min(8,indep*2)
         source_quality_bonus=max(0.0,min(6.0,(float(r.get("primary_trust",0.65) or 0.65)-0.65)*20))
+        learned_source_bonus=max(-3.0,min(3.0,float(s.get("source_reliability",0) or 0)*3.0))
         published_importance=importance
         if verification=="unverified": published_importance=min(published_importance,68.0)
         # Verification is deliberately a first-class ranking signal. A weak
@@ -346,9 +347,11 @@ def rerank_stories(stories,research=None):
             quality_penalty += 12
         item=dict(s); item["importance"]=round(published_importance,1)
         personal=float(s.get("personalized_score",importance) or importance); breaking=float(s.get("breaking_score",0) or 0); trend=float(s.get("trend_score",0) or 0)
-        final=(0.50*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.05*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity + source_quality_bonus - quality_penalty)
+        final=(0.47*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.06*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity + source_quality_bonus + learned_source_bonus - quality_penalty)
         item["ranking_score"]=round(final,1)
         item["personalization_applied"]=round(personal,1)
+        item["source_reliability_applied"]=round(float(s.get("source_reliability",0) or 0),3)
+        item["event_family"]=_event_family_key(item.get("headline","")) or "unclustered"
         item["_verification"]=verification
         scored.append((final,item))
 
