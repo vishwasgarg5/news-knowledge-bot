@@ -189,6 +189,39 @@ jobs:
           print(f"Feedback samples={feedback['samples']}")
           print("Production V4 monitoring contract passed")
           PY
+      - name: Intelligence V4 accuracy and shadow contract
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from app.storage import read_rows
+          from app.intelligence_v4 import (
+              diagnose_learning,time_bucket_metrics,event_level_metrics,
+              calibration_v2,source_category_profile,walk_forward_optimization,
+              compare_strategies,production_decision
+          )
+          root=Path("data")
+          rows=read_rows(root/"news_learning.csv")
+          diagnosis=diagnose_learning(rows)
+          dimensions=time_bucket_metrics(rows)
+          event=event_level_metrics(rows)
+          calibration=calibration_v2(rows)
+          profile=source_category_profile(rows)
+          walk=walk_forward_optimization(rows)
+          comparison=compare_strategies(rows)
+          decision=production_decision(comparison)
+          assert {"samples","positive_rate","selected_hit_rate"} <= diagnosis.keys()
+          assert isinstance(dimensions,dict)
+          assert {"events","precision","recall","f1"} <= event.keys()
+          assert isinstance(calibration.get("bins"),dict)
+          assert {"source","category"} <= profile.keys()
+          assert walk.get("leakage_safe") is True
+          assert comparison.get("status") in {"PROMOTE","SHADOW"}
+          assert decision.get("status") in {"PROMOTE","HOLD"}
+          print(f"Intelligence V4: samples={diagnosis['samples']} event_f1={event['f1']} walk_f1={walk['f1']} decision={decision['status']}")
+          print("Intelligence V4 accuracy and shadow contract passed")
+          PY
       - name: Production freeze gate
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
@@ -255,6 +288,10 @@ jobs:
           assert "backtest_v4" in stats
           assert "monitoring_alerts" in stats
           assert "source_fallback_order" in stats
+          assert "intelligence_v4_diagnosis" in stats
+          assert "strategy_comparison" in stats
+          assert "production_decision" in stats
+          assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
           print("Final audit artifact validated")
           PY
 
