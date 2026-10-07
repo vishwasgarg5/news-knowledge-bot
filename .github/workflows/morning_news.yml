@@ -90,6 +90,41 @@ jobs:
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
           PY
+      - name: Security and dependency audit
+        env:
+          PIP_DISABLE_PIP_VERSION_CHECK: '1'
+        run: |
+          python -m pip install --disable-pip-version-check pip-audit
+          pip-audit -r requirements.txt
+          echo "Dependency security audit passed"
+
+      - name: Backtest and production integration checks
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from app.analytics import backtest_learning, quality_dashboard
+          from app.storage import validate_data
+          root=Path("data")
+          quality=validate_data(root)
+          assert quality["ok"], quality["issues"]
+          backtest=backtest_learning(root)
+          dashboard=quality_dashboard(root)
+          print(f"Backtest samples={backtest['samples']} hit_rate={backtest['hit_rate']} mae={backtest['mae']}")
+          print(f"Quality dashboard: samples={dashboard['learning_samples']} history={dashboard['history_stories']} runs={dashboard['daily_runs']}")
+          print("Production integration checks passed")
+          PY
+
+      - name: Production freeze gate
+        run: |
+          test "${{ github.ref }}" = "refs/heads/main"
+          grep -q "workflow_dispatch:" .github/workflows/morning_news.yml
+          grep -q "schedule:" .github/workflows/morning_news.yml
+          ! grep -q "push:" .github/workflows/morning_news.yml
+          grep -q "python -m app.main" .github/workflows/morning_news.yml
+          echo "Production freeze gate passed"
+
       - name: Validate runtime configuration
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
