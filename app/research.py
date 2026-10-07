@@ -130,7 +130,15 @@ def _published_recent(value, hours=72):
     return timedelta(hours=-6) <= age <= timedelta(hours=hours)
 
 def verify_article(story, articles, memory=None):
-    headline=story.get("headline",""); primary_summary=str(story.get("summary","") or ""); primary_source=str(story.get("source","") or ""); primary_key=_source_key(primary_source, story.get("url",""))
+    """Build an auditable, freshness-aware verification record for one event.
+    Only current, independent publishers can raise the verification tier."""
+    headline=story.get("headline","")
+    primary_summary=str(story.get("summary","") or "")
+    primary_source=str(story.get("source","") or "")
+    primary_key=_source_key(primary_source, story.get("url",""))
+    primary_fresh=_published_recent(story.get("published",""),72)
+    primary_trust=max((v for k,v in TRUST.items() if k in primary_key),default=0.65)
+    primary_official=_is_official(primary_source)
     matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
@@ -163,8 +171,16 @@ def verify_article(story, articles, memory=None):
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
         if len(corroborating)>=8: break
     independent=len(source_names)
-    official=_is_official(primary_source)
+    official=primary_official
     primary_derivative=_is_derivative_report({"title":headline,"source":primary_source})
+
+    # Detect explicit disagreement language without trying to decide which
+    # publisher is correct. The flag is surfaced to ranking/audit so the bot
+    # can prefer attributed, corroborated stories over unresolved conflicts.
+    conflict_markers=("denied","denies","disputed","disputes","rejects","rejected","contradicts","contradicted","not true","false claim","refuted")
+    evidence_text=" ".join(str(a.get("title",""))+" "+str(a.get("summary","")) for a in corroborating).lower()
+    primary_text=(headline+" "+primary_summary).lower()
+    contradiction_flag=bool(corroborating and any(m in evidence_text for m in conflict_markers) and not any(m in primary_text for m in conflict_markers))
     if official:
         verification="official-source"
         confidence=96 if independent else 92
@@ -196,6 +212,10 @@ def verify_article(story, articles, memory=None):
         "current_sources":independent+(1 if primary_source else 0),
         "official_source":official,
         "primary_derivative":primary_derivative,
+        "primary_fresh":primary_fresh,
+        "primary_trust":round(primary_trust,2),
+        "contradiction_flag":contradiction_flag,
+        "freshness_hours":round(max(0.0,(datetime.now(timezone.utc)-(_parse_date(story.get("published","")) or datetime.now(timezone.utc))).total_seconds()/3600),1) if _parse_date(story.get("published","")) else None,
     }
 
 def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:list[dict]|None=None)->dict:
