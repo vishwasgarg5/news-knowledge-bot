@@ -430,12 +430,13 @@ def main():
     stats["production_decision"]=production_decision(stats["strategy_comparison"])
     v5=intelligence_v5(result.get("top_stories",[]),read_rows(DATA/"news_history.csv"),stats)
     stats["intelligence_v5"]=v5
-    v5plus=run_v5_plus(v5.get("stories",result.get("top_stories",[])),read_rows(DATA/"news_history.csv"),learning_rows,read_rows(DATA/"news_feedback.csv"),preferences,stats,[])
+    v5plus=run_v5_plus(v5.get("stories",result.get("top_stories",[])),read_rows(DATA/"news_history.csv"),learning_rows,read_rows(DATA/"news_feedback.csv"),preferences,stats,all_articles)
     stats["intelligence_v5_plus"]=v5plus
     stats["entity_profiles"]=v5plus["entity_profiles"]
     stats["event_clusters"]=v5plus["clusters"]
     stats["event_evolution"]=v5plus["event_evolution"]
     stats["impact_learning"]=v5plus["impact_learning"]
+    stats["market_context"]=v5plus["market_context"]
     stats["market_correlation"]=v5plus["market_correlation"]
     stats["source_event_reliability"]=v5plus["source_reliability"]
     stats["advanced_feedback"]=v5plus["feedback"]
@@ -488,6 +489,16 @@ def main():
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
+    # Persistent knowledge layer: one daily snapshot plus a rolling weekly summary.
+    daily_knowledge={"date":today,"stories":len(v5plus["stories"]),"high_impact":sum(1 for s in v5plus["stories"] if (s.get("impact") or {}).get("level")=="HIGH"),"new_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="NEW"),"developing_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="DEVELOPING"),"confirmed_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="CONFIRMED"),"contradictions":len(v5plus["contradictions"]),"research_items":len(v5plus["research_queue"])}
+    append_rows(DATA/"knowledge_daily.csv",[daily_knowledge],HEADERS["knowledge_daily.csv"])
+    week=today[:4]+"-W"+datetime.fromisoformat(today).strftime("%V")
+    hist7=[r for r in read_rows(DATA/"news_history.csv") if str(r.get("date",""))>= (datetime.fromisoformat(today)-timedelta(days=6)).date().isoformat()]
+    cat=__import__("collections").Counter(str(r.get("category","unknown")) for r in hist7)
+    ent=__import__("collections").Counter(str(r.get("headline","")) for r in hist7)
+    weekly={"week":week,"stories":len(hist7),"top_categories":json.dumps(cat.most_common(5),ensure_ascii=False),"top_entities":json.dumps([x[0] for x in ent.most_common(5)],ensure_ascii=False),"new_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="NEW"),"developing_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="DEVELOPING"),"confirmed_events":sum(1 for e in v5plus["event_evolution"] if e.get("status")=="CONFIRMED"),"anomalies":len(v5plus["weekly_report"].get("anomalies",[])),"research_items":len(v5plus["research_queue"])}
+    wkpath=DATA/"knowledge_weekly.csv"; wkrows=read_rows(wkpath)
+    if not any(r.get("week")==week for r in wkrows): append_rows(wkpath,[weekly],HEADERS["knowledge_weekly.csv"])
     stats["confidence_snapshot"]=confidence_snapshot(result.get("top_stories",[]))
     stats["historical_trend"]=historical_trend(read_rows(DATA/"news_history.csv"),7)
     stats["operational_health"]=operational_health(stats)
@@ -504,7 +515,7 @@ def main():
     stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
     stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
-    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5"),"intelligence_v5_plus":stats.get("intelligence_v5_plus"),"smart_alerts":stats.get("smart_alerts"),"evidence_gaps":stats.get("evidence_gaps"),"v5_production_evaluation":stats.get("v5_production_evaluation"),"v5_drift":stats.get("v5_drift"),"v5_calibration":stats.get("v5_calibration")})
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5"),"intelligence_v5_plus":stats.get("intelligence_v5_plus"),"smart_alerts":stats.get("smart_alerts"),"evidence_gaps":stats.get("evidence_gaps"),"v5_production_evaluation":stats.get("v5_production_evaluation"),"market_context":stats.get("market_context"),"knowledge_daily":daily_knowledge,"knowledge_weekly":weekly,"v5_drift":stats.get("v5_drift"),"v5_calibration":stats.get("v5_calibration")})
     # Refresh the uploaded audit only after every final stat has been populated.
     try:
         audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
