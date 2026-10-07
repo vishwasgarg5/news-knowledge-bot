@@ -432,3 +432,18 @@ def test_intelligence_v5_plus_steps_10_25():
     assert v["clusters"] and v["entity_profiles"]
     assert answer_news_question("investment deal",v["stories"],history)["stories"]
     assert "sections" in research_report(v["stories"],v["research_queue"])
+
+
+def test_production_v5_gate_27_40():
+    from app.production_v5 import walk_forward_v5, shadow_ab_test, calibration_monitor, drift_monitor, contradiction_and_evidence, followup_research_plan, autonomous_research_agent, generate_research_reports
+    rows=[{"initial_score":70,"outcome_score":0.8,"category":"economy"}]*150
+    wf=walk_forward_v5(rows,train_min=60,test_window=20)
+    assert wf["leakage_safe"] is True
+    assert "f1" in wf
+    assert "delta_f1" in shadow_ab_test(rows,rows)
+    assert calibration_monitor(rows)["samples"]==150
+    assert drift_monitor(rows,rows)["status"]=="STABLE"
+    assert set(contradiction_and_evidence([]))=={"contradictions","evidence_gaps"}
+    q=autonomous_research_agent([{"headline":"Test","priority":80}],rows)
+    assert generate_research_reports(q)
+    assert followup_research_plan([{"headline":"Test","impact":{"score":80}}])[0]["priority"]==80
