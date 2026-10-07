@@ -129,6 +129,13 @@ def _published_recent(value, hours=72):
     age=datetime.now(timezone.utc)-dt
     return timedelta(hours=-6) <= age <= timedelta(hours=hours)
 
+def _relaxed_event_match(headline, primary_summary, article):
+    primary=f"{headline} {primary_summary}"; other=f"{article.get('title','')} {article.get('summary','')}"
+    na,nb=_named_tokens(primary),_named_tokens(other); common=_tokens(primary)&_tokens(other)
+    events=common & {"attack","arrest","arrested","ban","blocked","breach","hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone","protest","ruling","verdict","order","approved","announced","launched","signed","summoned","filed","probe","investigation","withdrawn","reopened","election","vote","medal","gold","agreement","sanctions","strike"}
+    distinctive=common-{"government","president","minister","court","election","commission","india","world","news","today","latest","report","reports","official"}
+    return bool(na & nb and events and len(distinctive)>=2 and len(common)>=4)
+
 def verify_article(story, articles, memory=None):
     """Build an auditable, freshness-aware verification record for one event.
     Only current, independent publishers can raise the verification tier."""
@@ -150,7 +157,8 @@ def verify_article(story, articles, memory=None):
         context_sim=_event_similarity(primary_context,article_context)
         sim=max(title_sim, context_sim*0.92)
         strong_match=_strong_event_match(headline,primary_summary,a)
-        if sim>=0.55 or strong_match:
+        relaxed_match=_relaxed_event_match(headline,primary_summary,a)
+        if sim>=0.55 or strong_match or relaxed_match:
             source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             match_score=max(sim,0.58 if strong_match else sim)
             matches.append((match_score*0.7+trust*0.3,a,title_sim,context_sim))
@@ -164,7 +172,8 @@ def verify_article(story, articles, memory=None):
         # A summary can recover differently-worded reports, but it still needs
         # concrete overlap; this avoids turning broad topical similarity into corroboration.
         strong_match=_strong_event_match(headline,primary_summary,a)
-        if not strong_match and title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
+        relaxed_match=_relaxed_event_match(headline,primary_summary,a)
+        if not strong_match and not relaxed_match and title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
         if not strong_match and title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
@@ -180,7 +189,9 @@ def verify_article(story, articles, memory=None):
     conflict_markers=("denied","denies","disputed","disputes","rejects","rejected","contradicts","contradicted","not true","false claim","refuted")
     evidence_text=" ".join(str(a.get("title",""))+" "+str(a.get("summary","")) for a in corroborating).lower()
     primary_text=(headline+" "+primary_summary).lower()
-    contradiction_flag=bool(corroborating and any(m in evidence_text for m in conflict_markers) and not any(m in primary_text for m in conflict_markers))
+    contradiction_matches=[a for a in corroborating if any(m in (str(a.get("title",""))+" "+str(a.get("summary",""))).lower() for m in conflict_markers)]
+    contradiction_flag=bool(contradiction_matches and not any(m in primary_text for m in conflict_markers))
+    contradiction_evidence=[{"source":a.get("source",""),"title":a.get("title",""),"markers":[m for m in conflict_markers if m in (str(a.get("title",""))+" "+str(a.get("summary",""))).lower()]} for a in contradiction_matches[:4]]
     if official:
         verification="official-source"
         confidence=96 if independent else 92
@@ -215,6 +226,7 @@ def verify_article(story, articles, memory=None):
         "primary_fresh":primary_fresh,
         "primary_trust":round(primary_trust,2),
         "contradiction_flag":contradiction_flag,
+        "contradiction_evidence":contradiction_evidence,
         "freshness_hours":round(max(0.0,(datetime.now(timezone.utc)-(_parse_date(story.get("published","")) or datetime.now(timezone.utc))).total_seconds()/3600),1) if _parse_date(story.get("published","")) else None,
     }
 
