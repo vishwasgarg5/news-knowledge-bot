@@ -52,23 +52,41 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
         age=(today_d-d).days
         if age<1: continue
         seen=_same_event(ev,r.get("headline",""),current)
-        for horizon,field in ((1,"seen_again_24h"),(2,"seen_again_48h"),(7,"seen_again_7d")):
-            if age>=horizon and not r.get(field): r[field]="1" if seen else "0"
-        if age>=2 and not r.get("learning_value"):
+        if age>=1 and not r.get("seen_again_24h"): r["seen_again_24h"]="1" if seen else "0"
+        if age>=2 and not r.get("seen_again_48h"): r["seen_again_48h"]="1" if seen else "0"
+        if age>=7 and not r.get("seen_again_7d"): r["seen_again_7d"]="1" if seen else "0"
+
+        # Recalculate the outcome as each horizon matures. This makes the
+        # 7-day persistence signal genuinely feed future ranking.
+        mature=age>=1
+        if mature:
             was_selected=str(r.get("selected","")).lower()=="true"
-            value=(0.45 if r.get("seen_again_24h")=="1" else 0)+(0.35 if r.get("seen_again_48h")=="1" else 0)+(0.20 if r.get("seen_again_7d")=="1" else 0)
+            v24=0.45 if r.get("seen_again_24h")=="1" else 0
+            v48=0.35 if r.get("seen_again_48h")=="1" else 0
+            v7=0.20 if r.get("seen_again_7d")=="1" else 0
+            available=(0.45 if age>=1 else 0)+(0.35 if age>=2 else 0)+(0.20 if age>=7 else 0)
+            value=(v24+v48+v7)/max(available,0.45)
             outcome=min(1.0,value + (0.05 if r.get("seen_again_24h")=="1" and r.get("seen_again_48h")=="1" else 0.0))
             r["learning_value"]=f"{value:.2f}"
             r["outcome_score"]=f"{outcome:.2f}"
-            if was_selected and value==0:r["false_positive"]="1";false_positive+=1
-            evaluated+=1
-            if was_selected:selected_evaluated+=1
-        if str(r.get("selected","")).lower()!="true" and seen and age>=2 and not r.get("missed"):
+            if age>=7 and was_selected and value==0:
+                r["false_positive"]="1"
+            if age>=7 and (not was_selected) and seen:
+                r["missed"]="1"
+            if age>=7 or (was_selected and value==0):
+                evaluated+=1
+                if was_selected:selected_evaluated+=1
+                if was_selected and value==0:false_positive+=1
+        if str(r.get("selected","")).lower()!="true" and seen and age>=7 and not r.get("missed"):
             r["missed"]="1";misses+=1
+
     if rows:
         with path.open("w",newline="",encoding="utf-8") as f:
             w=csv.DictWriter(f,fieldnames=HEADERS["news_learning.csv"],extrasaction="ignore");w.writeheader();w.writerows(rows)
-    if not should_record: return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(rows)}
+
+    if not should_record:
+        return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(rows)}
+
     existing={(r.get("run_date"),r.get("event_id")) for r in rows}; new=[]
     for c in candidates:
         ev=c.get("event_id","")
