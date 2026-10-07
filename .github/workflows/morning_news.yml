@@ -169,6 +169,26 @@ jobs:
           print("Production integration checks passed")
           PY
 
+      - name: Production V4 and monitoring contract
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from app.production import time_series_backtest, feedback_snapshot, feedback_adjustment, monitoring_alerts
+          from app.storage import read_rows
+          root=Path("data")
+          result=time_series_backtest(read_rows(root/"news_learning.csv"))
+          assert result.get("leakage_safe") is True
+          assert {"precision","recall","f1","mae","stability"} <= result.keys()
+          feedback=feedback_snapshot(root)
+          assert {"samples","useful","not_useful","duplicate","important"} <= feedback.keys()
+          assert "ranking_delta" in feedback_adjustment(feedback)
+          assert isinstance(monitoring_alerts({"source_failures":0,"source_warnings":0,"stories":5,"world_stories":5,"world_target":5,"india_stories":5,"india_target":5,"health":"PASS"}),list)
+          print(f"Rolling V4: folds={result['folds']} f1={result['f1']} stability={result['stability']}")
+          print(f"Feedback samples={feedback['samples']}")
+          print("Production V4 monitoring contract passed")
+          PY
       - name: Production freeze gate
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
@@ -232,6 +252,9 @@ jobs:
           stats=data["stats"]
           assert "final_audit" in stats and "operational_health" in stats
           assert (stats["final_audit"] or {}).get("health") in {"PASS","WARN","DEGRADED"}
+          assert "backtest_v4" in stats
+          assert "monitoring_alerts" in stats
+          assert "source_fallback_order" in stats
           print("Final audit artifact validated")
           PY
 
