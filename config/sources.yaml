@@ -9,6 +9,9 @@ sources:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://rss.dw.com/xml/rss-en-world
     - https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml
+    - https://www.theguardian.com/world/rss
+    - https://feeds.npr.org/1004/rss.xml
+    - https://www.aljazeera.com/xml/rss/all.xml
   business:
     - https://feeds.bbci.co.uk/news/business/rss.xml
     - https://www.thehindu.com/business/feeder/default.rss
