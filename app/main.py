@@ -150,18 +150,135 @@ def _vocab_block(s,index):
         if raw and raw.upper()!="NONE":terms.append(raw)
     return "\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)]) if terms else None
 
-def build_messages(result,today,stats):
+def _status_label(story):
+    v=story.get("verification") or {}
+    if v.get("contradiction_flag"): return "⚠️ CONFLICT"
+    verification=str(v.get("verification","unverified"))
+    if verification=="multi-source": return "STRONG"
+    if verification=="official-source": return "OFFICIAL"
+    if verification=="multi-report": return "CORROBORATED"
+    if verification=="single-source": return "SINGLE SOURCE"
+    return "UNVERIFIED"
+
+
+def _executive_summary(stories):
+    if not stories:
+        return "No story passed the final quality gate."
+    top=sorted(stories,key=lambda x:float(x.get("importance",0) or 0),reverse=True)[:3]
+    return " · ".join(str(x.get("headline","")).strip() for x in top)
+
+
+def _daily_comparison(stories, timeline, today):
+    yesterday=(datetime.fromisoformat(today)-timedelta(days=1)).date().isoformat()
+    old=[r for r in timeline if r.get("date")==yesterday]
+    continuing=sum(1 for s in stories if s.get("change_since_yesterday")=="Continuing")
+    new=max(0,len(stories)-continuing)
+    old_regions={"india":0,"world":0}
+    for r in old:
+        region=str(r.get("region","world")).lower()
+        old_regions["india" if region=="india" else "world"]+=1
+    return {
+        "yesterday_stories":len(old),
+        "new":new,
+        "continuing":continuing,
+        "india_delta":sum(1 for s in stories if s.get("region")=="india")-old_regions["india"],
+        "world_delta":sum(1 for s in stories if s.get("region")!="india")-old_regions["world"],
+    }
+
+
+def _story_block(s,index,total):
+    flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}
+    importance=float(s.get("importance",0) or 0)
+    lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100 · {_status_label(s)}</b>",f"<b>{s.get('headline','')}</b>"]
+    if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
+    if s.get("why") and str(s.get("why")).strip(): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
+    if s.get("who") and str(s.get("who")).strip(): lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
+    if s.get("who_detail") and str(s.get("who_detail")).lower() not in {"not stated in supplied sources","none"}: lines += ["",f"<b>PERSON / ROLE</b>\n{s.get('who_detail')}"]
+    if s.get("how") and str(s.get("how")).lower() not in {"not stated in supplied sources","none"}: lines += ["",f"<b>HOW</b>\n{s.get('how')}"]
+    if s.get("when") and str(s.get("when")).strip(): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
+    if s.get("where") and str(s.get("where")).strip(): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
+    if s.get("why_important") and str(s.get("why_important")).strip(): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
+    key_data=str(s.get("key_data","")).strip()
+    if key_data and key_data.upper() not in {"NONE","NOT STATED IN SUPPLIED SOURCES"}: lines += ["",f"<b>KEY DATA</b>\n{key_data}"]
+    background=str(s.get("background","")).strip()
+    if background and background.lower() not in {"not stated in supplied sources","none"}: lines += ["",f"<b>BACKGROUND</b>\n{background}"]
+    history=v.get("historical") or []
+    if history: lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
+    change=s.get("change_since_yesterday")
+    if change and change.lower() not in {"unknown","new today"}: lines += ["",f"<b>CHANGE</b>\n{change}"]
+    if s.get("next") and str(s.get("next")).strip(): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
+    if s.get("connection") and str(s.get("connection")).lower() not in {"not stated in supplied sources","none"}: lines += ["",f"<b>CONNECTION</b>\n{s.get('connection')}"]
+    if s.get("memory_hook") and str(s.get("memory_hook")).lower() not in {"not stated in supplied sources","none"}: lines += ["",f"<b>MEMORY</b>\n{s.get('memory_hook')}"]
+    confidence=v.get("confidence","n/a"); sources=v.get("source_count",0)
+    lines += ["",f"🔎 {_status_label(s)} · confidence {confidence}% · {sources} source{'s' if sources!=1 else ''} · {'AI' if s.get('ai_generated') else 'FALLBACK'}"]
+    if v.get("contradiction_flag"):
+        lines += ["<b>VERIFICATION NOTE</b>\nConflicting evidence was detected; treat the story as provisional."]
+    elif str(v.get("verification"))=="single-source":
+        lines += ["<b>VERIFICATION NOTE</b>\nCredible single-source report; independent confirmation is pending."]
+    return "\n".join(lines)
+
+
+def _vocab_block(s,index):
+    vocab=str(s.get("vocabulary","")).strip()
+    if not vocab or vocab.upper()=="NONE": return None
+    terms=[]
+    for raw in re.split(r"\s*;\s*|\s*\|\s*\n",vocab):
+        raw=raw.strip(" -•")
+        if raw and raw.upper()!="NONE": terms.append(raw)
+    return "\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)]) if terms else None
+
+
+def build_messages(result,today,stats,timeline=None):
     stories=list(result.get("top_stories",[]))
-    india_stories=[s for s in stories if s.get("region")=="india"]
-    world_stories=[s for s in stories if s.get("region")!="india"]
-    stories=india_stories+world_stories
-    total=len(stories); india=len(india_stories); world=len(world_stories)
-    threshold=stats.get("importance_threshold",62)
-    lines=[f"📰 <b>NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>","",f"🔥 <b>{total} IMPORTANT STORIES</b>",f"🇮🇳 India: {india} · 🌍 World: {world}",f"🎯 Importance threshold: {threshold}/100","",f"📊 Scanned {stats['articles']} · Candidates {stats['candidates']} · Reported {total}",f"🔎 Verification: Strong {stats['strong_verified']}/{stats['total']} · Confirmed {max(0,stats.get('current_evidence',0)-stats['strong_verified'])}/{stats['total']} · Single-source {sum(1 for s in stories if (s.get("verification") or {}).get("verification")=="single-source")}/{stats['total']} · Conflicts {stats.get("contradictions",0)}",f"📡 Source health: {stats.get('source_ok',0)}/{stats.get('source_total',0)} OK · {stats.get('source_warnings',0)} warnings · {stats.get('source_failures',0)} failed",f"⚠️ Failed: {', '.join(stats.get('failed_sources',[])[:4]) if stats.get('failed_sources') else 'None'}",f"♻️ Duplicates {stats['exact_duplicates']} · Similar filtered {stats['semantic_filtered']}",f"🧠 Learning {stats['learning_labeled']} evaluated · {stats['learning_misses']} misses · {stats['learning_false_positives']} false positives · success {stats['learning_success_rate']:.0%}",f"🤖 AI {stats['ai_generated']} · Fallback {stats['ai_fallback']}",f"⚡ Breaking {stats.get('breaking_stories',0)} · Emerging {stats.get('emerging_topics',0)} · Personal score {stats.get('avg_personalized_score',0):.1f}",f"⏱️ {stats['runtime']} · {configured_model()}","","👇 Stories ranked by importance"]
-    messages=["\n".join(lines)]
+    timeline=timeline or []
+    stories=sorted(stories,key=lambda x:float(x.get("importance",0) or 0),reverse=True)
+    india=[s for s in stories if s.get("region")=="india"]
+    world=[s for s in stories if s.get("region")!="india"]
+    breaking=[s for s in stories if s.get("breaking_score",0) >= 50]
+    conflicts=[s for s in stories if (s.get("verification") or {}).get("contradiction_flag")]
+    strong=sum(1 for s in stories if _status_label(s) in {"STRONG","OFFICIAL"})
+    comparison=_daily_comparison(stories,timeline,today)
+    analytics=stats.get("analytics") or {}
+    weekly=analytics.get("last_7_days") or {}
+    learning_total=max(1,int(stats.get("learning_labeled",0) or 0))
+    miss_rate=float(stats.get("learning_miss_rate",0) or 0)
+    fp_rate=float(stats.get("learning_fp_rate",0) or 0)
+
+    header=[
+        f"📰 <b>DAILY NEWS INTELLIGENCE · {RUN_SLOT.upper()}</b>",
+        f"📅 {today}",
+        "",
+        "🎯 <b>EXECUTIVE SUMMARY</b>",
+        _executive_summary(stories),
+        "",
+        f"🔥 Stories {len(stories)} · 🔴 Breaking {len(breaking)} · ⭐ Strong {strong} · ⚠️ Conflicts {len(conflicts)}",
+        f"🇮🇳 India {len(india)} · 🌍 World {len(world)} · 🆕 New {comparison['new']} · 🔄 Continuing {comparison['continuing']}",
+        f"📈 Yesterday {comparison['yesterday_stories']} · India Δ {comparison['india_delta']:+d} · World Δ {comparison['world_delta']:+d}",
+        "",
+        "🧪 <b>QUALITY & VERIFICATION</b>",
+        f"Coverage {stats.get('current_evidence',0)}/{stats.get('total',0)} · Strong {stats.get('strong_verified',0)}/{stats.get('total',0)} · Contradictions {stats.get('contradictions',0)}",
+        f"Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} healthy · warnings {stats.get('source_warnings',0)} · failures {stats.get('source_failures',0)}",
+        f"Candidates {stats.get('candidates',0)} · filtered duplicates {stats.get('exact_duplicates',0)} · semantic {stats.get('semantic_filtered',0)}",
+        "",
+        "🧠 <b>LEARNING PERFORMANCE</b>",
+        f"Evaluated {stats.get('learning_labeled',0)} · success {stats.get('learning_success_rate',0):.0%} · miss {miss_rate:.1%} · false-positive {fp_rate:.1%}",
+        f"7-day runs {weekly.get('runs',0)} · avg success {float(weekly.get('avg_success_rate',0) or 0):.1%} · avg miss {float(weekly.get('avg_miss_rate',0) or 0):.1%}",
+        f"AI generated {stats.get('ai_generated',0)} · fallback {stats.get('ai_fallback',0)} · learning records {learning_total}",
+        "",
+        f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
+    ]
+    messages=["\n".join(header)]
+    if breaking:
+        messages.append("🔴 <b>BREAKING / FAST-MOVING</b>\n" + "\n".join(f"• {s.get('headline','')} · {float(s.get('importance',0) or 0):.0f}/100" for s in breaking[:5]))
+    if india:
+        messages.append("🇮🇳 <b>INDIA</b>\n" + "\n".join(f"• {s.get('headline','')} · {float(s.get('importance',0) or 0):.0f}/100 · {_status_label(s)}" for s in india))
+    if world:
+        messages.append("🌍 <b>WORLD</b>\n" + "\n".join(f"• {s.get('headline','')} · {float(s.get('importance',0) or 0):.0f}/100 · {_status_label(s)}" for s in world))
+    messages.append("👇 <b>DETAILED STORIES</b>")
     for i,s in enumerate(stories,1):
-        messages.append(_story_block(s,i,total)); vocab=_vocab_block(s,i)
-        if vocab:messages.append(vocab)
+        messages.append(_story_block(s,i,len(stories)))
+        vocab=_vocab_block(s,i)
+        if vocab: messages.append(vocab)
     return messages
 
 def main():
@@ -247,6 +364,7 @@ def main():
         append_rows(daily_path,[{"date":today,"evaluated":final_learning.get("evaluated",0),"selected_evaluated":final_learning.get("selected_evaluated",0),"misses":final_learning.get("misses",0),"false_positives":final_learning.get("false_positives",0),"success_rate":lm.get("success_rate",0),"false_positive_rate":lm.get("false_positive_rate",0),"miss_rate":lm.get("miss_rate",0)}],HEADERS["news_learning_daily.csv"])
 
     report=write_reports(DATA)
+    stats["analytics"]=report
     print(f"[ANALYTICS] samples={report['learning_samples']} avg_outcome={report['avg_outcome']} top_categories={report['top_categories'][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
@@ -256,7 +374,7 @@ def main():
 
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
         try:
-            for m in build_messages(result,today,stats): send_text(m)
+            for m in build_messages(result,today,stats,timeline): send_text(m)
         except Exception as exc:
             print(f"[WARN] Telegram full briefing failed: {exc}",flush=True)
             fallback=["📰 <b>NEWS INTELLIGENCE · FALLBACK</b>","",f"📊 Candidates {stats['candidates']} · Stories {stats['stories']}",f"🔎 Verified {stats['verified']}/{stats['total']} · Strong {stats['strong_verified']}/{stats['total']}",f"📡 Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} · {stats.get('health','DEGRADED')}","","<b>TOP STORIES</b>"]
