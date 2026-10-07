@@ -1,9 +1,9 @@
 {
-  "learning_samples": 5978,
-  "selected_samples": 894,
+  "learning_samples": 5980,
+  "selected_samples": 895,
   "avg_outcome": 0.155,
   "daily_runs": 15,
-  "history_stories": 1233,
+  "history_stories": 1234,
   "source_reliability": {
     "BBC News": 0.327,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.031,
@@ -28,7 +28,7 @@
   "top_categories": [
     [
       "india",
-      601
+      602
     ],
     [
       "world",
