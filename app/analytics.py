@@ -130,3 +130,33 @@ def write_reports(data_path):
     }
     (data_path/"analytics_weekly.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
     return report
+
+
+def backtest_learning_v3(data_path, min_score=0):
+    """Time-aware historical evaluation: each row is scored only against its own outcome."""
+    rows=read_rows(data_path/"news_learning.csv")
+    samples=[]
+    for r in rows:
+        try:
+            score=float(r.get("initial_score") or 0)
+            outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
+        except (TypeError,ValueError):
+            continue
+        if score < float(min_score): continue
+        samples.append((str(r.get("run_date","")),score,outcome>=0.5))
+    samples.sort(key=lambda x:x[0])
+    if not samples:
+        return {"samples":0,"hit_rate":0.0,"precision":0.0,"recall":0.0,"f1":0.0,"mae":0.0,"temporal_stability":0.0}
+    hits=sum(actual for _,score,actual in samples if score>=50)
+    selected=sum(score>=50 for _,score,_ in samples)
+    positives=sum(actual for _,_,actual in samples)
+    tp=hits; fp=max(0,selected-tp); fn=max(0,positives-tp)
+    precision=tp/max(1,tp+fp); recall=tp/max(1,tp+fn)
+    f1=2*precision*recall/max(1,precision+recall)
+    mae=sum(abs((1.0 if actual else 0.0)-(score/100.0)) for _,score,actual in samples)/len(samples)
+    mid=max(1,len(samples)//2)
+    a=samples[:mid]; b=samples[mid:]
+    def hr(rows):
+        return sum(actual for _,score,actual in rows if score>=50)/max(1,sum(score>=50 for _,score,_ in rows))
+    temporal=max(0.0,1.0-abs(hr(a)-hr(b)))
+    return {"samples":len(samples),"hit_rate":round(hits/max(1,selected),3),"precision":round(precision,3),"recall":round(recall,3),"f1":round(f1,3),"mae":round(mae,3),"temporal_stability":round(temporal,3)}
