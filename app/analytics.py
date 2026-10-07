@@ -19,12 +19,23 @@ def build_report(data_path):
     def averages(d):
         return {k:round(sum(v)/len(v),3) for k,v in sorted(d.items(),key=lambda z:-len(z[1])) if v}
     topics=Counter(str(r.get("category","unknown")).lower() for r in history)
+    def coverage(field):
+        return sum(1 for r in learning if str(r.get(field,"")).strip() in {"0","1"})
+    horizon_coverage={
+        "24h":coverage("seen_again_24h"),
+        "48h":coverage("seen_again_48h"),
+        "7d":coverage("seen_again_7d"),
+    }
     return {
         "learning_samples":len(learning),"selected_samples":len(selected),
         "avg_outcome":round(sum(outcomes)/len(outcomes),3) if outcomes else 0,
         "daily_runs":len(daily),"history_stories":len(history),
         "source_reliability":averages(source),"category_reliability":averages(category),
         "top_categories":topics.most_common(10),
+        "outcome_horizon_coverage":horizon_coverage,
+        "outcome_maturity":{"24h":coverage("seen_again_24h"),"48h":coverage("seen_again_48h"),"7d":coverage("seen_again_7d")},
+        "false_positives":sum(1 for r in learning if str(r.get("false_positive",""))=="1"),
+        "missed_stories":sum(1 for r in learning if str(r.get("missed",""))=="1"),
     }
 
 
