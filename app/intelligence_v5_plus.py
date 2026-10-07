@@ -64,8 +64,14 @@ def event_evolution(current,timeline):
     for e in cluster_events(current):
         head=e["headline"]; tt=tokens(head)
         related=[r for r in old if len(tt & tokens(r.get("headline","")))/max(1,len(tt|tokens(r.get("headline",""))))>=.25]
-        status="NEW" if not related else ("DEVELOPING" if len(related)>=1 else "NEW")
-        if e["story_count"]>=3: status="CONFIRMED" if len(e["sources"])>=2 else "DEVELOPING"
+        status="NEW" if not related else "DEVELOPING"
+        headline_l=head.lower()
+        if any(x in headline_l for x in ("resolved","settled","settlement","withdrawn","ended","concluded","agreement reached")):
+            status="RESOLVED"
+        elif e["story_count"]>=3 and len(e["sources"])>=2:
+            status="CONFIRMED"
+        elif len(related)>=2 and e["story_count"]>=2:
+            status="ESCALATING"
         out.append({k:v for k,v in e.items() if k!="_tokens"} | {"status":status,"history_count":len(related)})
     return out
 
