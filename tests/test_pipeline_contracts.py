@@ -59,6 +59,20 @@ def test_research_quality_contract():
         assert key in result
 
 
+def test_selection_preserves_research_fields():
+    from app.ai import select_stories
+    rows = select_stories([{
+        "title": "Fresh verified event",
+        "summary": "A concrete event happened today with enough detail to research.",
+        "source": "Reuters",
+        "url": "https://reuters.com/example",
+        "published": "2099-01-01T00:00:00+00:00",
+        "category": "world",
+        "region": "world",
+    }], top_n=1)
+    assert rows and rows[0]["published"]
+    assert rows[0]["summary"]
+
 def test_ranking_rejects_unverified_and_stale():
     from app.ai import rerank_stories
 
