@@ -160,8 +160,6 @@ def verify_article(story, articles, memory=None):
         if not strong_match and title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
-        key=_source_key(a.get("source",""), a.get("url",""))
-        if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
         if len(corroborating)>=8: break
     independent=len(source_names)
@@ -182,11 +180,16 @@ def verify_article(story, articles, memory=None):
     else:
         verification="unverified"
         confidence=35
+    evidence_rows=[{"title":a.get("title",""),"source":a.get("source",""),"url":a.get("url",""),"published":a.get("published",""),"summary":a.get("summary","")} for a in corroborating[:8]]
+    evidence_strength=100 if official else (85 if independent>=2 else (65 if independent==1 else 35))
+    verification_reason=("official primary source" if official else ("two or more independent current publishers" if independent>=2 else ("one independent current publisher" if independent==1 else "no independent current corroboration")))
     return {
-        "evidence":[{"title":a.get("title",""),"source":a.get("source",""),"url":a.get("url",""),"published":a.get("published",""),"summary":a.get("summary","")} for a in corroborating[:8]],
+        "evidence":evidence_rows,
         "historical":_memory_fallback(headline,memory or [],5),
         "verification":verification,
         "confidence":confidence,
+        "evidence_strength":evidence_strength,
+        "verification_reason":verification_reason,
         "source_count":independent+(1 if primary_source else 0),
         "independent_sources":independent,
         "fresh_sources":source_names[:5],
