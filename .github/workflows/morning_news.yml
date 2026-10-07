@@ -106,14 +106,21 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          from app.analytics import backtest_learning, quality_dashboard
+          from app.analytics import backtest_learning, backtest_learning_v2, quality_dashboard
+          from app.quality import prepare_candidates, source_health, coverage_gaps
           from app.storage import validate_data
           root=Path("data")
           quality=validate_data(root)
           assert quality["ok"], quality["issues"]
           backtest=backtest_learning(root)
           dashboard=quality_dashboard(root)
+          v2=backtest_learning_v2(root)
+          probe=prepare_candidates([{"headline":"India economy smoke test","category":"india","source":"test","importance":80}],[])
+          assert probe and "quality_score" in probe[0]
+          assert isinstance(source_health(probe),dict)
+          assert isinstance(coverage_gaps(probe),list)
           print(f"Backtest samples={backtest['samples']} hit_rate={backtest['hit_rate']} mae={backtest['mae']}")
+          print(f"Backtest V2 precision={v2['precision']} recall={v2['recall']} f1={v2['f1']}")
           print(f"Quality dashboard: samples={dashboard['learning_samples']} history={dashboard['history_stories']} runs={dashboard['daily_runs']}")
           print("Production integration checks passed")
           PY
