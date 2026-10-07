@@ -1,37 +1,37 @@
 {
-  "learning_samples": 5722,
-  "selected_samples": 878,
-  "avg_outcome": 0.124,
-  "daily_runs": 14,
-  "history_stories": 1221,
+  "learning_samples": 5968,
+  "selected_samples": 893,
+  "avg_outcome": 0.156,
+  "daily_runs": 15,
+  "history_stories": 1230,
   "source_reliability": {
-    "BBC News": 0.273,
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.027,
-    "Times of India": 0.028,
-    "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": 0.033,
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.047,
-    "Business News Today – Finance, Industry & Economy | The Hindu": 0.288,
-    "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.022,
-    "Technology News Today, Latest Tech News | The Hindu": 0.381,
-    "TechCrunch": 0.107,
-    "World | Deutsche Welle": 0.219
+    "BBC News": 0.327,
+    "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.031,
+    "Times of India": 0.034,
+    "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": 0.035,
+    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.077,
+    "Business News Today – Finance, Industry & Economy | The Hindu": 0.362,
+    "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.03,
+    "Technology News Today, Latest Tech News | The Hindu": 0.472,
+    "TechCrunch": 0.156,
+    "World | Deutsche Welle": 0.28
   },
   "category_reliability": {
-    "india": 0.04,
-    "world": 0.14,
-    "business": 0.298,
-    "technology": 0.253,
-    "science": 0.286,
-    "defence": 0.225
+    "india": 0.05,
+    "world": 0.176,
+    "business": 0.36,
+    "technology": 0.326,
+    "science": 0.334,
+    "defence": 0.475
   },
   "top_categories": [
     [
       "india",
-      593
+      598
     ],
     [
       "world",
-      254
+      257
     ],
     [
       "business",
@@ -39,11 +39,23 @@
     ],
     [
       "technology",
-      132
+      133
     ],
     [
       "science",
       35
     ]
-  ]
+  ],
+  "outcome_horizon_coverage": {
+    "24h": 5722,
+    "48h": 5296,
+    "7d": 4107
+  },
+  "outcome_maturity": {
+    "24h": 5722,
+    "48h": 5296,
+    "7d": 4107
+  },
+  "false_positives": 555,
+  "missed_stories": 339
 }
