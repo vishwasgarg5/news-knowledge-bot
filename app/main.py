@@ -18,6 +18,7 @@ from .ops import confidence_snapshot,historical_trend,operational_health,final_a
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
 from .intelligence_v5 import intelligence_v5
 from .intelligence_v5_plus import run_v5_plus,answer_news_question,research_report
+from .production_v5 import walk_forward_v5,shadow_ab_test,calibration_monitor,drift_monitor,autonomous_research_agent,generate_research_reports,contradiction_and_evidence,followup_research_plan,production_evaluation
 from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
@@ -447,6 +448,25 @@ def main():
     stats["evidence_gaps"]=v5plus["evidence_gaps"]
     stats["research_queue"]=v5plus["research_queue"]
     stats["weekly_intelligence"]=v5plus["weekly_report"]
+    v5_wf=walk_forward_v5(learning_rows)
+    v5_ab=shadow_ab_test(learning_rows,learning_rows)
+    v5_calibration=calibration_monitor(learning_rows)
+    v5_drift=drift_monitor(v5plus["stories"],read_rows(DATA/"news_history.csv"))
+    v5_evidence=contradiction_and_evidence(v5plus["stories"])
+    v5_followups=followup_research_plan(v5plus["stories"])
+    v5_agent=autonomous_research_agent(v5plus["research_queue"],read_rows(DATA/"news_history.csv"))
+    v5_reports=generate_research_reports(v5_agent)
+    v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"))
+    stats["v5_walk_forward"]=v5_wf
+    stats["v5_ab_test"]=v5_ab
+    stats["v5_calibration"]=v5_calibration
+    stats["v5_drift"]=v5_drift
+    stats["v5_evidence"]=v5_evidence
+    stats["v5_followups"]=v5_followups
+    stats["v5_research_agent"]=v5_agent
+    stats["v5_research_reports"]=v5_reports
+    stats["v5_production_evaluation"]=v5_eval
+
     for s in result.get("top_stories",[]):
         s["event_id"]=s.get("event_id") or next((x.get("event_id") for x in v5plus["stories"] if x.get("headline")==s.get("headline")), "")
         match=next((x for x in v5plus["stories"] if x.get("headline")==s.get("headline")),None)
@@ -484,7 +504,7 @@ def main():
     stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
     stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
-    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5"),"intelligence_v5_plus":stats.get("intelligence_v5_plus"),"smart_alerts":stats.get("smart_alerts"),"evidence_gaps":stats.get("evidence_gaps")})
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5"),"intelligence_v5_plus":stats.get("intelligence_v5_plus"),"smart_alerts":stats.get("smart_alerts"),"evidence_gaps":stats.get("evidence_gaps"),"v5_production_evaluation":stats.get("v5_production_evaluation"),"v5_drift":stats.get("v5_drift"),"v5_calibration":stats.get("v5_calibration")})
     # Refresh the uploaded audit only after every final stat has been populated.
     try:
         audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
