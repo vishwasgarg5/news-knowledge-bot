@@ -457,6 +457,31 @@ def test_phase1_v5_accuracy_calibration_and_utc_contracts():
     assert "datetime.utcnow" not in read("app/intelligence_v5_plus.py")
 
 
+def test_phase2_4_intelligence_layers():
+    from app.intelligence_v5_plus import personalized_feed, autonomous_research, news_market_correlation
+    prefs={"priority_categories":["economy"],"preferred_regions":["india"]}
+    stories=[{"headline":"India economy growth update","summary":"growth outlook","category":"economy","region":"india","importance":70,"impact":{"score":80}}]
+    feed=personalized_feed(stories,prefs)
+    assert feed and feed[0]["preference_matches"]>=2
+    evidence=[{"title":"India economy growth update confirmed","source":"Reuters","url":"https://reuters.com/x"}]
+    queue=autonomous_research(stories,evidence_pool=evidence)
+    assert queue and queue[0]["evidence_count"]>=1
+    market=[{"symbol":"NIFTY 50","status":"OK","change_pct":0.8}]
+    corr=news_market_correlation(stories,market)
+    assert corr and corr[0]["market_context_pct"]==0.8
+
+
+def test_knowledge_storage_contract():
+    from app.storage import HEADERS, ensure_data
+    import tempfile
+    from pathlib import Path
+    root=Path(tempfile.mkdtemp())
+    ensure_data(root)
+    assert (root/"knowledge_daily.csv").exists()
+    assert (root/"knowledge_weekly.csv").exists()
+    assert "research_items" in HEADERS["knowledge_daily.csv"]
+
+
 def test_production_v5_gate_27_40():
     from app.production_v5 import walk_forward_v5, shadow_ab_test, calibration_monitor, drift_monitor, contradiction_and_evidence, followup_research_plan, autonomous_research_agent, generate_research_reports
     rows=[{"initial_score":70,"outcome_score":0.8,"category":"economy"}]*150
