@@ -40,6 +40,30 @@ def build_report(data_path):
 
 
 
+def backtest_learning(data_path, min_score=0):
+    """Evaluate historical predictions without using future rows for ranking."""
+    rows=read_rows(data_path/"news_learning.csv")
+    evaluated=[]
+    for r in rows:
+        try:
+            initial=float(r.get("initial_score") or 0)
+            outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
+        except (TypeError,ValueError):
+            continue
+        if initial < float(min_score): continue
+        evaluated.append({
+            "run_date":r.get("run_date",""),"event_id":r.get("event_id",""),
+            "initial_score":initial,"outcome_score":outcome,
+            "selected":str(r.get("selected","")).lower() in {"true","1","yes"},
+        })
+    if not evaluated:
+        return {"samples":0,"selected":0,"avg_outcome":0,"mae":0,"hit_rate":0}
+    errors=[abs(x["initial_score"]/100-x["outcome_score"]) for x in evaluated]
+    hits=[x for x in evaluated if (x["initial_score"]>=50)==(x["outcome_score"]>=0.5)]
+    return {"samples":len(evaluated),"selected":sum(x["selected"] for x in evaluated),
+            "avg_outcome":round(sum(x["outcome_score"] for x in evaluated)/len(evaluated),3),
+            "mae":round(sum(errors)/len(errors),3),"hit_rate":round(len(hits)/len(evaluated),3)}
+
 def quality_dashboard(data_path):
     """Return compact operational metrics for daily/weekly observability."""
     report=build_report(data_path)
