@@ -28,7 +28,7 @@ def prepare_candidates(candidates, history=None):
         momentum=min(100.0,_f(x.get("trend_score"),30)+_f(x.get("breaking_score"))*0.35)
         gap=8.0 if cat in priority and seen_categories[cat] < 3 else 0.0
         diversity=min(6.0,max(0,3-source_counts.get(str(x.get("source","unknown")),1))*2.0)
-        quality=max(0.0,min(100.0,_f(x.get("importance"))+gap+diversity+novelty*4.0))
+        quality=max(0.0,min(100.0,_f(x.get("importance"))+gap+diversity+novelty*4.0+min(5.0,_f(x.get("breaking_score"))/20.0)+min(5.0,_f(x.get("trend_score"))/20.0)))
         x.update({"novelty_score":round(novelty*100,1),"event_momentum":round(momentum,1),"coverage_gap_score":round(gap,1),"source_diversity_score":round(diversity,1),"quality_score":round(quality,1)})
         out.append(x)
     return sorted(out,key=lambda x:(-_f(x.get("quality_score")),-_f(x.get("personalized_score")),-_f(x.get("importance"))))
@@ -50,3 +50,13 @@ def quality_snapshot(stories,research):
 def coverage_gaps(candidates):
     counts=Counter(str(x.get("category","other")).lower() for x in candidates)
     return [c for c in ("india","economy","business","technology","science","defence") if counts[c]==0]
+
+
+def category_counts(candidates):
+    return dict(Counter(str(x.get('category','other')).lower() for x in candidates))
+
+def coverage_plan(candidates, world_target=5, india_target=5):
+    rows=list(candidates or [])
+    india=sum(1 for x in rows if str(x.get('region','')).lower()=='india')
+    world=sum(1 for x in rows if str(x.get('region','')).lower()=='world')
+    return {'india_target':min(int(india_target),india),'world_target':min(int(world_target),world),'india_available':india,'world_available':world,'world_shortfall':max(0,int(world_target)-world),'india_shortfall':max(0,int(india_target)-india),'categories':category_counts(rows)}
