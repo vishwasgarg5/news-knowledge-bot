@@ -240,7 +240,7 @@ jobs:
           print("Intelligence V5+ steps 10-25 contract passed")
           PY
 
-      - name: Production freeze gate
+      - name: Intelligence V5 production gate 27-40\n        env:\n          PYTHONPATH: ${{ github.workspace }}\n        run: |\n          python - <<'PY'\n          from pathlib import Path\n          from app.production_v5 import walk_forward_v5, calibration_monitor, drift_monitor, contradiction_and_evidence, followup_research_plan\n          from app.storage import read_rows\n          root=Path('data')\n          learning=read_rows(root/'news_learning.csv')\n          history=read_rows(root/'news_history.csv')\n          wf=walk_forward_v5(learning)\n          cal=calibration_monitor(learning)\n          drift=drift_monitor(history,history)\n          evidence=contradiction_and_evidence([])\n          assert wf['leakage_safe'] is True\n          assert 'f1' in wf and 'bins' in cal\n          assert drift['status'] in {'STABLE','DRIFT'}\n          assert set(evidence)=={'contradictions','evidence_gaps'}\n          assert isinstance(followup_research_plan([]),list)\n          print('Intelligence V5 production gate 27-40 passed')\n          PY\n      - name: Production freeze gate
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
           grep -q "workflow_dispatch:" .github/workflows/morning_news.yml
@@ -316,6 +316,12 @@ jobs:
           assert "smart_alerts" in stats
           assert "knowledge_graph" in stats
           assert "evidence_gaps" in stats
+          assert "v5_walk_forward" in stats
+          assert "v5_ab_test" in stats
+          assert "v5_calibration" in stats
+          assert "v5_drift" in stats
+          assert "v5_production_evaluation" in stats
+          assert "v5_research_agent" in stats
           assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
           print("Final audit artifact validated")
           PY
