@@ -1,6 +1,6 @@
 from __future__ import annotations
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 import math,re
 
 def _f(v,d=0.0):
@@ -199,7 +199,7 @@ def autonomous_research(stories,similarity_history=None):
     return sorted(queue,key=lambda x:x["priority"],reverse=True)[:15]
 
 def research_report(stories,queue):
-    return {"generated_at":datetime.utcnow().isoformat()+"Z","sections":[{"headline":s["headline"],"priority":s["priority"],"finding":"Requires source verification, independent confirmation and historical comparison."} for s in queue]}
+    return {"generated_at":datetime.now(UTC).isoformat(),"sections":[{"headline":s["headline"],"priority":s["priority"],"finding":"Requires source verification, independent confirmation and historical comparison."} for s in queue]}
 
 def anomaly_detection(stories,history):
     cur=Counter(str(s.get("category","unknown")) for s in stories); old=Counter(str(r.get("category","unknown")) for r in history or [])
