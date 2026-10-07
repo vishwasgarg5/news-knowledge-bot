@@ -302,3 +302,20 @@ def test_main_wires_advanced_v3():
                  "learning_v3_snapshot","source_fallback_plan","breaking_fast_lane",
                  "calibrate_confidence","backtest_learning_v3"):
         assert item in text
+
+
+def test_ops_and_final_audit_contract():
+    from app.ops import confidence_snapshot,historical_trend,operational_health,final_audit
+    stories=[{"region":"india","breaking_score":60,"calibrated_confidence":90,"verification":{"confidence":80}},
+             {"region":"world","breaking_score":0,"calibrated_confidence":70,"verification":{"confidence":65}}]
+    assert confidence_snapshot(stories)["high_confidence"]==1
+    assert historical_trend([{"date":"2026-10-07","region":"world","event_status":"CONFIRMED"}])["stories"]==1
+    stats={"source_failures":0,"source_warnings":0,"current_evidence":2,"total":2,"data_quality":{"ok":True},"db_path":"data/news_knowledge.db","learning_labeled":10}
+    assert operational_health(stats)["status"]=="PASS"
+    assert final_audit(stats,stories)["world"]==1
+
+def test_confidence_calibration_is_exposed():
+    text=read("app/main.py")
+    assert "calibrated_confidence" in text
+    assert "confidence_snapshot" in text
+    assert "final_audit" in text
