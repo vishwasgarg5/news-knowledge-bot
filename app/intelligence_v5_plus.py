@@ -224,9 +224,12 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
             evidence=[]
             for a in evidence_pool or []:
                 if str(a.get("url",""))==str(s.get("url","")): continue
-                sim=len(tokens(s.get("headline","")) & tokens(a.get("title","")))/max(1,len(tokens(s.get("headline",""))|tokens(a.get("title",""))))
-                if sim>=0.22: evidence.append({"source":a.get("source",""),"title":a.get("title",""),"url":a.get("url",""),"similarity":round(sim,3)})
-            evidence=sorted(evidence,key=lambda x:x["similarity"],reverse=True)[:5]
+                title=a.get("title",a.get("headline",""))
+                sim=len(tokens(s.get("headline","")) & tokens(title))/max(1,len(tokens(s.get("headline",""))|tokens(title)))
+                reliability={"reuters":1.0,"bbc":0.95,"associated press":0.95,"ap":0.95,"bloomberg":0.9,"financial times":0.9}.get(str(a.get("source","")).lower(),0.7)
+                score=0.7*sim+0.3*reliability
+                if sim>=0.18: evidence.append({"source":a.get("source",""),"title":title,"url":a.get("url",""),"similarity":round(sim,3),"source_reliability":reliability,"evidence_score":round(score,3)})
+            evidence=sorted(evidence,key=lambda x:x["evidence_score"],reverse=True)[:5]
             queue.append({"headline":s.get("headline",""),"priority":round(priority,1),"tasks":["verify primary source","find independent confirmation","retrieve historical analogue"],"retrieved_evidence":evidence,"evidence_count":len(evidence),"research_status":"EVIDENCE_RETRIEVED" if evidence else "RESEARCH_REQUIRED"})
     return sorted(queue,key=lambda x:x["priority"],reverse=True)[:15]
 
@@ -242,7 +245,17 @@ def anomaly_detection(stories,history):
     return out
 
 def weekly_report(stories,history):
-    return {"top_events":[s.get("headline","") for s in sorted(stories,key=lambda x:_f(x.get("importance",0)),reverse=True)[:10]],"history_size":len(history or []),"anomalies":anomaly_detection(stories,history)}
+    recurring=Counter()
+    for r in history or []:
+        for e in tokens(r.get("headline",r.get("title",""))):
+            recurring[e]+=1
+    current=Counter()
+    for st in stories or []:
+        current.update(tokens(st.get("headline","")))
+    trends=[{"entity":k,"current_mentions":v,"historical_mentions":recurring.get(k,0)}
+            for k,v in current.most_common(30) if len(k)>=4]
+    return {"top_events":[st.get("headline","") for st in sorted(stories,key=lambda x:_f(x.get("importance",0)),reverse=True)[:10]],
+            "top_entities":trends[:10],"history_size":len(history or []),"anomalies":anomaly_detection(stories,history)}
 
 def run_v5_plus(stories,history,learning_rows,feedback_rows,preferences,diagnostics,market_rows=None):
     clusters=cluster_events(stories); enriched=[]
@@ -256,4 +269,4 @@ def run_v5_plus(stories,history,learning_rows,feedback_rows,preferences,diagnost
     evolution=event_evolution(enriched,history)
     graph=knowledge_graph(enriched)
     market=market_snapshot()
-    return {"stories":enriched,"clusters":clusters,"entities":entities,"entity_profiles":profiles,"event_evolution":evolution,"impact_learning":impact_stats,"market_context":market,"market_correlation":news_market_correlation(enriched,market),,"source_reliability":source_event_reliability(enriched),"feedback":advanced_feedback(feedback_rows),"scorecard":scorecard(enriched,diagnostics),"personalized_feed":personalized_feed(enriched,preferences),"alerts":alert_candidates(enriched),"trend_report":trend_report(enriched,history),"knowledge_graph":graph,"contradictions":contradiction_scan(enriched),"evidence_gaps":missing_evidence(enriched),"research_queue":autonomous_research(enriched,evidence_pool=market_rows),"weekly_report":weekly_report(enriched,history)}
+    return {"stories":enriched,"clusters":clusters,"entities":entities,"entity_profiles":profiles,"event_evolution":evolution,"impact_learning":impact_stats,"market_context":market,"market_correlation":news_market_correlation(enriched,market),"source_reliability":source_event_reliability(enriched),"feedback":advanced_feedback(feedback_rows),"scorecard":scorecard(enriched,diagnostics),"personalized_feed":personalized_feed(enriched,preferences),"alerts":alert_candidates(enriched),"trend_report":trend_report(enriched,history),"knowledge_graph":graph,"contradictions":contradiction_scan(enriched),"evidence_gaps":missing_evidence(enriched),"research_queue":autonomous_research(enriched,evidence_pool=market_rows),"weekly_report":weekly_report(enriched,history)}
