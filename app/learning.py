@@ -40,7 +40,9 @@ def _profile(rows):
             shrunk=raw*n/(n+prior)
             out[k]=max(-1,min(1,shrunk))
         return out
-    return {"source":norm(by_source),"category":norm(by_cat)}
+    source_scores=norm(by_source); category_scores=norm(by_cat)
+    source_observations={k:v[0] for k,v in by_source.items()}; category_observations={k:v[0] for k,v in by_cat.items()}
+    return {"source":source_scores,"category":category_scores,"source_reliability":source_scores,"source_observations":source_observations,"category_observations":category_observations}
 
 def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
     path=root/"news_learning.csv"; rows=read_rows(path); should_record=bool(record_current); selected_ids=set(selected_ids or [])
@@ -96,11 +98,13 @@ def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=No
     return {"evaluated":evaluated,"selected_evaluated":selected_evaluated,"misses":misses,"false_positives":false_positive,"profile":_profile(read_rows(path))}
 
 def apply_learning(candidates,profile):
-    source=profile.get("source",{}); category=profile.get("category",{}); out=[]
+    source=profile.get("source_reliability",profile.get("source",{})); category=profile.get("category",{})
+    obs=profile.get("source_observations",{}); out=[]
     for c in candidates:
-        s=source.get(c.get("source",""),0); cat=category.get(c.get("category",""),0)
-        bonus=max(-5,min(5,2.5*s+2.5*cat))
-        x=dict(c); x["learning_adjustment"]=round(bonus,1); x["importance"]=round(max(0,min(100,float(x.get("importance",0))+bonus)),1); out.append(x)
+        src=str(c.get("source","") or ""); sr=float(source.get(src,0) or 0); cat=float(category.get(c.get("category",""),0) or 0)
+        bonus=max(-4.0,min(4.0,2.0*sr+2.0*cat))
+        x=dict(c); x["source_reliability"]=round(sr,3); x["source_observations"]=int(obs.get(src,0) or 0)
+        x["learning_adjustment"]=round(bonus,1); x["importance"]=round(max(0,min(100,float(x.get("importance",0))+bonus)),1); out.append(x)
     return out
 
 
