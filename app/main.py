@@ -11,7 +11,8 @@ from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
 from .intelligence import enrich_trends,personalize,intelligence_summary
-from .analytics import build_report,write_reports
+from .analytics import build_report,write_reports,backtest_learning_v2,quality_dashboard
+from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -263,9 +264,11 @@ def build_messages(result,today,stats,timeline=None):
         "🧠 <b>LEARNING PERFORMANCE</b>",
         f"Evaluated {stats.get('learning_labeled',0)} · success {stats.get('learning_success_rate',0):.0%} · miss {miss_rate:.1%} · false-positive {fp_rate:.1%}",
         f"7-day runs {weekly.get('runs',0)} · avg success {float(weekly.get('avg_success_rate',0) or 0):.1%} · avg miss {float(weekly.get('avg_miss_rate',0) or 0):.1%}",
+        f"Backtest hit {float((stats.get('backtest_v2') or {}).get('hit_rate',0)):.1%} · precision {float((stats.get('backtest_v2') or {}).get('precision',0)):.1%} · recall {float((stats.get('backtest_v2') or {}).get('recall',0)):.1%}",
         f"AI generated {stats.get('ai_generated',0)} · fallback {stats.get('ai_fallback',0)} · learning records {learning_total}",
         "",
         f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
+        f"Coverage gaps: {', '.join(stats.get('coverage_gaps') or []) or 'none'}",
     ]
     messages=["\n".join(header)]
     if breaking:
@@ -291,6 +294,8 @@ def main():
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
     candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today); candidates=enrich_trends(candidates,read_rows(DATA/"news_history.csv")); candidates=personalize(candidates,preferences)
+    candidates=prepare_candidates(candidates,read_rows(DATA/"news_history.csv"))
+    print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)}",flush=True)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
     selected=rerank_stories(candidates,research); result=generate_briefing(selected,all_articles,timeline,today,research)
@@ -365,6 +370,11 @@ def main():
 
     report=write_reports(DATA)
     stats["analytics"]=report
+    stats["quality_snapshot"]=quality_snapshot(result.get("top_stories",[]),research)
+    stats["coverage_gaps"]=coverage_gaps(candidates)
+    stats["source_health"]=source_health(candidates)
+    stats["backtest_v2"]=backtest_learning_v2(DATA)
+    stats["quality_dashboard"]=quality_dashboard(DATA)
     print(f"[ANALYTICS] samples={report['learning_samples']} avg_outcome={report['avg_outcome']} top_categories={report['top_categories'][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
