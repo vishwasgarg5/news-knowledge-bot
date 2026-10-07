@@ -1,5 +1,7 @@
 from __future__ import annotations
 from collections import Counter
+from datetime import date,timedelta
+from pathlib import Path
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -17,7 +19,8 @@ def confidence_snapshot(stories):
     }
 
 def historical_trend(history, days=7):
-    rows=list(history or [])[-max(1,int(days))*50:]
+    cutoff=(date.today()-timedelta(days=max(1,int(days))-1)).isoformat()
+    rows=[x for x in (history or []) if str(x.get("date",""))[:10] >= cutoff]
     by_day=Counter(str(x.get("date","")) for x in rows if x.get("date"))
     by_region=Counter(str(x.get("region","world")).lower() for x in rows)
     by_status=Counter(str(x.get("event_status","NEW")) for x in rows)
@@ -28,7 +31,7 @@ def operational_health(stats):
         "sources":_f(stats.get("source_failures"))==0 and _f(stats.get("source_warnings"))==0,
         "verification":_f(stats.get("current_evidence"))/max(1,_f(stats.get("total")))>=0.50,
         "data":bool((stats.get("data_quality") or {}).get("ok",False)),
-        "database":bool(stats.get("db_path")),
+        "database":bool(stats.get("db_path")) and Path(str(stats.get("db_path"))).exists(),
         "learning":_f(stats.get("learning_labeled"))>=0,
     }
     return {"status":"PASS" if all(checks.values()) else "WARN","checks":checks,"failed_checks":[k for k,v in checks.items() if not v]}
