@@ -86,7 +86,10 @@ def apply_impact_calibration(stories,learning_rows):
         if learned is not None:
             s["impact"]["confidence"]=round(.5*float(s["impact"].get("confidence",.5))+.5*learned,3)
             s["impact"]["learned_rate"]=learned
-        else:\n            s.setdefault("impact", {})\n            s["impact"]["learned_rate"]=base[level]\n            s["impact"].setdefault("confidence", base[level])
+        else:
+            s.setdefault("impact", {})
+            s["impact"]["learned_rate"]=base[level]
+            s["impact"].setdefault("confidence", base[level])
     return stories,stats
 
 def similar_event_engine(story,history,limit=8):
