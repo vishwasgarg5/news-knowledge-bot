@@ -19,8 +19,8 @@
       "quality_rate": 1.0
     },
     "BBC News": {
-      "articles": 11,
-      "high_value": 11,
+      "articles": 12,
+      "high_value": 12,
       "quality_rate": 1.0
     },
     "World news | The Guardian": {
@@ -33,19 +33,19 @@
       "high_value": 4,
       "quality_rate": 1.0
     },
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": {
+    "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
       "articles": 2,
       "high_value": 2,
+      "quality_rate": 1.0
+    },
+    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": {
+      "articles": 1,
+      "high_value": 1,
       "quality_rate": 1.0
     },
     "Times of India": {
       "articles": 4,
       "high_value": 4,
-      "quality_rate": 1.0
-    },
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
-      "articles": 2,
-      "high_value": 2,
       "quality_rate": 1.0
     },
     "TechCrunch": {
@@ -64,10 +64,10 @@
     "Technology News Today, Latest Tech News | The Hindu",
     "Business News Today – Finance, Industry & Economy | The Hindu",
     "Times of India",
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "TechCrunch",
     "World news | The Guardian",
+    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
     "World | Deutsche Welle"
   ],
   "alerts": [
@@ -795,167 +795,6 @@
   "intelligence_v5": {
     "stories": [
       {
-        "story_id": "922cc773a6806de4",
-        "event_id": "44b1ad6f31a8bdb3",
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "importance": 90.2,
-        "ranking_score": 122.1,
-        "personalized_score": 100.0,
-        "personalization_applied": 100.0,
-        "breaking_score": 65,
-        "trend_score": 93,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.2,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-        "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation",
-        "related_articles": [
-          {
-            "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-            "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-            "published": "2026-10-07T03:37:57+00:00",
-            "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-              "published": "2026-10-06T10:05:22+00:00",
-              "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections."
-            },
-            {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Ops Safed Sagar, Sindoor veteran named new Indian Air Force chief",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/ops-safed-sagar-sindoor-veteran-named-new-indian-air-force-chief-101791313164304.html",
-              "published": "2026-10-07T02:18:20+00:00",
-              "summary": "New Delhi: The Union government on Tuesday named Air Marshal Ashutosh Dixit as the 29th Chief of Air Staff, announcing that he will take over from Air Chief Marshal AP Singh, who retires on October 31"
-            },
-            {
-              "title": "Extreme heat warnings issued for parts of southern California",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/us-news/2026/oct/05/extreme-heat-warnings-southern-california",
-              "published": "2026-10-05T08:20:52+00:00",
-              "summary": "<p>Temperatures in US state forecast to hit high 30s celsius this week, while regions in Indonesia grapple with wildfires</p><p>The National Weather Service in the US has issued extreme heat warnings for parts of southern California, including Los Angeles, until Thursday, as temperatures are expected to hit the high 30s celsius. Burbank, a suburb north of Los Angeles, recorded 39C on Saturday, a few degrees shy of the October record for the region set in 1987. A persistent area of high pressure will remain in place this week, leading to further hazardous hot weather and increased fire risk.</p><p>Parts of Indonesia are in the midst of an extreme wildfire season, which has peaked over the past month. Western Kalimantan (Borneo) and southern Sumatra have been particularly badly affected. The lack of rainfall has dried the usually water-logged tropical soils, meaning that fires have been able to spread quickly, above and below the surface. Indonesia’s soils are also extremely rich in peat, meaning that the smoke produced from the fires contain higher levels of toxic gases such as sulphur dioxide and carbon monoxide. Cities in surrounding areas and as far as Malaysia and Singapore have experienced <a href=\"https://www.theguardian.com/world/2026/sep/21/indonesia-borneo-sumatra-fires-smoke-toxic-air\">reduced air quality</a> in recent weeks as a result. Drought and wildfires are more common in this part of the world during <a href=\"https://www.theguardian.com/environment/elnino\">El Niño</a> events owing to suppressed thunderstorm activity.</p> <a href=\"https://www.theguardian.com/"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 93,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 5,
-          "independent_sources": 4,
-          "fresh_sources": [
-            "BBC News",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 5,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.2,
-          "calibrated_confidence": 100
-        },
-        "what": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "who": "CEC Gyanesh",
-        "who_detail": "",
-        "how": "",
-        "key_data": "",
-        "when": "October 10",
-        "where": "",
-        "why": "",
-        "why_important": "",
-        "background": "",
-        "change_since_yesterday": "",
-        "next": "",
-        "connection": "Related development: CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-        "memory_hook": "",
-        "vocabulary": "CEC — Chief Election Commissioner",
-        "ai_generated": false,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-          "impact": {
-            "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.462,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-28",
-            "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.146,
-            "date": "2026-09-27",
-            "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 85.3,
-        "early_signal": true
-      },
-      {
         "story_id": "3efac3bda7380fdf",
         "event_id": "31af1a1d8cf20521",
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -1031,7 +870,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 7.7,
+          "freshness_hours": 8.1,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -1041,12 +880,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions with California Democratic leaders, potentially impacting the midterms.",
+        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments about Iran and the potential for cities to be \"taken out\" in a war with Iran have been controversial.",
-        "change_since_yesterday": "The White House's stance has intensified political divisions, with California Democratic leaders condemning Trump's remarks and considering the 25th Amendment.",
-        "next": "Trump's comments may lead to further political fallout, including potential",
-        "connection": "Trump's previous controversial comments about Iran and cities have been referenced in multiple articles.",
+        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
+        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
+        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
+        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1136,25 +975,25 @@
         "verification": {
           "evidence": [
             {
-              "title": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
+              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
               "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-              "published": "2026-10-07T03:46:09+00:00",
-              "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation"
+              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
+              "published": "2026-10-07T00:42:00+00:00",
+              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
             },
             {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
+              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
               "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
+              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
+              "published": "2026-10-06T22:51:25+00:00",
+              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
             },
             {
-              "title": "CM alleges oppn destroyed over 100,000 Form 7 applications",
+              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
               "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cm-alleges-oppn-destroyed-over-100-000-form-7-applications-101791314845147.html",
-              "published": "2026-10-07T02:33:00+00:00",
-              "summary": "Karnataka chief minister DK Shivakumar on Tuesday alleged that BJP and JD(S) workers had withdrawn and destroyed more than one lakh Form 7 applications after submitting them in bulk during the revision of electoral rolls, while BJP demanded that the Election Commission act against him for making what it called “unsubstantiated allegations.”"
+              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
+              "published": "2026-10-07T03:37:57+00:00",
+              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
             }
           ],
           "historical": [
@@ -1189,7 +1028,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 17.9,
+          "freshness_hours": 18.2,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -1199,12 +1038,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The arrests could undermine the credibility of the election process and increase tensions between the opposition and the government.",
+        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
         "key_data": "",
-        "background": "In 2024, allegations of electoral fraud were made against the CEC, leading to a temporary suspension of the election commission.",
-        "change_since_yesterday": "The current situation involves new allegations of voter roll manipulation, potentially affecting the fairness of the 2026 elections.",
+        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
+        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
         "next": "",
-        "connection": "The 2024 allegations of electoral fraud were also related to the CEC and led to a temporary suspension of the election commission.",
+        "connection": "",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1278,32 +1117,20 @@
       "companies": [],
       "places": [],
       "topics": {
-        "cec": 2,
-        "delhi": 2,
-        "police": 2,
-        "mps": 2,
-        "gyanesh": 2,
-        "kumar": 2,
         "white": 2,
         "house": 2,
         "trump": 2,
         "iran": 2,
-        "live": 1,
-        "cjp": 1,
-        "saurav": 1,
-        "das": 1,
-        "october": 1,
-        "jantar": 1,
-        "mantar": 1,
-        "chief": 1,
-        "election": 1,
-        "commissioner": 1,
         "san": 1,
         "diego": 1,
         "gavin": 1,
         "newsom": 1,
         "indian": 1,
+        "mps": 1,
         "opposition": 1,
+        "cec": 1,
+        "gyanesh": 1,
+        "kumar": 1,
         "prime": 1,
         "minister": 1,
         "narendra": 1,
@@ -1311,11 +1138,6 @@
       }
     },
     "source_event_matrix": {
-      "india latest news: top national headlines today & breaking news | the hindu": {
-        "stories": 1,
-        "high_impact": 1,
-        "verified": 0
-      },
       "bbc news": {
         "stories": 2,
         "high_impact": 2,
@@ -1323,20 +1145,15 @@
       }
     },
     "scorecard": {
-      "stories": 3,
-      "high_impact": 3,
+      "stories": 2,
+      "high_impact": 2,
       "verified": 0,
       "verification_rate": 0.0,
-      "early_signals": 2,
+      "early_signals": 1,
       "health": "PASS"
     },
     "cross_event_links": [],
     "research_queue": [
-      {
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "priority": 58,
-        "reason": "high impact or emerging signal"
-      },
       {
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
         "priority": 58,
@@ -1351,217 +1168,6 @@
   },
   "intelligence_v5_plus": {
     "stories": [
-      {
-        "story_id": "922cc773a6806de4",
-        "event_id": "44b1ad6f31a8bdb3",
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "importance": 90.2,
-        "ranking_score": 122.1,
-        "personalized_score": 100.0,
-        "personalization_applied": 100.0,
-        "breaking_score": 65,
-        "trend_score": 93,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.2,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-        "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation",
-        "related_articles": [
-          {
-            "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-            "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-            "published": "2026-10-07T03:37:57+00:00",
-            "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-              "published": "2026-10-06T10:05:22+00:00",
-              "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections."
-            },
-            {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Ops Safed Sagar, Sindoor veteran named new Indian Air Force chief",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/ops-safed-sagar-sindoor-veteran-named-new-indian-air-force-chief-101791313164304.html",
-              "published": "2026-10-07T02:18:20+00:00",
-              "summary": "New Delhi: The Union government on Tuesday named Air Marshal Ashutosh Dixit as the 29th Chief of Air Staff, announcing that he will take over from Air Chief Marshal AP Singh, who retires on October 31"
-            },
-            {
-              "title": "Extreme heat warnings issued for parts of southern California",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/us-news/2026/oct/05/extreme-heat-warnings-southern-california",
-              "published": "2026-10-05T08:20:52+00:00",
-              "summary": "<p>Temperatures in US state forecast to hit high 30s celsius this week, while regions in Indonesia grapple with wildfires</p><p>The National Weather Service in the US has issued extreme heat warnings for parts of southern California, including Los Angeles, until Thursday, as temperatures are expected to hit the high 30s celsius. Burbank, a suburb north of Los Angeles, recorded 39C on Saturday, a few degrees shy of the October record for the region set in 1987. A persistent area of high pressure will remain in place this week, leading to further hazardous hot weather and increased fire risk.</p><p>Parts of Indonesia are in the midst of an extreme wildfire season, which has peaked over the past month. Western Kalimantan (Borneo) and southern Sumatra have been particularly badly affected. The lack of rainfall has dried the usually water-logged tropical soils, meaning that fires have been able to spread quickly, above and below the surface. Indonesia’s soils are also extremely rich in peat, meaning that the smoke produced from the fires contain higher levels of toxic gases such as sulphur dioxide and carbon monoxide. Cities in surrounding areas and as far as Malaysia and Singapore have experienced <a href=\"https://www.theguardian.com/world/2026/sep/21/indonesia-borneo-sumatra-fires-smoke-toxic-air\">reduced air quality</a> in recent weeks as a result. Drought and wildfires are more common in this part of the world during <a href=\"https://www.theguardian.com/environment/elnino\">El Niño</a> events owing to suppressed thunderstorm activity.</p> <a href=\"https://www.theguardian.com/"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 93,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 5,
-          "independent_sources": 4,
-          "fresh_sources": [
-            "BBC News",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 5,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.2,
-          "calibrated_confidence": 100
-        },
-        "what": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "who": "CEC Gyanesh",
-        "who_detail": "",
-        "how": "",
-        "key_data": "",
-        "when": "October 10",
-        "where": "",
-        "why": "",
-        "why_important": "",
-        "background": "",
-        "change_since_yesterday": "",
-        "next": "",
-        "connection": "Related development: CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-        "memory_hook": "",
-        "vocabulary": "CEC — Chief Election Commissioner",
-        "ai_generated": false,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-          "impact": {
-            "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.462,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-28",
-            "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.146,
-            "date": "2026-09-27",
-            "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 85.3,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.192,
-            "date": "2026-09-28",
-            "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.174,
-            "date": "2026-09-25",
-            "headline": "EC-SIR row: Jantar Mantar entrance barricaded ahead of protests - video",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.172,
-            "date": "2026-09-27",
-            "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-24",
-            "headline": "CJP threatens ‘Jantar Mantar 2.0’ if CEC Gyanesh Kumar does not resign",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.16,
-            "date": "2026-09-27",
-            "headline": "Mehbooba Mufti appeals to 'secular-minded' people to join protest at Delhi's Jantar Mantar on September 29",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.16,
-            "date": "2026-10-02",
-            "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
-            "outcome_score": null
-          }
-        ]
-      },
       {
         "story_id": "3efac3bda7380fdf",
         "event_id": "31af1a1d8cf20521",
@@ -1638,7 +1244,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 7.7,
+          "freshness_hours": 8.1,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -1648,12 +1254,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions with California Democratic leaders, potentially impacting the midterms.",
+        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments about Iran and the potential for cities to be \"taken out\" in a war with Iran have been controversial.",
-        "change_since_yesterday": "The White House's stance has intensified political divisions, with California Democratic leaders condemning Trump's remarks and considering the 25th Amendment.",
-        "next": "Trump's comments may lead to further political fallout, including potential",
-        "connection": "Trump's previous controversial comments about Iran and cities have been referenced in multiple articles.",
+        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
+        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
+        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
+        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1793,25 +1399,25 @@
         "verification": {
           "evidence": [
             {
-              "title": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
+              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
               "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-              "published": "2026-10-07T03:46:09+00:00",
-              "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation"
+              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
+              "published": "2026-10-07T00:42:00+00:00",
+              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
             },
             {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
+              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
               "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
+              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
+              "published": "2026-10-06T22:51:25+00:00",
+              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
             },
             {
-              "title": "CM alleges oppn destroyed over 100,000 Form 7 applications",
+              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
               "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cm-alleges-oppn-destroyed-over-100-000-form-7-applications-101791314845147.html",
-              "published": "2026-10-07T02:33:00+00:00",
-              "summary": "Karnataka chief minister DK Shivakumar on Tuesday alleged that BJP and JD(S) workers had withdrawn and destroyed more than one lakh Form 7 applications after submitting them in bulk during the revision of electoral rolls, while BJP demanded that the Election Commission act against him for making what it called “unsubstantiated allegations.”"
+              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
+              "published": "2026-10-07T03:37:57+00:00",
+              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
             }
           ],
           "historical": [
@@ -1846,7 +1452,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 17.9,
+          "freshness_hours": 18.2,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -1856,12 +1462,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The arrests could undermine the credibility of the election process and increase tensions between the opposition and the government.",
+        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
         "key_data": "",
-        "background": "In 2024, allegations of electoral fraud were made against the CEC, leading to a temporary suspension of the election commission.",
-        "change_since_yesterday": "The current situation involves new allegations of voter roll manipulation, potentially affecting the fairness of the 2026 elections.",
+        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
+        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
         "next": "",
-        "connection": "The 2024 allegations of electoral fraud were also related to the CEC and led to a temporary suspension of the election commission.",
+        "connection": "",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1982,177 +1588,6 @@
     ],
     "clusters": [
       {
-        "event_id": "ahead|cec|cjp|das|delhi|intimation|jantar|letter|live|mantar|october|police",
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "922cc773a6806de4",
-            "event_id": "44b1ad6f31a8bdb3",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "importance": 90.2,
-            "ranking_score": 122.1,
-            "personalized_score": 100.0,
-            "personalization_applied": 100.0,
-            "breaking_score": 65,
-            "trend_score": 93,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.2,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-            "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation",
-            "related_articles": [
-              {
-                "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-                "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-                "published": "2026-10-07T03:37:57+00:00",
-                "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-              }
-            ],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "Indian opposition MPs detained in protest against election chief",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-                  "published": "2026-10-06T10:05:22+00:00",
-                  "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections."
-                },
-                {
-                  "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-                  "published": "2026-10-07T03:13:09+00:00",
-                  "summary": ""
-                },
-                {
-                  "title": "Ops Safed Sagar, Sindoor veteran named new Indian Air Force chief",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/ops-safed-sagar-sindoor-veteran-named-new-indian-air-force-chief-101791313164304.html",
-                  "published": "2026-10-07T02:18:20+00:00",
-                  "summary": "New Delhi: The Union government on Tuesday named Air Marshal Ashutosh Dixit as the 29th Chief of Air Staff, announcing that he will take over from Air Chief Marshal AP Singh, who retires on October 31"
-                },
-                {
-                  "title": "Extreme heat warnings issued for parts of southern California",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/us-news/2026/oct/05/extreme-heat-warnings-southern-california",
-                  "published": "2026-10-05T08:20:52+00:00",
-                  "summary": "<p>Temperatures in US state forecast to hit high 30s celsius this week, while regions in Indonesia grapple with wildfires</p><p>The National Weather Service in the US has issued extreme heat warnings for parts of southern California, including Los Angeles, until Thursday, as temperatures are expected to hit the high 30s celsius. Burbank, a suburb north of Los Angeles, recorded 39C on Saturday, a few degrees shy of the October record for the region set in 1987. A persistent area of high pressure will remain in place this week, leading to further hazardous hot weather and increased fire risk.</p><p>Parts of Indonesia are in the midst of an extreme wildfire season, which has peaked over the past month. Western Kalimantan (Borneo) and southern Sumatra have been particularly badly affected. The lack of rainfall has dried the usually water-logged tropical soils, meaning that fires have been able to spread quickly, above and below the surface. Indonesia’s soils are also extremely rich in peat, meaning that the smoke produced from the fires contain higher levels of toxic gases such as sulphur dioxide and carbon monoxide. Cities in surrounding areas and as far as Malaysia and Singapore have experienced <a href=\"https://www.theguardian.com/world/2026/sep/21/indonesia-borneo-sumatra-fires-smoke-toxic-air\">reduced air quality</a> in recent weeks as a result. Drought and wildfires are more common in this part of the world during <a href=\"https://www.theguardian.com/environment/elnino\">El Niño</a> events owing to suppressed thunderstorm activity.</p> <a href=\"https://www.theguardian.com/"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-source",
-              "confidence": 93,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 5,
-              "independent_sources": 4,
-              "fresh_sources": [
-                "BBC News",
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "World news | The Guardian"
-              ],
-              "current_sources": 5,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.2,
-              "calibrated_confidence": 100
-            },
-            "what": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "who": "CEC Gyanesh",
-            "who_detail": "",
-            "how": "",
-            "key_data": "",
-            "when": "October 10",
-            "where": "",
-            "why": "",
-            "why_important": "",
-            "background": "",
-            "change_since_yesterday": "",
-            "next": "",
-            "connection": "Related development: CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-            "memory_hook": "",
-            "vocabulary": "CEC — Chief Election Commissioner",
-            "ai_generated": false,
-            "calibrated_confidence": 100,
-            "impact": {
-              "level": "HIGH",
-              "direction": "neutral",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-              "impact": {
-                "level": "HIGH",
-                "direction": "neutral",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.462,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.167,
-                "date": "2026-09-25",
-                "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.156,
-                "date": "2026-09-26",
-                "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.156,
-                "date": "2026-09-28",
-                "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.146,
-                "date": "2026-09-27",
-                "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 85.3,
-            "early_signal": true
-          }
-        ]
-      },
-      {
         "event_id": "and|comment|defends|diego|house|iran|let|out|san|take|trump|white",
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
         "story_count": 1,
@@ -2236,7 +1671,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 7.7,
+              "freshness_hours": 8.1,
               "calibrated_confidence": 97.0
             },
             "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -2246,12 +1681,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The White House's defense of Trump's comments has exacerbated tensions with California Democratic leaders, potentially impacting the midterms.",
+            "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
             "key_data": "",
-            "background": "Trump's previous comments about Iran and the potential for cities to be \"taken out\" in a war with Iran have been controversial.",
-            "change_since_yesterday": "The White House's stance has intensified political divisions, with California Democratic leaders condemning Trump's remarks and considering the 25th Amendment.",
-            "next": "Trump's comments may lead to further political fallout, including potential",
-            "connection": "Trump's previous controversial comments about Iran and cities have been referenced in multiple articles.",
+            "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
+            "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
+            "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
+            "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -2351,25 +1786,25 @@
             "verification": {
               "evidence": [
                 {
-                  "title": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
+                  "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
                   "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-                  "published": "2026-10-07T03:46:09+00:00",
-                  "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation"
+                  "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
+                  "published": "2026-10-07T00:42:00+00:00",
+                  "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
                 },
                 {
-                  "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
+                  "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
                   "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-                  "published": "2026-10-07T03:13:09+00:00",
-                  "summary": ""
+                  "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
+                  "published": "2026-10-06T22:51:25+00:00",
+                  "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
                 },
                 {
-                  "title": "CM alleges oppn destroyed over 100,000 Form 7 applications",
+                  "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
                   "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/cm-alleges-oppn-destroyed-over-100-000-form-7-applications-101791314845147.html",
-                  "published": "2026-10-07T02:33:00+00:00",
-                  "summary": "Karnataka chief minister DK Shivakumar on Tuesday alleged that BJP and JD(S) workers had withdrawn and destroyed more than one lakh Form 7 applications after submitting them in bulk during the revision of electoral rolls, while BJP demanded that the Election Commission act against him for making what it called “unsubstantiated allegations.”"
+                  "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
+                  "published": "2026-10-07T03:37:57+00:00",
+                  "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
                 }
               ],
               "historical": [
@@ -2404,7 +1839,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 17.9,
+              "freshness_hours": 18.2,
               "calibrated_confidence": 100
             },
             "what": "Indian opposition MPs detained in protest against election chief",
@@ -2414,12 +1849,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The arrests could undermine the credibility of the election process and increase tensions between the opposition and the government.",
+            "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
             "key_data": "",
-            "background": "In 2024, allegations of electoral fraud were made against the CEC, leading to a temporary suspension of the election commission.",
-            "change_since_yesterday": "The current situation involves new allegations of voter roll manipulation, potentially affecting the fairness of the 2026 elections.",
+            "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
+            "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
             "next": "",
-            "connection": "The 2024 allegations of electoral fraud were also related to the CEC and led to a temporary suspension of the election commission.",
+            "connection": "",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -2495,56 +1930,23 @@
       "companies": [],
       "places": [],
       "topics": {
-        "iran": 3,
-        "cec": 2,
-        "delhi police": 2,
-        "mps": 2,
         "white house": 2,
         "trump": 2,
-        "live": 1,
-        "cjp": 1,
-        "saurav das": 1,
-        "october": 1,
-        "jantar mantar": 1,
-        "the": 1,
-        "india": 1,
-        "chief election commissioner": 1,
-        "gyanesh kumar": 1,
+        "iran": 2,
         "san diego gavin": 1,
         "newsom": 1,
         "iran. trump": 1,
         "indian": 1,
+        "mps": 1,
         "opposition": 1,
         "cec gyanesh kumar": 1,
         "prime minister narendra": 1,
-        "modi": 1
+        "modi": 1,
+        "gyanesh kumar": 1,
+        "cec": 1
       }
     },
     "entity_profiles": [
-      {
-        "entity": "iran",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 34
-      },
-      {
-        "entity": "cec",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 45
-      },
-      {
-        "entity": "delhi police",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "mps",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 6
-      },
       {
         "entity": "white house",
         "type": "topic",
@@ -2558,58 +1960,10 @@
         "historical_mentions": 86
       },
       {
-        "entity": "live",
+        "entity": "iran",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 16
-      },
-      {
-        "entity": "cjp",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 14
-      },
-      {
-        "entity": "saurav das",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "october",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 11
-      },
-      {
-        "entity": "jantar mantar",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "the",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 95
-      },
-      {
-        "entity": "india",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 81
-      },
-      {
-        "entity": "chief election commissioner",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "gyanesh kumar",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
+        "historical_mentions": 34
       },
       {
         "entity": "san diego gavin",
@@ -2636,6 +1990,12 @@
         "historical_mentions": 32
       },
       {
+        "entity": "mps",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 6
+      },
+      {
         "entity": "opposition",
         "type": "topic",
         "current_mentions": 1,
@@ -2658,232 +2018,21 @@
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 32
+      },
+      {
+        "entity": "gyanesh kumar",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
+        "entity": "cec",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 45
       }
     ],
     "event_evolution": [
-      {
-        "event_id": "ahead|cec|cjp|das|delhi|intimation|jantar|letter|live|mantar|october|police",
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "922cc773a6806de4",
-            "event_id": "44b1ad6f31a8bdb3",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "importance": 90.2,
-            "ranking_score": 122.1,
-            "personalized_score": 100.0,
-            "personalization_applied": 100.0,
-            "breaking_score": 65,
-            "trend_score": 93,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.2,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-            "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation",
-            "related_articles": [
-              {
-                "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-                "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-                "published": "2026-10-07T03:37:57+00:00",
-                "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-              }
-            ],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "Indian opposition MPs detained in protest against election chief",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-                  "published": "2026-10-06T10:05:22+00:00",
-                  "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections."
-                },
-                {
-                  "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-                  "published": "2026-10-07T03:13:09+00:00",
-                  "summary": ""
-                },
-                {
-                  "title": "Ops Safed Sagar, Sindoor veteran named new Indian Air Force chief",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/ops-safed-sagar-sindoor-veteran-named-new-indian-air-force-chief-101791313164304.html",
-                  "published": "2026-10-07T02:18:20+00:00",
-                  "summary": "New Delhi: The Union government on Tuesday named Air Marshal Ashutosh Dixit as the 29th Chief of Air Staff, announcing that he will take over from Air Chief Marshal AP Singh, who retires on October 31"
-                },
-                {
-                  "title": "Extreme heat warnings issued for parts of southern California",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/us-news/2026/oct/05/extreme-heat-warnings-southern-california",
-                  "published": "2026-10-05T08:20:52+00:00",
-                  "summary": "<p>Temperatures in US state forecast to hit high 30s celsius this week, while regions in Indonesia grapple with wildfires</p><p>The National Weather Service in the US has issued extreme heat warnings for parts of southern California, including Los Angeles, until Thursday, as temperatures are expected to hit the high 30s celsius. Burbank, a suburb north of Los Angeles, recorded 39C on Saturday, a few degrees shy of the October record for the region set in 1987. A persistent area of high pressure will remain in place this week, leading to further hazardous hot weather and increased fire risk.</p><p>Parts of Indonesia are in the midst of an extreme wildfire season, which has peaked over the past month. Western Kalimantan (Borneo) and southern Sumatra have been particularly badly affected. The lack of rainfall has dried the usually water-logged tropical soils, meaning that fires have been able to spread quickly, above and below the surface. Indonesia’s soils are also extremely rich in peat, meaning that the smoke produced from the fires contain higher levels of toxic gases such as sulphur dioxide and carbon monoxide. Cities in surrounding areas and as far as Malaysia and Singapore have experienced <a href=\"https://www.theguardian.com/world/2026/sep/21/indonesia-borneo-sumatra-fires-smoke-toxic-air\">reduced air quality</a> in recent weeks as a result. Drought and wildfires are more common in this part of the world during <a href=\"https://www.theguardian.com/environment/elnino\">El Niño</a> events owing to suppressed thunderstorm activity.</p> <a href=\"https://www.theguardian.com/"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-source",
-              "confidence": 93,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 5,
-              "independent_sources": 4,
-              "fresh_sources": [
-                "BBC News",
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "World news | The Guardian"
-              ],
-              "current_sources": 5,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.2,
-              "calibrated_confidence": 100
-            },
-            "what": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "who": "CEC Gyanesh",
-            "who_detail": "",
-            "how": "",
-            "key_data": "",
-            "when": "October 10",
-            "where": "",
-            "why": "",
-            "why_important": "",
-            "background": "",
-            "change_since_yesterday": "",
-            "next": "",
-            "connection": "Related development: CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-            "memory_hook": "",
-            "vocabulary": "CEC — Chief Election Commissioner",
-            "ai_generated": false,
-            "calibrated_confidence": 100,
-            "impact": {
-              "level": "HIGH",
-              "direction": "neutral",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-              "impact": {
-                "level": "HIGH",
-                "direction": "neutral",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.462,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.167,
-                "date": "2026-09-25",
-                "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.156,
-                "date": "2026-09-26",
-                "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.156,
-                "date": "2026-09-28",
-                "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.146,
-                "date": "2026-09-27",
-                "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 85.3,
-            "early_signal": true,
-            "similar_historical_events": [
-              {
-                "similarity": 1.0,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.192,
-                "date": "2026-09-28",
-                "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.174,
-                "date": "2026-09-25",
-                "headline": "EC-SIR row: Jantar Mantar entrance barricaded ahead of protests - video",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.172,
-                "date": "2026-09-27",
-                "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.167,
-                "date": "2026-09-24",
-                "headline": "CJP threatens ‘Jantar Mantar 2.0’ if CEC Gyanesh Kumar does not resign",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.167,
-                "date": "2026-09-25",
-                "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.16,
-                "date": "2026-09-27",
-                "headline": "Mehbooba Mufti appeals to 'secular-minded' people to join protest at Delhi's Jantar Mantar on September 29",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.16,
-                "date": "2026-10-02",
-                "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
-                "outcome_score": null
-              }
-            ]
-          }
-        ],
-        "status": "DEVELOPING",
-        "history_count": 1
-      },
       {
         "event_id": "and|comment|defends|diego|house|iran|let|out|san|take|trump|white",
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -2968,7 +2117,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 7.7,
+              "freshness_hours": 8.1,
               "calibrated_confidence": 97.0
             },
             "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -2978,12 +2127,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The White House's defense of Trump's comments has exacerbated tensions with California Democratic leaders, potentially impacting the midterms.",
+            "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
             "key_data": "",
-            "background": "Trump's previous comments about Iran and the potential for cities to be \"taken out\" in a war with Iran have been controversial.",
-            "change_since_yesterday": "The White House's stance has intensified political divisions, with California Democratic leaders condemning Trump's remarks and considering the 25th Amendment.",
-            "next": "Trump's comments may lead to further political fallout, including potential",
-            "connection": "Trump's previous controversial comments about Iran and cities have been referenced in multiple articles.",
+            "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
+            "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
+            "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
+            "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -3135,25 +2284,25 @@
             "verification": {
               "evidence": [
                 {
-                  "title": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
+                  "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
                   "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-                  "published": "2026-10-07T03:46:09+00:00",
-                  "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation"
+                  "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
+                  "published": "2026-10-07T00:42:00+00:00",
+                  "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
                 },
                 {
-                  "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
+                  "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
                   "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-                  "published": "2026-10-07T03:13:09+00:00",
-                  "summary": ""
+                  "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
+                  "published": "2026-10-06T22:51:25+00:00",
+                  "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
                 },
                 {
-                  "title": "CM alleges oppn destroyed over 100,000 Form 7 applications",
+                  "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
                   "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/cm-alleges-oppn-destroyed-over-100-000-form-7-applications-101791314845147.html",
-                  "published": "2026-10-07T02:33:00+00:00",
-                  "summary": "Karnataka chief minister DK Shivakumar on Tuesday alleged that BJP and JD(S) workers had withdrawn and destroyed more than one lakh Form 7 applications after submitting them in bulk during the revision of electoral rolls, while BJP demanded that the Election Commission act against him for making what it called “unsubstantiated allegations.”"
+                  "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
+                  "published": "2026-10-07T03:37:57+00:00",
+                  "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
                 }
               ],
               "historical": [
@@ -3188,7 +2337,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 17.9,
+              "freshness_hours": 18.2,
               "calibrated_confidence": 100
             },
             "what": "Indian opposition MPs detained in protest against election chief",
@@ -3198,12 +2347,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The arrests could undermine the credibility of the election process and increase tensions between the opposition and the government.",
+            "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
             "key_data": "",
-            "background": "In 2024, allegations of electoral fraud were made against the CEC, leading to a temporary suspension of the election commission.",
-            "change_since_yesterday": "The current situation involves new allegations of voter roll manipulation, potentially affecting the fairness of the 2026 elections.",
+            "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
+            "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
             "next": "",
-            "connection": "The 2024 allegations of electoral fraud were also related to the CEC and led to a temporary suspension of the election commission.",
+            "connection": "",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -3337,12 +2486,6 @@
     },
     "market_correlation": [
       {
-        "event_id": "44b1ad6f31a8bdb3",
-        "direction": "neutral",
-        "market_samples": 0,
-        "avg_move": null
-      },
-      {
         "event_id": "31af1a1d8cf20521",
         "direction": "neutral",
         "market_samples": 0,
@@ -3356,12 +2499,6 @@
       }
     ],
     "source_reliability": {
-      "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
-        "n": 1,
-        "verified": 0,
-        "high_impact": 1,
-        "verification_rate": 0.0
-      },
       "BBC News": {
         "n": 2,
         "verified": 0,
@@ -3376,12 +2513,12 @@
       "signal": 0.0
     },
     "scorecard": {
-      "stories": 3,
-      "high_impact": 3,
+      "stories": 2,
+      "high_impact": 2,
       "medium_impact": 0,
       "low_impact": 0,
       "verified": 0,
-      "early_signals": 2,
+      "early_signals": 1,
       "health": "PASS"
     },
     "personalized_feed": [
@@ -3461,7 +2598,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 7.7,
+          "freshness_hours": 8.1,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -3471,12 +2608,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions with California Democratic leaders, potentially impacting the midterms.",
+        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments about Iran and the potential for cities to be \"taken out\" in a war with Iran have been controversial.",
-        "change_since_yesterday": "The White House's stance has intensified political divisions, with California Democratic leaders condemning Trump's remarks and considering the 25th Amendment.",
-        "next": "Trump's comments may lead to further political fallout, including potential",
-        "connection": "Trump's previous controversial comments about Iran and cities have been referenced in multiple articles.",
+        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
+        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
+        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
+        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -3618,25 +2755,25 @@
         "verification": {
           "evidence": [
             {
-              "title": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
+              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
               "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-              "published": "2026-10-07T03:46:09+00:00",
-              "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation"
+              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
+              "published": "2026-10-07T00:42:00+00:00",
+              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
             },
             {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
+              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
               "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
+              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
+              "published": "2026-10-06T22:51:25+00:00",
+              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
             },
             {
-              "title": "CM alleges oppn destroyed over 100,000 Form 7 applications",
+              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
               "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cm-alleges-oppn-destroyed-over-100-000-form-7-applications-101791314845147.html",
-              "published": "2026-10-07T02:33:00+00:00",
-              "summary": "Karnataka chief minister DK Shivakumar on Tuesday alleged that BJP and JD(S) workers had withdrawn and destroyed more than one lakh Form 7 applications after submitting them in bulk during the revision of electoral rolls, while BJP demanded that the Election Commission act against him for making what it called “unsubstantiated allegations.”"
+              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
+              "published": "2026-10-07T03:37:57+00:00",
+              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
             }
           ],
           "historical": [
@@ -3671,7 +2808,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 17.9,
+          "freshness_hours": 18.2,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -3681,12 +2818,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The arrests could undermine the credibility of the election process and increase tensions between the opposition and the government.",
+        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
         "key_data": "",
-        "background": "In 2024, allegations of electoral fraud were made against the CEC, leading to a temporary suspension of the election commission.",
-        "change_since_yesterday": "The current situation involves new allegations of voter roll manipulation, potentially affecting the fairness of the 2026 elections.",
+        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
+        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
         "next": "",
-        "connection": "The 2024 allegations of electoral fraud were also related to the CEC and led to a temporary suspension of the election commission.",
+        "connection": "",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -3805,242 +2942,25 @@
         ],
         "personalization_score": 92.7,
         "preference_matches": 0
-      },
-      {
-        "story_id": "922cc773a6806de4",
-        "event_id": "44b1ad6f31a8bdb3",
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "importance": 90.2,
-        "ranking_score": 122.1,
-        "personalized_score": 100.0,
-        "personalization_applied": 100.0,
-        "breaking_score": 65,
-        "trend_score": 93,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.2,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/cec-row-live-cjps-saurav-das-to-submit-intimation-letter-to-delhi-police-ahead-of-october-10-jantar-mantar-protest-security-tightened/article71554188.ece",
-        "summary": "The move comes hours after Delhi Police detained around 260 INDIA bloc protesters, including 10 MPs, during a demonstration demanding Chief Election Commissioner Gyanesh Kumar’s resignation",
-        "related_articles": [
-          {
-            "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-            "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-            "published": "2026-10-07T03:37:57+00:00",
-            "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-              "published": "2026-10-06T10:05:22+00:00",
-              "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections."
-            },
-            {
-              "title": "‘This is merely the beginning’: Congress warns Gyanesh Kumar after INDIA bloc protest",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/this-is-merely-the-beginning-congress-warns-gyanesh-kumar-after-india-bloc-protest/articleshow/134754583.cms",
-              "published": "2026-10-07T03:13:09+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Ops Safed Sagar, Sindoor veteran named new Indian Air Force chief",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/ops-safed-sagar-sindoor-veteran-named-new-indian-air-force-chief-101791313164304.html",
-              "published": "2026-10-07T02:18:20+00:00",
-              "summary": "New Delhi: The Union government on Tuesday named Air Marshal Ashutosh Dixit as the 29th Chief of Air Staff, announcing that he will take over from Air Chief Marshal AP Singh, who retires on October 31"
-            },
-            {
-              "title": "Extreme heat warnings issued for parts of southern California",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/us-news/2026/oct/05/extreme-heat-warnings-southern-california",
-              "published": "2026-10-05T08:20:52+00:00",
-              "summary": "<p>Temperatures in US state forecast to hit high 30s celsius this week, while regions in Indonesia grapple with wildfires</p><p>The National Weather Service in the US has issued extreme heat warnings for parts of southern California, including Los Angeles, until Thursday, as temperatures are expected to hit the high 30s celsius. Burbank, a suburb north of Los Angeles, recorded 39C on Saturday, a few degrees shy of the October record for the region set in 1987. A persistent area of high pressure will remain in place this week, leading to further hazardous hot weather and increased fire risk.</p><p>Parts of Indonesia are in the midst of an extreme wildfire season, which has peaked over the past month. Western Kalimantan (Borneo) and southern Sumatra have been particularly badly affected. The lack of rainfall has dried the usually water-logged tropical soils, meaning that fires have been able to spread quickly, above and below the surface. Indonesia’s soils are also extremely rich in peat, meaning that the smoke produced from the fires contain higher levels of toxic gases such as sulphur dioxide and carbon monoxide. Cities in surrounding areas and as far as Malaysia and Singapore have experienced <a href=\"https://www.theguardian.com/world/2026/sep/21/indonesia-borneo-sumatra-fires-smoke-toxic-air\">reduced air quality</a> in recent weeks as a result. Drought and wildfires are more common in this part of the world during <a href=\"https://www.theguardian.com/environment/elnino\">El Niño</a> events owing to suppressed thunderstorm activity.</p> <a href=\"https://www.theguardian.com/"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 93,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 5,
-          "independent_sources": 4,
-          "fresh_sources": [
-            "BBC News",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 5,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.2,
-          "calibrated_confidence": 100
-        },
-        "what": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "who": "CEC Gyanesh",
-        "who_detail": "",
-        "how": "",
-        "key_data": "",
-        "when": "October 10",
-        "where": "",
-        "why": "",
-        "why_important": "",
-        "background": "",
-        "change_since_yesterday": "",
-        "next": "",
-        "connection": "Related development: CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-        "memory_hook": "",
-        "vocabulary": "CEC — Chief Election Commissioner",
-        "ai_generated": false,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-          "impact": {
-            "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.462,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.156,
-            "date": "2026-09-28",
-            "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.146,
-            "date": "2026-09-27",
-            "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 85.3,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.192,
-            "date": "2026-09-28",
-            "headline": "Why Mumbai police denied permission to CJP for October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.174,
-            "date": "2026-09-25",
-            "headline": "EC-SIR row: Jantar Mantar entrance barricaded ahead of protests - video",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.172,
-            "date": "2026-09-27",
-            "headline": "'Such tactics...': Dipke says Mumbai Police denied permission for CJP's October 2 protest against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-24",
-            "headline": "CJP threatens ‘Jantar Mantar 2.0’ if CEC Gyanesh Kumar does not resign",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "‘Resign within 48 hours or Jantar Mantar 2.0’: CJP's ultimatum to CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.16,
-            "date": "2026-09-27",
-            "headline": "Mehbooba Mufti appeals to 'secular-minded' people to join protest at Delhi's Jantar Mantar on September 29",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.16,
-            "date": "2026-10-02",
-            "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
-            "outcome_score": null
-          }
-        ],
-        "personalization_score": 90.2,
-        "preference_matches": 0
       }
     ],
     "alerts": [],
     "trend_report": [
       {
-        "category": "india",
-        "current": 2,
-        "previous": 602,
-        "delta": -600
-      },
-      {
         "category": "world",
         "current": 1,
         "previous": 257,
         "delta": -256
+      },
+      {
+        "category": "india",
+        "current": 1,
+        "previous": 602,
+        "delta": -601
       }
     ],
     "knowledge_graph": {
       "nodes": [
-        {
-          "type": "event",
-          "label": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened"
-        },
         {
           "type": "event",
           "label": "White House defends Trump comment to let Iran 'take out' LA and San Diego"
@@ -4055,12 +2975,6 @@
     "contradictions": [],
     "evidence_gaps": [
       {
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "missing": [
-          "independent_source_count"
-        ]
-      },
-      {
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
         "missing": [
           "independent_source_count"
@@ -4074,15 +2988,6 @@
       }
     ],
     "research_queue": [
-      {
-        "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-        "priority": 79.3,
-        "tasks": [
-          "verify primary source",
-          "find independent confirmation",
-          "retrieve historical analogue"
-        ]
-      },
       {
         "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
         "priority": 76.5,
@@ -4105,8 +3010,7 @@
     "weekly_report": {
       "top_events": [
         "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "Indian opposition MPs detained in protest against election chief",
-        "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened"
+        "Indian opposition MPs detained in protest against election chief"
       ],
       "history_size": 1234,
       "anomalies": []
@@ -4114,12 +3018,6 @@
   },
   "smart_alerts": [],
   "evidence_gaps": [
-    {
-      "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-      "missing": [
-        "independent_source_count"
-      ]
-    },
     {
       "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
       "missing": [
@@ -4140,7 +3038,7 @@
           {
             "train": 120,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.133,
             "recall": 1.0,
             "f1": 0.235
@@ -4148,7 +3046,7 @@
           {
             "train": 150,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.333,
             "recall": 1.0,
             "f1": 0.5
@@ -4156,7 +3054,7 @@
           {
             "train": 180,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.033,
             "recall": 1.0,
             "f1": 0.065
@@ -4164,7 +3062,7 @@
           {
             "train": 210,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.167,
             "recall": 1.0,
             "f1": 0.286
@@ -4172,7 +3070,7 @@
           {
             "train": 240,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.2,
             "recall": 1.0,
             "f1": 0.333
@@ -4180,7 +3078,7 @@
           {
             "train": 270,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.1,
             "recall": 1.0,
             "f1": 0.182
@@ -4188,7 +3086,7 @@
           {
             "train": 300,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.1,
             "recall": 1.0,
             "f1": 0.182
@@ -4196,14 +3094,15 @@
           {
             "train": 330,
             "test": 30,
-            "threshold": 40,
+            "threshold": 50,
             "precision": 0.133,
             "recall": 1.0,
             "f1": 0.235
           }
         ],
         "f1": 0.252,
-        "leakage_safe": true
+        "leakage_safe": true,
+        "threshold_policy": "fixed_50"
       },
       "candidate_v5": {
         "folds": [
