@@ -150,7 +150,7 @@ def scorecard(stories,diagnostics):
 
 def personalized_feed(stories,preferences):
     prefs=preferences or {}; terms=set()
-    for k in ("topics","categories","watchlist","keywords","priority_categories"):
+    for k in ("topics","categories","watchlist","keywords","priority_categories","preferred_regions"):
         v=prefs.get(k,[])
         terms.update(str(x).lower() for x in v if isinstance(v,list))
     out=[]
