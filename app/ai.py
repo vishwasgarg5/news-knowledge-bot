@@ -773,10 +773,17 @@ Evidence: {json.dumps({
     result["ai_generated"]=True; return result
 
 def generate_briefing(selected,articles,previous,today,research=None):
-    evidence=_evidence(selected,articles,research); stories=[]; budget=max(0,int(os.getenv("AI_STORY_BUDGET","8")))
-    ai_candidates=[x for x in evidence if float(x.get("importance",0))>=float(os.getenv("AI_DEEP_IMPORTANCE","70"))]
-    if len(ai_candidates)<budget: ai_candidates=evidence[:budget]
-    ai_ids={x.get("story_id") for x in ai_candidates[:budget]}
+    """Generate expensive AI enrichment only for unique, highest-value events."""
+    evidence=_evidence(selected,articles,research); stories=[]
+    budget=max(0,int(os.getenv("AI_STORY_BUDGET","8"))); deep=float(os.getenv("AI_DEEP_IMPORTANCE","70"))
+    chosen=[]; seen_families=set()
+    for x in sorted(evidence,key=lambda z:float(z.get("importance",0) or 0),reverse=True):
+        family=str(x.get("event_family") or x.get("event_id") or x.get("story_id") or "")
+        if float(x.get("importance",0) or 0)<deep and len(chosen)>=budget: continue
+        if family in seen_families: continue
+        seen_families.add(family); chosen.append(x)
+        if len(chosen)>=budget: break
+    ai_ids={x.get("story_id") for x in chosen}
     for item in evidence:
         if item.get("story_id") not in ai_ids: stories.append(_fallback(item)); continue
         try: stories.append(_one(item,today))
