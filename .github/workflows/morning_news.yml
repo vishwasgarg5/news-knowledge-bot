@@ -161,7 +161,7 @@ jobs:
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
-          NEWS_MAX_STORIES: '15'
+          NEWS_MAX_STORIES: '10'
           NEWS_MIN_STORIES_TARGET: '6'
           NEWS_MAX_SINGLE_SOURCE_PER_REGION: '1'
           NEWS_MAX_STORIES_PER_SOURCE: '2'
@@ -169,6 +169,8 @@ jobs:
           NEWS_SINGLE_SOURCE_MIN_IMPORTANCE: '85'
           NEWS_MIN_VERIFICATION_FOR_LEARNING: 'multi-report'
           NEWS_MAX_PER_CATEGORY: '8'
+          NEWS_INDIA_TOP: '5'
+          NEWS_WORLD_TOP: '5'
           RUN_SLOT: morning
           PYTHONUNBUFFERED: '1'
         run: python -m app.main
