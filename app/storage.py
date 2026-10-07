@@ -10,6 +10,7 @@ HEADERS={
  "story_timeline.csv":["story_id","event_id","date","headline","event","importance","source","url","change_type","event_status"],
  "news_learning_daily.csv":["date","evaluated","selected_evaluated","misses","false_positives","success_rate","false_positive_rate","miss_rate"],
  "news_learning.csv":["run_date","event_id","story_id","headline","source","category","initial_score","selected","seen_again_24h","seen_again_48h","seen_again_7d","missed","false_positive","learning_value","outcome_score"],
+ "news_feedback.csv":["date","story_id","event_id","feedback","note"],
 }
 
 def _write(path,rows,fields):
