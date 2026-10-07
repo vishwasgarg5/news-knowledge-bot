@@ -1,7 +1,7 @@
 from __future__ import annotations
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, UTC
-import math,re
+import math,re,requests
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -101,14 +101,33 @@ def similar_event_engine(story,history,limit=8):
     rows.sort(reverse=True,key=lambda x:x[0])
     return [{"similarity":round(x,3),"date":r.get("date",r.get("run_date")),"headline":r.get("headline",r.get("title","")),"outcome_score":r.get("outcome_score")} for x,r in rows[:limit]]
 
+def market_snapshot():
+    """Fetch lightweight live index context; failures never block the news pipeline."""
+    out=[]
+    for symbol,name in (("%5ENSEI","NIFTY 50"),("%5EBSESN","SENSEX")):
+        try:
+            url=f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=2d&interval=1d"
+            data=requests.get(url,timeout=8,headers={"User-Agent":"news-knowledge-bot/1.0"}).json()
+            result=(data.get("chart") or {}).get("result") or []
+            meta=(result[0].get("meta") or {}) if result else {}
+            prev=_f(meta.get("previousClose")); price=_f(meta.get("regularMarketPrice"))
+            change=price-prev if prev else 0.0
+            pct=(change/prev*100) if prev else 0.0
+            out.append({"symbol":name,"price":round(price,2),"previous_close":round(prev,2),"change":round(change,2),"change_pct":round(pct,3),"status":"OK"})
+        except Exception as exc:
+            out.append({"symbol":name,"status":"UNAVAILABLE","error":str(exc)[:120]})
+    return out
+
 def news_market_correlation(stories,market_rows=None):
     market_rows=market_rows or []
+    global_moves=[_f(r.get("change_pct")) for r in market_rows if r.get("status")=="OK"]
+    avg_global=sum(global_moves)/len(global_moves) if global_moves else None
     out=[]
     for s in stories or []:
         event=s.get("event_id",event_key(s)); impact=(s.get("impact") or {}).get("direction","neutral")
         matches=[r for r in market_rows if str(r.get("event_id",""))==str(event)]
         moves=[_f(r.get("return",r.get("change_pct"))) for r in matches]
-        out.append({"event_id":event,"direction":impact,"market_samples":len(moves),"avg_move":round(sum(moves)/len(moves),3) if moves else None})
+        out.append({"event_id":event,"direction":impact,"market_samples":len(moves),"avg_move":round(sum(moves)/len(moves),3) if moves else None,"market_context_pct":round(avg_global,3) if avg_global is not None else None,"directional_alignment":("ALIGNED" if avg_global is not None and ((impact in {"positive","bullish"} and avg_global>0) or (impact in {"negative","bearish"} and avg_global<0)) else "UNKNOWN")})
     return out
 
 def source_event_reliability(stories):
@@ -131,12 +150,12 @@ def scorecard(stories,diagnostics):
 
 def personalized_feed(stories,preferences):
     prefs=preferences or {}; terms=set()
-    for k in ("topics","categories","watchlist","keywords"):
+    for k in ("topics","categories","watchlist","keywords","priority_categories"):
         v=prefs.get(k,[])
         terms.update(str(x).lower() for x in v if isinstance(v,list))
     out=[]
     for s in stories or []:
-        text=(str(s.get("headline",""))+" "+str(s.get("category",""))).lower()
+        text=(str(s.get("headline",""))+" "+str(s.get("summary",""))+" "+str(s.get("category",""))+" "+str(s.get("region",""))).lower()
         match=sum(1 for t in terms if t and t in text)
         x=dict(s); x["personalization_score"]=round(_f(s.get("importance",0))+match*8,2); x["preference_matches"]=match; out.append(x)
     return sorted(out,key=lambda x:x["personalization_score"],reverse=True)
@@ -170,12 +189,19 @@ def knowledge_graph(stories):
 
 def contradiction_scan(stories):
     out=[]
+    number_re=re.compile(r"(?<![A-Za-z])[-+]?\\d+(?:\\.\\d+)?(?:%|\\b)")
     positive_words={"approve","support","rise","gain","growth","increase"}
     negative_words={"ban","reject","fall","loss","decline","crisis"}
     for s in stories or []:
         text=str(s.get("headline","")).lower(); pos=sum(w in text for w in positive_words); neg=sum(w in text for w in negative_words)
         if pos and neg: out.append({"headline":s.get("headline",""),"reason":"mixed directional language"})
         if (s.get("verification") or {}).get("contradiction_flag"): out.append({"headline":s.get("headline",""),"reason":"verification contradiction"})
+        evidence=(s.get("verification") or {}).get("evidence") or []
+        primary_nums=number_re.findall(str(s.get("headline",""))+" "+str(s.get("summary","")))
+        for e in evidence:
+            other_nums=number_re.findall(str(e.get("title",""))+" "+str(e.get("summary","")))
+            if primary_nums and other_nums and set(primary_nums).isdisjoint(set(other_nums)):
+                out.append({"headline":s.get("headline",""),"reason":"numeric claim mismatch","source":e.get("source","")}); break
     return out
 
 def missing_evidence(stories):
@@ -189,13 +215,19 @@ def missing_evidence(stories):
         if missing:gaps.append({"headline":s.get("headline",""),"missing":missing})
     return gaps
 
-def autonomous_research(stories,similarity_history=None):
+def autonomous_research(stories,similarity_history=None,evidence_pool=None):
     queue=[]
     for s in stories or []:
         impact=(s.get("impact") or {})
         priority=impact.get("score",0)+(_f(s.get("momentum_score"))*.25)
         if priority>=65:
-            queue.append({"headline":s.get("headline",""),"priority":round(priority,1),"tasks":["verify primary source","find independent confirmation","retrieve historical analogue"]})
+            evidence=[]
+            for a in evidence_pool or []:
+                if str(a.get("url",""))==str(s.get("url","")): continue
+                sim=len(tokens(s.get("headline","")) & tokens(a.get("title","")))/max(1,len(tokens(s.get("headline",""))|tokens(a.get("title",""))))
+                if sim>=0.22: evidence.append({"source":a.get("source",""),"title":a.get("title",""),"url":a.get("url",""),"similarity":round(sim,3)})
+            evidence=sorted(evidence,key=lambda x:x["similarity"],reverse=True)[:5]
+            queue.append({"headline":s.get("headline",""),"priority":round(priority,1),"tasks":["verify primary source","find independent confirmation","retrieve historical analogue"],"retrieved_evidence":evidence,"evidence_count":len(evidence),"research_status":"EVIDENCE_RETRIEVED" if evidence else "RESEARCH_REQUIRED"})
     return sorted(queue,key=lambda x:x["priority"],reverse=True)[:15]
 
 def research_report(stories,queue):
@@ -223,4 +255,5 @@ def run_v5_plus(stories,history,learning_rows,feedback_rows,preferences,diagnost
     profiles=entity_profiles(enriched,history)
     evolution=event_evolution(enriched,history)
     graph=knowledge_graph(enriched)
-    return {"stories":enriched,"clusters":clusters,"entities":entities,"entity_profiles":profiles,"event_evolution":evolution,"impact_learning":impact_stats,"market_correlation":news_market_correlation(enriched,market_rows),"source_reliability":source_event_reliability(enriched),"feedback":advanced_feedback(feedback_rows),"scorecard":scorecard(enriched,diagnostics),"personalized_feed":personalized_feed(enriched,preferences),"alerts":alert_candidates(enriched),"trend_report":trend_report(enriched,history),"knowledge_graph":graph,"contradictions":contradiction_scan(enriched),"evidence_gaps":missing_evidence(enriched),"research_queue":autonomous_research(enriched),"weekly_report":weekly_report(enriched,history)}
+    market=market_snapshot()
+    return {"stories":enriched,"clusters":clusters,"entities":entities,"entity_profiles":profiles,"event_evolution":evolution,"impact_learning":impact_stats,"market_context":market,"market_correlation":news_market_correlation(enriched,market),,"source_reliability":source_event_reliability(enriched),"feedback":advanced_feedback(feedback_rows),"scorecard":scorecard(enriched,diagnostics),"personalized_feed":personalized_feed(enriched,preferences),"alerts":alert_candidates(enriched),"trend_report":trend_report(enriched,history),"knowledge_graph":graph,"contradictions":contradiction_scan(enriched),"evidence_gaps":missing_evidence(enriched),"research_queue":autonomous_research(enriched,evidence_pool=market_rows),"weekly_report":weekly_report(enriched,history)}
