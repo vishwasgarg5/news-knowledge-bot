@@ -11,6 +11,10 @@ HEADERS={
  "news_learning_daily.csv":["date","evaluated","selected_evaluated","misses","false_positives","success_rate","false_positive_rate","miss_rate"],
  "news_learning.csv":["run_date","event_id","story_id","headline","source","category","initial_score","selected","seen_again_24h","seen_again_48h","seen_again_7d","missed","false_positive","learning_value","outcome_score"],
  "news_feedback.csv":["date","story_id","event_id","feedback","note"],
+ "entity_memory.csv":["date","entity","type","current_mentions","historical_mentions"],
+ "event_memory.csv":["date","event_id","headline","status","story_count","source_count"],
+ "knowledge_edges.csv":["date","from_node","to_node","edge_type"],
+ "research_reports.csv":["date","headline","priority","finding"],
 }
 
 def _write(path,rows,fields):
