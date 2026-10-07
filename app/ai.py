@@ -347,7 +347,8 @@ def rerank_stories(stories,research=None):
             quality_penalty += 12
         item=dict(s); item["importance"]=round(published_importance,1)
         personal=float(s.get("personalized_score",importance) or importance); breaking=float(s.get("breaking_score",0) or 0); trend=float(s.get("trend_score",0) or 0)
-        final=(0.47*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.06*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity + source_quality_bonus + learned_source_bonus - quality_penalty)
+        quality_score=float(s.get("quality_score",published_importance) or published_importance)
+        final=(0.42*published_importance + 0.18*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.05*min(100,breaking) + 0.03*min(100,trend) + 0.10*quality_score + verification_bonus + source_diversity + source_quality_bonus + learned_source_bonus - quality_penalty)
         item["ranking_score"]=round(final,1)
         item["personalization_applied"]=round(personal,1)
         item["source_reliability_applied"]=round(float(s.get("source_reliability",0) or 0),3)
@@ -403,10 +404,12 @@ def rerank_stories(stories,research=None):
     india.sort(key=_quality_key)
     world.sort(key=_quality_key)
 
-    india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","15"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","15")))
+    india_limit=max(1,int(os.getenv("NEWS_INDIA_TOP","5"))); world_limit=max(1,int(os.getenv("NEWS_WORLD_TOP","5")))
     max_stories=int(os.getenv("NEWS_MAX_STORIES","0"))
     if max_stories>0:
-        india_limit=min(india_limit,max_stories); world_limit=min(world_limit,max(0,max_stories-india_limit))
+        total_limit=min(max_stories,india_limit+world_limit)
+        india_limit=min(india_limit,total_limit)
+        world_limit=min(world_limit,max(0,total_limit-india_limit))
 
     # One shared family ledger prevents the same development from occupying
     # both an India slot and a World slot.
