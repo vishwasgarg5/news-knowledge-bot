@@ -406,3 +406,14 @@ def test_intelligence_v4_production_wiring():
         "production_decision","intelligence_v4_diagnosis","strategy_comparison",
     ):
         assert item in text
+
+
+def test_intelligence_v5_contract():
+    from app.intelligence_v5 import intelligence_v5, classify_impact, event_momentum, similar_events
+    stories=[{"headline":"India announces major investment deal","summary":"growth and investment","source":"A","source_count":3,"verification_level":"multi-source"}]
+    history=[{"headline":"India investment deal","run_date":"2026-09-01","outcome_score":0.8}]
+    v=intelligence_v5(stories,history,{"health":"PASS"})
+    assert v["stories"] and "impact" in v["stories"][0]
+    assert v["stories"][0]["impact"]["level"] in {"HIGH","MEDIUM","LOW"}
+    assert "entities" in v and "scorecard" in v
+    assert "research_queue" in v and "cross_event_links" in v
