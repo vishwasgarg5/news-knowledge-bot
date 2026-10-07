@@ -440,6 +440,8 @@ def test_production_v5_gate_27_40():
     wf=walk_forward_v5(rows,train_min=60,test_window=20)
     assert wf["leakage_safe"] is True
     assert "f1" in wf
+    assert wf["feature_learning"] is True
+    assert "precision" in wf and "recall" in wf
     assert "delta_f1" in shadow_ab_test(rows,rows)
     assert calibration_monitor(rows)["samples"]==150
     assert drift_monitor(rows,rows)["status"]=="STABLE"
