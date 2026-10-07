@@ -170,13 +170,23 @@ def contradiction_and_evidence(stories):
 def followup_research_plan(stories):
     return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
 
+def production_quality_gate(ab,cal,drift,evidence):
+    blockers=[]
+    if ab.get("paired_folds",0)<2: blockers.append("insufficient_paired_folds")
+    if cal.get("samples",0)>0 and cal.get("ece",0)>0.20: blockers.append("poor_calibration")
+    if drift.get("status")=="DRIFT": blockers.append("distribution_drift")
+    if len(evidence.get("contradictions",[]))>max(3,int(evidence.get("evidence_gaps",[]).__len__()*0.5)): blockers.append("high_contradiction_load")
+    return {"status":"PASS" if not blockers else "HOLD","blockers":blockers}
+
 def production_evaluation(v4_rows,v5_rows,current,baseline):
     ab=shadow_ab_test(v4_rows,v5_rows)
     cal=calibration_monitor(v5_rows)
     drift=drift_monitor(current,baseline)
     rollback=drift["status"]=="DRIFT" and not ab["promote"]
-    return {"ab":ab,"calibration":cal,"drift":drift,"rollback":rollback,
-            "production_status":"PROMOTE_V5" if ab["promote"] and drift["status"]=="STABLE" else "HOLD_V4"}
+    gate=production_quality_gate(ab,cal,drift,{"contradictions":[],"evidence_gaps":[]})
+    status="PROMOTE_V5" if ab["promote"] and gate["status"]=="PASS" and drift["status"]=="STABLE" else "HOLD_V4"
+    return {"ab":ab,"calibration":cal,"drift":drift,"rollback":rollback,"quality_gate":gate,
+            "production_status":status}
 
 def run_v5_production_gate(learning_rows,stories,history):
     wf=walk_forward_v5(learning_rows)
