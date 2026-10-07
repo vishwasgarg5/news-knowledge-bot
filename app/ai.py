@@ -134,7 +134,7 @@ def select_stories(articles,top_n=None,excluded_headlines=None):
         category="world" if raw_category=="india" and region=="world" else ("india" if raw_category=="world" and region=="india" else raw_category)
         if max_stories>0 and category_counts.get(category,0)>=max_per_category: continue
         title=str(a.get("title",""))
-        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":category,"region":region,"region_confidence":round(float(a.get("region_confidence",0) or 0),2),"region_evidence":str(a.get("region_evidence","") or ""),"url":str(a.get("url","")),"source":str(a.get("source","")),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
+        selected.append({"story_id":hashlib.sha1(title.lower().encode()).hexdigest()[:16],"event_id":_event_id(title),"rank":len(selected)+1,"headline":title[:240],"importance":score,"category":category,"region":region,"region_confidence":round(float(a.get("region_confidence",0) or 0),2),"region_evidence":str(a.get("region_evidence","") or ""),"url":str(a.get("url","")),"source":str(a.get("source","")),"published":str(a.get("published","") or ""),"summary":str(a.get("summary","") or ""),"_event_text":event_text,"reason":"Impact, source quality, relevance and novelty."})
         category_counts[category]=category_counts.get(category,0)+1
         if len(selected)>=limit: break
     return selected
