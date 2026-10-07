@@ -15,10 +15,22 @@ def _ollama_url(): return os.getenv("OLLAMA_URL",DEFAULT_OLLAMA_URL).strip() or 
 def _call_ollama(prompt,system=SYSTEM,num_predict=None,timeout=None):
     payload={"model":_model_name(),"system":system,"prompt":prompt,"stream":False,"keep_alive":"5m","options":{"temperature":0.1,"num_ctx":int(os.getenv("AI_CONTEXT","2048")),"num_predict":num_predict or int(os.getenv("AI_MAX_OUTPUT","300"))}}
     req=Request(_ollama_url(),data=json.dumps(payload,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
-    try:
-        with urlopen(req,timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","25"))) as r:data=json.loads(r.read().decode())
-    except HTTPError as e: raise RuntimeError(f"Ollama HTTP {e.code}: {e.read().decode(errors='replace')[:300]}") from e
-    except URLError as e: raise RuntimeError(f"Cannot reach Ollama: {e.reason}") from e
+    request_timeout=timeout or int(os.getenv("AI_TIMEOUT_SECONDS","45"))
+    retry_timeout=int(os.getenv("AI_RETRY_TIMEOUT_SECONDS","60"))
+    attempts=(request_timeout,retry_timeout) if retry_timeout>request_timeout else (request_timeout,)
+    last_timeout=None
+    for attempt_timeout in attempts:
+        try:
+            with urlopen(req,timeout=attempt_timeout) as r:data=json.loads(r.read().decode())
+            last_timeout=None
+            break
+        except TimeoutError as e:
+            last_timeout=e
+            if attempt_timeout==attempts[-1]:
+                raise RuntimeError(f"Ollama request timed out after {attempt_timeout}s") from e
+        except HTTPError as e: raise RuntimeError(f"Ollama HTTP {e.code}: {e.read().decode(errors='replace')[:300]}") from e
+        except URLError as e: raise RuntimeError(f"Cannot reach Ollama: {e.reason}") from e
+    if last_timeout is not None: raise RuntimeError("Ollama request timed out") from last_timeout
     text=data.get("response","").strip()
     if not text: raise RuntimeError("Ollama returned an empty response")
     return text
