@@ -81,6 +81,26 @@ def backtest_learning_v2(data_path, min_score=0):
         group=[o for s,o in samples if lo<=s<hi]; buckets[f"{lo}-{hi-1}"]={"samples":len(group),"avg_outcome":round(sum(group)/len(group),3) if group else 0}
     return {"samples":len(samples),"precision":round(precision,3),"recall":round(recall,3),"f1":round(f1,3),"hit_rate":round(hit,3),"mae":round(mae,3),"buckets":buckets}
 
+def calibrate_learning_threshold(data_path, minimum=35, maximum=85, step=5):
+    """Find the historical score threshold with the best F1 without future leakage."""
+    rows=read_rows(data_path/"news_learning.csv"); samples=[]
+    for r in rows:
+        try: score=float(r.get("initial_score") or 0); outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
+        except (TypeError,ValueError): continue
+        samples.append((score,outcome>=0.5))
+    if not samples: return {"threshold":50,"precision":0,"recall":0,"f1":0,"samples":0}
+    best=None
+    for threshold in range(int(minimum),int(maximum)+1,int(step)):
+        tp=sum(score>=threshold and actual for score,actual in samples)
+        fp=sum(score>=threshold and not actual for score,actual in samples)
+        fn=sum(score<threshold and actual for score,actual in samples)
+        precision=tp/max(1,tp+fp); recall=tp/max(1,tp+fn)
+        f1=2*precision*recall/max(1,precision+recall)
+        candidate=(f1,precision,recall,-threshold)
+        if best is None or candidate>best[0]: best=(candidate,threshold,precision,recall,f1)
+    return {"threshold":best[1],"precision":round(best[2],3),"recall":round(best[3],3),"f1":round(best[4],3),"samples":len(samples)}
+
+
 def quality_dashboard(data_path):
     """Return compact operational metrics for daily/weekly observability."""
     report=build_report(data_path)
@@ -93,6 +113,7 @@ def quality_dashboard(data_path):
         "horizon_coverage":report["outcome_horizon_coverage"],
         "top_categories":report["top_categories"][:5],
         "backtest":backtest_learning_v2(data_path),
+        "calibration":calibrate_learning_threshold(data_path),
     }
 def write_reports(data_path):
     report=build_report(data_path)
