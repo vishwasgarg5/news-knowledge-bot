@@ -319,3 +319,40 @@ def test_confidence_calibration_is_exposed():
     assert "calibrated_confidence" in text
     assert "confidence_snapshot" in text
     assert "final_audit" in text
+
+
+def test_production_v4_feedback_and_monitoring(tmp_path):
+    from app.production import time_series_backtest, feedback_snapshot, feedback_adjustment, monitoring_alerts
+    from app.storage import ensure_data, append_rows, HEADERS
+    ensure_data(tmp_path)
+    rows=[]
+    for i in range(45):
+        rows.append({"run_date":f"2026-09-{(i%30)+1:02d}","initial_score":70 if i%2 else 40,"outcome_score":1 if i%3 else 0})
+    result=time_series_backtest(rows,minimum_train=20,test_window=10)
+    assert result["leakage_safe"] is True
+    assert result["folds"] >= 2
+    assert {"precision","recall","f1","mae","stability"} <= result.keys()
+    append_rows(tmp_path/"news_feedback.csv",[{"date":"2026-10-07","story_id":"s1","event_id":"e1","feedback":"useful","note":""}],HEADERS["news_feedback.csv"])
+    snap=feedback_snapshot(tmp_path)
+    assert snap["useful"]==1
+    assert feedback_adjustment(snap)["ranking_delta"] > 0
+    alerts=monitoring_alerts({"source_failures":0,"source_warnings":0,"stories":5,"world_stories":5,"world_target":5,"india_stories":5,"india_target":5,"health":"PASS"})
+    assert alerts == []
+
+
+def test_operational_trend_uses_calendar_window():
+    from app.ops import historical_trend
+    result=historical_trend([
+        {"date":"2020-01-01","region":"world"},
+        {"date":"2099-01-01","region":"india"},
+    ],days=7)
+    assert result["stories"] <= 1
+
+
+def test_feedback_schema_and_production_wiring():
+    text=read("app/main.py")
+    assert "time_series_backtest" in text
+    assert "feedback_snapshot" in text
+    assert "monitoring_alerts" in text
+    storage=read("app/storage.py")
+    assert "news_feedback.csv" in storage
