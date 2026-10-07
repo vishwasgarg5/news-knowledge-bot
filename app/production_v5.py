@@ -26,33 +26,30 @@ def _score_row(r, rates, weights):
     return weights[0]*base + weights[1]*source + weights[2]*category
 
 
+def _fit_rates(rows):
+    positive=sum(_label(r) for r in rows)
+    global_rate=positive/max(1,len(rows))
+    return {"global":global_rate,
+            "source":_feature_rates(rows,"source",prior=6.0,global_rate=global_rate),
+            "category":_feature_rates(rows,"category",prior=6.0,global_rate=global_rate)}
+
 def _best_v5_policy(train):
-    positive=sum(_label(r) for r in train)
-    global_rate=positive/max(1,len(train))
-    rates={"global":global_rate,
-           "source":_feature_rates(train,"source",prior=6.0,global_rate=global_rate),
-           "category":_feature_rates(train,"category",prior=6.0,global_rate=global_rate)}
-    best=None
-    # Constrained feature search: score, source reliability and category reliability.
-    # The policy is fitted only on the historical training window.
+    """Select hyperparameters on a trailing validation slice, then refit features on all training data."""
+    if len(train)<10: return {"rates":_fit_rates(train),"weights":(0.8,0.1,0.1),"threshold":0.5,"train_f1":0.0,"train_precision":0.0,"train_recall":0.0}
+    split=max(5,int(len(train)*0.8)); fit,valid=train[:split],train[split:]
+    rates=_fit_rates(fit); best=None
     for base_w in (0.50,0.60,0.70,0.80):
         for source_w in (0.10,0.20,0.30):
             category_w=1.0-base_w-source_w
             if category_w<0.10: continue
             weights=(base_w,source_w,category_w)
             for threshold in [x/100 for x in range(45,81,5)]:
-                tp=fp=fn=0
-                for r in train:
-                    pred=_score_row(r,rates,weights)>=threshold; actual=_label(r)
-                    tp+=pred and actual; fp+=pred and not actual; fn+=actual and not pred
-                p=tp/max(1,tp+fp); rec=tp/max(1,tp+fn)
-                f1=2*p*rec/max(1e-9,p+rec)
-                candidate=(f1,p,rec,weights,threshold)
-                if best is None or candidate[:3]>best[:3]:
-                    best=candidate
-    return {"rates":rates,"weights":best[3],"threshold":best[4],"train_f1":round(best[0],3),
-            "train_precision":round(best[1],3),"train_recall":round(best[2],3)}
-
+                p,r,f1=_evaluate_rows(valid,lambda row,w=weights,t=threshold:_score_row(row,rates,w)>=t)
+                candidate=(f1,p,r,weights,threshold)
+                if best is None or candidate[:3]>best[:3]: best=candidate
+    full_rates=_fit_rates(train)
+    p,r,f1=_evaluate_rows(train,lambda row,w=best[3],t=best[4]:_score_row(row,full_rates,w)>=t)
+    return {"rates":full_rates,"weights":best[3],"threshold":best[4],"train_f1":round(f1,3),"train_precision":round(p,3),"train_recall":round(r,3),"validation_f1":round(best[0],3),"validation_precision":round(best[1],3),"validation_recall":round(best[2],3)}
 
 def walk_forward_v5(rows,train_min=60,test_window=30):
     """Leakage-safe V5: learn a constrained composite score + threshold on each training window."""
@@ -141,7 +138,7 @@ def calibration_monitor(rows,bins=10):
 def calibrate_confidence(initial_score, rows, bins=10):
     """Map a raw 0-100 score to an empirical outcome probability with shrinkage."""
     score=max(0,min(100,_f(initial_score))); idx=min(bins-1,int(score/100*bins)); lo=idx/bins; hi=(idx+1)/bins
-    bucket=[r for r in rows or [] if lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi) and str(r.get("outcome_score","")).strip()]
+    bucket=[r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"} and (lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi))]
     global_rate=sum(_label(r) for r in rows or [])/max(1,len(rows or []))
     rate=(sum(_label(r) for r in bucket)+4*global_rate)/(len(bucket)+4)
     return round(rate*100,1)
