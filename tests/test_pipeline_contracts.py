@@ -189,6 +189,8 @@ def test_workflow_is_schedule_only_and_linked():
     assert "python -m compileall -q app" in text
     assert "python -m app.main" in text
     assert "actions/upload-artifact@v5" in text
+    assert "NEWS_WORLD_TOP: '5'" in text
+    assert "NEWS_INDIA_TOP: '5'" in text
     assert "git add data/" in text
 
 
@@ -249,18 +251,22 @@ def test_telegram_output_v2_contract():
 
 
 def test_quality_intelligence_v2_contract(tmp_path):
-    from app.quality import prepare_candidates, coverage_gaps, source_health, quality_snapshot
+    from app.quality import prepare_candidates, coverage_gaps, source_health, quality_snapshot, coverage_plan
     rows=[{"headline":"India economy update","category":"india","source":"Reuters","importance":80,"story_id":"1"}]
     out=prepare_candidates(rows,[])
     assert out and "novelty_score" in out[0] and "event_momentum" in out[0]
     assert isinstance(coverage_gaps(out),list)
+    plan=coverage_plan(out,world_target=5,india_target=5)
+    assert {"world_target","india_target","world_shortfall","india_shortfall"} <= plan.keys()
     assert source_health(out)["Reuters"]["articles"]==1
     snap=quality_snapshot(out,{"1":{"verification":"multi-source","contradiction_flag":False}})
     assert snap["strong"]==1
 
 def test_backtest_v2_contract(tmp_path):
-    from app.analytics import backtest_learning_v2
+    from app.analytics import backtest_learning_v2, calibrate_learning_threshold
     from app.storage import ensure_data
     ensure_data(tmp_path)
     result=backtest_learning_v2(tmp_path)
     assert {"samples","precision","recall","f1","hit_rate","mae","buckets"} <= result.keys()
+    calibration=calibrate_learning_threshold(tmp_path)
+    assert {"threshold","precision","recall","f1","samples"} <= calibration.keys()
