@@ -15,6 +15,8 @@ HEADERS={
  "event_memory.csv":["date","event_id","headline","status","story_count","source_count"],
  "knowledge_edges.csv":["date","from_node","to_node","edge_type"],
  "research_reports.csv":["date","headline","priority","finding"],
+ "knowledge_daily.csv":["date","stories","high_impact","new_events","developing_events","confirmed_events","contradictions","research_items"],
+ "knowledge_weekly.csv":["week","stories","top_categories","top_entities","new_events","developing_events","confirmed_events","anomalies","research_items"],
 }
 
 def _write(path,rows,fields):
