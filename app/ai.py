@@ -334,11 +334,15 @@ def rerank_stories(stories,research=None):
         conf=float(r.get("confidence",0) or 0); indep=int(r.get("independent_sources",0) or 0); importance=float(s.get("importance",0) or 0)
         novelty=100.0 if not r.get("historical") else 65.0; verification=r.get("verification","unverified")
         if verification=="unverified": conf=min(conf,50)
-        verification_bonus={"multi-source":12,"official-source":9,"multi-report":2,"single-source":-4}.get(verification,0)
+        verification_bonus={"multi-source":16,"official-source":14,"multi-report":6,"single-source":-12,"unverified":-35}.get(verification,0)
         source_diversity=min(8,indep*2)
         published_importance=importance
         if verification=="unverified": published_importance=min(published_importance,68.0)
-        quality_penalty=10 if r.get("primary_derivative") else 0
+        # Verification is deliberately a first-class ranking signal. A weak
+        # source must not outrank corroborated evidence simply on importance.
+        quality_penalty=(10 if r.get("primary_derivative") else 0) + (8 if r.get("contradiction_flag") else 0)
+        if not r.get("primary_fresh",True):
+            quality_penalty += 12
         item=dict(s); item["importance"]=round(published_importance,1)
         personal=float(s.get("personalized_score",importance) or importance); breaking=float(s.get("breaking_score",0) or 0); trend=float(s.get("trend_score",0) or 0)
         final=(0.50*published_importance + 0.20*conf + 0.07*min(100,50+indep*15) + 0.05*novelty + 0.10*personal + 0.05*min(100,breaking) + 0.03*min(100,trend) + verification_bonus + source_diversity - quality_penalty)
@@ -358,8 +362,9 @@ def rerank_stories(stories,research=None):
             trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
             return float(item.get("importance",0) or 0) >= min_single_importance and trusted
         if v=="unverified": return False
+        if not r.get("primary_fresh",True): return False
         return True
-    rejection_counts={"primary_derivative":0,"content_quality":0,"single_source_below_gate":0,"single_source_untrusted":0,"single_source_commentary":0,"unverified":0}
+    rejection_counts={"primary_derivative":0,"content_quality":0,"single_source_below_gate":0,"single_source_untrusted":0,"single_source_commentary":0,"unverified":0,"stale_primary":0}
     quality_scored=[]
     for pair in scored:
         score,item=pair; rr=research.get(item.get("story_id"),{}) or {}; vv=rr.get("verification","unverified")
@@ -378,8 +383,10 @@ def rerank_stories(stories,research=None):
                 rejection_counts["single_source_commentary"]+=1; continue
         if vv=="unverified":
             rejection_counts["unverified"]+=1; continue
+        if not rr.get("primary_fresh",True):
+            rejection_counts.setdefault("stale_primary",0); rejection_counts["stale_primary"]+=1; continue
         quality_scored.append(pair)
-    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} content_quality={rejection_counts['content_quality']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} eligible={len(quality_scored)}",flush=True)
+    print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} content_quality={rejection_counts['content_quality']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} stale_primary={rejection_counts['stale_primary']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     # Corroborated evidence must outrank high-scoring single-source items.
