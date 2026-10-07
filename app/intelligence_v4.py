@@ -202,12 +202,23 @@ def walk_forward_optimization(rows, minimum_train=60, test_window=30):
             "leakage_safe":True}
 
 
+def _legacy_fixed_threshold(rows, threshold=50):
+    clean=sorted([(str(r.get("run_date","")), _f(r.get("initial_score")), _positive(r.get("outcome_score")))
+                  for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}])
+    if not clean:
+        return {"samples":0,"precision":0.0,"recall":0.0,"f1":0.0,"leakage_safe":True}
+    selected=[x for x in clean if x[1]>=threshold]
+    tp=sum(a for _,_,a in selected)
+    fp=len(selected)-tp
+    positives=sum(a for _,_,a in clean)
+    fn=max(0,positives-tp)
+    p=tp/max(1,tp+fp); r=tp/max(1,tp+fn); f=2*p*r/max(1e-9,p+r)
+    return {"samples":len(clean),"precision":round(p,3),"recall":round(r,3),"f1":round(f,3),"threshold":threshold,"leakage_safe":True}
+
+
 def compare_strategies(rows):
-    """Step 79: deterministic shadow comparison against the legacy score gate."""
-    base=walk_forward_optimization(rows)
-    # The v4 strategy uses the same leakage-safe folds but learns a threshold from
-    # the historical score after reliability calibration. It is intentionally
-    # reported as a shadow strategy until it beats baseline on F1.
+    """Step 79: compare fixed production scoring with leakage-safe walk-forward V4."""
+    base=_legacy_fixed_threshold(rows,50)
     v4=walk_forward_optimization(rows,minimum_train=60,test_window=30)
     promotion=v4["f1"] > base["f1"] and v4["precision"] >= base["precision"]
     return {"baseline":base,"v4_shadow":v4,"promote":promotion,"status":"PROMOTE" if promotion else "SHADOW"}
