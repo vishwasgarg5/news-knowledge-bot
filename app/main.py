@@ -16,6 +16,7 @@ from .quality import prepare_candidates,source_health,quality_snapshot,coverage_
 from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
+from .intelligence_v5 import intelligence_v5
 from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
@@ -422,6 +423,15 @@ def main():
     stats["walk_forward_v4"]=walk_forward_optimization(learning_rows)
     stats["strategy_comparison"]=compare_strategies(learning_rows)
     stats["production_decision"]=production_decision(stats["strategy_comparison"])
+    v5=intelligence_v5(result.get("top_stories",[]),read_rows(DATA/"news_history.csv"),stats)
+    stats["intelligence_v5"]=v5
+    stats["impact_summary"]={"high":sum(1 for s in v5["stories"] if s["impact"]["level"]=="HIGH"),"medium":sum(1 for s in v5["stories"] if s["impact"]["level"]=="MEDIUM"),"low":sum(1 for s in v5["stories"] if s["impact"]["level"]=="LOW")}
+    stats["entity_summary"]=v5["entities"]
+    stats["intelligence_scorecard"]=v5["scorecard"]
+    stats["research_queue"]=v5["research_queue"]
+    stats["cross_event_links"]=v5["cross_event_links"]
+    stats["source_event_matrix"]=v5["source_event_matrix"]
+
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
@@ -441,7 +451,7 @@ def main():
     stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
     stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
-    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision")})
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5")})
     # Refresh the uploaded audit only after every final stat has been populated.
     try:
         audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
