@@ -14,6 +14,7 @@ from .intelligence import enrich_trends,personalize,intelligence_summary
 from .analytics import build_report,write_reports,backtest_learning_v2,backtest_learning_v3,quality_dashboard
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
 from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
+from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -320,6 +321,7 @@ def main():
     for s in result.get("top_stories",[]):
         s["verification"]=research.get(s.get("story_id"),{})
         s["calibrated_confidence"]=calibrate_confidence(s,research)
+        v=s.get("verification") or {}; v["calibrated_confidence"]=s["calibrated_confidence"]; s["verification"]=v
         s["source"]=source_by_url.get(s.get("url"),s.get("source",""))
 
     current_ids={s.get("story_id") for s in result.get("top_stories",[])}
@@ -397,6 +399,10 @@ def main():
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
+    stats["confidence_snapshot"]=confidence_snapshot(result.get("top_stories",[]))
+    stats["historical_trend"]=historical_trend(read_rows(DATA/"news_history.csv"),7)
+    stats["operational_health"]=operational_health(stats)
+    stats["final_audit"]=final_audit(stats,result.get("top_stories",[]))
     stats["learning_v3"]=learning_v3
     stats["source_fallback"]=source_fallback_plan(stats["source_health"])
     stats["breaking_fast_lane"]=len(fast_lane)
