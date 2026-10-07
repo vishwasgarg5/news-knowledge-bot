@@ -273,6 +273,8 @@ def build_messages(result,today,stats,timeline=None):
         f"Confidence calibrated {float((stats.get('confidence_snapshot') or {}).get('avg_calibrated',0)):.1f} · high {int((stats.get('confidence_snapshot') or {}).get('high_confidence',0))}",
         f"7-day history {int((stats.get('historical_trend') or {}).get('stories',0))} stories · health {(stats.get('operational_health') or {}).get('status','UNKNOWN')}",
         f"Backtest V3 stability {float((stats.get('backtest_v3') or {}).get('temporal_stability',0)):.1%} · breaking fast-lane {stats.get('breaking_fast_lane',0)}",
+        f"V4 event F1 {float((stats.get('intelligence_v4_event_level') or {}).get('f1',0)):.1%} · walk-forward F1 {float((stats.get('walk_forward_v4') or {}).get('f1',0)):.1%}",
+        f"V4 decision {(stats.get('production_decision') or {}).get('status','HOLD')} · feedback net {int((stats.get('intelligence_v4_feedback') or {}).get('net',0))}",
         f"AI generated {stats.get('ai_generated',0)} · fallback {stats.get('ai_fallback',0)} · learning records {learning_total}",
         "",
         f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
