@@ -167,7 +167,7 @@ jobs:
         run: python -m app.main
       - name: Upload final briefing audit
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: news-briefing-audit
           path: /tmp/news_briefing.json
