@@ -9,12 +9,29 @@ def breaking_score(story):
  if any(x in t for x in ("killed","dead","attack","earthquake","cyclone","war","ceasefire","resigns","resignation","arrested","verdict","ruling","crash")): s+=25
  return min(100,s+5 if story.get("region")=="india" else s)
 def enrich_trends(stories,historical=None):
- counts=Counter()
- for r in (historical or []): counts.update(_tokens(r.get("headline","")))
+ history=list(historical or [])
+ counts=Counter(); recurring=Counter()
+ for r in history:
+  t=_tokens(r.get("headline",""))
+  counts.update(t)
+  recurring.update(x for x in t if x)
  out=[]
  for s in stories:
-  t=_tokens(s.get("headline","")); overlap=sum(counts[x]>=2 for x in t); novelty=sum(counts[x]==0 for x in t)
-  x=dict(s); x["trend_score"]=round(min(100,40+overlap*8+novelty*3),1); x["breaking_score"]=breaking_score(s); x["emerging_topic"]=x["trend_score"]>=65 and x["breaking_score"]>=20; out.append(x)
+  t=_tokens(s.get("headline",""))
+  repeated=sum(1 for x in t if counts[x]>=2)
+  strong_repeated=sum(1 for x in t if recurring[x]>=3)
+  novel=sum(1 for x in t if counts[x]==0)
+  # Trend means repeated concrete topic vocabulary, not simply novelty.
+  # Novelty is retained as a small discovery signal but cannot create an
+  # emerging-topic label by itself.
+  continuity=min(55,repeated*7+strong_repeated*5)
+  discovery=min(15,novel*2)
+  score=min(100,30+continuity+discovery)
+  x=dict(s); x["trend_score"]=round(score,1); x["trend_repeated_terms"]=repeated
+  x["trend_strong_terms"]=strong_repeated; x["trend_novel_terms"]=novel
+  x["breaking_score"]=breaking_score(s)
+  x["emerging_topic"]=bool(repeated>=2 and (strong_repeated>=1 or x["breaking_score"]>=50))
+  out.append(x)
  return out
 def personalize(stories,preferences=None):
  p=dict(DEFAULT_PREFERENCES); p.update(preferences or {})
