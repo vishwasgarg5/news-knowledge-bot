@@ -49,6 +49,8 @@ def personalize(stories,preferences=None):
  regions={str(x).lower() for x in p.get("preferred_regions",[])}
  category_weight=float(p.get("category_weight",6) or 6); region_weight=float(p.get("region_weight",2) or 2)
  breaking_weight=float(p.get("breaking_weight",4) or 4); emerging_weight=float(p.get("emerging_weight",3) or 3)
+ novelty_weight=float(p.get("novelty_weight",1) or 1)
+ momentum_weight=float(p.get("momentum_weight",2) or 2)
  minimum=float(p.get("minimum_personal_score",58) or 58)
  out=[]
  for s in stories:
@@ -57,6 +59,8 @@ def personalize(stories,preferences=None):
   if str(x.get("region","")).lower() in regions: score+=region_weight; reasons.append("preferred region")
   if float(x.get("breaking_score",0) or 0)>=50: score+=breaking_weight; reasons.append("breaking")
   if x.get("emerging_topic"): score+=emerging_weight; reasons.append("emerging topic")
+  if float(x.get("novelty_score",0) or 0)>=70: score+=novelty_weight; reasons.append("novel")
+  if float(x.get("event_momentum",0) or 0)>=60: score+=momentum_weight; reasons.append("momentum")
   # Learning feedback is already applied to importance; expose it without
   # double-counting it here.
   learning=float(x.get("learning_adjustment",0) or 0)
