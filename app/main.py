@@ -13,6 +13,7 @@ from .learning import evaluate_and_learn,apply_learning,learning_metrics
 from .intelligence import enrich_trends,personalize,intelligence_summary
 from .analytics import build_report,write_reports,backtest_learning_v2,quality_dashboard
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
+from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -288,21 +289,34 @@ def main():
     started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{})
     articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700))
     today=datetime.now(IST).date().isoformat(); preferences=load_preferences(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
+    from .analytics import calibrate_learning_threshold
+    calibration=calibrate_learning_threshold(DATA)
+    production_floor=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); adaptive=apply_adaptive_threshold(calibration,production_floor)
+    os.environ["NEWS_MIN_IMPORTANCE"]=str(int(adaptive))
+    print(f"[LEARNING] calibrated_threshold={calibration.get('threshold')} production_threshold={adaptive}",flush=True)
     candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
     candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
 
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
-    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today); candidates=enrich_trends(candidates,read_rows(DATA/"news_history.csv")); candidates=personalize(candidates,preferences)
+    candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today); candidates=enrich_trends(candidates,read_rows(DATA/"news_history.csv"))
+    learning_v3=learning_v3_snapshot(read_rows(DATA/"news_learning.csv"))
+    preferences=adaptive_personalization(preferences,learning_v3)
+    candidates=personalize(candidates,preferences)
     candidates=prepare_candidates(candidates,read_rows(DATA/"news_history.csv"))
     plan=coverage_plan(candidates,world_target=int(os.getenv("NEWS_WORLD_TOP","5")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")))
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
-    selected=rerank_stories(candidates,research); result=generate_briefing(selected,all_articles,timeline,today,research)
+    selected=rerank_stories(candidates,research)
+    selected=consolidate_event_families(selected)
+    selected=diversify_stories(selected,max_total=int(os.getenv("NEWS_MAX_STORIES","10")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")),world_target=int(os.getenv("NEWS_WORLD_TOP","5")),max_per_source=int(os.getenv("NEWS_MAX_STORIES_PER_SOURCE","2")))
+    fast_lane=breaking_fast_lane(selected)
+    result=generate_briefing(selected,all_articles,timeline,today,research)
     source_by_url={a.get("url"):a.get("source","") for a in all_articles}
     for s in result.get("top_stories",[]):
         s["verification"]=research.get(s.get("story_id"),{})
+        s["calibrated_confidence"]=calibrate_confidence(s,research)
         s["source"]=source_by_url.get(s.get("url"),s.get("source",""))
 
     current_ids={s.get("story_id") for s in result.get("top_stories",[])}
@@ -379,6 +393,10 @@ def main():
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
+    stats["learning_v3"]=learning_v3
+    stats["source_fallback"]=source_fallback_plan(stats["source_health"])
+    stats["breaking_fast_lane"]=len(fast_lane)
+    stats["learning_calibration"]=calibration
     print(f"[ANALYTICS] samples={report['learning_samples']} avg_outcome={report['avg_outcome']} top_categories={report['top_categories'][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
