@@ -11,7 +11,7 @@ from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
 from .learning import evaluate_and_learn,apply_learning,learning_metrics
 from .intelligence import enrich_trends,personalize,intelligence_summary
-from .analytics import build_report,write_reports,backtest_learning_v2,quality_dashboard
+from .analytics import build_report,write_reports,backtest_learning_v2,backtest_learning_v3,quality_dashboard
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
 from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 
@@ -390,6 +390,7 @@ def main():
     stats["coverage_plan"]=plan
     stats["source_health"]=source_health(candidates)
     stats["backtest_v2"]=backtest_learning_v2(DATA)
+    stats["backtest_v3"]=backtest_learning_v3(DATA)
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
