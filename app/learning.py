@@ -31,7 +31,15 @@ def _profile(rows):
         by_source[r.get("source","unknown") or "unknown"][0]+=1; by_source[r.get("source","unknown") or "unknown"][1]+=val
         by_cat[r.get("category","other") or "other"][0]+=1; by_cat[r.get("category","other") or "other"][1]+=val
     def norm(d):
-        return {k:max(-1,min(1,v[1]/max(1,v[0]))) for k,v in d.items()}
+        # Shrink sparse observations toward neutral so one early outcome cannot
+        # swing tomorrow's ranking too aggressively.
+        out={}
+        prior=4.0
+        for k,(n,total) in d.items():
+            raw=total/max(1,n)
+            shrunk=raw*n/(n+prior)
+            out[k]=max(-1,min(1,shrunk))
+        return out
     return {"source":norm(by_source),"category":norm(by_cat)}
 
 def evaluate_and_learn(root:Path,candidates:list[dict],today:str,selected_ids=None,record_current=False):
