@@ -90,6 +90,26 @@ jobs:
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
           PY
+      - name: Advanced intelligence V3 contract
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from app.advanced import adaptive_threshold, diversify_stories, learning_v3_snapshot, source_fallback_plan, breaking_fast_lane
+          from app.analytics import backtest_learning_v3
+          from pathlib import Path
+          assert adaptive_threshold({"threshold":72}) == 72
+          rows=[{"story_id":"i","event_id":"i","region":"india","source":"a","ranking_score":90},
+                {"story_id":"w1","event_id":"w1","region":"world","source":"b","ranking_score":89},
+                {"story_id":"w2","event_id":"w2","region":"world","source":"c","ranking_score":88}]
+          assert len(diversify_stories(rows,max_total=3,india_target=1,world_target=2)) == 3
+          assert learning_v3_snapshot([{"selected":"true","outcome_score":"0.8"}])["hit_rate"] == 1.0
+          assert source_fallback_plan({"weak":{"quality_rate":0.1}})["fallback_required"]
+          assert breaking_fast_lane([{"breaking_score":80}])
+          assert "temporal_stability" in backtest_learning_v3(Path("data"))
+          print("Advanced intelligence V3 contract passed")
+          PY
+
       - name: Security and dependency audit
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
