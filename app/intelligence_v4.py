@@ -176,19 +176,22 @@ def feedback_learning(rows, feedback_rows, today=None):
             "net":useful-bad,"bounded_delta":round(max(-3,min(3,(useful-bad)*0.2)),2)}
 
 
-def walk_forward_optimization(rows, minimum_train=60, test_window=30):
+def walk_forward_optimization(rows, minimum_train=60, test_window=30, learn_threshold=True):
     """Step 78: walk-forward threshold selection with no future leakage."""
     clean=sorted([(str(r.get("run_date","")), _f(r.get("initial_score")), _positive(r.get("outcome_score")))
                   for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}])
     folds=[]; i=minimum_train
     while i<len(clean):
         train=clean[:i]; test=clean[i:i+test_window]
-        best=(0,-1)
-        for threshold in range(50,86,5):
-            tp=sum(s>=threshold and a for _,s,a in train); fp=sum(s>=threshold and not a for _,s,a in train); fn=sum(s<threshold and a for _,s,a in train)
-            p=tp/max(1,tp+fp); r=tp/max(1,tp+fn); f=2*p*r/max(1e-9,p+r)
-            if f>best[1]: best=(threshold,f)
-        threshold=best[0]
+        if learn_threshold:
+            best=(50,-1)
+            for threshold in range(50,86,5):
+                tp=sum(s>=threshold and a for _,s,a in train); fp=sum(s>=threshold and not a for _,s,a in train); fn=sum(s<threshold and a for _,s,a in train)
+                p=tp/max(1,tp+fp); r=tp/max(1,tp+fn); f=2*p*r/max(1e-9,p+r)
+                if f>best[1]: best=(threshold,f)
+            threshold=best[0]
+        else:
+            threshold=50
         tp=sum(s>=threshold and a for _,s,a in test); fp=sum(s>=threshold and not a for _,s,a in test); fn=sum(s<threshold and a for _,s,a in test)
         p=tp/max(1,tp+fp); r=tp/max(1,tp+fn); f=2*p*r/max(1e-9,p+r)
         folds.append({"start":test[0][0],"end":test[-1][0],"threshold":threshold,"precision":round(p,3),"recall":round(r,3),"f1":round(f,3)})
@@ -202,24 +205,10 @@ def walk_forward_optimization(rows, minimum_train=60, test_window=30):
             "leakage_safe":True}
 
 
-def _legacy_fixed_threshold(rows, threshold=50):
-    clean=sorted([(str(r.get("run_date","")), _f(r.get("initial_score")), _positive(r.get("outcome_score")))
-                  for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}])
-    if not clean:
-        return {"samples":0,"precision":0.0,"recall":0.0,"f1":0.0,"leakage_safe":True}
-    selected=[x for x in clean if x[1]>=threshold]
-    tp=sum(a for _,_,a in selected)
-    fp=len(selected)-tp
-    positives=sum(a for _,_,a in clean)
-    fn=max(0,positives-tp)
-    p=tp/max(1,tp+fp); r=tp/max(1,tp+fn); f=2*p*r/max(1e-9,p+r)
-    return {"samples":len(clean),"precision":round(p,3),"recall":round(r,3),"f1":round(f,3),"threshold":threshold,"leakage_safe":True}
-
-
 def compare_strategies(rows):
     """Step 79: compare fixed production scoring with leakage-safe walk-forward V4."""
-    base=_legacy_fixed_threshold(rows,50)
-    v4=walk_forward_optimization(rows,minimum_train=60,test_window=30)
+    base=walk_forward_optimization(rows,minimum_train=60,test_window=30,learn_threshold=False)
+    v4=walk_forward_optimization(rows,minimum_train=60,test_window=30,learn_threshold=True)
     promotion=v4["f1"] > base["f1"] and v4["precision"] >= base["precision"]
     return {"baseline":base,"v4_shadow":v4,"promote":promotion,"status":"PROMOTE" if promotion else "SHADOW"}
 
