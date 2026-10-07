@@ -188,7 +188,7 @@ def test_workflow_is_schedule_only_and_linked():
     text = read(".github/workflows/morning_news.yml")
     assert "python -m compileall -q app" in text
     assert "python -m app.main" in text
-    assert "actions/upload-artifact@v4" in text
+    assert "actions/upload-artifact@v5" in text
     assert "git add data/" in text
 
 
