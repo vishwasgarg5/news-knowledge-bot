@@ -1,7 +1,7 @@
 {
-  "learning_samples": 5976,
+  "learning_samples": 5978,
   "selected_samples": 894,
-  "avg_outcome": 0.156,
+  "avg_outcome": 0.155,
   "daily_runs": 15,
   "history_stories": 1233,
   "source_reliability": {
@@ -12,9 +12,10 @@
     "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.077,
     "Business News Today – Finance, Industry & Economy | The Hindu": 0.362,
     "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.03,
-    "Technology News Today, Latest Tech News | The Hindu": 0.471,
+    "Technology News Today, Latest Tech News | The Hindu": 0.469,
     "TechCrunch": 0.156,
-    "World | Deutsche Welle": 0.28
+    "World | Deutsche Welle": 0.28,
+    "World news | The Guardian": 0.0
   },
   "category_reliability": {
     "india": 0.05,
