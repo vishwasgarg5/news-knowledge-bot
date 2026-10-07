@@ -64,6 +64,23 @@ def backtest_learning(data_path, min_score=0):
             "avg_outcome":round(sum(x["outcome_score"] for x in evaluated)/len(evaluated),3),
             "mae":round(sum(errors)/len(errors),3),"hit_rate":round(len(hits)/len(evaluated),3)}
 
+def backtest_learning_v2(data_path, min_score=0):
+    """Leakage-safe diagnostic backtest with precision, recall and score buckets."""
+    rows=read_rows(data_path/"news_learning.csv"); samples=[]
+    for r in rows:
+        try: score=float(r.get("initial_score") or 0); outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
+        except (TypeError,ValueError): continue
+        if score>=float(min_score): samples.append((score,outcome))
+    if not samples: return {"samples":0,"precision":0,"recall":0,"f1":0,"hit_rate":0,"mae":0,"buckets":{}}
+    predicted=[s>=50 for s,_ in samples]; actual=[o>=0.5 for _,o in samples]
+    tp=sum(p and q for p,q in zip(predicted,actual)); fp=sum(p and not q for p,q in zip(predicted,actual)); fn=sum((not p) and q for p,q in zip(predicted,actual))
+    precision=tp/max(1,tp+fp); recall=tp/max(1,tp+fn); f1=2*precision*recall/max(1,precision+recall)
+    mae=sum(abs(s/100-o) for s,o in samples)/len(samples); hit=sum(p==q for p,q in zip(predicted,actual))/len(samples)
+    buckets={}
+    for lo,hi in ((0,50),(50,70),(70,85),(85,101)):
+        group=[o for s,o in samples if lo<=s<hi]; buckets[f"{lo}-{hi-1}"]={"samples":len(group),"avg_outcome":round(sum(group)/len(group),3) if group else 0}
+    return {"samples":len(samples),"precision":round(precision,3),"recall":round(recall,3),"f1":round(f1,3),"hit_rate":round(hit,3),"mae":round(mae,3),"buckets":buckets}
+
 def quality_dashboard(data_path):
     """Return compact operational metrics for daily/weekly observability."""
     report=build_report(data_path)
@@ -75,6 +92,7 @@ def quality_dashboard(data_path):
         "false_positive_rate":round(report["false_positives"]/max(1,report["selected_samples"]),3),
         "horizon_coverage":report["outcome_horizon_coverage"],
         "top_categories":report["top_categories"][:5],
+        "backtest":backtest_learning_v2(data_path),
     }
 def write_reports(data_path):
     report=build_report(data_path)
