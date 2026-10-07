@@ -1,6 +1,7 @@
 from __future__ import annotations
 from collections import Counter
-from statistics import mean
+from statistics import mean, stdev
+import math
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -86,33 +87,64 @@ def _fold_f1(rows,threshold):
     p=tp/max(1,tp+fp); rec=tp/max(1,tp+fn)
     return 2*p*rec/max(1,p+rec)
 
-def _fixed_threshold_eval(rows,threshold=50):
-    rows=[r for r in rows if str(r.get("outcome_score"," ")).strip()]
-    folds=[]; test_window=30
-    for end in range(120,min(len(rows)-test_window+1,120+8*test_window),test_window):
-        test=rows[end:end+test_window]
-        if not test: break
-        tp=fp=fn=0
-        for r in test:
-            pred=_f(r.get("initial_score"))>=threshold; actual=_label(r)
-            tp+=pred and actual; fp+=pred and not actual; fn+=actual and not pred
-        p=tp/max(1,tp+fp); rec=tp/max(1,tp+fn)
-        folds.append({"train":end,"test":len(test),"threshold":threshold,"precision":round(p,3),"recall":round(rec,3),"f1":round(2*p*rec/max(1,p+rec),3)})
-    return {"folds":folds,"f1":round(mean([x["f1"] for x in folds]),3) if folds else 0.0,"leakage_safe":True,"threshold_policy":"fixed_50"}
+def _evaluate_rows(rows, scorer):
+    tp=fp=fn=0
+    for r in rows:
+        pred=bool(scorer(r)); actual=_label(r)
+        tp+=int(pred and actual); fp+=int(pred and not actual); fn+=int((not pred) and actual)
+    precision=tp/max(1,tp+fp); recall=tp/max(1,tp+fn)
+    f1=2*precision*recall/max(1e-9,precision+recall)
+    return precision,recall,f1
 
-def shadow_ab_test(v4_rows,v5_rows):
-    a=_fixed_threshold_eval(v4_rows,50); b=walk_forward_v5(v5_rows)
+def _fixed_threshold_eval(rows,threshold=50,train_min=60,test_window=30):
+    clean=sorted([r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}], key=lambda r:str(r.get("run_date","")))
+    folds=[]; i=train_min
+    while i<len(clean):
+        test=clean[i:i+test_window]
+        if not test: break
+        p,r,f1=_evaluate_rows(test,lambda x:_f(x.get("initial_score"))>=threshold)
+        folds.append({"train":i,"test":len(test),"threshold":threshold,"precision":round(p,3),"recall":round(r,3),"f1":round(f1,3)})
+        i+=test_window
+    return {"folds":folds,"f1":round(mean([x["f1"] for x in folds]),3) if folds else 0.0,"precision":round(mean([x["precision"] for x in folds]),3) if folds else 0.0,"recall":round(mean([x["recall"] for x in folds]),3) if folds else 0.0,"leakage_safe":True,"threshold_policy":"fixed_50","train_min":train_min,"test_window":test_window}
+
+def _delta_ci(values):
+    vals=[float(x) for x in values]
+    if len(vals)<2: return {"mean":round(vals[0],3) if vals else 0.0,"lower":None,"upper":None,"significant":False,"n":len(vals)}
+    mu=mean(vals); se=stdev(vals)/math.sqrt(len(vals)); margin=1.96*se
+    return {"mean":round(mu,3),"lower":round(mu-margin,3),"upper":round(mu+margin,3),"significant":bool(mu>0 and mu-margin>0),"n":len(vals)}
+
+def shadow_ab_test(v4_rows,v5_rows,train_min=60,test_window=30):
+    a=_fixed_threshold_eval(v4_rows,50,train_min,test_window); b=walk_forward_v5(v5_rows,train_min,test_window)
+    n=min(len(a["folds"]),len(b["folds"])); deltas=[b["folds"][i]["f1"]-a["folds"][i]["f1"] for i in range(n)]
+    precision_deltas=[b["folds"][i]["precision"]-a["folds"][i]["precision"] for i in range(n)]
+    f1_ci=_delta_ci(deltas); precision_ci=_delta_ci(precision_deltas)
     delta=round(b["f1"]-a["f1"],3)
-    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"promote":bool(delta>0 and b["f1"]>=a["f1"] and a.get("leakage_safe") and b.get("leakage_safe"))}
+    promote=bool(delta>0 and b["precision"]>a["precision"] and f1_ci["significant"] and precision_ci["mean"]>0 and a.get("leakage_safe") and b.get("leakage_safe"))
+    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"delta_precision":round(b["precision"]-a["precision"],3),"f1_confidence_interval":f1_ci,"precision_confidence_interval":precision_ci,"paired_folds":n,"promote":promote,"promotion_rule":"V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"}
 
 def calibration_monitor(rows,bins=10):
-    out=[]
+    clean=[r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}]
+    out=[]; total_abs=0.0; brier=0.0
     for i in range(bins):
         lo=i/bins; hi=(i+1)/bins
-        xs=[_f(r.get("outcome_score")) for r in rows if str(r.get("outcome_score","")).strip() and lo<=_f(r.get("initial_score"))/100<hi]
-        out.append({"bin":f"{lo:.1f}-{hi:.1f}","samples":len(xs),"actual_rate":round(mean([x>=.5 for x in xs]),3) if xs else None})
-    return {"bins":out,"samples":sum(x["samples"] for x in out)}
+        bucket=[r for r in clean if lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (i==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi)]
+        predicted=[max(0,min(1,_f(r.get("initial_score"))/100)) for r in bucket]
+        actual=[1.0 if _label(r) else 0.0 for r in bucket]
+        mean_pred=mean(predicted) if predicted else None; actual_rate=mean(actual) if actual else None
+        gap=abs(mean_pred-actual_rate) if bucket else 0.0; total_abs+=gap*len(bucket)
+        brier+=sum((p-y)**2 for p,y in zip(predicted,actual))
+        out.append({"bin":f"{lo:.1f}-{hi:.1f}","samples":len(bucket),"mean_predicted":round(mean_pred,3) if mean_pred is not None else None,"actual_rate":round(actual_rate,3) if actual_rate is not None else None,"gap":round(gap,3) if bucket else None})
+    n=len(clean)
+    ece=total_abs/max(1,n)
+    return {"bins":out,"samples":n,"ece":round(ece,3),"brier":round(brier/max(1,n),3),"status":"CALIBRATED" if ece<=0.08 else ("OVER_CONFIDENT" if sum(1 for x in out if x["gap"] is not None and x["mean_predicted"]>x["actual_rate"] and x["gap"]>.10)>len([x for x in out if x["gap"] is not None])/2 else "UNDER_CONFIDENT")}
 
+def calibrate_confidence(initial_score, rows, bins=10):
+    """Map a raw 0-100 score to an empirical outcome probability with shrinkage."""
+    score=max(0,min(100,_f(initial_score))); idx=min(bins-1,int(score/100*bins)); lo=idx/bins; hi=(idx+1)/bins
+    bucket=[r for r in rows or [] if lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi) and str(r.get("outcome_score","")).strip()]
+    global_rate=sum(_label(r) for r in rows or [])/max(1,len(rows or []))
+    rate=(sum(_label(r) for r in bucket)+4*global_rate)/(len(bucket)+4)
+    return round(rate*100,1)
 def drift_monitor(current,baseline):
     cur=Counter(str(r.get("category","unknown")) for r in current); base=Counter(str(r.get("category","unknown")) for r in baseline)
     keys=set(cur)|set(base); n=max(1,len(current)); m=max(1,len(baseline))
