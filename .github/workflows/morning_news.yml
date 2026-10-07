@@ -222,7 +222,25 @@ jobs:
           print(f"Intelligence V4: samples={diagnosis['samples']} event_f1={event['f1']} walk_f1={walk['f1']} decision={decision['status']}")
           print("Intelligence V4 accuracy and shadow contract passed")
           PY
-      - name: Intelligence V5 foundation contract\n        env:\n          PYTHONPATH: ${{ github.workspace }}\n        run: |\n          python - <<'PY'\n          from pathlib import Path\n          from app.storage import read_rows\n          from app.intelligence_v5 import intelligence_v5\n          root=Path('data')\n          result=intelligence_v5([],read_rows(root/'news_history.csv'),{'health':'PASS'})\n          assert {'stories','entities','source_event_matrix','scorecard','cross_event_links','research_queue'} <= result.keys()\n          assert isinstance(result['entities'],dict)\n          assert isinstance(result['research_queue'],list)\n          print('Intelligence V5 foundation contract passed')\n          PY\n      - name: Production freeze gate
+      - name: Intelligence V5 foundation contract\n        env:\n          PYTHONPATH: ${{ github.workspace }}\n        run: |\n          python - <<'PY'\n          from pathlib import Path\n          from app.storage import read_rows\n          from app.intelligence_v5 import intelligence_v5\n          root=Path('data')\n          result=intelligence_v5([],read_rows(root/'news_history.csv'),{'health':'PASS'})\n          assert {'stories','entities','source_event_matrix','scorecard','cross_event_links','research_queue'} <= result.keys()\n          assert isinstance(result['entities'],dict)\n          assert isinstance(result['research_queue'],list)\n          print('Intelligence V5 foundation contract passed')\n          PY\n      - name: Intelligence V5+ steps 10-25 contract
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from app.storage import ensure_data, read_rows
+          from app.intelligence_v5_plus import run_v5_plus
+          root=Path("data"); ensure_data(root)
+          stories=[{"headline":"India investment deal","summary":"growth investment","source":"test","category":"economy","importance":80,"source_count":3,"verification_level":"multi-source","breaking_score":80}]
+          v=run_v5_plus(stories,read_rows(root/"news_history.csv"),read_rows(root/"news_learning.csv"),read_rows(root/"news_feedback.csv"),{"topics":["economy"]},{"health":"PASS"})
+          required={"entities","entity_profiles","clusters","event_evolution","impact_learning","market_correlation","source_reliability","feedback","scorecard","personalized_feed","alerts","trend_report","knowledge_graph","contradictions","evidence_gaps","research_queue","weekly_report"}
+          assert required <= v.keys()
+          assert v["scorecard"]["stories"] == 1
+          assert isinstance(v["knowledge_graph"]["edges"],list)
+          print("Intelligence V5+ steps 10-25 contract passed")
+          PY
+
+      - name: Production freeze gate
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
           grep -q "workflow_dispatch:" .github/workflows/morning_news.yml
@@ -294,6 +312,10 @@ jobs:
           assert "intelligence_v5" in stats
           assert "intelligence_scorecard" in stats
           assert "research_queue" in stats
+          assert "intelligence_v5_plus" in stats
+          assert "smart_alerts" in stats
+          assert "knowledge_graph" in stats
+          assert "evidence_gaps" in stats
           assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
           print("Final audit artifact validated")
           PY
