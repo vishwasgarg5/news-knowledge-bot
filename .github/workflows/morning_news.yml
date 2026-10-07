@@ -120,13 +120,32 @@ jobs:
           pip-audit --local
           echo "Dependency security audit passed"
 
+      - name: Confidence, operations and final-audit contract
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          from app.ops import confidence_snapshot, historical_trend, operational_health, final_audit
+          stories=[{"region":"india","calibrated_confidence":90,"verification":{"confidence":80}},
+                   {"region":"world","calibrated_confidence":70,"verification":{"confidence":65}}]
+          assert confidence_snapshot(stories)["high_confidence"] == 1
+          assert historical_trend([{"date":"2026-10-07","region":"world"}])["stories"] == 1
+          stats={"source_failures":0,"source_warnings":0,"current_evidence":2,"total":2,
+                 "data_quality":{"ok":True},"db_path":"data/news_knowledge.db","learning_labeled":1}
+          assert operational_health(stats)["status"] == "PASS"
+          assert final_audit(stats,stories)["world"] == 1
+          print("Confidence, operations and final-audit contract passed")
+          PY
+
       - name: Backtest and production integration checks
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: |
           python - <<'PY'
           from pathlib import Path
-          from app.analytics import backtest_learning, backtest_learning_v2, quality_dashboard
+          from app.analytics import backtest_learning, backtest_learning_v2, quality_dashboard, backtest_learning_v3
+          from app.advanced import adaptive_threshold, diversify_stories
+          from app.ops import final_audit
           from app.quality import prepare_candidates, source_health, coverage_gaps, coverage_plan
           from app.storage import validate_data
           root=Path("data")
@@ -144,6 +163,9 @@ jobs:
           print(f"Backtest samples={backtest['samples']} hit_rate={backtest['hit_rate']} mae={backtest['mae']}")
           print(f"Backtest V2 precision={v2['precision']} recall={v2['recall']} f1={v2['f1']}")
           print(f"Quality dashboard: samples={dashboard['learning_samples']} history={dashboard['history_stories']} runs={dashboard['daily_runs']}")
+          assert "temporal_stability" in backtest_learning_v3(root)
+          assert adaptive_threshold({"threshold":62}) >= 55
+          assert len(diversify_stories([{"story_id":"i","region":"india","ranking_score":90}],max_total=1,india_target=1,world_target=0)) == 1
           print("Production integration checks passed")
           PY
 
@@ -170,6 +192,8 @@ jobs:
           echo "Runtime configuration validation passed"
       - name: Generate news briefing
         env:
+          PYTHONHASHSEED: '0'
+          PIP_NO_INPUT: '1'
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           AI_PROVIDER: ollama
@@ -196,6 +220,21 @@ jobs:
           RUN_SLOT: morning
           PYTHONUNBUFFERED: '1'
         run: python -m app.main
+      - name: Validate final audit artifact
+        if: success()
+        run: |
+          test -s /tmp/news_briefing.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("/tmp/news_briefing.json").read_text(encoding="utf-8"))
+          assert {"date","stats","stories"} <= data.keys()
+          stats=data["stats"]
+          assert "final_audit" in stats and "operational_health" in stats
+          assert (stats["final_audit"] or {}).get("health") in {"PASS","WARN","DEGRADED"}
+          print("Final audit artifact validated")
+          PY
+
       - name: Upload final briefing audit
         if: always()
         uses: actions/upload-artifact@v5
