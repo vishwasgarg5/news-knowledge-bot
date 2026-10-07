@@ -8,7 +8,6 @@ or an Ollama model.
 """
 
 import ast
-import os
 from pathlib import Path
 
 import yaml
@@ -123,6 +122,29 @@ def test_learning_does_not_record_current_run_by_default(tmp_path):
     assert result["evaluated"] == 0
     assert "today-event" not in (root / "news_learning.csv").read_text(encoding="utf-8")
 
+
+def test_second_pass_corroboration_and_contradiction_fields():
+    from app.research import verify_article
+    story={"headline":"Company X launches emergency plant after fire","summary":"Company X launched a new plant after a fire disrupted output.","source":"Reuters","url":"https://reuters.com/x","published":"2099-01-01T00:00:00+00:00"}
+    evidence=[{"title":"Company X opens emergency plant following factory fire","summary":"Company X opened the emergency plant after the factory fire disrupted output.","source":"BBC","url":"https://bbc.com/x","published":"2099-01-01T00:00:00+00:00"}]
+    result=verify_article(story,evidence,[])
+    assert result["independent_sources"]==1
+    assert "contradiction_evidence" in result
+
+def test_breaking_and_personalization_are_deterministic():
+    from app.intelligence import breaking_score, personalize
+    story={"headline":"Breaking: major earthquake hits India","summary":"Emergency response begins.","published":"2099-01-01T00:00:00+00:00","region":"india","category":"india","importance":70}
+    assert breaking_score(story)>=50
+    out=personalize([story],{"priority_categories":["india"],"preferred_regions":["india"],"category_weight":7,"region_weight":2,"breaking_weight":4,"emerging_weight":3})
+    assert out and out[0]["personalized_score"]>=79
+
+def test_learning_exposes_source_reliability():
+    from app.learning import _profile, apply_learning
+    rows=[{"selected":"true","source":"Reuters","category":"world","outcome_score":"0.8"} for _ in range(5)]
+    profile=_profile(rows)
+    assert "source_reliability" in profile and "source_observations" in profile
+    out=apply_learning([{"source":"Reuters","category":"world","importance":70}],profile)
+    assert "source_reliability" in out[0]
 
 def test_storage_and_analytics_contract(tmp_path):
     from app.analytics import build_report
