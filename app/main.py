@@ -268,12 +268,15 @@ def build_messages(result,today,stats,timeline=None):
         f"7-day runs {weekly.get('runs',0)} · avg success {float(weekly.get('avg_success_rate',0) or 0):.1%} · avg miss {float(weekly.get('avg_miss_rate',0) or 0):.1%}",
         f"Backtest hit {float((stats.get('backtest_v2') or {}).get('hit_rate',0)):.1%} · precision {float((stats.get('backtest_v2') or {}).get('precision',0)):.1%} · recall {float((stats.get('backtest_v2') or {}).get('recall',0)):.1%}",
         f"Adaptive threshold {stats.get('importance_threshold',62):.0f} · calibration F1 {float((stats.get('learning_calibration') or {}).get('f1',0)):.1%}",
+        f"Confidence calibrated {float((stats.get('confidence_snapshot') or {}).get('avg_calibrated',0)):.1f} · high {int((stats.get('confidence_snapshot') or {}).get('high_confidence',0))}",
+        f"7-day history {int((stats.get('historical_trend') or {}).get('stories',0))} stories · health {(stats.get('operational_health') or {}).get('status','UNKNOWN')}",
         f"Backtest V3 stability {float((stats.get('backtest_v3') or {}).get('temporal_stability',0)):.1%} · breaking fast-lane {stats.get('breaking_fast_lane',0)}",
         f"AI generated {stats.get('ai_generated',0)} · fallback {stats.get('ai_fallback',0)} · learning records {learning_total}",
         "",
         f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
         f"Coverage gaps: {', '.join(stats.get('coverage_gaps') or []) or 'none'}",
         f"Fallback sources: {len((stats.get('source_fallback') or {}).get('weak_sources',[]))}",
+        f"Final audit: {(stats.get('final_audit') or {}).get('health','UNKNOWN')}",
     ]
     messages=["\n".join(header)]
     if breaking:
