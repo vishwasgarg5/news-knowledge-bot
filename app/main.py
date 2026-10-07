@@ -114,13 +114,19 @@ def _story_block(s,index,total):
         lines += ["",f"<b>CONNECTION</b>\n{s.get('connection')}"]
     if s.get("memory_hook") and str(s.get("memory_hook")).lower() not in {"not stated in supplied sources","none"}:
         lines += ["",f"<b>MEMORY</b>\n{s.get('memory_hook')}"]
-    if verification=="unverified":
+    verification=v.get("verification","unverified")
+    confidence=v.get("confidence","n/a")
+    sources=v.get("source_count",0)
+    if v.get("contradiction_flag"):
+        status="⚠️ CONFLICTING REPORTS"
+    elif verification=="unverified":
         status="SINGLE SOURCE / PENDING" if sources==1 else "UNVERIFIED"
     elif verification=="single-source":
         status="SINGLE SOURCE"
+    elif verification=="multi-report":
+        status="CONFIRMED · 1 INDEPENDENT SOURCE"
     elif verification=="multi-source":
-        independent=int(v.get("independent_sources",0) or 0)
-        status="CONFIRMED · MULTI-SOURCE" if independent>=2 else "MULTI-REPORT · 1 INDEPENDENT SOURCE"
+        status="CONFIRMED · MULTI-SOURCE"
     elif verification=="official-source":
         status="OFFICIAL SOURCE"
     else:
