@@ -220,3 +220,29 @@ def test_no_debug_or_secret_literals_in_application():
     for path in (ROOT / "app").glob("*.py"):
         text = path.read_text(encoding="utf-8")
         assert not any(token in text for token in forbidden)
+
+
+def test_telegram_output_v2_contract():
+    from app.main import build_messages
+    result={"top_stories":[
+        {"story_id":"1","headline":"India event","importance":90,"region":"india","category":"india",
+         "breaking_score":60,"verification":{"verification":"multi-source","confidence":95,"source_count":2},
+         "what":"Something happened."},
+        {"story_id":"2","headline":"World event","importance":80,"region":"world","category":"world",
+         "breaking_score":0,"verification":{"verification":"single-source","confidence":75,"source_count":1},
+         "what":"Something else happened."},
+    ]}
+    stats={"current_evidence":2,"total":2,"strong_verified":1,"contradictions":0,
+           "source_ok":3,"source_total":3,"source_warnings":0,"source_failures":0,
+           "candidates":10,"exact_duplicates":1,"semantic_filtered":2,
+           "learning_labeled":100,"learning_success_rate":0.8,"learning_miss_rate":0.1,
+           "learning_fp_rate":0.1,"ai_generated":1,"ai_fallback":1,"health":"PASS",
+           "runtime":"1.2s","analytics":{"last_7_days":{"runs":5,"avg_success_rate":0.75,"avg_miss_rate":0.12}}}
+    messages=build_messages(result,"2026-10-07",stats,[])
+    payload="\n".join(messages)
+    assert "EXECUTIVE SUMMARY" in payload
+    assert "QUALITY & VERIFICATION" in payload
+    assert "LEARNING PERFORMANCE" in payload
+    assert "INDIA" in payload and "WORLD" in payload
+    assert "DETAILED STORIES" in payload
+    assert "STRONG" in payload and "SINGLE SOURCE" in payload
