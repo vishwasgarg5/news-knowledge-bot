@@ -270,3 +270,35 @@ def test_backtest_v2_contract(tmp_path):
     assert {"samples","precision","recall","f1","hit_rate","mae","buckets"} <= result.keys()
     calibration=calibrate_learning_threshold(tmp_path)
     assert {"threshold","precision","recall","f1","samples"} <= calibration.keys()
+
+def test_advanced_intelligence_v3_contract(tmp_path):
+    from app.advanced import adaptive_threshold,diversify_stories,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
+    threshold=adaptive_threshold({"threshold":72})
+    assert threshold==72
+    stories=[
+        {"story_id":"i1","event_id":"e1","region":"india","source":"A","importance":90,"ranking_score":90},
+        {"story_id":"w1","event_id":"e2","region":"world","source":"B","importance":89,"ranking_score":89},
+        {"story_id":"w2","event_id":"e3","region":"world","source":"C","importance":88,"ranking_score":88},
+    ]
+    out=diversify_stories(stories,max_total=3,india_target=1,world_target=2,max_per_source=2)
+    assert len(out)==3 and sum(x["region"]=="world" for x in out)==2
+    snap=learning_v3_snapshot([{"selected":"true","outcome_score":"0.8","false_positive":"false"}])
+    assert snap["hit_rate"]==1.0
+    assert source_fallback_plan({"weak":{"quality_rate":0.1}})["fallback_required"]
+    assert breaking_fast_lane([{"breaking_score":80}])
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":80,"verification":"multi-source","independent_sources":2}})>80
+    assert adaptive_personalization({"category_weight":6},{"hit_rate":0.8})["category_weight"]==7
+
+def test_backtest_v3_contract(tmp_path):
+    from app.analytics import backtest_learning_v3
+    from app.storage import ensure_data
+    ensure_data(tmp_path)
+    result=backtest_learning_v3(tmp_path)
+    assert {"samples","hit_rate","precision","recall","f1","mae","temporal_stability"} <= result.keys()
+
+def test_main_wires_advanced_v3():
+    text=read("app/main.py")
+    for item in ("apply_adaptive_threshold","diversify_stories","consolidate_event_families",
+                 "learning_v3_snapshot","source_fallback_plan","breaking_fast_lane",
+                 "calibrate_confidence","backtest_learning_v3"):
+        assert item in text
