@@ -16,6 +16,7 @@ from .quality import prepare_candidates,source_health,quality_snapshot,coverage_
 from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
+from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -309,13 +310,18 @@ def main():
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
     candidates=apply_learning(candidates,learning_stats.get("profile",{})); candidates=normalize_regions(candidates,{a.get("url"):a for a in all_articles}); candidates=previous_change(candidates,timeline,today); candidates=enrich_trends(candidates,read_rows(DATA/"news_history.csv"))
-    learning_v3=learning_v3_snapshot(read_rows(DATA/"news_learning.csv"))
+    learning_rows=read_rows(DATA/"news_learning.csv")
+    learning_v3=learning_v3_snapshot(learning_rows)
     preferences=adaptive_personalization(preferences,learning_v3)
     candidates=personalize(candidates,preferences)
+    v4_calibration=calibration_v2(learning_rows,today)
+    v4_profile=source_category_profile(learning_rows,today)
+    v4_feedback=feedback_learning(learning_rows,read_rows(DATA/"news_feedback.csv"),today)
     for x in candidates:
-        x['feedback_adjustment']=feedback_adj['ranking_delta']
-        x['personalized_score']=max(0.0,float(x.get('personalized_score',x.get('importance',0)) or 0)+feedback_adj['ranking_delta'])
+        x['feedback_adjustment']=feedback_adj['ranking_delta'] + v4_feedback['bounded_delta']
+        x['personalized_score']=max(0.0,float(x.get('personalized_score',x.get('importance',0)) or 0)+x['feedback_adjustment'])
     candidates=prepare_candidates(candidates,read_rows(DATA/"news_history.csv"))
+    candidates=apply_intelligence_v4(candidates,v4_profile,v4_calibration)
     plan=coverage_plan(candidates,world_target=int(os.getenv("NEWS_WORLD_TOP","5")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")))
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
 
@@ -405,6 +411,15 @@ def main():
     stats["backtest_v2"]=backtest_learning_v2(DATA)
     stats["backtest_v3"]=backtest_learning_v3(DATA)
     stats["backtest_v4"]=time_series_backtest(read_rows(DATA/"news_learning.csv"))
+    stats["intelligence_v4_diagnosis"]=diagnose_learning(learning_rows,today)
+    stats["intelligence_v4_dimensions"]=time_bucket_metrics(learning_rows,today)
+    stats["intelligence_v4_event_level"]=event_level_metrics(learning_rows,today)
+    stats["intelligence_v4_calibration"]=v4_calibration
+    stats["intelligence_v4_profile"]=v4_profile
+    stats["intelligence_v4_feedback"]=v4_feedback
+    stats["walk_forward_v4"]=walk_forward_optimization(learning_rows)
+    stats["strategy_comparison"]=compare_strategies(learning_rows)
+    stats["production_decision"]=production_decision(stats["strategy_comparison"])
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
@@ -424,7 +439,7 @@ def main():
     stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
     stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
-    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4")})
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision")})
     # Refresh the uploaded audit only after every final stat has been populated.
     try:
         audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
