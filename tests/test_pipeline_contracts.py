@@ -8,6 +8,7 @@ or an Ollama model.
 """
 
 import ast
+from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -125,8 +126,9 @@ def test_learning_does_not_record_current_run_by_default(tmp_path):
 
 def test_second_pass_corroboration_and_contradiction_fields():
     from app.research import verify_article
-    story={"headline":"Company X launches emergency plant after fire","summary":"Company X launched a new plant after a fire disrupted output.","source":"Reuters","url":"https://reuters.com/x","published":"2099-01-01T00:00:00+00:00"}
-    evidence=[{"title":"Company X opens emergency plant following factory fire","summary":"Company X opened the emergency plant after the factory fire disrupted output.","source":"BBC","url":"https://bbc.com/x","published":"2099-01-01T00:00:00+00:00"}]
+    published=datetime.now(timezone.utc).isoformat()
+    story={"headline":"Company X launches emergency plant after fire","summary":"Company X launched a new plant after a fire disrupted output.","source":"Reuters","url":"https://reuters.com/x","published":published}
+    evidence=[{"title":"Company X opens emergency plant following factory fire","summary":"Company X opened the emergency plant after the factory fire disrupted output.","source":"BBC","url":"https://bbc.com/x","published":published}]
     result=verify_article(story,evidence,[])
     assert result["independent_sources"]==1
     assert "contradiction_evidence" in result
