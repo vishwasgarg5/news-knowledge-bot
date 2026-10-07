@@ -111,7 +111,12 @@ jobs:
           AI_DEEP_IMPORTANCE: '75'
           NEWS_MIN_IMPORTANCE: '62'
           NEWS_CANDIDATE_LIMIT: '700'
-          NEWS_MAX_STORIES: '0'
+          NEWS_MAX_STORIES: '15'
+          NEWS_MAX_SINGLE_SOURCE_PER_REGION: '1'
+          NEWS_MAX_STORIES_PER_SOURCE: '2'
+          NEWS_MAX_EVENT_FAMILY: '2'
+          NEWS_SINGLE_SOURCE_MIN_IMPORTANCE: '85'
+          NEWS_MIN_VERIFICATION_FOR_LEARNING: 'multi-report'
           NEWS_MAX_PER_CATEGORY: '8'
           RUN_SLOT: morning
           PYTHONUNBUFFERED: '1'
@@ -130,13 +135,34 @@ jobs:
           cat /tmp/ollama.log || true
           echo "=== Git status ==="
           git status --short
+      # The production job owns only the generated data/ memory. There is no
+      # push trigger, so this commit cannot recursively start this workflow.
       - name: Commit news memory safely
         if: success()
         run: |
+          set -euo pipefail
           git config user.name "news-knowledge-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/
-          git diff --cached --quiet || git commit -m "Update news memory"
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+          git diff --cached --quiet && echo "No memory changes to commit" && exit 0
+          git commit -m "Update news memory"
+
+          # Rebase/push with a small retry window in case another memory commit
+          # lands on main between fetch and push.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main || {
+              echo "::warning::Rebase failed on attempt $attempt"
+              git rebase --abort || true
+              if [ "$attempt" -eq 3 ]; then exit 1; fi
+              sleep $((attempt * 3))
+              continue
+            }
+            if git push origin HEAD:main; then
+              echo "News memory pushed successfully on attempt $attempt"
+              exit 0
+            fi
+            echo "::warning::Push race detected on attempt $attempt"
+            if [ "$attempt" -lt 3 ]; then sleep $((attempt * 3)); fi
+          done
+          exit 1
