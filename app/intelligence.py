@@ -4,10 +4,20 @@ from collections import Counter
 DEFAULT_PREFERENCES={"priority_categories":["india","economy","business","technology","science","defence"],"preferred_regions":["india","world"],"minimum_personal_score":58}
 def _tokens(text): return set(re.findall(r"[a-z]{4,}",str(text or "").lower()))
 def breaking_score(story):
- t=f"{story.get('headline','')} {story.get('summary','')}".lower(); s=0
- if any(x in t for x in ("breaking","just in","urgent","alert")): s+=30
- if any(x in t for x in ("killed","dead","attack","earthquake","cyclone","war","ceasefire","resigns","resignation","arrested","verdict","ruling","crash")): s+=25
- return min(100,s+5 if story.get("region")=="india" else s)
+ t=f"{story.get('headline','')} {story.get('summary','')}".lower(); score=0
+ if any(x in t for x in ("breaking","just in","urgent","alert","developing")): score+=30
+ if any(x in t for x in ("killed","dead","attack","earthquake","cyclone","war","ceasefire","resigns","resignation","arrested","verdict","ruling","crash","landfall","explosion","evacuation")): score+=25
+ raw=str(story.get("published","") or "").replace("Z","+00:00")
+ try:
+  from datetime import datetime,timezone
+  dt=datetime.fromisoformat(raw); dt=dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+  age=max(0,(datetime.now(timezone.utc)-dt.astimezone(timezone.utc)).total_seconds()/3600)
+  if age<=3: score+=35
+  elif age<=6: score+=25
+  elif age<=12: score+=15
+  elif age<=24: score+=5
+ except (TypeError,ValueError): pass
+ return min(100,score+5 if story.get("region")=="india" else score)
 def enrich_trends(stories,historical=None):
  history=list(historical or [])
  counts=Counter(); recurring=Counter()
@@ -37,14 +47,16 @@ def personalize(stories,preferences=None):
  p=dict(DEFAULT_PREFERENCES); p.update(preferences or {})
  cats={str(x).lower() for x in p.get("priority_categories",[])}
  regions={str(x).lower() for x in p.get("preferred_regions",[])}
+ category_weight=float(p.get("category_weight",6) or 6); region_weight=float(p.get("region_weight",2) or 2)
+ breaking_weight=float(p.get("breaking_weight",4) or 4); emerging_weight=float(p.get("emerging_weight",3) or 3)
  minimum=float(p.get("minimum_personal_score",58) or 58)
  out=[]
  for s in stories:
   x=dict(s); base=float(x.get("importance",0) or 0); score=base; reasons=[]
-  if str(x.get("category","")).lower() in cats: score+=6; reasons.append("priority category")
-  if str(x.get("region","")).lower() in regions: score+=2; reasons.append("preferred region")
-  if float(x.get("breaking_score",0) or 0)>=50: score+=4; reasons.append("breaking")
-  if x.get("emerging_topic"): score+=3; reasons.append("emerging topic")
+  if str(x.get("category","")).lower() in cats: score+=category_weight; reasons.append("priority category")
+  if str(x.get("region","")).lower() in regions: score+=region_weight; reasons.append("preferred region")
+  if float(x.get("breaking_score",0) or 0)>=50: score+=breaking_weight; reasons.append("breaking")
+  if x.get("emerging_topic"): score+=emerging_weight; reasons.append("emerging topic")
   # Learning feedback is already applied to importance; expose it without
   # double-counting it here.
   learning=float(x.get("learning_adjustment",0) or 0)
