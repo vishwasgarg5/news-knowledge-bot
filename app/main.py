@@ -457,10 +457,8 @@ def main():
     rr=research_report(v5plus["stories"],v5plus["research_queue"])
     append_rows(DATA/"research_reports.csv",[{"date":today,"headline":x["headline"],"priority":x["priority"],"finding":x["finding"]} for x in rr["sections"]],HEADERS["research_reports.csv"])
 
-    stats["impact_summary"]={"high":sum(1 for s in v5["stories"] if s["impact"]["level"]=="HIGH"),"medium":sum(1 for s in v5["stories"] if s["impact"]["level"]=="MEDIUM"),"low":sum(1 for s in v5["stories"] if s["impact"]["level"]=="LOW")}
-    stats["entity_summary"]=v5["entities"]
-    stats["intelligence_scorecard"]=v5["scorecard"]
-    stats["research_queue"]=v5["research_queue"]
+    stats["impact_summary"]={"high":sum(1 for s in v5plus["stories"] if s["impact"]["level"]=="HIGH"),"medium":sum(1 for s in v5plus["stories"] if s["impact"]["level"]=="MEDIUM"),"low":sum(1 for s in v5plus["stories"] if s["impact"]["level"]=="LOW")}
+    stats["entity_summary"]=v5plus["entities"]
     stats["cross_event_links"]=v5["cross_event_links"]
     stats["source_event_matrix"]=v5["source_event_matrix"]
 
