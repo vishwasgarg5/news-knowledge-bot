@@ -158,6 +158,14 @@ def test_storage_and_analytics_contract(tmp_path):
             "category_reliability", "outcome_horizon_coverage"} <= report.keys()
 
 
+def test_backtest_and_quality_dashboard_contract(tmp_path):
+    from app.analytics import backtest_learning, quality_dashboard
+    from app.storage import ensure_data
+    ensure_data(tmp_path)
+    assert backtest_learning(tmp_path)["samples"] == 0
+    dashboard=quality_dashboard(tmp_path)
+    assert {"learning_samples","history_stories","daily_runs","horizon_coverage"} <= dashboard.keys()
+
 def test_telegram_chunks_preserve_content():
     from app.telegram import chunks
 
