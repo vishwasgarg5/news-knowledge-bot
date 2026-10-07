@@ -17,6 +17,7 @@ from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stor
 from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
 from .intelligence_v5 import intelligence_v5
+from .intelligence_v5_plus import run_v5_plus,answer_news_question,research_report
 from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
@@ -425,6 +426,37 @@ def main():
     stats["production_decision"]=production_decision(stats["strategy_comparison"])
     v5=intelligence_v5(result.get("top_stories",[]),read_rows(DATA/"news_history.csv"),stats)
     stats["intelligence_v5"]=v5
+    v5plus=run_v5_plus(v5.get("stories",result.get("top_stories",[])),read_rows(DATA/"news_history.csv"),learning_rows,read_rows(DATA/"news_feedback.csv"),preferences,stats,[])
+    stats["intelligence_v5_plus"]=v5plus
+    stats["entity_profiles"]=v5plus["entity_profiles"]
+    stats["event_clusters"]=v5plus["clusters"]
+    stats["event_evolution"]=v5plus["event_evolution"]
+    stats["impact_learning"]=v5plus["impact_learning"]
+    stats["market_correlation"]=v5plus["market_correlation"]
+    stats["source_event_reliability"]=v5plus["source_reliability"]
+    stats["advanced_feedback"]=v5plus["feedback"]
+    stats["intelligence_scorecard"]=v5plus["scorecard"]
+    stats["personalized_feed"]=v5plus["personalized_feed"]
+    stats["smart_alerts"]=v5plus["alerts"]
+    stats["trend_report"]=v5plus["trend_report"]
+    stats["knowledge_graph"]=v5plus["knowledge_graph"]
+    stats["contradiction_scan"]=v5plus["contradictions"]
+    stats["evidence_gaps"]=v5plus["evidence_gaps"]
+    stats["research_queue"]=v5plus["research_queue"]
+    stats["weekly_intelligence"]=v5plus["weekly_report"]
+    for s in result.get("top_stories",[]):
+        s["event_id"]=s.get("event_id") or next((x.get("event_id") for x in v5plus["stories"] if x.get("headline")==s.get("headline")), "")
+        match=next((x for x in v5plus["stories"] if x.get("headline")==s.get("headline")),None)
+        if match:
+            for k in ("impact","momentum_score","early_signal","similar_historical_events"):
+                if k in match:s[k]=match[k]
+    today_rows=[{"date":today,**p} for p in v5plus["entity_profiles"]]
+    append_rows(DATA/"entity_memory.csv",today_rows,HEADERS["entity_memory.csv"])
+    append_rows(DATA/"event_memory.csv",[{"date":today,"event_id":e["event_id"],"headline":e["headline"],"status":e["status"],"story_count":e["story_count"],"source_count":len(e["sources"])} for e in v5plus["event_evolution"]],HEADERS["event_memory.csv"])
+    append_rows(DATA/"knowledge_edges.csv",[{"date":today,"from_node":e["from"],"to_node":e["to"],"edge_type":e["type"]} for e in v5plus["knowledge_graph"]["edges"]],HEADERS["knowledge_edges.csv"])
+    rr=research_report(v5plus["stories"],v5plus["research_queue"])
+    append_rows(DATA/"research_reports.csv",[{"date":today,"headline":x["headline"],"priority":x["priority"],"finding":x["finding"]} for x in rr["sections"]],HEADERS["research_reports.csv"])
+
     stats["impact_summary"]={"high":sum(1 for s in v5["stories"] if s["impact"]["level"]=="HIGH"),"medium":sum(1 for s in v5["stories"] if s["impact"]["level"]=="MEDIUM"),"low":sum(1 for s in v5["stories"] if s["impact"]["level"]=="LOW")}
     stats["entity_summary"]=v5["entities"]
     stats["intelligence_scorecard"]=v5["scorecard"]
@@ -451,7 +483,7 @@ def main():
     stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
     stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
-    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5")})
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4"),"intelligence_v4":stats.get("strategy_comparison"),"production_decision":stats.get("production_decision"),"intelligence_v5":stats.get("intelligence_v5"),"intelligence_v5_plus":stats.get("intelligence_v5_plus"),"smart_alerts":stats.get("smart_alerts"),"evidence_gaps":stats.get("evidence_gaps")})
     # Refresh the uploaded audit only after every final stat has been populated.
     try:
         audit={"date":today,"run_slot":RUN_SLOT,"stats":stats,"analytics":build_report(DATA),"stories":result.get("top_stories",[])}
