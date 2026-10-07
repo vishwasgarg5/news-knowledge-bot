@@ -454,7 +454,7 @@ def test_phase1_v5_accuracy_calibration_and_utc_contracts():
     cal=calibration_monitor(rows)
     assert {"ece","brier","status"} <= cal.keys()
     assert 0 <= calibrate_confidence(80,rows) <= 100
-    assert "datetime.utcnow" not in research_report.__code__.co_names
+    assert "datetime.utcnow" not in read("app/intelligence_v5_plus.py")
 
 
 def test_production_v5_gate_27_40():
