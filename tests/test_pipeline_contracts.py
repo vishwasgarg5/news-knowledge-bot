@@ -434,6 +434,29 @@ def test_intelligence_v5_plus_steps_10_25():
     assert "sections" in research_report(v["stories"],v["research_queue"])
 
 
+def test_phase1_v5_accuracy_calibration_and_utc_contracts():
+    from app.production_v5 import walk_forward_v5, shadow_ab_test, calibration_monitor, calibrate_confidence
+    from app.intelligence_v5_plus import research_report
+    rows=[]
+    for i in range(180):
+        rows.append({
+            "run_date": f"2026-09-{(i % 30) + 1:02d}",
+            "initial_score": 85 if i % 4 else 35,
+            "source": "Trusted" if i % 3 else "Unknown",
+            "category": "economy" if i % 2 else "world",
+            "outcome_score": "0.9" if (i % 5) else "0.1",
+        })
+    wf=walk_forward_v5(rows,train_min=60,test_window=20)
+    ab=shadow_ab_test(rows,rows,train_min=60,test_window=20)
+    assert wf["leakage_safe"] is True and wf["feature_learning"] is True
+    assert len(ab["baseline_v4"]["folds"])==len(ab["candidate_v5"]["folds"])
+    assert "f1_confidence_interval" in ab and "precision_confidence_interval" in ab
+    cal=calibration_monitor(rows)
+    assert {"ece","brier","status"} <= cal.keys()
+    assert 0 <= calibrate_confidence(80,rows) <= 100
+    assert "datetime.utcnow" not in research_report.__code__.co_names
+
+
 def test_production_v5_gate_27_40():
     from app.production_v5 import walk_forward_v5, shadow_ab_test, calibration_monitor, drift_monitor, contradiction_and_evidence, followup_research_plan, autonomous_research_agent, generate_research_reports
     rows=[{"initial_score":70,"outcome_score":0.8,"category":"economy"}]*150
