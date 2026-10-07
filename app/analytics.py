@@ -39,6 +39,19 @@ def build_report(data_path):
     }
 
 
+
+def quality_dashboard(data_path):
+    """Return compact operational metrics for daily/weekly observability."""
+    report=build_report(data_path)
+    return {
+        "learning_samples":report["learning_samples"],
+        "history_stories":report["history_stories"],
+        "daily_runs":report["daily_runs"],
+        "avg_outcome":report["avg_outcome"],
+        "false_positive_rate":round(report["false_positives"]/max(1,report["selected_samples"]),3),
+        "horizon_coverage":report["outcome_horizon_coverage"],
+        "top_categories":report["top_categories"][:5],
+    }
 def write_reports(data_path):
     report=build_report(data_path)
     (data_path/"analytics_report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
