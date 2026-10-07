@@ -15,6 +15,7 @@ from .analytics import build_report,write_reports,backtest_learning_v2,backtest_
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
 from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
+from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -296,6 +297,7 @@ def main():
     started=time.monotonic(); ensure_data(DATA); cfg=load_sources(); limits=cfg.get("limits",{})
     articles,cstats=collect(cfg.get("sources",{}),limits.get("max_articles_per_source",40),limits.get("max_total_articles",700))
     today=datetime.now(IST).date().isoformat(); preferences=load_preferences(); timeline=read_rows(DATA/"story_timeline.csv"); all_articles=[a.__dict__ for a in articles]
+    feedback=feedback_snapshot(DATA); feedback_adj=feedback_adjustment(feedback)
     from .analytics import calibrate_learning_threshold
     calibration=calibrate_learning_threshold(DATA)
     production_floor=float(os.getenv("NEWS_MIN_IMPORTANCE","62")); adaptive=apply_adaptive_threshold(calibration,production_floor)
@@ -310,6 +312,9 @@ def main():
     learning_v3=learning_v3_snapshot(read_rows(DATA/"news_learning.csv"))
     preferences=adaptive_personalization(preferences,learning_v3)
     candidates=personalize(candidates,preferences)
+    for x in candidates:
+        x['feedback_adjustment']=feedback_adj['ranking_delta']
+        x['personalized_score']=max(0.0,float(x.get('personalized_score',x.get('importance',0)) or 0)+feedback_adj['ranking_delta'])
     candidates=prepare_candidates(candidates,read_rows(DATA/"news_history.csv"))
     plan=coverage_plan(candidates,world_target=int(os.getenv("NEWS_WORLD_TOP","5")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")))
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
@@ -399,6 +404,7 @@ def main():
     stats["source_health"]=source_health(candidates)
     stats["backtest_v2"]=backtest_learning_v2(DATA)
     stats["backtest_v3"]=backtest_learning_v3(DATA)
+    stats["backtest_v4"]=time_series_backtest(read_rows(DATA/"news_learning.csv"))
     from .analytics import calibrate_learning_threshold
     stats["learning_calibration"]=calibrate_learning_threshold(DATA)
     stats["quality_dashboard"]=quality_dashboard(DATA)
@@ -409,7 +415,16 @@ def main():
     stats["learning_v3"]=learning_v3
     stats["source_fallback"]=source_fallback_plan(stats["source_health"])
     stats["breaking_fast_lane"]=len(fast_lane)
+    stats["feedback"]=feedback
+    stats["feedback_adjustment"]=feedback_adj
+    stats["lifecycle"]=lifecycle_summary(read_rows(DATA/"story_timeline.csv"))
+    stats["india_stories"]=sum(1 for s in result.get("top_stories",[]) if s.get("region")=="india")
+    stats["world_stories"]=sum(1 for s in result.get("top_stories",[]) if s.get("region")=="world")
+    stats["india_target"]=int(os.getenv("NEWS_INDIA_TOP","5")); stats["world_target"]=int(os.getenv("NEWS_WORLD_TOP","5"))
+    stats["source_fallback_order"]=source_fallback_order(stats["source_health"])
+    stats["monitoring_alerts"]=monitoring_alerts(stats)
     stats["learning_calibration"]=calibration
+    persist_operational_snapshot(DATA,{"date":today,"health":stats.get("health"),"operational_health":stats.get("operational_health"),"source_health":stats.get("source_health"),"fallback_order":stats.get("source_fallback_order"),"alerts":stats.get("monitoring_alerts"),"backtest_v4":stats.get("backtest_v4")})
     print(f"[ANALYTICS] samples={report['learning_samples']} avg_outcome={report['avg_outcome']} top_categories={report['top_categories'][:5]}",flush=True)
     print(f"[PASS] FINAL NEWS INTELLIGENCE | candidates={stats['candidates']} | stories={stats['stories']} | current_verified={current_verified}/{total_selected} | strong={strong_verified}/{total_selected} | learning={stats['learning_labeled']} | source_failures={source_failures} | source_warnings={source_warnings} | health={stats['health']} | learning_recorded={'yes' if quality_ok else 'no'} | new={added}",flush=True)
     for failure in (cstats.get("source_status") or []):
