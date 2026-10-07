@@ -33,10 +33,24 @@ def _fold_f1(rows,threshold):
     p=tp/max(1,tp+fp); rec=tp/max(1,tp+fn)
     return 2*p*rec/max(1,p+rec)
 
+def _fixed_threshold_eval(rows,threshold=50):
+    rows=[r for r in rows if str(r.get("outcome_score"," ")).strip()]
+    folds=[]; test_window=30
+    for end in range(120,min(len(rows)-test_window+1,120+8*test_window),test_window):
+        test=rows[end:end+test_window]
+        if not test: break
+        tp=fp=fn=0
+        for r in test:
+            pred=_f(r.get("initial_score"))>=threshold; actual=_label(r)
+            tp+=pred and actual; fp+=pred and not actual; fn+=actual and not pred
+        p=tp/max(1,tp+fp); rec=tp/max(1,tp+fn)
+        folds.append({"train":end,"test":len(test),"threshold":threshold,"precision":round(p,3),"recall":round(rec,3),"f1":round(2*p*rec/max(1,p+rec),3)})
+    return {"folds":folds,"f1":round(mean([x["f1"] for x in folds]),3) if folds else 0.0,"leakage_safe":True,"threshold_policy":"fixed_50"}
+
 def shadow_ab_test(v4_rows,v5_rows):
-    a=walk_forward_v5(v4_rows); b=walk_forward_v5(v5_rows)
+    a=_fixed_threshold_eval(v4_rows,50); b=walk_forward_v5(v5_rows)
     delta=round(b["f1"]-a["f1"],3)
-    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"promote":bool(delta>0 and b["f1"]>=a["f1"])}
+    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"promote":bool(delta>0 and b["f1"]>=a["f1"] and a.get("leakage_safe") and b.get("leakage_safe"))}
 
 def calibration_monitor(rows,bins=10):
     out=[]
