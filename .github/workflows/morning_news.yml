@@ -359,6 +359,10 @@ jobs:
           assert "v5_calibration" in stats
           assert "v5_drift" in stats
           assert "v5_production_evaluation" in stats
+          assert "v5_quality_gate" in stats
+          assert (stats["v5_quality_gate"] or {}).get("status") in {"PASS","HOLD"}
+          assert "research_completion_rate" in stats
+          assert 0.0 <= float(stats["research_completion_rate"]) <= 1.0
           assert "v5_research_agent" in stats
           assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
           print("Final audit artifact validated")
