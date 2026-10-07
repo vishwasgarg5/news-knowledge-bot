@@ -14,8 +14,8 @@
   },
   "source_health": {
     "Technology News Today, Latest Tech News | The Hindu": {
-      "articles": 5,
-      "high_value": 5,
+      "articles": 4,
+      "high_value": 4,
       "quality_rate": 1.0
     },
     "BBC News": {
@@ -49,8 +49,8 @@
       "quality_rate": 1.0
     },
     "TechCrunch": {
-      "articles": 2,
-      "high_value": 2,
+      "articles": 3,
+      "high_value": 3,
       "quality_rate": 1.0
     },
     "World | Deutsche Welle": {
@@ -64,8 +64,8 @@
     "Technology News Today, Latest Tech News | The Hindu",
     "Business News Today – Finance, Industry & Economy | The Hindu",
     "Times of India",
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "TechCrunch",
+    "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "World news | The Guardian",
     "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
     "World | Deutsche Welle"
@@ -870,7 +870,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.1,
+          "freshness_hours": 8.3,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -882,10 +882,10 @@
         "how": "",
         "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
-        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
-        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
-        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
+        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
+        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
+        "next": "",
+        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1028,7 +1028,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.2,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -1038,12 +1038,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
+        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
         "key_data": "",
-        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
-        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
-        "next": "",
-        "connection": "",
+        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
+        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
+        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
+        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1244,7 +1244,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.1,
+          "freshness_hours": 8.3,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -1256,10 +1256,10 @@
         "how": "",
         "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
-        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
-        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
-        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
+        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
+        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
+        "next": "",
+        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1452,7 +1452,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.2,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -1462,12 +1462,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
+        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
         "key_data": "",
-        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
-        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
-        "next": "",
-        "connection": "",
+        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
+        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
+        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
+        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1671,7 +1671,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.1,
+              "freshness_hours": 8.3,
               "calibrated_confidence": 97.0
             },
             "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -1683,10 +1683,10 @@
             "how": "",
             "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
             "key_data": "",
-            "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
-            "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
-            "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
-            "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
+            "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
+            "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
+            "next": "",
+            "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -1839,7 +1839,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 18.2,
+              "freshness_hours": 18.4,
               "calibrated_confidence": 100
             },
             "what": "Indian opposition MPs detained in protest against election chief",
@@ -1849,12 +1849,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
+            "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
             "key_data": "",
-            "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
-            "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
-            "next": "",
-            "connection": "",
+            "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
+            "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
+            "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
+            "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -1930,29 +1930,25 @@
       "companies": [],
       "places": [],
       "topics": {
+        "trump": 3,
         "white house": 2,
-        "trump": 2,
         "iran": 2,
+        "cec gyanesh kumar": 2,
         "san diego gavin": 1,
         "newsom": 1,
-        "iran. trump": 1,
+        "iran. the": 1,
+        "los angeles": 1,
+        "san diego": 1,
         "indian": 1,
         "mps": 1,
         "opposition": 1,
-        "cec gyanesh kumar": 1,
         "prime minister narendra": 1,
         "modi": 1,
-        "gyanesh kumar": 1,
-        "cec": 1
+        "the": 1,
+        "india": 1
       }
     },
     "entity_profiles": [
-      {
-        "entity": "white house",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
       {
         "entity": "trump",
         "type": "topic",
@@ -1960,10 +1956,22 @@
         "historical_mentions": 86
       },
       {
+        "entity": "white house",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
         "entity": "iran",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 34
+      },
+      {
+        "entity": "cec gyanesh kumar",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
       },
       {
         "entity": "san diego gavin",
@@ -1978,7 +1986,19 @@
         "historical_mentions": 0
       },
       {
-        "entity": "iran. trump",
+        "entity": "iran. the",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
+        "entity": "los angeles",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
+        "entity": "san diego",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
@@ -2002,12 +2022,6 @@
         "historical_mentions": 11
       },
       {
-        "entity": "cec gyanesh kumar",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
         "entity": "prime minister narendra",
         "type": "topic",
         "current_mentions": 1,
@@ -2020,16 +2034,16 @@
         "historical_mentions": 32
       },
       {
-        "entity": "gyanesh kumar",
+        "entity": "the",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 0
+        "historical_mentions": 95
       },
       {
-        "entity": "cec",
+        "entity": "india",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 45
+        "historical_mentions": 81
       }
     ],
     "event_evolution": [
@@ -2117,7 +2131,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.1,
+              "freshness_hours": 8.3,
               "calibrated_confidence": 97.0
             },
             "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -2129,10 +2143,10 @@
             "how": "",
             "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
             "key_data": "",
-            "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
-            "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
-            "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
-            "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
+            "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
+            "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
+            "next": "",
+            "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -2337,7 +2351,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 18.2,
+              "freshness_hours": 18.4,
               "calibrated_confidence": 100
             },
             "what": "Indian opposition MPs detained in protest against election chief",
@@ -2347,12 +2361,12 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
+            "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
             "key_data": "",
-            "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
-            "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
-            "next": "",
-            "connection": "",
+            "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
+            "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
+            "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
+            "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -2484,18 +2498,40 @@
         "LOW": null
       }
     },
+    "market_context": [
+      {
+        "symbol": "NIFTY 50",
+        "price": 22600.5,
+        "previous_close": 0.0,
+        "change": 0.0,
+        "change_pct": 0.0,
+        "status": "OK"
+      },
+      {
+        "symbol": "SENSEX",
+        "price": 72636.81,
+        "previous_close": 0.0,
+        "change": 0.0,
+        "change_pct": 0.0,
+        "status": "OK"
+      }
+    ],
     "market_correlation": [
       {
         "event_id": "31af1a1d8cf20521",
         "direction": "neutral",
         "market_samples": 0,
-        "avg_move": null
+        "avg_move": null,
+        "market_context_pct": 0.0,
+        "directional_alignment": "UNKNOWN"
       },
       {
         "event_id": "431a59e6fa77c94b",
         "direction": "positive",
         "market_samples": 0,
-        "avg_move": null
+        "avg_move": null,
+        "market_context_pct": 0.0,
+        "directional_alignment": "UNKNOWN"
       }
     ],
     "source_reliability": {
@@ -2598,7 +2634,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.1,
+          "freshness_hours": 8.3,
           "calibrated_confidence": 97.0
         },
         "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
@@ -2610,10 +2646,10 @@
         "how": "",
         "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
         "key_data": "",
-        "background": "Trump's previous comments on Iran have already led to international condemnation and calls for restraint.",
-        "change_since_yesterday": "The White House's stance has shifted the blame away from Trump, potentially weakening his position domestically and internationally.",
-        "next": "Republicans may rally against Trump in the upcoming midterms, further isolating him from his own party.",
-        "connection": "Trump's previous controversial statements about Iran, including his suggestion of a potential nuclear war.",
+        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
+        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
+        "next": "",
+        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2730,8 +2766,8 @@
             "outcome_score": null
           }
         ],
-        "personalization_score": 94.7,
-        "preference_matches": 0
+        "personalization_score": 102.7,
+        "preference_matches": 1
       },
       {
         "story_id": "120726675754922d",
@@ -2808,7 +2844,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.2,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 100
         },
         "what": "Indian opposition MPs detained in protest against election chief",
@@ -2818,12 +2854,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could lead to further political unrest and undermine the credibility of the electoral process.",
+        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
         "key_data": "",
-        "background": "In 2019, Gyanesh Kumar was appointed as the CEC, a position he has held since then.",
-        "change_since_yesterday": "The detention of opposition MPs challenges the impartiality of the electoral process and could lead to accusations of electoral fraud.",
-        "next": "",
-        "connection": "",
+        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
+        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
+        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
+        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2940,8 +2976,8 @@
             "outcome_score": null
           }
         ],
-        "personalization_score": 92.7,
-        "preference_matches": 0
+        "personalization_score": 100.7,
+        "preference_matches": 1
       }
     ],
     "alerts": [],
@@ -2995,7 +3031,27 @@
           "verify primary source",
           "find independent confirmation",
           "retrieve historical analogue"
-        ]
+        ],
+        "retrieved_evidence": [
+          {
+            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+            "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+            "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
+            "similarity": 0.278,
+            "source_reliability": 0.7,
+            "evidence_score": 0.404
+          },
+          {
+            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
+            "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
+            "similarity": 0.227,
+            "source_reliability": 0.7,
+            "evidence_score": 0.369
+          }
+        ],
+        "evidence_count": 2,
+        "research_status": "EVIDENCE_RETRIEVED"
       },
       {
         "headline": "Indian opposition MPs detained in protest against election chief",
@@ -3004,13 +3060,77 @@
           "verify primary source",
           "find independent confirmation",
           "retrieve historical analogue"
-        ]
+        ],
+        "retrieved_evidence": [
+          {
+            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+            "title": "Rahul calls SIR ‘treason’ as INDIA unites against ECI; MPs detained",
+            "url": "https://www.thehindu.com/news/national/leader-of-opposition-in-lok-sabha-rahul-gandhi-during-cec-protest/article71551240.ece",
+            "similarity": 0.2,
+            "source_reliability": 0.7,
+            "evidence_score": 0.35
+          }
+        ],
+        "evidence_count": 1,
+        "research_status": "EVIDENCE_RETRIEVED"
       }
     ],
     "weekly_report": {
       "top_events": [
         "White House defends Trump comment to let Iran 'take out' LA and San Diego",
         "Indian opposition MPs detained in protest against election chief"
+      ],
+      "top_entities": [
+        {
+          "entity": "white",
+          "current_mentions": 1,
+          "historical_mentions": 14
+        },
+        {
+          "entity": "defends",
+          "current_mentions": 1,
+          "historical_mentions": 3
+        },
+        {
+          "entity": "take",
+          "current_mentions": 1,
+          "historical_mentions": 13
+        },
+        {
+          "entity": "diego",
+          "current_mentions": 1,
+          "historical_mentions": 2
+        },
+        {
+          "entity": "house",
+          "current_mentions": 1,
+          "historical_mentions": 15
+        },
+        {
+          "entity": "iran",
+          "current_mentions": 1,
+          "historical_mentions": 34
+        },
+        {
+          "entity": "trump",
+          "current_mentions": 1,
+          "historical_mentions": 86
+        },
+        {
+          "entity": "comment",
+          "current_mentions": 1,
+          "historical_mentions": 2
+        },
+        {
+          "entity": "protest",
+          "current_mentions": 1,
+          "historical_mentions": 27
+        },
+        {
+          "entity": "opposition",
+          "current_mentions": 1,
+          "historical_mentions": 11
+        }
       ],
       "history_size": 1234,
       "anomalies": []
@@ -3036,6 +3156,22 @@
       "baseline_v4": {
         "folds": [
           {
+            "train": 60,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 90,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
             "train": 120,
             "test": 30,
             "threshold": 50,
@@ -3098,146 +3234,4255 @@
             "precision": 0.133,
             "recall": 1.0,
             "f1": 0.235
+          },
+          {
+            "train": 360,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 390,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 420,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 450,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 480,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 510,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 540,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 570,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 600,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 630,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 660,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 690,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 720,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 750,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 780,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 810,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 840,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 870,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 900,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 930,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 960,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 990,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1020,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 1050,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 1080,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 1110,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 1140,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1170,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 1200,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 1230,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 1260,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1290,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1320,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1350,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1380,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 1410,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 1440,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1470,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1500,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1530,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 1560,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 1590,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 1620,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1650,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 1680,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 1710,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 1740,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 1770,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 1800,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 1830,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1860,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 1890,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1920,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 1950,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 1980,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2010,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 2040,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2070,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2100,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 2130,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2160,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 2190,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 2220,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2250,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2280,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2310,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 2340,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 2370,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2400,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 2430,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2460,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2490,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 2520,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2550,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2580,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2610,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2640,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2670,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2700,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2730,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2760,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2790,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2820,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2850,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2880,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2910,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 2940,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2970,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3000,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 3030,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3060,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3090,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3120,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3150,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3180,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3210,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3240,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3270,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3300,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3330,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3360,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3390,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3420,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3450,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 3480,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 3510,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 3540,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 3570,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3600,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3630,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 3660,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3690,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 3720,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3750,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3780,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3810,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3840,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3870,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 3900,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 3930,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3960,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3990,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 4020,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 4050,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4080,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 4110,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 4140,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 4170,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 4200,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 4230,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 4260,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 4290,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 4320,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 4350,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 4380,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4410,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 4440,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.4,
+            "recall": 1.0,
+            "f1": 0.571
+          },
+          {
+            "train": 4470,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.3,
+            "recall": 1.0,
+            "f1": 0.462
+          },
+          {
+            "train": 4500,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 4530,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 4560,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 4590,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 4620,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4650,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 4680,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4710,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 4740,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.3,
+            "recall": 1.0,
+            "f1": 0.462
+          },
+          {
+            "train": 4770,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 4800,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 4830,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 4860,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4890,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 4920,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.3,
+            "recall": 1.0,
+            "f1": 0.462
+          },
+          {
+            "train": 4950,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4980,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.367,
+            "recall": 1.0,
+            "f1": 0.537
+          },
+          {
+            "train": 5010,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 5040,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 5070,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 5100,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.267,
+            "recall": 1.0,
+            "f1": 0.421
+          },
+          {
+            "train": 5130,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 5160,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 5190,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 5220,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 5250,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5280,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 5310,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 5340,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 5370,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.3,
+            "recall": 1.0,
+            "f1": 0.462
+          },
+          {
+            "train": 5400,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 5430,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          {
+            "train": 5460,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.233,
+            "recall": 1.0,
+            "f1": 0.378
+          },
+          {
+            "train": 5490,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 5520,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          {
+            "train": 5550,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 5580,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.633,
+            "recall": 1.0,
+            "f1": 0.776
+          },
+          {
+            "train": 5610,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 5640,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 5670,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.6,
+            "recall": 1.0,
+            "f1": 0.75
+          },
+          {
+            "train": 5700,
+            "test": 22,
+            "threshold": 50,
+            "precision": 0.273,
+            "recall": 1.0,
+            "f1": 0.429
           }
         ],
-        "f1": 0.252,
+        "f1": 0.209,
+        "precision": 0.131,
+        "recall": 0.81,
         "leakage_safe": true,
-        "threshold_policy": "fixed_50"
+        "threshold_policy": "fixed_50",
+        "train_min": 60,
+        "test_window": 30
       },
       "candidate_v5": {
+        "samples": 5722,
         "folds": [
+          {
+            "train": 60,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          {
+            "train": 90,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.333,
+            "recall": 0.833,
+            "f1": 0.476
+          },
           {
             "train": 120,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.133,
-            "recall": 1.0,
-            "f1": 0.235
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.176,
+            "recall": 0.75,
+            "f1": 0.265
           },
           {
             "train": 150,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.333,
-            "recall": 1.0,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.667,
+            "recall": 0.4,
             "f1": 0.5
           },
           {
             "train": 180,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.033,
+            "threshold": 0.45,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.048,
             "recall": 1.0,
-            "f1": 0.065
+            "f1": 0.091
           },
           {
             "train": 210,
             "test": 30,
-            "threshold": 40,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.2,
+            "recall": 0.8,
+            "f1": 0.32
+          },
+          {
+            "train": 240,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.429,
+            "recall": 0.5,
+            "f1": 0.429
+          },
+          {
+            "train": 270,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.167,
+            "recall": 0.333,
+            "f1": 0.111
+          },
+          {
+            "train": 300,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 330,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.25,
+            "recall": 0.25,
+            "f1": 0.125
+          },
+          {
+            "train": 360,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.667,
+            "recall": 0.8,
+            "f1": 0.727
+          },
+          {
+            "train": 390,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 420,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 450,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 480,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 510,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 540,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 570,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.2,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 600,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.2,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 630,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 660,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 690,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 720,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 750,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 780,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 810,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 840,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 870,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 900,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.25,
+            "recall": 0.5,
+            "f1": 0.25
+          },
+          {
+            "train": 930,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.333,
+            "recall": 0.667,
+            "f1": 0.444
+          },
+          {
+            "train": 960,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 990,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 1020,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          {
+            "train": 1050,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.3,
+            "recall": 1.0,
+            "f1": 0.462
+          },
+          {
+            "train": 1080,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.312,
+            "recall": 0.833,
+            "f1": 0.455
+          },
+          {
+            "train": 1110,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.368,
+            "recall": 0.875,
+            "f1": 0.519
+          },
+          {
+            "train": 1140,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.133,
+            "recall": 1.0,
+            "f1": 0.235
+          },
+          {
+            "train": 1170,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.077,
+            "recall": 1.0,
+            "f1": 0.143
+          },
+          {
+            "train": 1200,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.167,
+            "recall": 0.667,
+            "f1": 0.222
+          },
+          {
+            "train": 1230,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1260,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1290,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1320,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.7,
+              0.1,
+              0.20000000000000004
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1350,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.7,
+              0.2,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1380,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.4,
+            "f1": 0.571
+          },
+          {
+            "train": 1410,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.6,
+            "f1": 0.75
+          },
+          {
+            "train": 1440,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1470,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1500,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 1530,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.6,
+            "f1": 0.75
+          },
+          {
+            "train": 1560,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 1590,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1620,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1650,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.214,
+            "recall": 0.75,
+            "f1": 0.321
+          },
+          {
+            "train": 1680,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.462,
+            "recall": 1.0,
+            "f1": 0.632
+          },
+          {
+            "train": 1710,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.167,
+            "recall": 0.667,
+            "f1": 0.222
+          },
+          {
+            "train": 1740,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.5,
+            "recall": 0.667,
+            "f1": 0.571
+          },
+          {
+            "train": 1770,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.636,
+            "recall": 0.875,
+            "f1": 0.737
+          },
+          {
+            "train": 1800,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.235,
+            "recall": 0.667,
+            "f1": 0.314
+          },
+          {
+            "train": 1830,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1860,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1890,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1920,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 1950,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 1980,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
             "precision": 0.167,
             "recall": 1.0,
             "f1": 0.286
           },
           {
-            "train": 240,
+            "train": 2010,
             "test": 30,
-            "threshold": 40,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.714,
+            "recall": 1.0,
+            "f1": 0.833
+          },
+          {
+            "train": 2040,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.667,
+            "recall": 0.667,
+            "f1": 0.667
+          },
+          {
+            "train": 2070,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 2100,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.125,
+            "recall": 1.0,
+            "f1": 0.222
+          },
+          {
+            "train": 2130,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          },
+          {
+            "train": 2160,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2190,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2220,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 2250,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2280,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          },
+          {
+            "train": 2310,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.857
+          },
+          {
+            "train": 2340,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 2370,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 0.333,
+            "f1": 0.5
+          },
+          {
+            "train": 2400,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          {
+            "train": 2430,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
             "precision": 0.2,
             "recall": 1.0,
             "f1": 0.333
           },
           {
-            "train": 270,
+            "train": 2460,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.1,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.231,
             "recall": 1.0,
-            "f1": 0.182
+            "f1": 0.375
           },
           {
-            "train": 300,
+            "train": 2490,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.1,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.364,
             "recall": 1.0,
-            "f1": 0.182
+            "f1": 0.533
           },
           {
-            "train": 330,
+            "train": 2520,
             "test": 30,
-            "threshold": 40,
-            "precision": 0.133,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.167,
             "recall": 1.0,
-            "f1": 0.235
+            "f1": 0.286
+          },
+          {
+            "train": 2550,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 2580,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2610,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2640,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2670,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.2,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2700,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2730,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2760,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2790,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2820,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2850,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.231,
+            "recall": 1.0,
+            "f1": 0.375
+          },
+          {
+            "train": 2880,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 1.0,
+            "recall": 0.667,
+            "f1": 0.8
+          },
+          {
+            "train": 2910,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2940,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 2970,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.667
+          },
+          {
+            "train": 3000,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3030,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3060,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3090,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 3120,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 3150,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3180,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 3210,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3240,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3270,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3300,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3330,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3360,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3390,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3420,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          },
+          {
+            "train": 3450,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3480,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.8,
+            "recall": 0.5,
+            "f1": 0.615
+          },
+          {
+            "train": 3510,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 0.375,
+            "f1": 0.545
+          },
+          {
+            "train": 3540,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3570,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3600,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.286,
+            "recall": 1.0,
+            "f1": 0.444
+          },
+          {
+            "train": 3630,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 3660,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.125,
+            "recall": 0.5,
+            "f1": 0.125
+          },
+          {
+            "train": 3690,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.286,
+            "recall": 0.667,
+            "f1": 0.381
+          },
+          {
+            "train": 3720,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3750,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3780,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3810,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3840,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.125,
+            "recall": 1.0,
+            "f1": 0.222
+          },
+          {
+            "train": 3870,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
+          },
+          {
+            "train": 3900,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.364,
+            "recall": 1.0,
+            "f1": 0.533
+          },
+          {
+            "train": 3930,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3960,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3990,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4020,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4050,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4080,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          {
+            "train": 4110,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.267,
+            "recall": 0.8,
+            "f1": 0.4
+          },
+          {
+            "train": 4140,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.286,
+            "recall": 0.286,
+            "f1": 0.163
+          },
+          {
+            "train": 4170,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.556,
+            "recall": 0.714,
+            "f1": 0.625
+          },
+          {
+            "train": 4200,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.1,
+              0.30000000000000004
+            ],
+            "precision": 0.667,
+            "recall": 0.25,
+            "f1": 0.333
+          },
+          {
+            "train": 4230,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.667,
+            "recall": 0.286,
+            "f1": 0.381
+          },
+          {
+            "train": 4260,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.667,
+            "recall": 0.25,
+            "f1": 0.333
+          },
+          {
+            "train": 4290,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.467,
+            "recall": 0.875,
+            "f1": 0.609
+          },
+          {
+            "train": 4320,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4350,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.438,
+            "recall": 1.0,
+            "f1": 0.609
+          },
+          {
+            "train": 4380,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.65,
+            "recall": 1.0,
+            "f1": 0.788
+          },
+          {
+            "train": 4410,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.8,
+            "recall": 0.571,
+            "f1": 0.667
+          },
+          {
+            "train": 4440,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4
+          },
+          {
+            "train": 4470,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 1.0,
+            "recall": 0.222,
+            "f1": 0.364
+          },
+          {
+            "train": 4500,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4530,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.733,
+            "recall": 0.733,
+            "f1": 0.733
+          },
+          {
+            "train": 4560,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.25,
+            "recall": 0.5,
+            "f1": 0.25
+          },
+          {
+            "train": 4590,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.154,
+            "recall": 1.0,
+            "f1": 0.267
+          },
+          {
+            "train": 4620,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.75,
+            "recall": 0.923,
+            "f1": 0.828
+          },
+          {
+            "train": 4650,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.824,
+            "recall": 0.933,
+            "f1": 0.875
+          },
+          {
+            "train": 4680,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.667,
+            "recall": 0.923,
+            "f1": 0.774
+          },
+          {
+            "train": 4710,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.75,
+            "recall": 0.8,
+            "f1": 0.774
+          },
+          {
+            "train": 4740,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.692,
+            "recall": 1.0,
+            "f1": 0.818
+          },
+          {
+            "train": 4770,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.615,
+            "recall": 1.0,
+            "f1": 0.762
+          },
+          {
+            "train": 4800,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 4830,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
+          },
+          {
+            "train": 4860,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.433,
+            "recall": 1.0,
+            "f1": 0.605
+          },
+          {
+            "train": 4890,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.556,
+            "recall": 1.0,
+            "f1": 0.714
+          },
+          {
+            "train": 4920,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.5,
+            "recall": 0.889,
+            "f1": 0.64
+          },
+          {
+            "train": 4950,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.733,
+            "recall": 0.846,
+            "f1": 0.786
+          },
+          {
+            "train": 4980,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.667,
+            "recall": 0.909,
+            "f1": 0.769
+          },
+          {
+            "train": 5010,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.333,
+            "recall": 0.571,
+            "f1": 0.381
+          },
+          {
+            "train": 5040,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          {
+            "train": 5070,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.158,
+            "recall": 1.0,
+            "f1": 0.273
+          },
+          {
+            "train": 5100,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.471,
+            "recall": 1.0,
+            "f1": 0.64
+          },
+          {
+            "train": 5130,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          {
+            "train": 5160,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.556,
+            "recall": 1.0,
+            "f1": 0.714
+          },
+          {
+            "train": 5190,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.385,
+            "recall": 1.0,
+            "f1": 0.556
+          },
+          {
+            "train": 5220,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.364,
+            "recall": 1.0,
+            "f1": 0.533
+          },
+          {
+            "train": 5250,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5280,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.111,
+            "recall": 1.0,
+            "f1": 0.2
+          },
+          {
+            "train": 5310,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.222,
+            "recall": 1.0,
+            "f1": 0.364
+          },
+          {
+            "train": 5340,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.4,
+            "recall": 1.0,
+            "f1": 0.571
+          },
+          {
+            "train": 5370,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.529,
+            "recall": 1.0,
+            "f1": 0.692
+          },
+          {
+            "train": 5400,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          {
+            "train": 5430,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.643,
+            "recall": 0.9,
+            "f1": 0.75
+          },
+          {
+            "train": 5460,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 5490,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5520,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.4,
+            "recall": 1.0,
+            "f1": 0.571
+          },
+          {
+            "train": 5550,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.812,
+            "recall": 0.867,
+            "f1": 0.839
+          },
+          {
+            "train": 5580,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 0.842,
+            "f1": 0.914
+          },
+          {
+            "train": 5610,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 1.0,
+            "recall": 0.933,
+            "f1": 0.966
+          },
+          {
+            "train": 5640,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.889,
+            "recall": 0.533,
+            "f1": 0.667
+          },
+          {
+            "train": 5670,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.889,
+            "recall": 0.444,
+            "f1": 0.593
+          },
+          {
+            "train": 5700,
+            "test": 22,
+            "threshold": 0.5,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.667,
+            "recall": 0.333,
+            "f1": 0.444
           }
         ],
-        "f1": 0.252,
+        "f1": 0.34,
+        "precision": 0.335,
+        "recall": 0.501,
+        "thresholds": [
+          0.45,
+          0.5,
+          0.45,
+          0.5,
+          0.45,
+          0.45,
+          0.55,
+          0.55,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.55,
+          0.55,
+          0.55,
+          0.6,
+          0.6,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
+          0.5,
+          0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.6,
+          0.6,
+          0.6,
+          0.6,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
+          0.5,
+          0.5,
+          0.5,
+          0.55,
+          0.5,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
+          0.5,
+          0.45,
+          0.45,
+          0.5,
+          0.5,
+          0.5,
+          0.55,
+          0.55,
+          0.5,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.55,
+          0.6,
+          0.6,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.6,
+          0.55,
+          0.55,
+          0.6,
+          0.6,
+          0.55,
+          0.55,
+          0.6,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.5,
+          0.45,
+          0.45,
+          0.5,
+          0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.5,
+          0.45,
+          0.45,
+          0.5,
+          0.5,
+          0.45,
+          0.5
+        ],
+        "feature_learning": true,
         "leakage_safe": true
       },
-      "delta_f1": 0.0,
-      "promote": false
+      "delta_f1": 0.131,
+      "delta_precision": 0.204,
+      "f1_confidence_interval": {
+        "mean": 0.131,
+        "lower": 0.096,
+        "upper": 0.165,
+        "significant": true,
+        "n": 189
+      },
+      "precision_confidence_interval": {
+        "mean": 0.203,
+        "lower": 0.162,
+        "upper": 0.245,
+        "significant": true,
+        "n": 189
+      },
+      "paired_folds": 189,
+      "promote": true,
+      "promotion_rule": "V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"
     },
     "calibration": {
       "bins": [
         {
           "bin": "0.0-0.1",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.1-0.2",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.2-0.3",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.3-0.4",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.4-0.5",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.5-0.6",
           "samples": 0,
-          "actual_rate": null
+          "mean_predicted": null,
+          "actual_rate": null,
+          "gap": null
         },
         {
           "bin": "0.6-0.7",
           "samples": 2014,
-          "actual_rate": 0.063
+          "mean_predicted": 0.664,
+          "actual_rate": 0.063,
+          "gap": 0.601
         },
         {
           "bin": "0.7-0.8",
           "samples": 2394,
-          "actual_rate": 0.17
+          "mean_predicted": 0.747,
+          "actual_rate": 0.17,
+          "gap": 0.577
         },
         {
           "bin": "0.8-0.9",
           "samples": 1034,
-          "actual_rate": 0.169
+          "mean_predicted": 0.838,
+          "actual_rate": 0.169,
+          "gap": 0.669
         },
         {
           "bin": "0.9-1.0",
-          "samples": 240,
-          "actual_rate": 0.2
+          "samples": 280,
+          "mean_predicted": 0.947,
+          "actual_rate": 0.186,
+          "gap": 0.761
         }
       ],
-      "samples": 5682
+      "samples": 5722,
+      "ece": 0.611,
+      "brier": 0.488,
+      "status": "OVER_CONFIDENT"
     },
     "drift": {
       "mean_distribution_shift": 0.1216,
       "status": "STABLE"
     },
     "rollback": false,
+    "quality_gate": {
+      "status": "HOLD",
+      "blockers": [
+        "poor_calibration"
+      ]
+    },
     "production_status": "HOLD_V4"
+  },
+  "market_context": [
+    {
+      "symbol": "NIFTY 50",
+      "price": 22600.5,
+      "previous_close": 0.0,
+      "change": 0.0,
+      "change_pct": 0.0,
+      "status": "OK"
+    },
+    {
+      "symbol": "SENSEX",
+      "price": 72636.81,
+      "previous_close": 0.0,
+      "change": 0.0,
+      "change_pct": 0.0,
+      "status": "OK"
+    }
+  ],
+  "knowledge_daily": {
+    "date": "2026-10-07",
+    "stories": 2,
+    "high_impact": 2,
+    "new_events": 0,
+    "developing_events": 2,
+    "confirmed_events": 0,
+    "contradictions": 0,
+    "research_items": 2
+  },
+  "knowledge_weekly": {
+    "week": "2026-W41",
+    "stories": 113,
+    "top_categories": "[[\"india\", 54], [\"world\", 42], [\"technology\", 12], [\"business\", 5]]",
+    "top_entities": "[{\"entity\": \"white\", \"current_mentions\": 1, \"historical_mentions\": 14}, {\"entity\": \"defends\", \"current_mentions\": 1, \"historical_mentions\": 3}, {\"entity\": \"take\", \"current_mentions\": 1, \"historical_mentions\": 13}, {\"entity\": \"diego\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"house\", \"current_mentions\": 1, \"historical_mentions\": 15}, {\"entity\": \"iran\", \"current_mentions\": 1, \"historical_mentions\": 34}, {\"entity\": \"trump\", \"current_mentions\": 1, \"historical_mentions\": 86}, {\"entity\": \"comment\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"protest\", \"current_mentions\": 1, \"historical_mentions\": 27}, {\"entity\": \"opposition\", \"current_mentions\": 1, \"historical_mentions\": 11}]",
+    "new_events": 0,
+    "developing_events": 2,
+    "confirmed_events": 0,
+    "anomalies": 0,
+    "research_items": 2
   },
   "v5_drift": {
     "mean_distribution_shift": 0.1216,
@@ -3248,54 +7493,77 @@
       {
         "bin": "0.0-0.1",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.1-0.2",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.2-0.3",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.3-0.4",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.4-0.5",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.5-0.6",
         "samples": 0,
-        "actual_rate": null
+        "mean_predicted": null,
+        "actual_rate": null,
+        "gap": null
       },
       {
         "bin": "0.6-0.7",
         "samples": 2014,
-        "actual_rate": 0.063
+        "mean_predicted": 0.664,
+        "actual_rate": 0.063,
+        "gap": 0.601
       },
       {
         "bin": "0.7-0.8",
         "samples": 2394,
-        "actual_rate": 0.17
+        "mean_predicted": 0.747,
+        "actual_rate": 0.17,
+        "gap": 0.577
       },
       {
         "bin": "0.8-0.9",
         "samples": 1034,
-        "actual_rate": 0.169
+        "mean_predicted": 0.838,
+        "actual_rate": 0.169,
+        "gap": 0.669
       },
       {
         "bin": "0.9-1.0",
-        "samples": 240,
-        "actual_rate": 0.2
+        "samples": 280,
+        "mean_predicted": 0.947,
+        "actual_rate": 0.186,
+        "gap": 0.761
       }
     ],
-    "samples": 5682
+    "samples": 5722,
+    "ece": 0.611,
+    "brier": 0.488,
+    "status": "OVER_CONFIDENT"
   }
 }
