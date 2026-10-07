@@ -95,7 +95,10 @@ jobs:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
         run: |
           python -m pip install --disable-pip-version-check pip-audit
-          # requirements.txt is fully pinned; skip pip dependency resolution so pip-audit\n          # audits the exact declared versions without creating/upgrading an isolated pip.\n          pip-audit --no-deps -r requirements.txt\n          echo "Dependency security audit passed"
+          # requirements.txt is fully pinned; skip pip dependency resolution so pip-audit
+          # audits the exact declared versions without creating/upgrading an isolated pip.
+          pip-audit --no-deps -r requirements.txt
+          echo "Dependency security audit passed"
 
       - name: Backtest and production integration checks
         env:
