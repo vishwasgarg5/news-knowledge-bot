@@ -417,3 +417,18 @@ def test_intelligence_v5_contract():
     assert v["stories"][0]["impact"]["level"] in {"HIGH","MEDIUM","LOW"}
     assert "entities" in v and "scorecard" in v
     assert "research_queue" in v and "cross_event_links" in v
+
+
+def test_intelligence_v5_plus_steps_10_25():
+    from app.intelligence_v5_plus import run_v5_plus, answer_news_question, research_report
+    stories=[{"headline":"India announces major investment deal","summary":"growth and investment","source":"Reuters","category":"economy","importance":82,"source_count":3,"verification_level":"multi-source","breaking_score":80}]
+    history=[{"headline":"India investment deal","run_date":"2026-09-01","category":"economy","outcome_score":0.8,"source":"Reuters"}]
+    learning=[{"outcome_score":"0.8","impact_level":"HIGH"}]
+    feedback=[{"feedback":"positive"},{"feedback":"negative"}]
+    prefs={"topics":["economy"]}
+    v=run_v5_plus(stories,history,learning,feedback,prefs,{"health":"PASS"})
+    for k in ("entities","entity_profiles","clusters","event_evolution","impact_learning","market_correlation","source_reliability","feedback","scorecard","personalized_feed","alerts","trend_report","knowledge_graph","contradictions","evidence_gaps","research_queue","weekly_report"):
+        assert k in v
+    assert v["clusters"] and v["entity_profiles"]
+    assert answer_news_question("investment deal",v["stories"],history)["stories"]
+    assert "sections" in research_report(v["stories"],v["research_queue"])
