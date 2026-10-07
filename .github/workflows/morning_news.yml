@@ -64,8 +64,9 @@ jobs:
           sample=[{"headline":"India economy update","importance":70,"category":"economy","region":"india"}]
           x=personalize(enrich_trends(sample,[]), yaml.safe_load(Path("config/preferences.yaml").read_text(encoding="utf-8")))
           assert x and "personalized_score" in x[0] and "breaking_score" in x[0]
-          from app.storage import ensure_data, sync_sqlite
+          from app.storage import ensure_data, sync_sqlite, validate_data
           root=Path("data"); ensure_data(root); db=sync_sqlite(root); assert db.exists()
+          quality=validate_data(root); assert quality["ok"], quality["issues"]
           import sqlite3
           with sqlite3.connect(db) as con:
               assert con.execute("select name from sqlite_master where type='table' and name='learning_outcomes'").fetchone() is not None
