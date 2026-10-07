@@ -497,3 +497,23 @@ def test_production_v5_gate_27_40():
     q=autonomous_research_agent([{"headline":"Test","priority":80}],rows)
     assert generate_research_reports(q)
     assert followup_research_plan([{"headline":"Test","impact":{"score":80}}])[0]["priority"]==80
+
+def test_phase_2_to_4_plus_production_hardening(tmp_path):
+    from app.intelligence_v5_plus import autonomous_research, weekly_report
+    from app.production_v5 import production_quality_gate
+    queue=autonomous_research([{"headline":"India market investment","impact":{"score":80},"momentum_score":20}],
+                              evidence_pool=[{"title":"India market investment confirmed","source":"Reuters","url":"https://reuters.example"}])
+    assert queue and queue[0]["evidence_count"] >= 1
+    report=weekly_report([{"headline":"India market investment","importance":80}],[])
+    assert "top_entities" in report and isinstance(report["top_entities"],list)
+    gate=production_quality_gate({"paired_folds":2},{"samples":10,"ece":0.05},{"status":"STABLE"},{"contradictions":[],"evidence_gaps":[]})
+    assert gate["status"]=="PASS"
+
+def test_knowledge_daily_is_unique_by_date(tmp_path):
+    from app.storage import ensure_data, read_rows, replace_rows, HEADERS
+    ensure_data(tmp_path)
+    path=tmp_path/"knowledge_daily.csv"
+    rows=[{"date":"2026-10-07","stories":1,"high_impact":1,"new_events":1,"developing_events":0,"confirmed_events":0,"contradictions":0,"research_items":1},
+          {"date":"2026-10-07","stories":2,"high_impact":1,"new_events":0,"developing_events":1,"confirmed_events":0,"contradictions":0,"research_items":2}]
+    replace_rows(path,[rows[-1]],HEADERS["knowledge_daily.csv"])
+    assert len([r for r in read_rows(path) if r["date"]=="2026-10-07"])==1
