@@ -356,3 +356,53 @@ def test_feedback_schema_and_production_wiring():
     assert "monitoring_alerts" in text
     storage=read("app/storage.py")
     assert "news_feedback.csv" in storage
+
+
+def test_intelligence_v4_contract(tmp_path):
+    from app.intelligence_v4 import (
+        diagnose_learning, time_bucket_metrics, event_level_metrics,
+        calibration_v2, source_category_profile, apply_intelligence_v4,
+        feedback_learning, walk_forward_optimization, compare_strategies,
+        production_decision, calibrated_score,
+    )
+    rows=[]
+    for i in range(120):
+        rows.append({
+            "run_date": f"2026-09-{(i % 30) + 1:02d}",
+            "event_id": f"e{i//2}",
+            "story_id": f"s{i}",
+            "source": "A" if i % 2 else "B",
+            "category": "india" if i % 3 else "economy",
+            "initial_score": 80 if i % 4 else 45,
+            "selected": "true" if i % 3 else "false",
+            "outcome_score": "0.8" if i % 5 else "0.1",
+        })
+    diagnosis=diagnose_learning(rows, "2026-10-07")
+    assert diagnosis["samples"] == 120
+    assert "positive_rate" in diagnosis
+    assert time_bucket_metrics(rows, "2026-10-07")
+    event=event_level_metrics(rows, "2026-10-07")
+    assert event["events"] < 120
+    cal=calibration_v2(rows, "2026-10-07")
+    profile=source_category_profile(rows, "2026-10-07")
+    ranked=apply_intelligence_v4([{"story_id":"x","source":"A","category":"india","importance":80,"personalized_score":80}], profile, cal)
+    assert ranked and "calibrated_intelligence_score" in ranked[0]
+    feedback=feedback_learning(rows,[{"story_id":"x","feedback":"useful"}],"2026-10-07")
+    assert feedback["bounded_delta"] > 0
+    wf=walk_forward_optimization(rows, minimum_train=40, test_window=20)
+    assert wf["leakage_safe"] is True and wf["folds"] >= 2
+    comparison=compare_strategies(rows)
+    assert comparison["status"] in {"PROMOTE","SHADOW"}
+    assert production_decision(comparison)["status"] in {"PROMOTE","HOLD"}
+    assert 0 <= calibrated_score(80, cal) <= 100
+
+
+def test_intelligence_v4_production_wiring():
+    text=read("app/main.py")
+    for item in (
+        "diagnose_learning","time_bucket_metrics","event_level_metrics",
+        "calibration_v2","source_category_profile","apply_intelligence_v4",
+        "feedback_learning","walk_forward_optimization","compare_strategies",
+        "production_decision","intelligence_v4_diagnosis","strategy_comparison",
+    ):
+        assert item in text
