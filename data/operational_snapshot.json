@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07",
+  "date": "2026-10-08",
   "health": "PASS",
   "operational_health": {
     "status": "PASS",
@@ -13,74 +13,62 @@
     "failed_checks": []
   },
   "source_health": {
-    "Technology News Today, Latest Tech News | The Hindu": {
-      "articles": 4,
-      "high_value": 4,
+    "Business News Today – Finance, Industry & Economy | The Hindu": {
+      "articles": 7,
+      "high_value": 7,
       "quality_rate": 1.0
     },
     "BBC News": {
-      "articles": 12,
-      "high_value": 12,
-      "quality_rate": 1.0
+      "articles": 7,
+      "high_value": 6,
+      "quality_rate": 0.857
     },
     "World news | The Guardian": {
-      "articles": 1,
-      "high_value": 1,
-      "quality_rate": 1.0
-    },
-    "Business News Today – Finance, Industry & Economy | The Hindu": {
       "articles": 4,
       "high_value": 4,
+      "quality_rate": 1.0
+    },
+    "Technology News Today, Latest Tech News | The Hindu": {
+      "articles": 3,
+      "high_value": 3,
+      "quality_rate": 1.0
+    },
+    "TechCrunch": {
+      "articles": 4,
+      "high_value": 4,
+      "quality_rate": 1.0
+    },
+    "Times of India": {
+      "articles": 7,
+      "high_value": 7,
       "quality_rate": 1.0
     },
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
       "articles": 2,
       "high_value": 2,
       "quality_rate": 1.0
-    },
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": {
-      "articles": 1,
-      "high_value": 1,
-      "quality_rate": 1.0
-    },
-    "Times of India": {
-      "articles": 4,
-      "high_value": 4,
-      "quality_rate": 1.0
-    },
-    "TechCrunch": {
-      "articles": 3,
-      "high_value": 3,
-      "quality_rate": 1.0
-    },
-    "World | Deutsche Welle": {
-      "articles": 1,
-      "high_value": 1,
-      "quality_rate": 1.0
     }
   },
   "fallback_order": [
-    "BBC News",
-    "Technology News Today, Latest Tech News | The Hindu",
     "Business News Today – Finance, Industry & Economy | The Hindu",
     "Times of India",
-    "TechCrunch",
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "World news | The Guardian",
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-    "World | Deutsche Welle"
+    "TechCrunch",
+    "Technology News Today, Latest Tech News | The Hindu",
+    "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+    "BBC News"
   ],
   "alerts": [
     "INDIA_COVERAGE_GAP",
     "WORLD_COVERAGE_GAP"
   ],
   "backtest_v4": {
-    "samples": 5980,
-    "folds": 298,
-    "precision": 0.124,
-    "recall": 0.512,
-    "f1": 0.172,
-    "mae": 0.676,
+    "samples": 6014,
+    "folds": 300,
+    "precision": 0.117,
+    "recall": 0.513,
+    "f1": 0.165,
+    "mae": 0.68,
     "stability": 0.158,
     "thresholds": [
       75,
@@ -309,10 +297,11 @@
       75,
       75,
       75,
-      70,
-      70,
-      70,
-      70,
+      75,
+      75,
+      75,
+      75,
+      75,
       75,
       75,
       75,
@@ -328,6 +317,7 @@
       70,
       70,
       70,
+      75,
       70,
       70,
       70,
@@ -386,12 +376,21 @@
   },
   "intelligence_v4": {
     "baseline": {
-      "samples": 5722,
-      "folds": 189,
-      "f1": 0.213,
-      "precision": 0.133,
-      "recall": 0.788,
+      "samples": 5980,
+      "folds": 198,
+      "f1": 0.196,
+      "precision": 0.122,
+      "recall": 0.758,
       "thresholds": [
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
+        50,
         50,
         50,
         50,
@@ -582,15 +581,15 @@
         50,
         50
       ],
-      "stability": 0.814,
+      "stability": 0.817,
       "leakage_safe": true
     },
     "v4_shadow": {
-      "samples": 5722,
-      "folds": 189,
-      "f1": 0.173,
-      "precision": 0.111,
-      "recall": 0.568,
+      "samples": 5980,
+      "folds": 198,
+      "f1": 0.158,
+      "precision": 0.101,
+      "recall": 0.544,
       "thresholds": [
         50,
         50,
@@ -740,6 +739,15 @@
         75,
         75,
         75,
+        75,
+        70,
+        70,
+        75,
+        75,
+        75,
+        75,
+        75,
+        70,
         70,
         70,
         70,
@@ -782,7 +790,7 @@
         70,
         70
       ],
-      "stability": 0.805,
+      "stability": 0.812,
       "leakage_safe": true
     },
     "promote": false,
@@ -795,64 +803,42 @@
   "intelligence_v5": {
     "stories": [
       {
-        "story_id": "3efac3bda7380fdf",
-        "event_id": "31af1a1d8cf20521",
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "importance": 94.7,
-        "ranking_score": 115.0,
-        "personalized_score": 99.7,
-        "personalization_applied": 99.7,
-        "breaking_score": 40,
+        "story_id": "65f518c0ef774c86",
+        "event_id": "258d4c87a704441e",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "importance": 100.0,
+        "ranking_score": 118.7,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 35,
         "trend_score": 85,
         "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": 1.1,
-        "category": "world",
-        "region": "world",
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": 0.8,
+        "category": "india",
+        "region": "india",
         "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss",
-        "summary": "Gavin Newsom called the remarks \"deranged\", but the White House said Trump was warning of the risk of a nuclear Iran.",
-        "related_articles": [
-          {
-            "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-            "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-            "published": "2026-10-07T01:07:21+00:00",
-            "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
-          },
-          {
-            "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-            "published": "2026-10-06T21:35:43+00:00",
-            "summary": "California Democratic leaders quickly condemned Trump's comments. He also threatened to invoke the 25th Amendment."
-          }
-        ],
+        "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+        "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+        "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "Trump says Hormuz ‘belongs’ to America but where are US warships amid Iran’s withdrawal claims?",
-              "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/videos/trump-says-hormuz-belongs-to-america-but-where-are-us-warships-amid-iran-s-withdrawal-claims-101791340769164.html",
-              "published": "2026-10-07T02:40:31+00:00",
-              "summary": "Trump has asserted that the Strait of Hormuz is under U.S. control, while Iranian officials claim American warships have moved hundreds of kilometres away from the strategic waterway. Trump previously said the U.S. had effective control of the strait and described American naval forces as capable of maintaining the blockade. Meanwhile, IRGC adviser Ali Fadavi has claimed that no U.S. naval vessels remain in the Persian Gulf, Strait of Hormuz or Gulf of Oman, saying American forces have withdrawn more than 1,000 kilometres from Iran. The competing claims come as Tehran keeps the strait closed pending conditions tied to a previous agreement."
+              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+              "published": "2026-10-07T15:14:12+00:00",
+              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
             },
             {
-              "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
               "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-              "published": "2026-10-07T01:07:21+00:00",
-              "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
+              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+              "published": "2026-10-08T00:33:03+00:00",
+              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
             }
           ],
-          "historical": [
-            {
-              "title": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss"
-            }
-          ],
+          "historical": [],
           "verification": "multi-source",
           "confidence": 83,
           "evidence_strength": 85,
@@ -860,7 +846,7 @@
           "source_count": 3,
           "independent_sources": 2,
           "fresh_sources": [
-            "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+            "World news | The Guardian",
             "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
           ],
           "current_sources": 3,
@@ -870,198 +856,40 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.3,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 97.0
         },
-        "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
-        "key_data": "",
-        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
-        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
-        "next": "",
-        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 97.0,
-        "impact": {
-          "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-          "impact": {
-            "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.48,
-            "date": "2026-10-06",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.194,
-            "date": "2026-10-06",
-            "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-10-07",
-            "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 73.8,
-        "early_signal": true
-      },
-      {
-        "story_id": "120726675754922d",
-        "event_id": "431a59e6fa77c94b",
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "importance": 92.7,
-        "ranking_score": 116.4,
-        "personalized_score": 100.0,
-        "personalization_applied": 100.0,
-        "breaking_score": 10,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.8,
-        "category": "india",
-        "region": "india",
-        "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-        "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections.",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
-              "published": "2026-10-07T00:42:00+00:00",
-              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
-            },
-            {
-              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
-              "published": "2026-10-06T22:51:25+00:00",
-              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
-            },
-            {
-              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-              "published": "2026-10-07T03:37:57+00:00",
-              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-            }
-          ],
-          "historical": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss"
-            },
-            {
-              "title": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-              "date": "2026-09-26",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-congress-leaders-clash-with-police-detained-during-protest-against-chief-election-commissioner/article71509301.ece"
-            }
-          ],
-          "verification": "multi-source",
-          "confidence": 88,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
-          "fresh_sources": [
-            "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 4,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.95,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 18.4,
-          "calibrated_confidence": 100
-        },
-        "what": "Indian opposition MPs detained in protest against election chief",
+        "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
+        "why_important": "",
         "key_data": "",
-        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
-        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
-        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
-        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
+        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 100,
+        "calibrated_confidence": 97.0,
         "impact": {
           "level": "HIGH",
-          "direction": "positive",
-          "score": 58,
-          "confidence": 0.53,
+          "direction": "negative",
+          "score": 100,
+          "confidence": 0.85,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "Indian opposition MPs detained in protest against election chief",
+          "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
           "impact": {
             "level": "HIGH",
-            "direction": "positive",
-            "score": 58,
-            "confidence": 0.53
+            "direction": "negative",
+            "score": 100,
+            "confidence": 0.85
           },
           "immediate": [
             "Monitor official confirmation and affected entities"
@@ -1078,38 +906,38 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.308,
-            "date": "2026-10-06",
-            "headline": "Indian opposition MPs detained in protest against election chief",
+            "similarity": 0.4,
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.219,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+            "similarity": 0.097,
+            "date": "2026-09-24",
+            "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
             "outcome_score": null
           },
           {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
+            "similarity": 0.094,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-09-23",
-            "headline": "Election Commission dissent sparks Opposition call for CEC Gyanesh Kumar’s removal",
+            "similarity": 0.091,
+            "date": "2026-09-15",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-10-02",
-            "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
+            "similarity": 0.081,
+            "date": "2026-09-17",
+            "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
             "outcome_score": null
           }
         ],
-        "momentum_score": 63.2,
-        "early_signal": false
+        "momentum_score": 72.0,
+        "early_signal": true
       }
     ],
     "entities": {
@@ -1117,36 +945,20 @@
       "companies": [],
       "places": [],
       "topics": {
-        "white": 2,
-        "house": 2,
-        "trump": 2,
-        "iran": 2,
-        "san": 1,
-        "diego": 1,
-        "gavin": 1,
-        "newsom": 1,
-        "indian": 1,
-        "mps": 1,
-        "opposition": 1,
-        "cec": 1,
-        "gyanesh": 1,
-        "kumar": 1,
-        "prime": 1,
-        "minister": 1,
-        "narendra": 1,
-        "modi": 1
+        "middle": 1,
+        "east": 1
       }
     },
     "source_event_matrix": {
       "bbc news": {
-        "stories": 2,
-        "high_impact": 2,
+        "stories": 1,
+        "high_impact": 1,
         "verified": 0
       }
     },
     "scorecard": {
-      "stories": 2,
-      "high_impact": 2,
+      "stories": 1,
+      "high_impact": 1,
       "verified": 0,
       "verification_rate": 0.0,
       "early_signals": 1,
@@ -1155,13 +967,8 @@
     "cross_event_links": [],
     "research_queue": [
       {
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "priority": 58,
-        "reason": "high impact or emerging signal"
-      },
-      {
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "priority": 58,
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "priority": 100,
         "reason": "high impact or emerging signal"
       }
     ]
@@ -1169,64 +976,42 @@
   "intelligence_v5_plus": {
     "stories": [
       {
-        "story_id": "3efac3bda7380fdf",
-        "event_id": "31af1a1d8cf20521",
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "importance": 94.7,
-        "ranking_score": 115.0,
-        "personalized_score": 99.7,
-        "personalization_applied": 99.7,
-        "breaking_score": 40,
+        "story_id": "65f518c0ef774c86",
+        "event_id": "258d4c87a704441e",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "importance": 100.0,
+        "ranking_score": 118.7,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 35,
         "trend_score": 85,
         "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": 1.1,
-        "category": "world",
-        "region": "world",
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": 0.8,
+        "category": "india",
+        "region": "india",
         "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss",
-        "summary": "Gavin Newsom called the remarks \"deranged\", but the White House said Trump was warning of the risk of a nuclear Iran.",
-        "related_articles": [
-          {
-            "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-            "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-            "published": "2026-10-07T01:07:21+00:00",
-            "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
-          },
-          {
-            "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-            "published": "2026-10-06T21:35:43+00:00",
-            "summary": "California Democratic leaders quickly condemned Trump's comments. He also threatened to invoke the 25th Amendment."
-          }
-        ],
+        "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+        "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+        "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "Trump says Hormuz ‘belongs’ to America but where are US warships amid Iran’s withdrawal claims?",
-              "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/videos/trump-says-hormuz-belongs-to-america-but-where-are-us-warships-amid-iran-s-withdrawal-claims-101791340769164.html",
-              "published": "2026-10-07T02:40:31+00:00",
-              "summary": "Trump has asserted that the Strait of Hormuz is under U.S. control, while Iranian officials claim American warships have moved hundreds of kilometres away from the strategic waterway. Trump previously said the U.S. had effective control of the strait and described American naval forces as capable of maintaining the blockade. Meanwhile, IRGC adviser Ali Fadavi has claimed that no U.S. naval vessels remain in the Persian Gulf, Strait of Hormuz or Gulf of Oman, saying American forces have withdrawn more than 1,000 kilometres from Iran. The competing claims come as Tehran keeps the strait closed pending conditions tied to a previous agreement."
+              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+              "published": "2026-10-07T15:14:12+00:00",
+              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
             },
             {
-              "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
               "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-              "published": "2026-10-07T01:07:21+00:00",
-              "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
+              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+              "published": "2026-10-08T00:33:03+00:00",
+              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
             }
           ],
-          "historical": [
-            {
-              "title": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss"
-            }
-          ],
+          "historical": [],
           "verification": "multi-source",
           "confidence": 83,
           "evidence_strength": 85,
@@ -1234,7 +1019,7 @@
           "source_count": 3,
           "independent_sources": 2,
           "fresh_sources": [
-            "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+            "World news | The Guardian",
             "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
           ],
           "current_sources": 3,
@@ -1244,248 +1029,40 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.3,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 97.0
         },
-        "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
-        "key_data": "",
-        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
-        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
-        "next": "",
-        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 97.0,
-        "impact": {
-          "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-          "impact": {
-            "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.48,
-            "date": "2026-10-06",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.194,
-            "date": "2026-10-06",
-            "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-10-07",
-            "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 73.8,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-06",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.333,
-            "date": "2026-10-06",
-            "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.227,
-            "date": "2026-10-07",
-            "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.2,
-            "date": "2026-09-25",
-            "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.2,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.176,
-            "date": "2026-09-24",
-            "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.176,
-            "date": "2026-09-24",
-            "headline": "Judge temporarily overturns Trump's White House media ban",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.158,
-            "date": "2026-09-23",
-            "headline": "White House rolling out red carpet for historic Xi Jinping visit",
-            "outcome_score": null
-          }
-        ]
-      },
-      {
-        "story_id": "120726675754922d",
-        "event_id": "431a59e6fa77c94b",
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "importance": 92.7,
-        "ranking_score": 116.4,
-        "personalized_score": 100.0,
-        "personalization_applied": 100.0,
-        "breaking_score": 10,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.8,
-        "category": "india",
-        "region": "india",
-        "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-        "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections.",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
-              "published": "2026-10-07T00:42:00+00:00",
-              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
-            },
-            {
-              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
-              "published": "2026-10-06T22:51:25+00:00",
-              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
-            },
-            {
-              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-              "published": "2026-10-07T03:37:57+00:00",
-              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-            }
-          ],
-          "historical": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss"
-            },
-            {
-              "title": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-              "date": "2026-09-26",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-congress-leaders-clash-with-police-detained-during-protest-against-chief-election-commissioner/article71509301.ece"
-            }
-          ],
-          "verification": "multi-source",
-          "confidence": 88,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
-          "fresh_sources": [
-            "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 4,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.95,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 18.4,
-          "calibrated_confidence": 100
-        },
-        "what": "Indian opposition MPs detained in protest against election chief",
+        "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
+        "why_important": "",
         "key_data": "",
-        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
-        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
-        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
-        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
+        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 100,
+        "calibrated_confidence": 97.0,
         "impact": {
           "level": "HIGH",
-          "direction": "positive",
-          "score": 58,
-          "confidence": 0.53,
+          "direction": "negative",
+          "score": 100,
+          "confidence": 0.85,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "Indian opposition MPs detained in protest against election chief",
+          "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
           "impact": {
             "level": "HIGH",
-            "direction": "positive",
-            "score": 58,
-            "confidence": 0.53
+            "direction": "negative",
+            "score": 100,
+            "confidence": 0.85
           },
           "immediate": [
             "Monitor official confirmation and affected entities"
@@ -1502,85 +1079,67 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.308,
-            "date": "2026-10-06",
-            "headline": "Indian opposition MPs detained in protest against election chief",
+            "similarity": 0.4,
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.219,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+            "similarity": 0.097,
+            "date": "2026-09-24",
+            "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
             "outcome_score": null
           },
           {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
+            "similarity": 0.094,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-09-23",
-            "headline": "Election Commission dissent sparks Opposition call for CEC Gyanesh Kumar’s removal",
+            "similarity": 0.091,
+            "date": "2026-09-15",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-10-02",
-            "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
+            "similarity": 0.081,
+            "date": "2026-09-17",
+            "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
             "outcome_score": null
           }
         ],
-        "momentum_score": 63.2,
-        "early_signal": false,
+        "momentum_score": 72.0,
+        "early_signal": true,
         "similar_historical_events": [
           {
             "similarity": 1.0,
-            "date": "2026-10-06",
-            "headline": "Indian opposition MPs detained in protest against election chief",
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.312,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+            "similarity": 0.176,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
             "similarity": 0.167,
             "date": "2026-09-15",
-            "headline": "Punjab villager death: Congress Sachin Pilot, Partap Bajwa detained during protest against Cheema",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
             "similarity": 0.154,
-            "date": "2026-10-06",
-            "headline": "Indian police accused of sexually harassing journalists at protest",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-21",
-            "headline": "Collective holds protest against plan to relocate zoo in Keralam",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-26",
-            "headline": "Students strike across Germany in protest against military service",
+            "date": "2026-09-07",
+            "headline": "Does ‘inflation targeting’ work in India?",
             "outcome_score": null
           },
           {
             "similarity": 0.133,
-            "date": "2026-09-25",
-            "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.133,
-            "date": "2026-09-28",
-            "headline": "Mobile phone retailers to protest against UPI MDR charges on October 2",
+            "date": "2026-09-27",
+            "headline": "DHL Express to hike charges by 8.9% in India from Jan",
             "outcome_score": null
           }
         ]
@@ -1588,72 +1147,50 @@
     ],
     "clusters": [
       {
-        "event_id": "and|comment|defends|diego|house|iran|let|out|san|take|trump|white",
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
+        "event_id": "bank|concerns|first|growing|hike|india|inflation|rate|signals|since",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "story_count": 1,
         "sources": [
           "BBC News"
         ],
         "stories": [
           {
-            "story_id": "3efac3bda7380fdf",
-            "event_id": "31af1a1d8cf20521",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "importance": 94.7,
-            "ranking_score": 115.0,
-            "personalized_score": 99.7,
-            "personalization_applied": 99.7,
-            "breaking_score": 40,
+            "story_id": "65f518c0ef774c86",
+            "event_id": "258d4c87a704441e",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+            "importance": 100.0,
+            "ranking_score": 118.7,
+            "personalized_score": 100.0,
+            "personalization_applied": 100.0,
+            "breaking_score": 35,
             "trend_score": 85,
             "emerging_topic": true,
-            "why_for_you": "preferred region + emerging topic",
-            "learning_adjustment": 1.1,
-            "category": "world",
-            "region": "world",
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": 0.8,
+            "category": "india",
+            "region": "india",
             "source": "BBC News",
-            "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss",
-            "summary": "Gavin Newsom called the remarks \"deranged\", but the White House said Trump was warning of the risk of a nuclear Iran.",
-            "related_articles": [
-              {
-                "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-                "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-                "published": "2026-10-07T01:07:21+00:00",
-                "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
-              },
-              {
-                "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-                "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-                "published": "2026-10-06T21:35:43+00:00",
-                "summary": "California Democratic leaders quickly condemned Trump's comments. He also threatened to invoke the 25th Amendment."
-              }
-            ],
+            "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+            "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+            "related_articles": [],
             "verification": {
               "evidence": [
                 {
-                  "title": "Trump says Hormuz ‘belongs’ to America but where are US warships amid Iran’s withdrawal claims?",
-                  "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/videos/trump-says-hormuz-belongs-to-america-but-where-are-us-warships-amid-iran-s-withdrawal-claims-101791340769164.html",
-                  "published": "2026-10-07T02:40:31+00:00",
-                  "summary": "Trump has asserted that the Strait of Hormuz is under U.S. control, while Iranian officials claim American warships have moved hundreds of kilometres away from the strategic waterway. Trump previously said the U.S. had effective control of the strait and described American naval forces as capable of maintaining the blockade. Meanwhile, IRGC adviser Ali Fadavi has claimed that no U.S. naval vessels remain in the Persian Gulf, Strait of Hormuz or Gulf of Oman, saying American forces have withdrawn more than 1,000 kilometres from Iran. The competing claims come as Tehran keeps the strait closed pending conditions tied to a previous agreement."
+                  "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+                  "published": "2026-10-07T15:14:12+00:00",
+                  "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
                 },
                 {
-                  "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+                  "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
                   "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                  "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-                  "published": "2026-10-07T01:07:21+00:00",
-                  "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
+                  "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+                  "published": "2026-10-08T00:33:03+00:00",
+                  "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
                 }
               ],
-              "historical": [
-                {
-                  "title": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-                  "date": "2026-10-06",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss"
-                }
-              ],
+              "historical": [],
               "verification": "multi-source",
               "confidence": 83,
               "evidence_strength": 85,
@@ -1661,7 +1198,7 @@
               "source_count": 3,
               "independent_sources": 2,
               "fresh_sources": [
-                "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+                "World news | The Guardian",
                 "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
               ],
               "current_sources": 3,
@@ -1671,208 +1208,40 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.3,
+              "freshness_hours": 15.5,
               "calibrated_confidence": 97.0
             },
-            "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
-            "key_data": "",
-            "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
-            "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
-            "next": "",
-            "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 97.0,
-            "impact": {
-              "level": "HIGH",
-              "direction": "neutral",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-              "impact": {
-                "level": "HIGH",
-                "direction": "neutral",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.48,
-                "date": "2026-10-06",
-                "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.194,
-                "date": "2026-10-06",
-                "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-10-07",
-                "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-09-25",
-                "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-09-25",
-                "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 73.8,
-            "early_signal": true
-          }
-        ]
-      },
-      {
-        "event_id": "against|chief|detained|election|indian|mps|opposition|protest",
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "story_count": 1,
-        "sources": [
-          "BBC News"
-        ],
-        "stories": [
-          {
-            "story_id": "120726675754922d",
-            "event_id": "431a59e6fa77c94b",
-            "headline": "Indian opposition MPs detained in protest against election chief",
-            "importance": 92.7,
-            "ranking_score": 116.4,
-            "personalized_score": 100.0,
-            "personalization_applied": 100.0,
-            "breaking_score": 10,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.8,
-            "category": "india",
-            "region": "india",
-            "source": "BBC News",
-            "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-            "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections.",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
-                  "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
-                  "published": "2026-10-07T00:42:00+00:00",
-                  "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
-                },
-                {
-                  "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
-                  "published": "2026-10-06T22:51:25+00:00",
-                  "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
-                },
-                {
-                  "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-                  "published": "2026-10-07T03:37:57+00:00",
-                  "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-                }
-              ],
-              "historical": [
-                {
-                  "title": "Indian opposition MPs detained in protest against election chief",
-                  "date": "2026-10-06",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss"
-                },
-                {
-                  "title": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-                  "date": "2026-09-26",
-                  "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-congress-leaders-clash-with-police-detained-during-protest-against-chief-election-commissioner/article71509301.ece"
-                }
-              ],
-              "verification": "multi-source",
-              "confidence": 88,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 4,
-              "independent_sources": 3,
-              "fresh_sources": [
-                "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 4,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.95,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 18.4,
-              "calibrated_confidence": 100
-            },
-            "what": "Indian opposition MPs detained in protest against election chief",
+            "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "who": "",
             "who_detail": "",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
+            "why_important": "",
             "key_data": "",
-            "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
-            "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
-            "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
-            "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
+            "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+            "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+            "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+            "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 100,
+            "calibrated_confidence": 97.0,
             "impact": {
               "level": "HIGH",
-              "direction": "positive",
-              "score": 58,
-              "confidence": 0.53,
+              "direction": "negative",
+              "score": 100,
+              "confidence": 0.85,
               "learned_rate": 0.75
             },
             "consequences": {
-              "event": "Indian opposition MPs detained in protest against election chief",
+              "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
               "impact": {
                 "level": "HIGH",
-                "direction": "positive",
-                "score": 58,
-                "confidence": 0.53
+                "direction": "negative",
+                "score": 100,
+                "confidence": 0.85
               },
               "immediate": [
                 "Monitor official confirmation and affected entities"
@@ -1889,38 +1258,38 @@
             "lifecycle_v2": "NEW",
             "similar_events": [
               {
-                "similarity": 0.308,
-                "date": "2026-10-06",
-                "headline": "Indian opposition MPs detained in protest against election chief",
+                "similarity": 0.4,
+                "date": "2026-10-08",
+                "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
                 "outcome_score": null
               },
               {
-                "similarity": 0.219,
-                "date": "2026-09-26",
-                "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+                "similarity": 0.097,
+                "date": "2026-09-24",
+                "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
                 "outcome_score": null
               },
               {
-                "similarity": 0.167,
-                "date": "2026-09-25",
-                "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
+                "similarity": 0.094,
+                "date": "2026-10-05",
+                "headline": "RBI may end rate-cut cycle with first hike since February 2023",
                 "outcome_score": null
               },
               {
-                "similarity": 0.156,
-                "date": "2026-09-23",
-                "headline": "Election Commission dissent sparks Opposition call for CEC Gyanesh Kumar’s removal",
+                "similarity": 0.091,
+                "date": "2026-09-15",
+                "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
                 "outcome_score": null
               },
               {
-                "similarity": 0.156,
-                "date": "2026-10-02",
-                "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
+                "similarity": 0.081,
+                "date": "2026-09-17",
+                "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
                 "outcome_score": null
               }
             ],
-            "momentum_score": 63.2,
-            "early_signal": false
+            "momentum_score": 72.0,
+            "early_signal": true
           }
         ]
       }
@@ -1930,108 +1299,18 @@
       "companies": [],
       "places": [],
       "topics": {
-        "trump": 3,
-        "white house": 2,
-        "iran": 2,
-        "cec gyanesh kumar": 2,
-        "san diego gavin": 1,
-        "newsom": 1,
-        "iran. the": 1,
-        "los angeles": 1,
-        "san diego": 1,
-        "indian": 1,
-        "mps": 1,
-        "opposition": 1,
-        "prime minister narendra": 1,
-        "modi": 1,
+        "india": 2,
         "the": 1,
-        "india": 1
+        "middle east": 1,
+        "inflation": 1
       }
     },
     "entity_profiles": [
       {
-        "entity": "trump",
+        "entity": "india",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 86
-      },
-      {
-        "entity": "white house",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "iran",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 34
-      },
-      {
-        "entity": "cec gyanesh kumar",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "san diego gavin",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "newsom",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "iran. the",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "los angeles",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "san diego",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "indian",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 32
-      },
-      {
-        "entity": "mps",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 6
-      },
-      {
-        "entity": "opposition",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 11
-      },
-      {
-        "entity": "prime minister narendra",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "modi",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 32
+        "historical_mentions": 82
       },
       {
         "entity": "the",
@@ -2040,80 +1319,64 @@
         "historical_mentions": 95
       },
       {
-        "entity": "india",
+        "entity": "middle east",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 81
+        "historical_mentions": 0
+      },
+      {
+        "entity": "inflation",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 6
       }
     ],
     "event_evolution": [
       {
-        "event_id": "and|comment|defends|diego|house|iran|let|out|san|take|trump|white",
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
+        "event_id": "bank|concerns|first|growing|hike|india|inflation|rate|signals|since",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "story_count": 1,
         "sources": [
           "BBC News"
         ],
         "stories": [
           {
-            "story_id": "3efac3bda7380fdf",
-            "event_id": "31af1a1d8cf20521",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "importance": 94.7,
-            "ranking_score": 115.0,
-            "personalized_score": 99.7,
-            "personalization_applied": 99.7,
-            "breaking_score": 40,
+            "story_id": "65f518c0ef774c86",
+            "event_id": "258d4c87a704441e",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+            "importance": 100.0,
+            "ranking_score": 118.7,
+            "personalized_score": 100.0,
+            "personalization_applied": 100.0,
+            "breaking_score": 35,
             "trend_score": 85,
             "emerging_topic": true,
-            "why_for_you": "preferred region + emerging topic",
-            "learning_adjustment": 1.1,
-            "category": "world",
-            "region": "world",
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": 0.8,
+            "category": "india",
+            "region": "india",
             "source": "BBC News",
-            "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss",
-            "summary": "Gavin Newsom called the remarks \"deranged\", but the White House said Trump was warning of the risk of a nuclear Iran.",
-            "related_articles": [
-              {
-                "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-                "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-                "published": "2026-10-07T01:07:21+00:00",
-                "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
-              },
-              {
-                "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-                "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-                "published": "2026-10-06T21:35:43+00:00",
-                "summary": "California Democratic leaders quickly condemned Trump's comments. He also threatened to invoke the 25th Amendment."
-              }
-            ],
+            "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+            "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+            "related_articles": [],
             "verification": {
               "evidence": [
                 {
-                  "title": "Trump says Hormuz ‘belongs’ to America but where are US warships amid Iran’s withdrawal claims?",
-                  "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/videos/trump-says-hormuz-belongs-to-america-but-where-are-us-warships-amid-iran-s-withdrawal-claims-101791340769164.html",
-                  "published": "2026-10-07T02:40:31+00:00",
-                  "summary": "Trump has asserted that the Strait of Hormuz is under U.S. control, while Iranian officials claim American warships have moved hundreds of kilometres away from the strategic waterway. Trump previously said the U.S. had effective control of the strait and described American naval forces as capable of maintaining the blockade. Meanwhile, IRGC adviser Ali Fadavi has claimed that no U.S. naval vessels remain in the Persian Gulf, Strait of Hormuz or Gulf of Oman, saying American forces have withdrawn more than 1,000 kilometres from Iran. The competing claims come as Tehran keeps the strait closed pending conditions tied to a previous agreement."
+                  "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+                  "published": "2026-10-07T15:14:12+00:00",
+                  "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
                 },
                 {
-                  "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+                  "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
                   "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                  "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-                  "published": "2026-10-07T01:07:21+00:00",
-                  "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
+                  "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+                  "published": "2026-10-08T00:33:03+00:00",
+                  "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
                 }
               ],
-              "historical": [
-                {
-                  "title": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-                  "date": "2026-10-06",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss"
-                }
-              ],
+              "historical": [],
               "verification": "multi-source",
               "confidence": 83,
               "evidence_strength": 85,
@@ -2121,7 +1384,7 @@
               "source_count": 3,
               "independent_sources": 2,
               "fresh_sources": [
-                "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+                "World news | The Guardian",
                 "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
               ],
               "current_sources": 3,
@@ -2131,260 +1394,40 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.3,
+              "freshness_hours": 15.5,
               "calibrated_confidence": 97.0
             },
-            "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
-            "key_data": "",
-            "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
-            "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
-            "next": "",
-            "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 97.0,
-            "impact": {
-              "level": "HIGH",
-              "direction": "neutral",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-              "impact": {
-                "level": "HIGH",
-                "direction": "neutral",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.48,
-                "date": "2026-10-06",
-                "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.194,
-                "date": "2026-10-06",
-                "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-10-07",
-                "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-09-25",
-                "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-09-25",
-                "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 73.8,
-            "early_signal": true,
-            "similar_historical_events": [
-              {
-                "similarity": 1.0,
-                "date": "2026-10-06",
-                "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.333,
-                "date": "2026-10-06",
-                "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.227,
-                "date": "2026-10-07",
-                "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.2,
-                "date": "2026-09-25",
-                "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.2,
-                "date": "2026-09-25",
-                "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.176,
-                "date": "2026-09-24",
-                "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.176,
-                "date": "2026-09-24",
-                "headline": "Judge temporarily overturns Trump's White House media ban",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.158,
-                "date": "2026-09-23",
-                "headline": "White House rolling out red carpet for historic Xi Jinping visit",
-                "outcome_score": null
-              }
-            ]
-          }
-        ],
-        "status": "DEVELOPING",
-        "history_count": 2
-      },
-      {
-        "event_id": "against|chief|detained|election|indian|mps|opposition|protest",
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "story_count": 1,
-        "sources": [
-          "BBC News"
-        ],
-        "stories": [
-          {
-            "story_id": "120726675754922d",
-            "event_id": "431a59e6fa77c94b",
-            "headline": "Indian opposition MPs detained in protest against election chief",
-            "importance": 92.7,
-            "ranking_score": 116.4,
-            "personalized_score": 100.0,
-            "personalization_applied": 100.0,
-            "breaking_score": 10,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.8,
-            "category": "india",
-            "region": "india",
-            "source": "BBC News",
-            "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-            "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections.",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
-                  "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
-                  "published": "2026-10-07T00:42:00+00:00",
-                  "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
-                },
-                {
-                  "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
-                  "published": "2026-10-06T22:51:25+00:00",
-                  "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
-                },
-                {
-                  "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-                  "published": "2026-10-07T03:37:57+00:00",
-                  "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
-                }
-              ],
-              "historical": [
-                {
-                  "title": "Indian opposition MPs detained in protest against election chief",
-                  "date": "2026-10-06",
-                  "source": "BBC News",
-                  "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss"
-                },
-                {
-                  "title": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-                  "date": "2026-09-26",
-                  "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                  "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-congress-leaders-clash-with-police-detained-during-protest-against-chief-election-commissioner/article71509301.ece"
-                }
-              ],
-              "verification": "multi-source",
-              "confidence": 88,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 4,
-              "independent_sources": 3,
-              "fresh_sources": [
-                "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 4,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.95,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 18.4,
-              "calibrated_confidence": 100
-            },
-            "what": "Indian opposition MPs detained in protest against election chief",
+            "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "who": "",
             "who_detail": "",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
+            "why_important": "",
             "key_data": "",
-            "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
-            "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
-            "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
-            "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
+            "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+            "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+            "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+            "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 100,
+            "calibrated_confidence": 97.0,
             "impact": {
               "level": "HIGH",
-              "direction": "positive",
-              "score": 58,
-              "confidence": 0.53,
+              "direction": "negative",
+              "score": 100,
+              "confidence": 0.85,
               "learned_rate": 0.75
             },
             "consequences": {
-              "event": "Indian opposition MPs detained in protest against election chief",
+              "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
               "impact": {
                 "level": "HIGH",
-                "direction": "positive",
-                "score": 58,
-                "confidence": 0.53
+                "direction": "negative",
+                "score": 100,
+                "confidence": 0.85
               },
               "immediate": [
                 "Monitor official confirmation and affected entities"
@@ -2401,97 +1444,79 @@
             "lifecycle_v2": "NEW",
             "similar_events": [
               {
-                "similarity": 0.308,
-                "date": "2026-10-06",
-                "headline": "Indian opposition MPs detained in protest against election chief",
+                "similarity": 0.4,
+                "date": "2026-10-08",
+                "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
                 "outcome_score": null
               },
               {
-                "similarity": 0.219,
-                "date": "2026-09-26",
-                "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+                "similarity": 0.097,
+                "date": "2026-09-24",
+                "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
                 "outcome_score": null
               },
               {
-                "similarity": 0.167,
-                "date": "2026-09-25",
-                "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
+                "similarity": 0.094,
+                "date": "2026-10-05",
+                "headline": "RBI may end rate-cut cycle with first hike since February 2023",
                 "outcome_score": null
               },
               {
-                "similarity": 0.156,
-                "date": "2026-09-23",
-                "headline": "Election Commission dissent sparks Opposition call for CEC Gyanesh Kumar’s removal",
+                "similarity": 0.091,
+                "date": "2026-09-15",
+                "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
                 "outcome_score": null
               },
               {
-                "similarity": 0.156,
-                "date": "2026-10-02",
-                "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
+                "similarity": 0.081,
+                "date": "2026-09-17",
+                "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
                 "outcome_score": null
               }
             ],
-            "momentum_score": 63.2,
-            "early_signal": false,
+            "momentum_score": 72.0,
+            "early_signal": true,
             "similar_historical_events": [
               {
                 "similarity": 1.0,
-                "date": "2026-10-06",
-                "headline": "Indian opposition MPs detained in protest against election chief",
+                "date": "2026-10-08",
+                "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
                 "outcome_score": null
               },
               {
-                "similarity": 0.312,
-                "date": "2026-09-26",
-                "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+                "similarity": 0.176,
+                "date": "2026-10-05",
+                "headline": "RBI may end rate-cut cycle with first hike since February 2023",
                 "outcome_score": null
               },
               {
                 "similarity": 0.167,
                 "date": "2026-09-15",
-                "headline": "Punjab villager death: Congress Sachin Pilot, Partap Bajwa detained during protest against Cheema",
+                "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
                 "outcome_score": null
               },
               {
                 "similarity": 0.154,
-                "date": "2026-10-06",
-                "headline": "Indian police accused of sexually harassing journalists at protest",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-09-21",
-                "headline": "Collective holds protest against plan to relocate zoo in Keralam",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-09-26",
-                "headline": "Students strike across Germany in protest against military service",
+                "date": "2026-09-07",
+                "headline": "Does ‘inflation targeting’ work in India?",
                 "outcome_score": null
               },
               {
                 "similarity": 0.133,
-                "date": "2026-09-25",
-                "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.133,
-                "date": "2026-09-28",
-                "headline": "Mobile phone retailers to protest against UPI MDR charges on October 2",
+                "date": "2026-09-27",
+                "headline": "DHL Express to hike charges by 8.9% in India from Jan",
                 "outcome_score": null
               }
             ]
           }
         ],
         "status": "DEVELOPING",
-        "history_count": 2
+        "history_count": 1
       }
     ],
     "impact_learning": {
-      "samples": 5722,
-      "positive_rate": 0.133,
+      "samples": 5980,
+      "positive_rate": 0.122,
       "by_level": {
         "HIGH": null,
         "MEDIUM": null,
@@ -2501,7 +1526,7 @@
     "market_context": [
       {
         "symbol": "NIFTY 50",
-        "price": 22600.5,
+        "price": 22603.05,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -2509,7 +1534,7 @@
       },
       {
         "symbol": "SENSEX",
-        "price": 72636.81,
+        "price": 72638.7,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -2518,16 +1543,8 @@
     ],
     "market_correlation": [
       {
-        "event_id": "31af1a1d8cf20521",
-        "direction": "neutral",
-        "market_samples": 0,
-        "avg_move": null,
-        "market_context_pct": 0.0,
-        "directional_alignment": "UNKNOWN"
-      },
-      {
-        "event_id": "431a59e6fa77c94b",
-        "direction": "positive",
+        "event_id": "258d4c87a704441e",
+        "direction": "negative",
         "market_samples": 0,
         "avg_move": null,
         "market_context_pct": 0.0,
@@ -2536,9 +1553,9 @@
     ],
     "source_reliability": {
       "BBC News": {
-        "n": 2,
+        "n": 1,
         "verified": 0,
-        "high_impact": 2,
+        "high_impact": 1,
         "verification_rate": 0.0
       }
     },
@@ -2549,8 +1566,8 @@
       "signal": 0.0
     },
     "scorecard": {
-      "stories": 2,
-      "high_impact": 2,
+      "stories": 1,
+      "high_impact": 1,
       "medium_impact": 0,
       "low_impact": 0,
       "verified": 0,
@@ -2559,64 +1576,42 @@
     },
     "personalized_feed": [
       {
-        "story_id": "3efac3bda7380fdf",
-        "event_id": "31af1a1d8cf20521",
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "importance": 94.7,
-        "ranking_score": 115.0,
-        "personalized_score": 99.7,
-        "personalization_applied": 99.7,
-        "breaking_score": 40,
+        "story_id": "65f518c0ef774c86",
+        "event_id": "258d4c87a704441e",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "importance": 100.0,
+        "ranking_score": 118.7,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 35,
         "trend_score": 85,
         "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": 1.1,
-        "category": "world",
-        "region": "world",
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": 0.8,
+        "category": "india",
+        "region": "india",
         "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss",
-        "summary": "Gavin Newsom called the remarks \"deranged\", but the White House said Trump was warning of the risk of a nuclear Iran.",
-        "related_articles": [
-          {
-            "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-            "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-            "published": "2026-10-07T01:07:21+00:00",
-            "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
-          },
-          {
-            "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-            "published": "2026-10-06T21:35:43+00:00",
-            "summary": "California Democratic leaders quickly condemned Trump's comments. He also threatened to invoke the 25th Amendment."
-          }
-        ],
+        "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+        "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+        "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "Trump says Hormuz ‘belongs’ to America but where are US warships amid Iran’s withdrawal claims?",
-              "source": "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/videos/trump-says-hormuz-belongs-to-america-but-where-are-us-warships-amid-iran-s-withdrawal-claims-101791340769164.html",
-              "published": "2026-10-07T02:40:31+00:00",
-              "summary": "Trump has asserted that the Strait of Hormuz is under U.S. control, while Iranian officials claim American warships have moved hundreds of kilometres away from the strategic waterway. Trump previously said the U.S. had effective control of the strait and described American naval forces as capable of maintaining the blockade. Meanwhile, IRGC adviser Ali Fadavi has claimed that no U.S. naval vessels remain in the Persian Gulf, Strait of Hormuz or Gulf of Oman, saying American forces have withdrawn more than 1,000 kilometres from Iran. The competing claims come as Tehran keeps the strait closed pending conditions tied to a previous agreement."
+              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+              "published": "2026-10-07T15:14:12+00:00",
+              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
             },
             {
-              "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
+              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
               "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-              "published": "2026-10-07T01:07:21+00:00",
-              "summary": "Both Democrats and Republicans have expressed outrage at Trump&#039;s remarks that cities could be sacrificed in Iran war."
+              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+              "published": "2026-10-08T00:33:03+00:00",
+              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
             }
           ],
-          "historical": [
-            {
-              "title": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/c6r7yn8pknyxo?at_medium=RSS&at_campaign=rss"
-            }
-          ],
+          "historical": [],
           "verification": "multi-source",
           "confidence": 83,
           "evidence_strength": 85,
@@ -2624,7 +1619,7 @@
           "source_count": 3,
           "independent_sources": 2,
           "fresh_sources": [
-            "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+            "World news | The Guardian",
             "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
           ],
           "current_sources": 3,
@@ -2634,40 +1629,40 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.3,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 97.0
         },
-        "what": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+        "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "who": "",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The White House's defense of Trump's comments has exacerbated tensions between the US and Iran, potentially destabilizing the region.",
+        "why_important": "",
         "key_data": "",
-        "background": "The comments were made during a press conference where Trump discussed the possibility of a nuclear-armed Iran, with Los Angeles and San Diego being mentioned as potential targets.",
-        "change_since_yesterday": "The White House's stance has shifted from a warning to a direct threat, changing the diplomatic and military landscape in the region.",
-        "next": "",
-        "connection": "Trump's remarks have been echoed by other politicians, including California Democratic leaders, who have condemned the comments.",
+        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
         "calibrated_confidence": 97.0,
         "impact": {
           "level": "HIGH",
-          "direction": "neutral",
-          "score": 58,
-          "confidence": 0.53,
+          "direction": "negative",
+          "score": 100,
+          "confidence": 0.85,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
+          "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
           "impact": {
             "level": "HIGH",
-            "direction": "neutral",
-            "score": 58,
-            "confidence": 0.53
+            "direction": "negative",
+            "score": 100,
+            "confidence": 0.85
           },
           "immediate": [
             "Monitor official confirmation and affected entities"
@@ -2684,100 +1679,84 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.48,
-            "date": "2026-10-06",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
+            "similarity": 0.4,
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.194,
-            "date": "2026-10-06",
-            "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
+            "similarity": 0.097,
+            "date": "2026-09-24",
+            "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
             "outcome_score": null
           },
           {
-            "similarity": 0.143,
-            "date": "2026-10-07",
-            "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
+            "similarity": 0.094,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
+            "similarity": 0.091,
+            "date": "2026-09-15",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
-            "similarity": 0.121,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
+            "similarity": 0.081,
+            "date": "2026-09-17",
+            "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
             "outcome_score": null
           }
         ],
-        "momentum_score": 73.8,
+        "momentum_score": 72.0,
         "early_signal": true,
         "similar_historical_events": [
           {
             "similarity": 1.0,
-            "date": "2026-10-06",
-            "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.333,
-            "date": "2026-10-06",
-            "headline": "Trump says Iran taking out LA and San Diego would be 'small price to pay'",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.227,
-            "date": "2026-10-07",
-            "headline": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.2,
-            "date": "2026-09-25",
-            "headline": "‘No greater partner than Trump’: Netanyahu defends Iran war as delegates walk out at UNGA",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.2,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
             "similarity": 0.176,
-            "date": "2026-09-24",
-            "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
-            "similarity": 0.176,
-            "date": "2026-09-24",
-            "headline": "Judge temporarily overturns Trump's White House media ban",
+            "similarity": 0.167,
+            "date": "2026-09-15",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
-            "similarity": 0.158,
-            "date": "2026-09-23",
-            "headline": "White House rolling out red carpet for historic Xi Jinping visit",
+            "similarity": 0.154,
+            "date": "2026-09-07",
+            "headline": "Does ‘inflation targeting’ work in India?",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.133,
+            "date": "2026-09-27",
+            "headline": "DHL Express to hike charges by 8.9% in India from Jan",
             "outcome_score": null
           }
         ],
-        "personalization_score": 102.7,
+        "personalization_score": 108.0,
         "preference_matches": 1
-      },
+      }
+    ],
+    "alerts": [
       {
-        "story_id": "120726675754922d",
-        "event_id": "431a59e6fa77c94b",
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "importance": 92.7,
-        "ranking_score": 116.4,
+        "story_id": "65f518c0ef774c86",
+        "event_id": "258d4c87a704441e",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "importance": 100.0,
+        "ranking_score": 118.7,
         "personalized_score": 100.0,
         "personalization_applied": 100.0,
-        "breaking_score": 10,
+        "breaking_score": 35,
         "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
@@ -2785,99 +1764,78 @@
         "category": "india",
         "region": "india",
         "source": "BBC News",
-        "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss",
-        "summary": "Opposition leaders have alleged that CEC Gyanesh Kumar manipulated voter rolls to favour Prime Minister Narendra Modi's party during elections.",
+        "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+        "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
         "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "CEC Gyanesh Kumar’s Chhattisgarh visit postponed",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/cec-gyanesh-kumars-chhattisgarh-visit-postponed/article71553108.ece",
-              "published": "2026-10-07T00:42:00+00:00",
-              "summary": "Mr Kumar — who is facing criticism over the Special Intensive Revision (SIR) of electoral rolls — and the fellow ECI officials were scheduled to travel from Delhi to Chhattisgarh for the visit spanning October 7 and 8"
+              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+              "published": "2026-10-07T15:14:12+00:00",
+              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
             },
             {
-              "title": "From Gujarat CM to India's PM: Modi's 25 years in office",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/from-gujarat-cm-to-indias-pm-modis-25-years-in-office/articleshow/134752463.cms",
-              "published": "2026-10-06T22:51:25+00:00",
-              "summary": "Narendra Modi's journey began with his role as Gujarat Chief Minister, addressing state issues and implementing reforms. His tenure included launching significant initiatives like the Jan Dhan Yojana and Swachh Bharat Mission, aimed at improving welfare. The BJP's political maneuvers led to Modi becoming Prime Minister in 2014, marking a significant shift in governance."
-            },
-            {
-              "title": "CEC Gyanesh Kumar row LIVE: Saurav Das to inform Delhi Police of CJP's Oct 10 protest against CEC at 10am",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/cec-gyanesh-kumar-live-updates-india-bloc-protest-rahul-gandhi-congress-cjp-saurav-das-parliament-street-delhi-police-101791341181184.html",
-              "published": "2026-10-07T03:37:57+00:00",
-              "summary": "CEC Gyanesh Kumar row LIVE: Rahul Gandhi took the centre stage in the Opposition's protest against CEC on Tuesday, climbing on to the barricades to wave the tricolor and forcing his way through the security to enter Akashwani Bhawan where they staged a sit-in."
+              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
+              "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+              "published": "2026-10-08T00:33:03+00:00",
+              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
             }
           ],
-          "historical": [
-            {
-              "title": "Indian opposition MPs detained in protest against election chief",
-              "date": "2026-10-06",
-              "source": "BBC News",
-              "url": "https://www.bbc.co.uk/news/articles/crpdgvx82831o?at_medium=RSS&at_campaign=rss"
-            },
-            {
-              "title": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
-              "date": "2026-09-26",
-              "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-              "url": "https://www.thehindu.com/news/national/uttar-pradesh/up-congress-leaders-clash-with-police-detained-during-protest-against-chief-election-commissioner/article71509301.ece"
-            }
-          ],
+          "historical": [],
           "verification": "multi-source",
-          "confidence": 88,
+          "confidence": 83,
           "evidence_strength": 85,
           "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
+          "source_count": 3,
+          "independent_sources": 2,
           "fresh_sources": [
-            "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+            "World news | The Guardian",
+            "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
           ],
-          "current_sources": 4,
+          "current_sources": 3,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.4,
-          "calibrated_confidence": 100
+          "freshness_hours": 15.5,
+          "calibrated_confidence": 97.0
         },
-        "what": "Indian opposition MPs detained in protest against election chief",
+        "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The detention of opposition MPs could escalate tensions and potentially impact the legitimacy of the election results.",
+        "why_important": "",
         "key_data": "",
-        "background": "The election in India is marred by allegations of electoral malpractice, with CEC Gyanesh Kumar being a key figure.",
-        "change_since_yesterday": "The detention of MPs could lead to a more confrontational political climate and affect the election's outcome.",
-        "next": "The Indian Election Commission is expected to release a detailed report on the allegations.",
-        "connection": "The allegations against CEC Gyanesh Kumar are consistent with other reports of electoral irregularities.",
+        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 100,
+        "calibrated_confidence": 97.0,
         "impact": {
           "level": "HIGH",
-          "direction": "positive",
-          "score": 58,
-          "confidence": 0.53,
+          "direction": "negative",
+          "score": 100,
+          "confidence": 0.85,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "Indian opposition MPs detained in protest against election chief",
+          "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
           "impact": {
             "level": "HIGH",
-            "direction": "positive",
-            "score": 58,
-            "confidence": 0.53
+            "direction": "negative",
+            "score": 100,
+            "confidence": 0.85
           },
           "immediate": [
             "Monitor official confirmation and affected entities"
@@ -2894,116 +1852,85 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.308,
-            "date": "2026-10-06",
-            "headline": "Indian opposition MPs detained in protest against election chief",
+            "similarity": 0.4,
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.219,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+            "similarity": 0.097,
+            "date": "2026-09-24",
+            "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
             "outcome_score": null
           },
           {
-            "similarity": 0.167,
-            "date": "2026-09-25",
-            "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
+            "similarity": 0.094,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-09-23",
-            "headline": "Election Commission dissent sparks Opposition call for CEC Gyanesh Kumar’s removal",
+            "similarity": 0.091,
+            "date": "2026-09-15",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
-            "similarity": 0.156,
-            "date": "2026-10-02",
-            "headline": "CJP to protest against CEC Gyanesh Kumar in Mumbai on October 2, Dipke challenges CM Fadnavis",
+            "similarity": 0.081,
+            "date": "2026-09-17",
+            "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
             "outcome_score": null
           }
         ],
-        "momentum_score": 63.2,
-        "early_signal": false,
+        "momentum_score": 72.0,
+        "early_signal": true,
         "similar_historical_events": [
           {
             "similarity": 1.0,
-            "date": "2026-10-06",
-            "headline": "Indian opposition MPs detained in protest against election chief",
+            "date": "2026-10-08",
+            "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "outcome_score": null
           },
           {
-            "similarity": 0.312,
-            "date": "2026-09-26",
-            "headline": "U.P. Congress leaders clash with police, detained during protest against Chief Election Commissioner",
+            "similarity": 0.176,
+            "date": "2026-10-05",
+            "headline": "RBI may end rate-cut cycle with first hike since February 2023",
             "outcome_score": null
           },
           {
             "similarity": 0.167,
             "date": "2026-09-15",
-            "headline": "Punjab villager death: Congress Sachin Pilot, Partap Bajwa detained during protest against Cheema",
+            "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
             "outcome_score": null
           },
           {
             "similarity": 0.154,
-            "date": "2026-10-06",
-            "headline": "Indian police accused of sexually harassing journalists at protest",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-21",
-            "headline": "Collective holds protest against plan to relocate zoo in Keralam",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-26",
-            "headline": "Students strike across Germany in protest against military service",
+            "date": "2026-09-07",
+            "headline": "Does ‘inflation targeting’ work in India?",
             "outcome_score": null
           },
           {
             "similarity": 0.133,
-            "date": "2026-09-25",
-            "headline": "Opposition set to move fresh motion against CEC Gyanesh Kumar",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.133,
-            "date": "2026-09-28",
-            "headline": "Mobile phone retailers to protest against UPI MDR charges on October 2",
+            "date": "2026-09-27",
+            "headline": "DHL Express to hike charges by 8.9% in India from Jan",
             "outcome_score": null
           }
-        ],
-        "personalization_score": 100.7,
-        "preference_matches": 1
+        ]
       }
     ],
-    "alerts": [],
     "trend_report": [
-      {
-        "category": "world",
-        "current": 1,
-        "previous": 257,
-        "delta": -256
-      },
       {
         "category": "india",
         "current": 1,
-        "previous": 602,
-        "delta": -601
+        "previous": 603,
+        "delta": -602
       }
     ],
     "knowledge_graph": {
       "nodes": [
         {
           "type": "event",
-          "label": "White House defends Trump comment to let Iran 'take out' LA and San Diego"
-        },
-        {
-          "type": "event",
-          "label": "Indian opposition MPs detained in protest against election chief"
+          "label": "India's first bank rate hike since 2023 signals growing inflation concerns"
         }
       ],
       "edges": []
@@ -3011,13 +1938,7 @@
     "contradictions": [],
     "evidence_gaps": [
       {
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "missing": [
-          "independent_source_count"
-        ]
-      },
-      {
-        "headline": "Indian opposition MPs detained in protest against election chief",
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "missing": [
           "independent_source_count"
         ]
@@ -3025,127 +1946,252 @@
     ],
     "research_queue": [
       {
-        "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "priority": 76.5,
+        "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "priority": 118.0,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
           "retrieve historical analogue"
         ],
-        "retrieved_evidence": [
-          {
-            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-            "title": "Politicians slam Trump’s suggestion that Iran ‘take’ San Diego, Los Angeles",
-            "url": "https://www.aljazeera.com/news/2026/10/7/politicians-slam-trumps-suggestion-that-iran-take-san-diego-los-angeles?traffic_source=rss",
-            "similarity": 0.278,
-            "source_reliability": 0.7,
-            "evidence_score": 0.404
-          },
-          {
-            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-            "title": "'Dangerous' Trump walks away after 'let Iran take out LA' remark as Republicans turn on him before midterms",
-            "url": "https://www.hindustantimes.com/world-news/us-news/dangerous-trump-walks-away-after-let-iran-take-out-la-remark-as-republicans-turn-on-him-before-midterms-101791316872980.html",
-            "similarity": 0.227,
-            "source_reliability": 0.7,
-            "evidence_score": 0.369
-          }
-        ],
-        "evidence_count": 2,
-        "research_status": "EVIDENCE_RETRIEVED"
-      },
-      {
-        "headline": "Indian opposition MPs detained in protest against election chief",
-        "priority": 73.8,
-        "tasks": [
-          "verify primary source",
-          "find independent confirmation",
-          "retrieve historical analogue"
-        ],
-        "retrieved_evidence": [
-          {
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "title": "Rahul calls SIR ‘treason’ as INDIA unites against ECI; MPs detained",
-            "url": "https://www.thehindu.com/news/national/leader-of-opposition-in-lok-sabha-rahul-gandhi-during-cec-protest/article71551240.ece",
-            "similarity": 0.2,
-            "source_reliability": 0.7,
-            "evidence_score": 0.35
-          }
-        ],
-        "evidence_count": 1,
-        "research_status": "EVIDENCE_RETRIEVED"
+        "retrieved_evidence": [],
+        "evidence_count": 0,
+        "research_status": "RESEARCH_REQUIRED"
       }
     ],
     "weekly_report": {
       "top_events": [
-        "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-        "Indian opposition MPs detained in protest against election chief"
+        "India's first bank rate hike since 2023 signals growing inflation concerns"
       ],
       "top_entities": [
         {
-          "entity": "white",
+          "entity": "bank",
+          "current_mentions": 1,
+          "historical_mentions": 9
+        },
+        {
+          "entity": "hike",
+          "current_mentions": 1,
+          "historical_mentions": 8
+        },
+        {
+          "entity": "since",
+          "current_mentions": 1,
+          "historical_mentions": 6
+        },
+        {
+          "entity": "growing",
+          "current_mentions": 1,
+          "historical_mentions": 5
+        },
+        {
+          "entity": "first",
+          "current_mentions": 1,
+          "historical_mentions": 29
+        },
+        {
+          "entity": "inflation",
+          "current_mentions": 1,
+          "historical_mentions": 6
+        },
+        {
+          "entity": "concerns",
           "current_mentions": 1,
           "historical_mentions": 14
         },
         {
-          "entity": "defends",
+          "entity": "india",
+          "current_mentions": 1,
+          "historical_mentions": 82
+        },
+        {
+          "entity": "rate",
+          "current_mentions": 1,
+          "historical_mentions": 8
+        },
+        {
+          "entity": "signals",
           "current_mentions": 1,
           "historical_mentions": 3
-        },
-        {
-          "entity": "take",
-          "current_mentions": 1,
-          "historical_mentions": 13
-        },
-        {
-          "entity": "diego",
-          "current_mentions": 1,
-          "historical_mentions": 2
-        },
-        {
-          "entity": "house",
-          "current_mentions": 1,
-          "historical_mentions": 15
-        },
-        {
-          "entity": "iran",
-          "current_mentions": 1,
-          "historical_mentions": 34
-        },
-        {
-          "entity": "trump",
-          "current_mentions": 1,
-          "historical_mentions": 86
-        },
-        {
-          "entity": "comment",
-          "current_mentions": 1,
-          "historical_mentions": 2
-        },
-        {
-          "entity": "protest",
-          "current_mentions": 1,
-          "historical_mentions": 27
-        },
-        {
-          "entity": "opposition",
-          "current_mentions": 1,
-          "historical_mentions": 11
         }
       ],
-      "history_size": 1234,
+      "history_size": 1235,
       "anomalies": []
     }
   },
-  "smart_alerts": [],
+  "smart_alerts": [
+    {
+      "story_id": "65f518c0ef774c86",
+      "event_id": "258d4c87a704441e",
+      "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+      "importance": 100.0,
+      "ranking_score": 118.7,
+      "personalized_score": 100.0,
+      "personalization_applied": 100.0,
+      "breaking_score": 35,
+      "trend_score": 85,
+      "emerging_topic": true,
+      "why_for_you": "priority category + preferred region",
+      "learning_adjustment": 0.8,
+      "category": "india",
+      "region": "india",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss",
+      "summary": "The hike reflects a global shift towards tighter monetary policy as central banks battle inflation fuelled by Middle East conflict.",
+      "related_articles": [],
+      "verification": {
+        "evidence": [
+          {
+            "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
+            "source": "World news | The Guardian",
+            "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
+            "published": "2026-10-07T15:14:12+00:00",
+            "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+          },
+          {
+            "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
+            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+            "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
+            "published": "2026-10-08T00:33:03+00:00",
+            "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+          }
+        ],
+        "historical": [],
+        "verification": "multi-source",
+        "confidence": 83,
+        "evidence_strength": 85,
+        "verification_reason": "two or more independent current publishers",
+        "source_count": 3,
+        "independent_sources": 2,
+        "fresh_sources": [
+          "World news | The Guardian",
+          "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+        ],
+        "current_sources": 3,
+        "official_source": false,
+        "primary_derivative": false,
+        "primary_fresh": true,
+        "primary_trust": 0.95,
+        "contradiction_flag": false,
+        "contradiction_evidence": [],
+        "freshness_hours": 15.5,
+        "calibrated_confidence": 97.0
+      },
+      "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
+      "who": "",
+      "who_detail": "",
+      "when": "",
+      "where": "",
+      "why": "",
+      "how": "",
+      "why_important": "",
+      "key_data": "",
+      "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
+      "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
+      "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
+      "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+      "memory_hook": "",
+      "vocabulary": "",
+      "ai_generated": true,
+      "calibrated_confidence": 97.0,
+      "impact": {
+        "level": "HIGH",
+        "direction": "negative",
+        "score": 100,
+        "confidence": 0.85,
+        "learned_rate": 0.75
+      },
+      "consequences": {
+        "event": "India's first bank rate hike since 2023 signals growing inflation concerns",
+        "impact": {
+          "level": "HIGH",
+          "direction": "negative",
+          "score": 100,
+          "confidence": 0.85
+        },
+        "immediate": [
+          "Monitor official confirmation and affected entities"
+        ],
+        "second_order": [
+          "Monitor related sectors, suppliers, competitors and policy response"
+        ],
+        "watch_next": [
+          "New official statements",
+          "Independent confirmation",
+          "Price/economic data if relevant"
+        ]
+      },
+      "lifecycle_v2": "NEW",
+      "similar_events": [
+        {
+          "similarity": 0.4,
+          "date": "2026-10-08",
+          "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.097,
+          "date": "2026-09-24",
+          "headline": "Disney+ and Hulu add to the growing trend of streaming inflation",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.094,
+          "date": "2026-10-05",
+          "headline": "RBI may end rate-cut cycle with first hike since February 2023",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.091,
+          "date": "2026-09-15",
+          "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.081,
+          "date": "2026-09-17",
+          "headline": "Modi taking India towards the league of developed nations, says Andhra Pradesh Chief Minister Chandrababu Naidu",
+          "outcome_score": null
+        }
+      ],
+      "momentum_score": 72.0,
+      "early_signal": true,
+      "similar_historical_events": [
+        {
+          "similarity": 1.0,
+          "date": "2026-10-08",
+          "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.176,
+          "date": "2026-10-05",
+          "headline": "RBI may end rate-cut cycle with first hike since February 2023",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.167,
+          "date": "2026-09-15",
+          "headline": "August retail inflation raises chances of RBI rate hike in October, say economists",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.154,
+          "date": "2026-09-07",
+          "headline": "Does ‘inflation targeting’ work in India?",
+          "outcome_score": null
+        },
+        {
+          "similarity": 0.133,
+          "date": "2026-09-27",
+          "headline": "DHL Express to hike charges by 8.9% in India from Jan",
+          "outcome_score": null
+        }
+      ]
+    }
+  ],
   "evidence_gaps": [
     {
-      "headline": "White House defends Trump comment to let Iran 'take out' LA and San Diego",
-      "missing": [
-        "independent_source_count"
-      ]
-    },
-    {
-      "headline": "Indian opposition MPs detained in protest against election chief",
+      "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
       "missing": [
         "independent_source_count"
       ]
@@ -4231,12 +3277,36 @@
             "train": 4080,
             "test": 30,
             "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4110,
+            "test": 30,
+            "threshold": 50,
             "precision": 0.033,
             "recall": 1.0,
             "f1": 0.065
           },
           {
-            "train": 4110,
+            "train": 4140,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 4170,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 4200,
             "test": 30,
             "threshold": 50,
             "precision": 0.167,
@@ -4244,60 +3314,36 @@
             "f1": 0.286
           },
           {
-            "train": 4140,
-            "test": 30,
-            "threshold": 50,
-            "precision": 0.233,
-            "recall": 1.0,
-            "f1": 0.378
-          },
-          {
-            "train": 4170,
-            "test": 30,
-            "threshold": 50,
-            "precision": 0.233,
-            "recall": 1.0,
-            "f1": 0.378
-          },
-          {
-            "train": 4200,
-            "test": 30,
-            "threshold": 50,
-            "precision": 0.267,
-            "recall": 1.0,
-            "f1": 0.421
-          },
-          {
             "train": 4230,
             "test": 30,
             "threshold": 50,
-            "precision": 0.233,
+            "precision": 0.167,
             "recall": 1.0,
-            "f1": 0.378
+            "f1": 0.286
           },
           {
             "train": 4260,
             "test": 30,
             "threshold": 50,
-            "precision": 0.267,
+            "precision": 0.067,
             "recall": 1.0,
-            "f1": 0.421
+            "f1": 0.125
           },
           {
             "train": 4290,
             "test": 30,
             "threshold": 50,
-            "precision": 0.267,
-            "recall": 1.0,
-            "f1": 0.421
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4320,
             "test": 30,
             "threshold": 50,
-            "precision": 0.033,
-            "recall": 1.0,
-            "f1": 0.065
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4350,
@@ -4661,23 +3707,95 @@
           },
           {
             "train": 5700,
-            "test": 22,
+            "test": 30,
             "threshold": 50,
-            "precision": 0.273,
+            "precision": 0.2,
             "recall": 1.0,
-            "f1": 0.429
+            "f1": 0.333
+          },
+          {
+            "train": 5730,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
+          },
+          {
+            "train": 5760,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5790,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5820,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5850,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.033,
+            "recall": 1.0,
+            "f1": 0.065
+          },
+          {
+            "train": 5880,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5910,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5940,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5970,
+            "test": 10,
+            "threshold": 50,
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
           }
         ],
-        "f1": 0.209,
-        "precision": 0.131,
-        "recall": 0.81,
+        "f1": 0.193,
+        "precision": 0.12,
+        "recall": 0.773,
         "leakage_safe": true,
         "threshold_policy": "fixed_50",
         "train_min": 60,
         "test_window": 30
       },
       "candidate_v5": {
-        "samples": 5722,
+        "samples": 5980,
         "folds": [
           {
             "train": 60,
@@ -6430,9 +5548,9 @@
               0.2,
               0.3
             ],
-            "precision": 0.333,
-            "recall": 1.0,
-            "f1": 0.5
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4110,
@@ -6443,9 +5561,9 @@
               0.2,
               0.3
             ],
-            "precision": 0.267,
-            "recall": 0.8,
-            "f1": 0.4
+            "precision": 0.067,
+            "recall": 1.0,
+            "f1": 0.125
           },
           {
             "train": 4140,
@@ -6453,12 +5571,12 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.1,
+              0.4
             ],
             "precision": 0.286,
-            "recall": 0.286,
-            "f1": 0.163
+            "recall": 0.667,
+            "f1": 0.381
           },
           {
             "train": 4170,
@@ -6469,9 +5587,9 @@
               0.1,
               0.30000000000000004
             ],
-            "precision": 0.556,
-            "recall": 0.714,
-            "f1": 0.625
+            "precision": 0.375,
+            "recall": 1.0,
+            "f1": 0.545
           },
           {
             "train": 4200,
@@ -6482,9 +5600,9 @@
               0.1,
               0.30000000000000004
             ],
-            "precision": 0.667,
-            "recall": 0.25,
-            "f1": 0.333
+            "precision": 0.5,
+            "recall": 0.2,
+            "f1": 0.2
           },
           {
             "train": 4230,
@@ -6492,12 +5610,12 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.667,
-            "recall": 0.286,
-            "f1": 0.381
+            "precision": 0.5,
+            "recall": 0.2,
+            "f1": 0.2
           },
           {
             "train": 4260,
@@ -6505,34 +5623,34 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.667,
-            "recall": 0.25,
-            "f1": 0.333
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4290,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
-              0.2
+              0.6,
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.467,
-            "recall": 0.875,
-            "f1": 0.609
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4320,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
-              0.2
+              0.6,
+              0.1,
+              0.30000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6541,41 +5659,41 @@
           {
             "train": 4350,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
+              0.6,
+              0.2,
               0.2
             ],
-            "precision": 0.438,
+            "precision": 0.467,
             "recall": 1.0,
-            "f1": 0.609
+            "f1": 0.636
           },
           {
             "train": 4380,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.643,
+            "recall": 0.692,
+            "f1": 0.667
+          },
+          {
+            "train": 4410,
+            "test": 30,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.65,
-            "recall": 1.0,
-            "f1": 0.788
-          },
-          {
-            "train": 4410,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.6,
-              0.3,
-              0.10000000000000003
-            ],
-            "precision": 0.8,
-            "recall": 0.571,
-            "f1": 0.667
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4440,
@@ -6587,8 +5705,8 @@
               0.10000000000000003
             ],
             "precision": 1.0,
-            "recall": 0.25,
-            "f1": 0.4
+            "recall": 0.167,
+            "f1": 0.286
           },
           {
             "train": 4470,
@@ -6619,80 +5737,80 @@
           {
             "train": 4530,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
-            "precision": 0.733,
-            "recall": 0.733,
-            "f1": 0.733
+            "precision": 1.0,
+            "recall": 0.2,
+            "f1": 0.333
           },
           {
             "train": 4560,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.25,
+            "precision": 0.5,
             "recall": 0.5,
-            "f1": 0.25
+            "f1": 0.5
           },
           {
             "train": 4590,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
-            "precision": 0.154,
+            "precision": 0.333,
             "recall": 1.0,
-            "f1": 0.267
+            "f1": 0.5
           },
           {
             "train": 4620,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.75,
-            "recall": 0.923,
-            "f1": 0.828
+            "precision": 0.727,
+            "recall": 0.615,
+            "f1": 0.667
           },
           {
             "train": 4650,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
-            "precision": 0.824,
-            "recall": 0.933,
-            "f1": 0.875
+            "precision": 0.727,
+            "recall": 0.533,
+            "f1": 0.615
           },
           {
             "train": 4680,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
-            "precision": 0.667,
-            "recall": 0.923,
-            "f1": 0.774
+            "precision": 0.5,
+            "recall": 0.308,
+            "f1": 0.308
           },
           {
             "train": 4710,
@@ -6716,22 +5834,22 @@
               0.3,
               0.2
             ],
-            "precision": 0.692,
-            "recall": 1.0,
-            "f1": 0.818
+            "precision": 0.667,
+            "recall": 0.889,
+            "f1": 0.762
           },
           {
             "train": 4770,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
-            "precision": 0.615,
-            "recall": 1.0,
-            "f1": 0.762
+            "precision": 0.583,
+            "recall": 0.875,
+            "f1": 0.7
           },
           {
             "train": 4800,
@@ -6775,11 +5893,11 @@
           {
             "train": 4890,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
             "weights": [
-              0.5,
+              0.6,
               0.3,
-              0.2
+              0.10000000000000003
             ],
             "precision": 0.556,
             "recall": 1.0,
@@ -6820,9 +5938,9 @@
               0.3,
               0.10000000000000003
             ],
-            "precision": 0.667,
+            "precision": 0.714,
             "recall": 0.909,
-            "f1": 0.769
+            "f1": 0.8
           },
           {
             "train": 5010,
@@ -6833,9 +5951,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.333,
+            "precision": 0.4,
             "recall": 0.571,
-            "f1": 0.381
+            "f1": 0.457
           },
           {
             "train": 5040,
@@ -6911,9 +6029,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.385,
+            "precision": 0.417,
             "recall": 1.0,
-            "f1": 0.556
+            "f1": 0.588
           },
           {
             "train": 5220,
@@ -6924,9 +6042,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.364,
-            "recall": 1.0,
-            "f1": 0.533
+            "precision": 0.333,
+            "recall": 0.75,
+            "f1": 0.462
           },
           {
             "train": 5250,
@@ -6950,9 +6068,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.111,
+            "precision": 0.118,
             "recall": 1.0,
-            "f1": 0.2
+            "f1": 0.211
           },
           {
             "train": 5310,
@@ -7015,9 +6133,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.643,
-            "recall": 0.9,
-            "f1": 0.75
+            "precision": 0.615,
+            "recall": 0.8,
+            "f1": 0.696
           },
           {
             "train": 5460,
@@ -7028,9 +6146,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.5,
+            "precision": 0.538,
             "recall": 1.0,
-            "f1": 0.667
+            "f1": 0.7
           },
           {
             "train": 5490,
@@ -7048,15 +6166,15 @@
           {
             "train": 5520,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
-            "precision": 0.4,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 0.571
+            "f1": 0.667
           },
           {
             "train": 5550,
@@ -7087,11 +6205,11 @@
           {
             "train": 5610,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 1.0,
             "recall": 0.933,
@@ -7100,11 +6218,11 @@
           {
             "train": 5640,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 0.889,
             "recall": 0.533,
@@ -7125,21 +6243,138 @@
           },
           {
             "train": 5700,
-            "test": 22,
-            "threshold": 0.5,
+            "test": 30,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
-            "precision": 0.667,
+            "precision": 0.2,
             "recall": 0.333,
-            "f1": 0.444
+            "f1": 0.133
+          },
+          {
+            "train": 5730,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.143,
+            "recall": 1.0,
+            "f1": 0.25
+          },
+          {
+            "train": 5760,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5790,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5820,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5850,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.062,
+            "recall": 1.0,
+            "f1": 0.118
+          },
+          {
+            "train": 5880,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5910,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5940,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.2,
+              0.3
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 5970,
+            "test": 10,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.1,
+            "recall": 1.0,
+            "f1": 0.182
           }
         ],
-        "f1": 0.34,
-        "precision": 0.335,
-        "recall": 0.501,
+        "f1": 0.308,
+        "precision": 0.307,
+        "recall": 0.47,
         "thresholds": [
           0.45,
           0.5,
@@ -7282,23 +6517,20 @@
           0.55,
           0.55,
           0.55,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
           0.55,
           0.55,
           0.55,
           0.5,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
+          0.5,
+          0.55,
+          0.55,
+          0.5,
+          0.55,
+          0.5,
+          0.55,
+          0.5,
+          0.55,
+          0.55,
           0.45,
           0.45,
           0.5,
@@ -7307,50 +6539,62 @@
           0.5,
           0.5,
           0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.5,
-          0.45,
-          0.45,
           0.5,
           0.5,
           0.45,
-          0.5
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45
         ],
         "feature_learning": true,
         "leakage_safe": true
       },
-      "delta_f1": 0.131,
-      "delta_precision": 0.204,
+      "delta_f1": 0.115,
+      "delta_precision": 0.187,
       "f1_confidence_interval": {
-        "mean": 0.131,
-        "lower": 0.096,
-        "upper": 0.165,
+        "mean": 0.115,
+        "lower": 0.081,
+        "upper": 0.149,
         "significant": true,
-        "n": 189
+        "n": 198
       },
       "precision_confidence_interval": {
-        "mean": 0.203,
-        "lower": 0.162,
-        "upper": 0.245,
+        "mean": 0.186,
+        "lower": 0.146,
+        "upper": 0.226,
         "significant": true,
-        "n": 189
+        "n": 198
       },
-      "paired_folds": 189,
+      "paired_folds": 198,
       "promote": true,
       "promotion_rule": "V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"
     },
@@ -7400,47 +6644,48 @@
         },
         {
           "bin": "0.6-0.7",
-          "samples": 2014,
+          "samples": 2101,
           "mean_predicted": 0.664,
-          "actual_rate": 0.063,
-          "gap": 0.601
+          "actual_rate": 0.056,
+          "gap": 0.608
         },
         {
           "bin": "0.7-0.8",
-          "samples": 2394,
+          "samples": 2497,
           "mean_predicted": 0.747,
-          "actual_rate": 0.17,
-          "gap": 0.577
+          "actual_rate": 0.156,
+          "gap": 0.591
         },
         {
           "bin": "0.8-0.9",
-          "samples": 1034,
-          "mean_predicted": 0.838,
-          "actual_rate": 0.169,
-          "gap": 0.669
+          "samples": 1084,
+          "mean_predicted": 0.839,
+          "actual_rate": 0.158,
+          "gap": 0.681
         },
         {
           "bin": "0.9-1.0",
-          "samples": 280,
+          "samples": 298,
           "mean_predicted": 0.947,
-          "actual_rate": 0.186,
-          "gap": 0.761
+          "actual_rate": 0.178,
+          "gap": 0.769
         }
       ],
-      "samples": 5722,
-      "ece": 0.611,
-      "brier": 0.488,
+      "samples": 5980,
+      "ece": 0.622,
+      "brier": 0.494,
       "status": "OVER_CONFIDENT"
     },
     "drift": {
-      "mean_distribution_shift": 0.1216,
-      "status": "STABLE"
+      "mean_distribution_shift": 0.2047,
+      "status": "DRIFT"
     },
     "rollback": false,
     "quality_gate": {
       "status": "HOLD",
       "blockers": [
-        "poor_calibration"
+        "poor_calibration",
+        "distribution_drift"
       ]
     },
     "production_status": "HOLD_V4"
@@ -7448,7 +6693,7 @@
   "market_context": [
     {
       "symbol": "NIFTY 50",
-      "price": 22600.5,
+      "price": 22603.05,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -7456,7 +6701,7 @@
     },
     {
       "symbol": "SENSEX",
-      "price": 72636.81,
+      "price": 72638.7,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -7464,29 +6709,29 @@
     }
   ],
   "knowledge_daily": {
-    "date": "2026-10-07",
-    "stories": 2,
-    "high_impact": 2,
+    "date": "2026-10-08",
+    "stories": 1,
+    "high_impact": 1,
     "new_events": 0,
-    "developing_events": 2,
+    "developing_events": 1,
     "confirmed_events": 0,
     "contradictions": 0,
-    "research_items": 2
+    "research_items": 1
   },
   "knowledge_weekly": {
     "week": "2026-W41",
-    "stories": 113,
-    "top_categories": "[[\"india\", 54], [\"world\", 42], [\"technology\", 12], [\"business\", 5]]",
-    "top_entities": "[{\"entity\": \"white\", \"current_mentions\": 1, \"historical_mentions\": 14}, {\"entity\": \"defends\", \"current_mentions\": 1, \"historical_mentions\": 3}, {\"entity\": \"take\", \"current_mentions\": 1, \"historical_mentions\": 13}, {\"entity\": \"diego\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"house\", \"current_mentions\": 1, \"historical_mentions\": 15}, {\"entity\": \"iran\", \"current_mentions\": 1, \"historical_mentions\": 34}, {\"entity\": \"trump\", \"current_mentions\": 1, \"historical_mentions\": 86}, {\"entity\": \"comment\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"protest\", \"current_mentions\": 1, \"historical_mentions\": 27}, {\"entity\": \"opposition\", \"current_mentions\": 1, \"historical_mentions\": 11}]",
+    "stories": 100,
+    "top_categories": "[[\"india\", 49], [\"world\", 37], [\"technology\", 10], [\"business\", 4]]",
+    "top_entities": "[{\"entity\": \"bank\", \"current_mentions\": 1, \"historical_mentions\": 9}, {\"entity\": \"hike\", \"current_mentions\": 1, \"historical_mentions\": 8}, {\"entity\": \"since\", \"current_mentions\": 1, \"historical_mentions\": 6}, {\"entity\": \"growing\", \"current_mentions\": 1, \"historical_mentions\": 5}, {\"entity\": \"first\", \"current_mentions\": 1, \"historical_mentions\": 29}, {\"entity\": \"inflation\", \"current_mentions\": 1, \"historical_mentions\": 6}, {\"entity\": \"concerns\", \"current_mentions\": 1, \"historical_mentions\": 14}, {\"entity\": \"india\", \"current_mentions\": 1, \"historical_mentions\": 82}, {\"entity\": \"rate\", \"current_mentions\": 1, \"historical_mentions\": 8}, {\"entity\": \"signals\", \"current_mentions\": 1, \"historical_mentions\": 3}]",
     "new_events": 0,
-    "developing_events": 2,
+    "developing_events": 1,
     "confirmed_events": 0,
     "anomalies": 0,
-    "research_items": 2
+    "research_items": 1
   },
   "v5_drift": {
-    "mean_distribution_shift": 0.1216,
-    "status": "STABLE"
+    "mean_distribution_shift": 0.2047,
+    "status": "DRIFT"
   },
   "v5_calibration": {
     "bins": [
@@ -7534,36 +6779,36 @@
       },
       {
         "bin": "0.6-0.7",
-        "samples": 2014,
+        "samples": 2101,
         "mean_predicted": 0.664,
-        "actual_rate": 0.063,
-        "gap": 0.601
+        "actual_rate": 0.056,
+        "gap": 0.608
       },
       {
         "bin": "0.7-0.8",
-        "samples": 2394,
+        "samples": 2497,
         "mean_predicted": 0.747,
-        "actual_rate": 0.17,
-        "gap": 0.577
+        "actual_rate": 0.156,
+        "gap": 0.591
       },
       {
         "bin": "0.8-0.9",
-        "samples": 1034,
-        "mean_predicted": 0.838,
-        "actual_rate": 0.169,
-        "gap": 0.669
+        "samples": 1084,
+        "mean_predicted": 0.839,
+        "actual_rate": 0.158,
+        "gap": 0.681
       },
       {
         "bin": "0.9-1.0",
-        "samples": 280,
+        "samples": 298,
         "mean_predicted": 0.947,
-        "actual_rate": 0.186,
-        "gap": 0.761
+        "actual_rate": 0.178,
+        "gap": 0.769
       }
     ],
-    "samples": 5722,
-    "ece": 0.611,
-    "brier": 0.488,
+    "samples": 5980,
+    "ece": 0.622,
+    "brier": 0.494,
     "status": "OVER_CONFIDENT"
   }
 }
