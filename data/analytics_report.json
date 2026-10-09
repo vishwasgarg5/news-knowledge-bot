@@ -1,28 +1,28 @@
 {
-  "learning_samples": 6014,
-  "selected_samples": 896,
-  "avg_outcome": 0.144,
-  "daily_runs": 16,
+  "learning_samples": 6052,
+  "selected_samples": 897,
+  "avg_outcome": 0.142,
+  "daily_runs": 17,
   "history_stories": 1235,
   "source_reliability": {
-    "BBC News": 0.308,
+    "BBC News": 0.302,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.029,
     "Times of India": 0.031,
     "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": 0.034,
+    "Business News Today – Finance, Industry & Economy | The Hindu": 0.329,
     "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.063,
-    "Business News Today – Finance, Industry & Economy | The Hindu": 0.336,
     "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.026,
-    "Technology News Today, Latest Tech News | The Hindu": 0.435,
-    "TechCrunch": 0.135,
-    "World | Deutsche Welle": 0.254,
-    "World news | The Guardian": 0.2
+    "Technology News Today, Latest Tech News | The Hindu": 0.429,
+    "TechCrunch": 0.132,
+    "World | Deutsche Welle": 0.256,
+    "World news | The Guardian": 0.173
   },
   "category_reliability": {
     "india": 0.046,
-    "world": 0.161,
-    "business": 0.339,
-    "technology": 0.296,
-    "science": 0.317,
+    "world": 0.159,
+    "business": 0.333,
+    "technology": 0.289,
+    "science": 0.308,
     "defence": 0.365
   },
   "top_categories": [
@@ -48,14 +48,14 @@
     ]
   ],
   "outcome_horizon_coverage": {
-    "24h": 5980,
-    "48h": 5722,
-    "7d": 4358
+    "24h": 6014,
+    "48h": 5980,
+    "7d": 4613
   },
   "outcome_maturity": {
-    "24h": 5980,
-    "48h": 5722,
-    "7d": 4358
+    "24h": 6014,
+    "48h": 5980,
+    "7d": 4613
   },
   "false_positives": 555,
   "missed_stories": 339

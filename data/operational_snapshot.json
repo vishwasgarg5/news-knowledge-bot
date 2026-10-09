@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08",
+  "date": "2026-10-09",
   "health": "PASS",
   "operational_health": {
     "status": "PASS",
@@ -19,43 +19,37 @@
       "quality_rate": 1.0
     },
     "BBC News": {
-      "articles": 7,
-      "high_value": 6,
-      "quality_rate": 0.857
+      "articles": 13,
+      "high_value": 10,
+      "quality_rate": 0.769
+    },
+    "Technology News Today, Latest Tech News | The Hindu": {
+      "articles": 1,
+      "high_value": 1,
+      "quality_rate": 1.0
     },
     "World news | The Guardian": {
       "articles": 4,
       "high_value": 4,
       "quality_rate": 1.0
     },
-    "Technology News Today, Latest Tech News | The Hindu": {
-      "articles": 3,
-      "high_value": 3,
-      "quality_rate": 1.0
-    },
     "TechCrunch": {
-      "articles": 4,
-      "high_value": 4,
+      "articles": 6,
+      "high_value": 6,
       "quality_rate": 1.0
     },
     "Times of India": {
       "articles": 7,
       "high_value": 7,
       "quality_rate": 1.0
-    },
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
-      "articles": 2,
-      "high_value": 2,
-      "quality_rate": 1.0
     }
   },
   "fallback_order": [
     "Business News Today – Finance, Industry & Economy | The Hindu",
     "Times of India",
-    "World news | The Guardian",
     "TechCrunch",
+    "World news | The Guardian",
     "Technology News Today, Latest Tech News | The Hindu",
-    "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "BBC News"
   ],
   "alerts": [
@@ -63,13 +57,13 @@
     "WORLD_COVERAGE_GAP"
   ],
   "backtest_v4": {
-    "samples": 6014,
-    "folds": 300,
-    "precision": 0.117,
-    "recall": 0.513,
-    "f1": 0.165,
-    "mae": 0.68,
-    "stability": 0.158,
+    "samples": 6052,
+    "folds": 302,
+    "precision": 0.105,
+    "recall": 0.489,
+    "f1": 0.15,
+    "mae": 0.684,
+    "stability": 0.143,
     "thresholds": [
       75,
       70,
@@ -307,81 +301,84 @@
       75,
       75,
       75,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
       75,
       70,
       70,
       70,
       70,
       70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70,
-      70
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75,
+      75
     ],
     "leakage_safe": true
   },
   "intelligence_v4": {
     "baseline": {
-      "samples": 5980,
-      "folds": 198,
-      "f1": 0.196,
-      "precision": 0.122,
-      "recall": 0.758,
+      "samples": 6014,
+      "folds": 199,
+      "f1": 0.187,
+      "precision": 0.115,
+      "recall": 0.754,
       "thresholds": [
+        50,
         50,
         50,
         50,
@@ -581,15 +578,15 @@
         50,
         50
       ],
-      "stability": 0.817,
+      "stability": 0.825,
       "leakage_safe": true
     },
     "v4_shadow": {
-      "samples": 5980,
-      "folds": 198,
-      "f1": 0.158,
-      "precision": 0.101,
-      "recall": 0.544,
+      "samples": 6014,
+      "folds": 199,
+      "f1": 0.145,
+      "precision": 0.091,
+      "recall": 0.529,
       "thresholds": [
         50,
         50,
@@ -740,8 +737,31 @@
         75,
         75,
         75,
-        70,
-        70,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
         75,
         75,
         75,
@@ -757,40 +777,18 @@
         70,
         70,
         70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70,
-        70
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75,
+        75
       ],
-      "stability": 0.812,
+      "stability": 0.826,
       "leakage_safe": true
     },
     "promote": false,
@@ -806,11 +804,11 @@
         "story_id": "65f518c0ef774c86",
         "event_id": "258d4c87a704441e",
         "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-        "importance": 100.0,
-        "ranking_score": 118.7,
+        "importance": 98.8,
+        "ranking_score": 120.1,
         "personalized_score": 100.0,
         "personalization_applied": 100.0,
-        "breaking_score": 35,
+        "breaking_score": 30,
         "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
@@ -824,40 +822,55 @@
         "verification": {
           "evidence": [
             {
-              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-              "published": "2026-10-07T15:14:12+00:00",
-              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+              "title": "Air India, Akasa hike fuel surcharge as costs climb",
+              "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+              "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+              "published": "2026-10-08T14:40:44+00:00",
+              "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
             },
             {
-              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-              "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-              "published": "2026-10-08T00:33:03+00:00",
-              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+              "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+              "published": "2026-10-08T15:00:01+00:00",
+              "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+            },
+            {
+              "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+              "published": "2026-10-08T16:43:39+00:00",
+              "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
             }
           ],
-          "historical": [],
+          "historical": [
+            {
+              "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+              "date": "2026-10-08",
+              "source": "BBC News",
+              "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+            }
+          ],
           "verification": "multi-source",
-          "confidence": 83,
+          "confidence": 88,
           "evidence_strength": 85,
           "verification_reason": "two or more independent current publishers",
-          "source_count": 3,
-          "independent_sources": 2,
+          "source_count": 4,
+          "independent_sources": 3,
           "fresh_sources": [
-            "World news | The Guardian",
-            "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+            "Business News Today – Finance, Industry & Economy | The Hindu",
+            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "World news | The Guardian"
           ],
-          "current_sources": 3,
+          "current_sources": 4,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.5,
-          "calibrated_confidence": 97.0
+          "freshness_hours": 39.8,
+          "calibrated_confidence": 100
         },
         "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
@@ -868,14 +881,14 @@
         "how": "",
         "why_important": "",
         "key_data": "",
-        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+        "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+        "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+        "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+        "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 97.0,
+        "calibrated_confidence": 100,
         "impact": {
           "level": "HIGH",
           "direction": "negative",
@@ -936,7 +949,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 72.0,
+        "momentum_score": 70.2,
         "early_signal": true
       }
     ],
@@ -979,11 +992,11 @@
         "story_id": "65f518c0ef774c86",
         "event_id": "258d4c87a704441e",
         "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-        "importance": 100.0,
-        "ranking_score": 118.7,
+        "importance": 98.8,
+        "ranking_score": 120.1,
         "personalized_score": 100.0,
         "personalization_applied": 100.0,
-        "breaking_score": 35,
+        "breaking_score": 30,
         "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
@@ -997,40 +1010,55 @@
         "verification": {
           "evidence": [
             {
-              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-              "published": "2026-10-07T15:14:12+00:00",
-              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+              "title": "Air India, Akasa hike fuel surcharge as costs climb",
+              "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+              "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+              "published": "2026-10-08T14:40:44+00:00",
+              "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
             },
             {
-              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-              "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-              "published": "2026-10-08T00:33:03+00:00",
-              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+              "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+              "published": "2026-10-08T15:00:01+00:00",
+              "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+            },
+            {
+              "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+              "published": "2026-10-08T16:43:39+00:00",
+              "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
             }
           ],
-          "historical": [],
+          "historical": [
+            {
+              "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+              "date": "2026-10-08",
+              "source": "BBC News",
+              "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+            }
+          ],
           "verification": "multi-source",
-          "confidence": 83,
+          "confidence": 88,
           "evidence_strength": 85,
           "verification_reason": "two or more independent current publishers",
-          "source_count": 3,
-          "independent_sources": 2,
+          "source_count": 4,
+          "independent_sources": 3,
           "fresh_sources": [
-            "World news | The Guardian",
-            "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+            "Business News Today – Finance, Industry & Economy | The Hindu",
+            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "World news | The Guardian"
           ],
-          "current_sources": 3,
+          "current_sources": 4,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.5,
-          "calibrated_confidence": 97.0
+          "freshness_hours": 39.8,
+          "calibrated_confidence": 100
         },
         "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
@@ -1041,14 +1069,14 @@
         "how": "",
         "why_important": "",
         "key_data": "",
-        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+        "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+        "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+        "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+        "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 97.0,
+        "calibrated_confidence": 100,
         "impact": {
           "level": "HIGH",
           "direction": "negative",
@@ -1109,7 +1137,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 72.0,
+        "momentum_score": 70.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -1158,11 +1186,11 @@
             "story_id": "65f518c0ef774c86",
             "event_id": "258d4c87a704441e",
             "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-            "importance": 100.0,
-            "ranking_score": 118.7,
+            "importance": 98.8,
+            "ranking_score": 120.1,
             "personalized_score": 100.0,
             "personalization_applied": 100.0,
-            "breaking_score": 35,
+            "breaking_score": 30,
             "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
@@ -1176,40 +1204,55 @@
             "verification": {
               "evidence": [
                 {
-                  "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-                  "published": "2026-10-07T15:14:12+00:00",
-                  "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+                  "title": "Air India, Akasa hike fuel surcharge as costs climb",
+                  "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+                  "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+                  "published": "2026-10-08T14:40:44+00:00",
+                  "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
                 },
                 {
-                  "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-                  "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                  "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-                  "published": "2026-10-08T00:33:03+00:00",
-                  "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+                  "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+                  "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+                  "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+                  "published": "2026-10-08T15:00:01+00:00",
+                  "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+                },
+                {
+                  "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+                  "published": "2026-10-08T16:43:39+00:00",
+                  "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
                 }
               ],
-              "historical": [],
+              "historical": [
+                {
+                  "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+                  "date": "2026-10-08",
+                  "source": "BBC News",
+                  "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+                }
+              ],
               "verification": "multi-source",
-              "confidence": 83,
+              "confidence": 88,
               "evidence_strength": 85,
               "verification_reason": "two or more independent current publishers",
-              "source_count": 3,
-              "independent_sources": 2,
+              "source_count": 4,
+              "independent_sources": 3,
               "fresh_sources": [
-                "World news | The Guardian",
-                "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+                "Business News Today – Finance, Industry & Economy | The Hindu",
+                "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+                "World news | The Guardian"
               ],
-              "current_sources": 3,
+              "current_sources": 4,
               "official_source": false,
               "primary_derivative": false,
               "primary_fresh": true,
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 15.5,
-              "calibrated_confidence": 97.0
+              "freshness_hours": 39.8,
+              "calibrated_confidence": 100
             },
             "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "who": "",
@@ -1220,14 +1263,14 @@
             "how": "",
             "why_important": "",
             "key_data": "",
-            "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-            "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-            "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-            "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+            "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+            "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+            "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+            "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 97.0,
+            "calibrated_confidence": 100,
             "impact": {
               "level": "HIGH",
               "direction": "negative",
@@ -1288,7 +1331,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 72.0,
+            "momentum_score": 70.2,
             "early_signal": true
           }
         ]
@@ -1296,16 +1339,25 @@
     ],
     "entities": {
       "people": [],
-      "companies": [],
+      "companies": [
+        "Reserve Bank"
+      ],
       "places": [],
       "topics": {
-        "india": 2,
+        "india": 3,
         "the": 1,
         "middle east": 1,
-        "inflation": 1
+        "inflation": 1,
+        "rbi": 1
       }
     },
     "entity_profiles": [
+      {
+        "entity": "Reserve Bank",
+        "type": "companie",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
       {
         "entity": "india",
         "type": "topic",
@@ -1329,6 +1381,12 @@
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 6
+      },
+      {
+        "entity": "rbi",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 17
       }
     ],
     "event_evolution": [
@@ -1344,11 +1402,11 @@
             "story_id": "65f518c0ef774c86",
             "event_id": "258d4c87a704441e",
             "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-            "importance": 100.0,
-            "ranking_score": 118.7,
+            "importance": 98.8,
+            "ranking_score": 120.1,
             "personalized_score": 100.0,
             "personalization_applied": 100.0,
-            "breaking_score": 35,
+            "breaking_score": 30,
             "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
@@ -1362,40 +1420,55 @@
             "verification": {
               "evidence": [
                 {
-                  "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-                  "published": "2026-10-07T15:14:12+00:00",
-                  "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+                  "title": "Air India, Akasa hike fuel surcharge as costs climb",
+                  "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+                  "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+                  "published": "2026-10-08T14:40:44+00:00",
+                  "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
                 },
                 {
-                  "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-                  "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-                  "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-                  "published": "2026-10-08T00:33:03+00:00",
-                  "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+                  "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+                  "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+                  "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+                  "published": "2026-10-08T15:00:01+00:00",
+                  "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+                },
+                {
+                  "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+                  "published": "2026-10-08T16:43:39+00:00",
+                  "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
                 }
               ],
-              "historical": [],
+              "historical": [
+                {
+                  "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+                  "date": "2026-10-08",
+                  "source": "BBC News",
+                  "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+                }
+              ],
               "verification": "multi-source",
-              "confidence": 83,
+              "confidence": 88,
               "evidence_strength": 85,
               "verification_reason": "two or more independent current publishers",
-              "source_count": 3,
-              "independent_sources": 2,
+              "source_count": 4,
+              "independent_sources": 3,
               "fresh_sources": [
-                "World news | The Guardian",
-                "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+                "Business News Today – Finance, Industry & Economy | The Hindu",
+                "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+                "World news | The Guardian"
               ],
-              "current_sources": 3,
+              "current_sources": 4,
               "official_source": false,
               "primary_derivative": false,
               "primary_fresh": true,
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 15.5,
-              "calibrated_confidence": 97.0
+              "freshness_hours": 39.8,
+              "calibrated_confidence": 100
             },
             "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
             "who": "",
@@ -1406,14 +1479,14 @@
             "how": "",
             "why_important": "",
             "key_data": "",
-            "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-            "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-            "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-            "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+            "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+            "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+            "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+            "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 97.0,
+            "calibrated_confidence": 100,
             "impact": {
               "level": "HIGH",
               "direction": "negative",
@@ -1474,7 +1547,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 72.0,
+            "momentum_score": 70.2,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -1515,8 +1588,8 @@
       }
     ],
     "impact_learning": {
-      "samples": 5980,
-      "positive_rate": 0.122,
+      "samples": 6014,
+      "positive_rate": 0.115,
       "by_level": {
         "HIGH": null,
         "MEDIUM": null,
@@ -1526,7 +1599,7 @@
     "market_context": [
       {
         "symbol": "NIFTY 50",
-        "price": 22603.05,
+        "price": 22231.8,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -1534,7 +1607,7 @@
       },
       {
         "symbol": "SENSEX",
-        "price": 72638.7,
+        "price": 71593.24,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -1579,11 +1652,11 @@
         "story_id": "65f518c0ef774c86",
         "event_id": "258d4c87a704441e",
         "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-        "importance": 100.0,
-        "ranking_score": 118.7,
+        "importance": 98.8,
+        "ranking_score": 120.1,
         "personalized_score": 100.0,
         "personalization_applied": 100.0,
-        "breaking_score": 35,
+        "breaking_score": 30,
         "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
@@ -1597,40 +1670,55 @@
         "verification": {
           "evidence": [
             {
-              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-              "published": "2026-10-07T15:14:12+00:00",
-              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+              "title": "Air India, Akasa hike fuel surcharge as costs climb",
+              "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+              "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+              "published": "2026-10-08T14:40:44+00:00",
+              "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
             },
             {
-              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-              "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-              "published": "2026-10-08T00:33:03+00:00",
-              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+              "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+              "published": "2026-10-08T15:00:01+00:00",
+              "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+            },
+            {
+              "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+              "published": "2026-10-08T16:43:39+00:00",
+              "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
             }
           ],
-          "historical": [],
+          "historical": [
+            {
+              "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+              "date": "2026-10-08",
+              "source": "BBC News",
+              "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+            }
+          ],
           "verification": "multi-source",
-          "confidence": 83,
+          "confidence": 88,
           "evidence_strength": 85,
           "verification_reason": "two or more independent current publishers",
-          "source_count": 3,
-          "independent_sources": 2,
+          "source_count": 4,
+          "independent_sources": 3,
           "fresh_sources": [
-            "World news | The Guardian",
-            "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+            "Business News Today – Finance, Industry & Economy | The Hindu",
+            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "World news | The Guardian"
           ],
-          "current_sources": 3,
+          "current_sources": 4,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.5,
-          "calibrated_confidence": 97.0
+          "freshness_hours": 39.8,
+          "calibrated_confidence": 100
         },
         "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
@@ -1641,14 +1729,14 @@
         "how": "",
         "why_important": "",
         "key_data": "",
-        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+        "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+        "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+        "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+        "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 97.0,
+        "calibrated_confidence": 100,
         "impact": {
           "level": "HIGH",
           "direction": "negative",
@@ -1709,7 +1797,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 72.0,
+        "momentum_score": 70.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -1743,7 +1831,7 @@
             "outcome_score": null
           }
         ],
-        "personalization_score": 108.0,
+        "personalization_score": 106.8,
         "preference_matches": 1
       }
     ],
@@ -1752,11 +1840,11 @@
         "story_id": "65f518c0ef774c86",
         "event_id": "258d4c87a704441e",
         "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-        "importance": 100.0,
-        "ranking_score": 118.7,
+        "importance": 98.8,
+        "ranking_score": 120.1,
         "personalized_score": 100.0,
         "personalization_applied": 100.0,
-        "breaking_score": 35,
+        "breaking_score": 30,
         "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
@@ -1770,40 +1858,55 @@
         "verification": {
           "evidence": [
             {
-              "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-              "published": "2026-10-07T15:14:12+00:00",
-              "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+              "title": "Air India, Akasa hike fuel surcharge as costs climb",
+              "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+              "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+              "published": "2026-10-08T14:40:44+00:00",
+              "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
             },
             {
-              "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-              "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-              "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-              "published": "2026-10-08T00:33:03+00:00",
-              "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+              "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+              "published": "2026-10-08T15:00:01+00:00",
+              "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+            },
+            {
+              "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+              "published": "2026-10-08T16:43:39+00:00",
+              "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
             }
           ],
-          "historical": [],
+          "historical": [
+            {
+              "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+              "date": "2026-10-08",
+              "source": "BBC News",
+              "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+            }
+          ],
           "verification": "multi-source",
-          "confidence": 83,
+          "confidence": 88,
           "evidence_strength": 85,
           "verification_reason": "two or more independent current publishers",
-          "source_count": 3,
-          "independent_sources": 2,
+          "source_count": 4,
+          "independent_sources": 3,
           "fresh_sources": [
-            "World news | The Guardian",
-            "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+            "Business News Today – Finance, Industry & Economy | The Hindu",
+            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "World news | The Guardian"
           ],
-          "current_sources": 3,
+          "current_sources": 4,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.5,
-          "calibrated_confidence": 97.0
+          "freshness_hours": 39.8,
+          "calibrated_confidence": 100
         },
         "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
         "who": "",
@@ -1814,14 +1917,14 @@
         "how": "",
         "why_important": "",
         "key_data": "",
-        "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-        "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-        "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-        "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+        "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+        "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+        "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+        "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 97.0,
+        "calibrated_confidence": 100,
         "impact": {
           "level": "HIGH",
           "direction": "negative",
@@ -1882,7 +1985,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 72.0,
+        "momentum_score": 70.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -1931,9 +2034,19 @@
         {
           "type": "event",
           "label": "India's first bank rate hike since 2023 signals growing inflation concerns"
+        },
+        {
+          "type": "entity",
+          "label": "Reserve Bank"
         }
       ],
-      "edges": []
+      "edges": [
+        {
+          "from": "258d4c87a704441e",
+          "to": "entity:reserve bank",
+          "type": "mentions"
+        }
+      ]
     },
     "contradictions": [],
     "evidence_gaps": [
@@ -1947,7 +2060,7 @@
     "research_queue": [
       {
         "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-        "priority": 118.0,
+        "priority": 117.5,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -2023,11 +2136,11 @@
       "story_id": "65f518c0ef774c86",
       "event_id": "258d4c87a704441e",
       "headline": "India's first bank rate hike since 2023 signals growing inflation concerns",
-      "importance": 100.0,
-      "ranking_score": 118.7,
+      "importance": 98.8,
+      "ranking_score": 120.1,
       "personalized_score": 100.0,
       "personalization_applied": 100.0,
-      "breaking_score": 35,
+      "breaking_score": 30,
       "trend_score": 85,
       "emerging_topic": true,
       "why_for_you": "priority category + preferred region",
@@ -2041,40 +2154,55 @@
       "verification": {
         "evidence": [
           {
-            "title": "‘Palestinians will bear the cost’: UK consulate in East Jerusalem prepares to shut its doors",
-            "source": "World news | The Guardian",
-            "url": "https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel",
-            "published": "2026-10-07T15:14:12+00:00",
-            "summary": "<p>Forced closure marks low point in UK-Israeli relations, with reports UK is considering retaliatory expulsion of Israeli diplomats from London</p><ul><li><p><a href=\"https://www.theguardian.com/world/live/2026/oct/07/israel-october-7-anniversary-hamas-gaza-netanyahu-iran-latest-news-updates\">Israel marks three years since 7 October attack – live</a></p></li></ul><p>The UK consulate in East Jerusalem gave few signs it was at the centre of a geopolitical controversy this week, with little movement around the high-walled building save the fluttering of the union jack and the occasional car exiting the compound.</p><p>The mission is to shut its doors on Thursday after Israel ordered its closure in response to a <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">UK ban on trade with illegal settlements</a> in the occupied West Bank and sanctions on those who help build or finance them.</p> <a href=\"https://www.theguardian.com/world/2026/oct/07/uk-consulate-east-jerusalem-prepares-close-israel\">Continue reading...</a>"
+            "title": "Air India, Akasa hike fuel surcharge as costs climb",
+            "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+            "url": "https://www.thehindu.com/business/Industry/air-india-akasa-hike-fuel-surcharge-as-costs-climb/article71560439.ece",
+            "published": "2026-10-08T14:40:44+00:00",
+            "summary": "The airlines attributed the revisions to sustained increases in fuel prices amid continuing geopolitical tensions in the Middle East."
           },
           {
-            "title": "US stocks slide as oil prices fluctuate over renewed Iran war fears",
-            "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
-            "url": "https://www.aljazeera.com/news/2026/10/8/us-stocks-slide-as-oil-prices-fluctuate-over-renewed-iran-war-fears?traffic_source=rss",
-            "published": "2026-10-08T00:33:03+00:00",
-            "summary": "Oil prices rose on fresh concerns about Middle East supplies, before falling on the possible release of more reserves."
+            "title": "Kindergarten, medical complex damaged by ‘missile fragments’ in Riyadh, says Saudi civil defence after Houthi attack",
+            "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+            "url": "https://www.hindustantimes.com/world-news/kindergarten-medical-complex-damaged-by-missile-fragments-in-riyadh-says-saudi-civil-defence-after-houthi-attack-101791470274833.html",
+            "published": "2026-10-08T15:00:01+00:00",
+            "summary": "The scale and frequency of attacks targeting the capital are unprecedented in the eight months of conflict that has spread across the Middle East."
+          },
+          {
+            "title": "British consulate in East Jerusalem will stay open as UK mission, says Ed Miliband",
+            "source": "World news | The Guardian",
+            "url": "https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband",
+            "published": "2026-10-08T16:43:39+00:00",
+            "summary": "<p>UK and Israel back away from full diplomatic confrontation, though British presence in Palestine will be much reduced</p><p>Israel and the UK have backed away from a full-scale diplomatic confrontation, with Britain announcing it is rebranding its consulate general ⁠building in ⁠East Jerusalem ​as a UK mission, a move that will result in UK diplomats leaving Israel, with only seven to remain in the building. Among those leaving is the consul general, Helen Winterton.</p><p>The change was forced on the UK by the Israeli government as punishment for the decision by the foreign secretary, Ed Miliband, last month <a href=\"https://www.theguardian.com/world/2026/sep/08/uk-accuses-israeli-terrorists-ethnic-cleansing-west-bank-government-backing\">to ban trade with illegal settlements</a> and introduce a tougher sanctions regime against those who aided the building of settlements. The UK is seeking to protect the two-state solution as the best means of ending the Israel-Palestine conflict.</p> <a href=\"https://www.theguardian.com/politics/2026/oct/08/uk-consulate-east-jerusalem-remain-open-uk-mission-ed-miliband\">Continue reading...</a>"
           }
         ],
-        "historical": [],
+        "historical": [
+          {
+            "title": "India's first bank rate hike since 2023 signals growing inflation concerns",
+            "date": "2026-10-08",
+            "source": "BBC News",
+            "url": "https://www.bbc.co.uk/news/articles/c5j9kngz3j1go?at_medium=RSS&at_campaign=rss"
+          }
+        ],
         "verification": "multi-source",
-        "confidence": 83,
+        "confidence": 88,
         "evidence_strength": 85,
         "verification_reason": "two or more independent current publishers",
-        "source_count": 3,
-        "independent_sources": 2,
+        "source_count": 4,
+        "independent_sources": 3,
         "fresh_sources": [
-          "World news | The Guardian",
-          "Al Jazeera – Breaking News, World News and Video from Al Jazeera"
+          "Business News Today – Finance, Industry & Economy | The Hindu",
+          "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
+          "World news | The Guardian"
         ],
-        "current_sources": 3,
+        "current_sources": 4,
         "official_source": false,
         "primary_derivative": false,
         "primary_fresh": true,
         "primary_trust": 0.95,
         "contradiction_flag": false,
         "contradiction_evidence": [],
-        "freshness_hours": 15.5,
-        "calibrated_confidence": 97.0
+        "freshness_hours": 39.8,
+        "calibrated_confidence": 100
       },
       "what": "India's first bank rate hike since 2023 signals growing inflation concerns",
       "who": "",
@@ -2085,14 +2213,14 @@
       "how": "",
       "why_important": "",
       "key_data": "",
-      "background": "Inflation in India has been persistently high, with the central bank aiming to stabilize prices.",
-      "change_since_yesterday": "The last bank rate hike was in 2023, indicating a significant change in monetary policy to combat inflation.",
-      "next": "The central bank will likely monitor economic indicators to decide on future rate hikes or cuts.",
-      "connection": "The move aligns with global trends where central banks are tightening monetary policy to combat inflation.",
+      "background": "Inflation in India has been persistently high, with the Reserve Bank of India (RBI) facing pressure to control prices.",
+      "change_since_yesterday": "The RBI's decision comes after a period of no rate hikes, signaling a departure from its previous stance.",
+      "next": "The RBI will likely monitor economic indicators closely to assess the impact of the rate hike.",
+      "connection": "The move aligns with global central banks' responses to inflation, particularly in response to geopolitical tensions.",
       "memory_hook": "",
       "vocabulary": "",
       "ai_generated": true,
-      "calibrated_confidence": 97.0,
+      "calibrated_confidence": 100,
       "impact": {
         "level": "HIGH",
         "direction": "negative",
@@ -2153,7 +2281,7 @@
           "outcome_score": null
         }
       ],
-      "momentum_score": 72.0,
+      "momentum_score": 70.2,
       "early_signal": true,
       "similar_historical_events": [
         {
@@ -3349,20 +3477,28 @@
             "train": 4350,
             "test": 30,
             "threshold": 50,
-            "precision": 0.233,
+            "precision": 0.2,
             "recall": 1.0,
-            "f1": 0.378
+            "f1": 0.333
           },
           {
             "train": 4380,
             "test": 30,
             "threshold": 50,
-            "precision": 0.433,
+            "precision": 0.267,
             "recall": 1.0,
-            "f1": 0.605
+            "f1": 0.421
           },
           {
             "train": 4410,
+            "test": 30,
+            "threshold": 50,
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
+          },
+          {
+            "train": 4440,
             "test": 30,
             "threshold": 50,
             "precision": 0.233,
@@ -3370,44 +3506,36 @@
             "f1": 0.378
           },
           {
-            "train": 4440,
-            "test": 30,
-            "threshold": 50,
-            "precision": 0.4,
-            "recall": 1.0,
-            "f1": 0.571
-          },
-          {
             "train": 4470,
             "test": 30,
             "threshold": 50,
-            "precision": 0.3,
+            "precision": 0.1,
             "recall": 1.0,
-            "f1": 0.462
+            "f1": 0.182
           },
           {
             "train": 4500,
             "test": 30,
             "threshold": 50,
-            "precision": 0.2,
+            "precision": 0.033,
             "recall": 1.0,
-            "f1": 0.333
+            "f1": 0.065
           },
           {
             "train": 4530,
             "test": 30,
             "threshold": 50,
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.667
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4560,
             "test": 30,
             "threshold": 50,
-            "precision": 0.2,
-            "recall": 1.0,
-            "f1": 0.333
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4590,
@@ -3779,23 +3907,31 @@
           },
           {
             "train": 5970,
-            "test": 10,
+            "test": 30,
             "threshold": 50,
-            "precision": 0.1,
+            "precision": 0.167,
             "recall": 1.0,
-            "f1": 0.182
+            "f1": 0.286
+          },
+          {
+            "train": 6000,
+            "test": 14,
+            "threshold": 50,
+            "precision": 0.071,
+            "recall": 1.0,
+            "f1": 0.133
           }
         ],
-        "f1": 0.193,
-        "precision": 0.12,
-        "recall": 0.773,
+        "f1": 0.183,
+        "precision": 0.113,
+        "recall": 0.764,
         "leakage_safe": true,
         "threshold_policy": "fixed_50",
         "train_min": 60,
         "test_window": 30
       },
       "candidate_v5": {
-        "samples": 5980,
+        "samples": 6014,
         "folds": [
           {
             "train": 60,
@@ -5665,9 +5801,9 @@
               0.2,
               0.2
             ],
-            "precision": 0.467,
+            "precision": 0.4,
             "recall": 1.0,
-            "f1": 0.636
+            "f1": 0.571
           },
           {
             "train": 4380,
@@ -5678,9 +5814,9 @@
               0.1,
               0.4
             ],
-            "precision": 0.643,
-            "recall": 0.692,
-            "f1": 0.667
+            "precision": 0.357,
+            "recall": 0.625,
+            "f1": 0.446
           },
           {
             "train": 4410,
@@ -5701,25 +5837,25 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.2,
+              0.2
             ],
-            "precision": 1.0,
-            "recall": 0.167,
-            "f1": 0.286
+            "precision": 0.5,
+            "recall": 0.143,
+            "f1": 0.143
           },
           {
             "train": 4470,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
-            "precision": 1.0,
-            "recall": 0.222,
-            "f1": 0.364
+            "precision": 0.5,
+            "recall": 0.333,
+            "f1": 0.333
           },
           {
             "train": 4500,
@@ -5737,28 +5873,28 @@
           {
             "train": 4530,
             "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.6,
-              0.3,
-              0.10000000000000003
-            ],
-            "precision": 1.0,
-            "recall": 0.2,
-            "f1": 0.333
-          },
-          {
-            "train": 4560,
-            "test": 30,
             "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.5,
-            "recall": 0.5,
-            "f1": 0.5
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4560,
+            "test": 30,
+            "threshold": 0.55,
+            "weights": [
+              0.6,
+              0.2,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
           },
           {
             "train": 4590,
@@ -5766,8 +5902,8 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.2,
+              0.2
             ],
             "precision": 0.333,
             "recall": 1.0,
@@ -5776,15 +5912,15 @@
           {
             "train": 4620,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
+              0.6,
+              0.2,
               0.2
             ],
-            "precision": 0.727,
-            "recall": 0.615,
-            "f1": 0.667
+            "precision": 0.714,
+            "recall": 0.769,
+            "f1": 0.741
           },
           {
             "train": 4650,
@@ -5792,64 +5928,64 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.2,
+              0.2
             ],
-            "precision": 0.727,
-            "recall": 0.533,
-            "f1": 0.615
+            "precision": 0.833,
+            "recall": 0.333,
+            "f1": 0.476
           },
           {
             "train": 4680,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
-              0.6,
-              0.3,
-              0.10000000000000003
+              0.5,
+              0.1,
+              0.4
             ],
             "precision": 0.5,
-            "recall": 0.308,
-            "f1": 0.308
+            "recall": 0.231,
+            "f1": 0.231
           },
           {
             "train": 4710,
             "test": 30,
-            "threshold": 0.45,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.1,
+              0.4
             ],
-            "precision": 0.75,
-            "recall": 0.8,
-            "f1": 0.774
+            "precision": 1.0,
+            "recall": 0.067,
+            "f1": 0.125
           },
           {
             "train": 4740,
             "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 4770,
+            "test": 30,
             "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.667,
-            "recall": 0.889,
-            "f1": 0.762
-          },
-          {
-            "train": 4770,
-            "test": 30,
-            "threshold": 0.5,
-            "weights": [
-              0.6,
-              0.3,
-              0.10000000000000003
-            ],
-            "precision": 0.583,
-            "recall": 0.875,
-            "f1": 0.7
+            "precision": 0.5,
+            "recall": 0.625,
+            "f1": 0.556
           },
           {
             "train": 4800,
@@ -5860,9 +5996,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.167,
+            "precision": 0.182,
             "recall": 1.0,
-            "f1": 0.286
+            "f1": 0.308
           },
           {
             "train": 4830,
@@ -5873,9 +6009,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.2,
+            "precision": 0.25,
             "recall": 1.0,
-            "f1": 0.333
+            "f1": 0.4
           },
           {
             "train": 4860,
@@ -5893,11 +6029,11 @@
           {
             "train": 4890,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 0.556,
             "recall": 1.0,
@@ -5919,28 +6055,28 @@
           {
             "train": 4950,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
-            "precision": 0.733,
-            "recall": 0.846,
-            "f1": 0.786
+            "precision": 0.667,
+            "recall": 0.615,
+            "f1": 0.64
           },
           {
             "train": 4980,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
-            "precision": 0.714,
-            "recall": 0.909,
-            "f1": 0.8
+            "precision": 0.6,
+            "recall": 0.545,
+            "f1": 0.571
           },
           {
             "train": 5010,
@@ -5951,9 +6087,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.4,
+            "precision": 0.444,
             "recall": 0.571,
-            "f1": 0.457
+            "f1": 0.5
           },
           {
             "train": 5040,
@@ -5977,9 +6113,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.158,
+            "precision": 0.2,
             "recall": 1.0,
-            "f1": 0.273
+            "f1": 0.333
           },
           {
             "train": 5100,
@@ -6029,9 +6165,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.417,
+            "precision": 0.5,
             "recall": 1.0,
-            "f1": 0.588
+            "f1": 0.667
           },
           {
             "train": 5220,
@@ -6146,9 +6282,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.538,
+            "precision": 0.583,
             "recall": 1.0,
-            "f1": 0.7
+            "f1": 0.737
           },
           {
             "train": 5490,
@@ -6250,9 +6386,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.2,
-            "recall": 0.333,
-            "f1": 0.133
+            "precision": 0.111,
+            "recall": 0.167,
+            "f1": 0.037
           },
           {
             "train": 5730,
@@ -6263,9 +6399,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.143,
+            "precision": 0.158,
             "recall": 1.0,
-            "f1": 0.25
+            "f1": 0.273
           },
           {
             "train": 5760,
@@ -6315,9 +6451,9 @@
               0.3,
               0.2
             ],
-            "precision": 0.062,
+            "precision": 0.067,
             "recall": 1.0,
-            "f1": 0.118
+            "f1": 0.125
           },
           {
             "train": 5880,
@@ -6351,8 +6487,8 @@
             "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6360,21 +6496,34 @@
           },
           {
             "train": 5970,
-            "test": 10,
+            "test": 30,
             "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.1,
+            "precision": 0.167,
             "recall": 1.0,
-            "f1": 0.182
+            "f1": 0.286
+          },
+          {
+            "train": 6000,
+            "test": 14,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.071,
+            "recall": 1.0,
+            "f1": 0.133
           }
         ],
-        "f1": 0.308,
-        "precision": 0.307,
-        "recall": 0.47,
+        "f1": 0.292,
+        "precision": 0.289,
+        "recall": 0.455,
         "thresholds": [
           0.45,
           0.5,
@@ -6523,24 +6672,25 @@
           0.5,
           0.5,
           0.55,
-          0.55,
           0.5,
-          0.55,
           0.5,
-          0.55,
           0.5,
           0.55,
           0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
           0.45,
           0.45,
           0.5,
           0.45,
           0.45,
-          0.5,
-          0.5,
           0.45,
-          0.5,
-          0.5,
+          0.45,
+          0.45,
           0.45,
           0.45,
           0.45,
@@ -6578,23 +6728,23 @@
         "feature_learning": true,
         "leakage_safe": true
       },
-      "delta_f1": 0.115,
-      "delta_precision": 0.187,
+      "delta_f1": 0.109,
+      "delta_precision": 0.176,
       "f1_confidence_interval": {
-        "mean": 0.115,
-        "lower": 0.081,
-        "upper": 0.149,
+        "mean": 0.109,
+        "lower": 0.074,
+        "upper": 0.144,
         "significant": true,
-        "n": 198
+        "n": 199
       },
       "precision_confidence_interval": {
-        "mean": 0.186,
-        "lower": 0.146,
-        "upper": 0.226,
+        "mean": 0.176,
+        "lower": 0.137,
+        "upper": 0.216,
         "significant": true,
-        "n": 198
+        "n": 199
       },
-      "paired_folds": 198,
+      "paired_folds": 199,
       "promote": true,
       "promotion_rule": "V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"
     },
@@ -6646,34 +6796,34 @@
           "bin": "0.6-0.7",
           "samples": 2101,
           "mean_predicted": 0.664,
-          "actual_rate": 0.056,
-          "gap": 0.608
+          "actual_rate": 0.05,
+          "gap": 0.614
         },
         {
           "bin": "0.7-0.8",
-          "samples": 2497,
+          "samples": 2499,
           "mean_predicted": 0.747,
-          "actual_rate": 0.156,
-          "gap": 0.591
+          "actual_rate": 0.146,
+          "gap": 0.601
         },
         {
           "bin": "0.8-0.9",
-          "samples": 1084,
+          "samples": 1101,
           "mean_predicted": 0.839,
-          "actual_rate": 0.158,
-          "gap": 0.681
+          "actual_rate": 0.153,
+          "gap": 0.685
         },
         {
           "bin": "0.9-1.0",
-          "samples": 298,
-          "mean_predicted": 0.947,
-          "actual_rate": 0.178,
-          "gap": 0.769
+          "samples": 313,
+          "mean_predicted": 0.948,
+          "actual_rate": 0.173,
+          "gap": 0.775
         }
       ],
-      "samples": 5980,
-      "ece": 0.622,
-      "brier": 0.494,
+      "samples": 6014,
+      "ece": 0.63,
+      "brier": 0.499,
       "status": "OVER_CONFIDENT"
     },
     "drift": {
@@ -6693,7 +6843,7 @@
   "market_context": [
     {
       "symbol": "NIFTY 50",
-      "price": 22603.05,
+      "price": 22231.8,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -6701,7 +6851,7 @@
     },
     {
       "symbol": "SENSEX",
-      "price": 72638.7,
+      "price": 71593.24,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -6709,7 +6859,7 @@
     }
   ],
   "knowledge_daily": {
-    "date": "2026-10-08",
+    "date": "2026-10-09",
     "stories": 1,
     "high_impact": 1,
     "new_events": 0,
@@ -6720,8 +6870,8 @@
   },
   "knowledge_weekly": {
     "week": "2026-W41",
-    "stories": 100,
-    "top_categories": "[[\"india\", 49], [\"world\", 37], [\"technology\", 10], [\"business\", 4]]",
+    "stories": 88,
+    "top_categories": "[[\"india\", 44], [\"world\", 33], [\"technology\", 9], [\"business\", 2]]",
     "top_entities": "[{\"entity\": \"bank\", \"current_mentions\": 1, \"historical_mentions\": 9}, {\"entity\": \"hike\", \"current_mentions\": 1, \"historical_mentions\": 8}, {\"entity\": \"since\", \"current_mentions\": 1, \"historical_mentions\": 6}, {\"entity\": \"growing\", \"current_mentions\": 1, \"historical_mentions\": 5}, {\"entity\": \"first\", \"current_mentions\": 1, \"historical_mentions\": 29}, {\"entity\": \"inflation\", \"current_mentions\": 1, \"historical_mentions\": 6}, {\"entity\": \"concerns\", \"current_mentions\": 1, \"historical_mentions\": 14}, {\"entity\": \"india\", \"current_mentions\": 1, \"historical_mentions\": 82}, {\"entity\": \"rate\", \"current_mentions\": 1, \"historical_mentions\": 8}, {\"entity\": \"signals\", \"current_mentions\": 1, \"historical_mentions\": 3}]",
     "new_events": 0,
     "developing_events": 1,
@@ -6781,34 +6931,34 @@
         "bin": "0.6-0.7",
         "samples": 2101,
         "mean_predicted": 0.664,
-        "actual_rate": 0.056,
-        "gap": 0.608
+        "actual_rate": 0.05,
+        "gap": 0.614
       },
       {
         "bin": "0.7-0.8",
-        "samples": 2497,
+        "samples": 2499,
         "mean_predicted": 0.747,
-        "actual_rate": 0.156,
-        "gap": 0.591
+        "actual_rate": 0.146,
+        "gap": 0.601
       },
       {
         "bin": "0.8-0.9",
-        "samples": 1084,
+        "samples": 1101,
         "mean_predicted": 0.839,
-        "actual_rate": 0.158,
-        "gap": 0.681
+        "actual_rate": 0.153,
+        "gap": 0.685
       },
       {
         "bin": "0.9-1.0",
-        "samples": 298,
-        "mean_predicted": 0.947,
-        "actual_rate": 0.178,
-        "gap": 0.769
+        "samples": 313,
+        "mean_predicted": 0.948,
+        "actual_rate": 0.173,
+        "gap": 0.775
       }
     ],
-    "samples": 5980,
-    "ece": 0.622,
-    "brier": 0.494,
+    "samples": 6014,
+    "ece": 0.63,
+    "brier": 0.499,
     "status": "OVER_CONFIDENT"
   }
 }
