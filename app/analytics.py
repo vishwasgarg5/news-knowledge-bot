@@ -33,6 +33,8 @@ def build_report(data_path):
         "daily_runs":len(daily),"history_stories":len(history),
         "source_reliability":averages(source),"category_reliability":averages(category),
         "top_categories":topics.most_common(10),
+        "learning_data_audit":learning_data_audit(data_path),
+        "chronological_ranking_evaluation":chronological_ranking_evaluation(data_path),
         "outcome_horizon_coverage":horizon_coverage,
         "outcome_maturity":{"24h":coverage("seen_again_24h"),"48h":coverage("seen_again_48h"),"7d":coverage("seen_again_7d")},
         "false_positives":sum(1 for r in learning if str(r.get("false_positive",""))=="1"),
