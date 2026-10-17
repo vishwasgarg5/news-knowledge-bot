@@ -176,6 +176,13 @@ def generate_research_reports(agent_queue):
 def followup_research_plan(stories):
     return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
 
+def run_v5_production_gate(learning_rows,stories,history):
+    wf=walk_forward_v5(learning_rows)
+    evaln=production_evaluation(learning_rows,learning_rows,stories,history)
+    evidence=contradiction_and_evidence(stories)
+    queue=autonomous_research_agent(evaln.get("ab",{}).get("candidate_v5",{}).get("folds",[]),history)
+    return {"walk_forward":wf,"evaluation":evaln,"evidence":evidence,"followups":followup_research_plan(stories)}
+
 def production_quality_gate(ab,cal,drift,evidence,coverage=None):
     return production_readiness_gate(ab,cal,drift,evidence,coverage)
 
