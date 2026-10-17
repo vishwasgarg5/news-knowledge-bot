@@ -13,29 +13,29 @@
     "failed_checks": []
   },
   "source_health": {
-    "Technology News Today, Latest Tech News | The Hindu": {
-      "articles": 7,
-      "high_value": 7,
-      "quality_rate": 1.0
-    },
     "Business News Today – Finance, Industry & Economy | The Hindu": {
       "articles": 7,
       "high_value": 7,
       "quality_rate": 1.0
     },
+    "Technology News Today, Latest Tech News | The Hindu": {
+      "articles": 7,
+      "high_value": 7,
+      "quality_rate": 1.0
+    },
     "World news | The Guardian": {
-      "articles": 1,
-      "high_value": 1,
+      "articles": 2,
+      "high_value": 2,
       "quality_rate": 1.0
     },
     "BBC News": {
-      "articles": 8,
-      "high_value": 7,
-      "quality_rate": 0.875
+      "articles": 10,
+      "high_value": 8,
+      "quality_rate": 0.8
     },
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
-      "articles": 4,
-      "high_value": 4,
+      "articles": 5,
+      "high_value": 5,
       "quality_rate": 1.0
     },
     "Times of India": {
@@ -43,31 +43,19 @@
       "high_value": 4,
       "quality_rate": 1.0
     },
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": {
-      "articles": 2,
-      "high_value": 2,
-      "quality_rate": 1.0
-    },
-    "TechCrunch": {
-      "articles": 1,
-      "high_value": 1,
-      "quality_rate": 1.0
-    },
-    "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": {
+    "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": {
       "articles": 1,
       "high_value": 1,
       "quality_rate": 1.0
     }
   },
   "fallback_order": [
-    "Technology News Today, Latest Tech News | The Hindu",
     "Business News Today – Finance, Industry & Economy | The Hindu",
+    "Technology News Today, Latest Tech News | The Hindu",
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
     "Times of India",
-    "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
     "World news | The Guardian",
-    "TechCrunch",
-    "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times",
+    "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
     "BBC News"
   ],
   "alerts": [
@@ -833,250 +821,99 @@
   "intelligence_v5": {
     "stories": [
       {
-        "story_id": "eb4d792b455f6edb",
-        "event_id": "54a2540253579bdf",
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "importance": 89.1,
-        "ranking_score": 116.3,
-        "personalized_score": 99.1,
-        "personalization_applied": 99.1,
-        "breaking_score": 40,
-        "trend_score": 85,
+        "story_id": "a1d2e046eee5c26f",
+        "event_id": "9d87073a757afb09",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "importance": 93.1,
+        "ranking_score": 106.2,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 20,
+        "trend_score": 87,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
+        "learning_adjustment": 1.4,
+        "category": "business",
         "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/anti-cec-sir-protest-live-updates-oct-17-2026-cjp-tiranga-march-abhijeet-dipke-detained-delhi-police-neha-bora/article71595221.ece",
-        "summary": "AISA president Neha Bora released on Oct. 17; Stalin, Mamata Banerjee, and Arvind Kejriwal condemn the CJP founder's detention",
-        "related_articles": [
-          {
-            "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-            "published": "2026-10-17T04:38:39+00:00",
-            "summary": "Both were taken into preventive custody ahead of the 'Lehra Do Tiranga' protest march at Connaught Place in New Delhi on Oct. 16"
-          },
-          {
-            "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-            "published": "2026-10-17T01:00:51+00:00",
-            "summary": "CJP protest LIVE: Delhi Police said that while Neha Bora was released after formal procedures under Section 65 of the Delhi Police Act, action under Section 126/170 of the BNSS was initiated against Dipke"
-          },
-          {
-            "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-            "published": "2026-10-16T17:22:22+00:00",
-            "summary": "At least 150 people were detained around Janpath Road, CP and Mandi House. CJP founder Abhijeet Dipke and AISA activist Neha Bora were among them.&nbsp;"
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "'Law &amp; order flouted': Neha Bora slams overnight detention of women over anti-SIR stir",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/women-ought-to-be-released-after-sunset-neha-bora-questions-night-long-detentions-over-anti-sir-stir/articleshow/135005810.cms",
-              "published": "2026-10-17T01:33:18+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Tricolour-waving crowd of 2,000 takes over Delhi's Connaught Place despite park closure, detentions",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/tricolour-march-held-in-cp-amid-restrictions-detentions-101792199514517.html",
-              "published": "2026-10-17T01:27:40+00:00",
-              "summary": "Police detained 100-150 protesters, including CJP founder Abhijeet Dipke and AISA president Neha Bora, as security was tightened across Lutyens’ Delhi."
-            },
-            {
-              "title": "India’s Cockroach Janta party leader arrested amid crackdown on protests",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests",
-              "published": "2026-10-16T16:22:32+00:00",
-              "summary": "<p>Abhijeet Dipke was detained before planned anti-government demonstrations in Delhi</p><p>The leader of the Cockroach Janta party (CJP) youth movement, Abhijeet Dipke, was detained by police on Friday and then later formally arrested as authorities cracked down on fresh anti-government protests in the Indian capital.</p><p>Dipke was detained before a planned Friday evening demonstration he had called in central Delhi, urging supporters of the movement to come out and hold up the Indian flag.</p> <a href=\"https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests\">Continue reading...</a>"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 88,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
-          "fresh_sources": [
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 4,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.3,
-          "calibrated_confidence": 100
-        },
-        "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "who": "Neha Bora",
-        "who_detail": "Abhijeet Dipke - Founder of the Cheeliya Party (CJP), currently in preventive custody; Neha Bora - AISA president, released on Oct. 17.",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
-        "key_data": "",
-        "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
-        "next": "",
-        "connection": "",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "negative",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-          "impact": {
-            "level": "HIGH",
-            "direction": "negative",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.469,
-            "date": "2026-10-17",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.116,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.111,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.095,
-            "date": "2026-09-24",
-            "headline": "Tensions between India and Bangladesh are in focus after Dhaka skipped the BRICS summit in Delhi",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 73.8,
-        "early_signal": true
-      },
-      {
-        "story_id": "d11f63ee39706fad",
-        "event_id": "50ad5a3000b35a1a",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "importance": 89.4,
-        "ranking_score": 97.2,
-        "personalized_score": 99.4,
-        "personalization_applied": 99.4,
-        "breaking_score": 40,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+        "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+        "url": "https://www.thehindu.com/business/two-mumbai-based-firms-five-indian-nationals-face-us-sanctions-over-iran-oil-trade/article71561446.ece",
+        "summary": "The action against the Indian entities and individuals is part of the U.S. crackdown against Iran under Operation Economic Outcast",
         "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-              "published": "2026-10-16T18:53:15+00:00",
-              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+              "title": "Femicide in Iran: When 'honor' becomes a death sentence",
+              "source": "World | Deutsche Welle",
+              "url": "https://www.dw.com/en/femicide-in-iran-when-honor-becomes-a-death-sentence/a-79681977?maca=en-rss-en-world-4025-xml-mrss",
+              "published": "2026-10-16T14:27:00+00:00",
+              "summary": "The murder of a young mother has once again sparked debate in Iran over so-called honor killings, the social acceptance of violence against women and the lack of protection for people vulnerable to gender-based violence."
+            },
+            {
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest",
+              "published": "2026-10-14T17:40:05+00:00",
+              "summary": "<p>A fresh wave of protests by India’s youth-led Cockroach movement has been met with a brutal crackdown by Narendra Modi’s government and the closure of a historic protest site in Delhi. Two of the movement’s leaders have been imprisoned for five days for violating suppression measures. The protests, which began over frustration about education and unemployment, are now focused on voting rights. Modi’s government denies claims it is seeking to disenfranchise millions of voters. But its treatment of protesters has been criticised by the UN and Amnesty International and raised concerns that India is sliding further into autocracy. Lucy Hough speaks to South Asia correspondent Hannah Ellis-Petersen <strong>– </strong><a href=\"https://www.youtube.com/@todayinfocuspodcast\"><strong>watch on YouTube</strong></a></p> <a href=\"https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest\">Continue reading...</a>"
             }
           ],
           "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
+          "verification": "multi-source",
+          "confidence": 83,
+          "evidence_strength": 85,
+          "verification_reason": "two or more independent current publishers",
+          "source_count": 3,
+          "independent_sources": 2,
           "fresh_sources": [
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+            "World | Deutsche Welle",
+            "World news | The Guardian"
           ],
-          "current_sources": 2,
+          "current_sources": 3,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.5,
-          "calibrated_confidence": 77.0
+          "contradiction_flag": true,
+          "contradiction_evidence": [
+            {
+              "source": "World news | The Guardian",
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "markers": [
+                "denies"
+              ]
+            }
+          ],
+          "freshness_hours": 7.5,
+          "calibrated_confidence": 82.0
         },
-        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "who": "",
+        "what": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "who": "Two Mumbai-based",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+        "why_important": "Five Indian nationals and two Mumbai-based firms face potential economic sanctions from the U.S. over their involvement in Iran's oil trade.",
         "key_data": "",
-        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
-        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
-        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
-        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+        "background": "The U.S. has been cracking down on entities involved in Iran's oil trade as part of Operation Economic Outcast since 2018.",
+        "change_since_yesterday": "The sanctions target Indian entities, expanding the scope of U.S. enforcement beyond previous targets.",
+        "next": "The U.S. will likely review the sanctions",
+        "connection": "Other sanctions have been imposed on entities for similar activities, including those from China and the United Arab Emirates.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 77.0,
+        "calibrated_confidence": 82.0,
         "impact": {
           "level": "HIGH",
-          "direction": "negative",
+          "direction": "positive",
           "score": 58,
           "confidence": 0.53,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+          "event": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
           "impact": {
             "level": "HIGH",
-            "direction": "negative",
+            "direction": "positive",
             "score": 58,
             "confidence": 0.53
           },
@@ -1095,38 +932,38 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.375,
+            "similarity": 0.52,
             "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.129,
-            "date": "2026-09-22",
-            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
             "outcome_score": null
           },
           {
             "similarity": 0.121,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+            "date": "2026-10-05",
+            "headline": "Yemen's government declares a major operation against the Houthis, and other Mideast news",
             "outcome_score": null
           },
           {
-            "similarity": 0.111,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+            "similarity": 0.1,
+            "date": "2026-09-02",
+            "headline": "Rupee falls 2 paise to 94.97 against U.S. dollar in early trade",
             "outcome_score": null
           },
           {
-            "similarity": 0.105,
-            "date": "2026-10-12",
-            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+            "similarity": 0.1,
+            "date": "2026-09-11",
+            "headline": "Rupee falls 27 paise to 95.79 against U.S. dollar in early trade",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.1,
+            "date": "2026-09-15",
+            "headline": "Rupee falls 30 paise to 95.84 against U.S. dollar in early trade",
             "outcome_score": null
           }
         ],
-        "momentum_score": 73.8,
-        "early_signal": true
+        "momentum_score": 67.5,
+        "early_signal": false
       }
     ],
     "entities": {
@@ -1134,58 +971,35 @@
       "companies": [],
       "places": [],
       "topics": {
-        "delhi": 3,
-        "court": 2,
-        "oct": 2,
-        "anti-cec": 1,
-        "live": 1,
-        "abhijeet": 1,
-        "dipke": 1,
-        "sem": 1,
-        "police": 1,
-        "bnss": 1,
-        "aisa": 1,
-        "neha": 1,
-        "bora": 1,
-        "stalin": 1,
-        "mamata": 1,
-        "banerjee": 1,
-        "arvind": 1,
-        "kejriwal": 1,
-        "cjp": 1,
-        "supreme": 1
+        "indian": 2,
+        "u.s": 2,
+        "iran": 2,
+        "two": 1,
+        "mumbai-based": 1,
+        "operation": 1,
+        "economic": 1,
+        "outcast": 1
       }
     },
     "source_event_matrix": {
-      "india latest news: top national headlines today & breaking news | the hindu": {
-        "stories": 2,
-        "high_impact": 2,
+      "business news today – finance, industry & economy | the hindu": {
+        "stories": 1,
+        "high_impact": 1,
         "verified": 0
       }
     },
     "scorecard": {
-      "stories": 2,
-      "high_impact": 2,
+      "stories": 1,
+      "high_impact": 1,
       "verified": 0,
       "verification_rate": 0.0,
-      "early_signals": 2,
+      "early_signals": 0,
       "health": "PASS"
     },
-    "cross_event_links": [
-      {
-        "a": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "b": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "strength": 2
-      }
-    ],
+    "cross_event_links": [],
     "research_queue": [
       {
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "priority": 58,
-        "reason": "high impact or emerging signal"
-      },
-      {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
         "priority": 58,
         "reason": "high impact or emerging signal"
       }
@@ -1194,282 +1008,99 @@
   "intelligence_v5_plus": {
     "stories": [
       {
-        "story_id": "eb4d792b455f6edb",
-        "event_id": "54a2540253579bdf",
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "importance": 89.1,
-        "ranking_score": 116.3,
-        "personalized_score": 99.1,
-        "personalization_applied": 99.1,
-        "breaking_score": 40,
-        "trend_score": 85,
+        "story_id": "a1d2e046eee5c26f",
+        "event_id": "9d87073a757afb09",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "importance": 93.1,
+        "ranking_score": 106.2,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 20,
+        "trend_score": 87,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
+        "learning_adjustment": 1.4,
+        "category": "business",
         "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/anti-cec-sir-protest-live-updates-oct-17-2026-cjp-tiranga-march-abhijeet-dipke-detained-delhi-police-neha-bora/article71595221.ece",
-        "summary": "AISA president Neha Bora released on Oct. 17; Stalin, Mamata Banerjee, and Arvind Kejriwal condemn the CJP founder's detention",
-        "related_articles": [
-          {
-            "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-            "published": "2026-10-17T04:38:39+00:00",
-            "summary": "Both were taken into preventive custody ahead of the 'Lehra Do Tiranga' protest march at Connaught Place in New Delhi on Oct. 16"
-          },
-          {
-            "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-            "published": "2026-10-17T01:00:51+00:00",
-            "summary": "CJP protest LIVE: Delhi Police said that while Neha Bora was released after formal procedures under Section 65 of the Delhi Police Act, action under Section 126/170 of the BNSS was initiated against Dipke"
-          },
-          {
-            "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-            "published": "2026-10-16T17:22:22+00:00",
-            "summary": "At least 150 people were detained around Janpath Road, CP and Mandi House. CJP founder Abhijeet Dipke and AISA activist Neha Bora were among them.&nbsp;"
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "'Law &amp; order flouted': Neha Bora slams overnight detention of women over anti-SIR stir",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/women-ought-to-be-released-after-sunset-neha-bora-questions-night-long-detentions-over-anti-sir-stir/articleshow/135005810.cms",
-              "published": "2026-10-17T01:33:18+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Tricolour-waving crowd of 2,000 takes over Delhi's Connaught Place despite park closure, detentions",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/tricolour-march-held-in-cp-amid-restrictions-detentions-101792199514517.html",
-              "published": "2026-10-17T01:27:40+00:00",
-              "summary": "Police detained 100-150 protesters, including CJP founder Abhijeet Dipke and AISA president Neha Bora, as security was tightened across Lutyens’ Delhi."
-            },
-            {
-              "title": "India’s Cockroach Janta party leader arrested amid crackdown on protests",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests",
-              "published": "2026-10-16T16:22:32+00:00",
-              "summary": "<p>Abhijeet Dipke was detained before planned anti-government demonstrations in Delhi</p><p>The leader of the Cockroach Janta party (CJP) youth movement, Abhijeet Dipke, was detained by police on Friday and then later formally arrested as authorities cracked down on fresh anti-government protests in the Indian capital.</p><p>Dipke was detained before a planned Friday evening demonstration he had called in central Delhi, urging supporters of the movement to come out and hold up the Indian flag.</p> <a href=\"https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests\">Continue reading...</a>"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 88,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
-          "fresh_sources": [
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 4,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.3,
-          "calibrated_confidence": 100
-        },
-        "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "who": "Neha Bora",
-        "who_detail": "Abhijeet Dipke - Founder of the Cheeliya Party (CJP), currently in preventive custody; Neha Bora - AISA president, released on Oct. 17.",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
-        "key_data": "",
-        "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
-        "next": "",
-        "connection": "",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "negative",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-          "impact": {
-            "level": "HIGH",
-            "direction": "negative",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.469,
-            "date": "2026-10-17",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.116,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.111,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.095,
-            "date": "2026-09-24",
-            "headline": "Tensions between India and Bangladesh are in focus after Dhaka skipped the BRICS summit in Delhi",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 73.8,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-17",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.148,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.138,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-09-29",
-            "headline": "Delhi Police file non-cognisable report against Parvesh Verma after complaint over slap",
-            "outcome_score": null
-          }
-        ]
-      },
-      {
-        "story_id": "d11f63ee39706fad",
-        "event_id": "50ad5a3000b35a1a",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "importance": 89.4,
-        "ranking_score": 97.2,
-        "personalized_score": 99.4,
-        "personalization_applied": 99.4,
-        "breaking_score": 40,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+        "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+        "url": "https://www.thehindu.com/business/two-mumbai-based-firms-five-indian-nationals-face-us-sanctions-over-iran-oil-trade/article71561446.ece",
+        "summary": "The action against the Indian entities and individuals is part of the U.S. crackdown against Iran under Operation Economic Outcast",
         "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-              "published": "2026-10-16T18:53:15+00:00",
-              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+              "title": "Femicide in Iran: When 'honor' becomes a death sentence",
+              "source": "World | Deutsche Welle",
+              "url": "https://www.dw.com/en/femicide-in-iran-when-honor-becomes-a-death-sentence/a-79681977?maca=en-rss-en-world-4025-xml-mrss",
+              "published": "2026-10-16T14:27:00+00:00",
+              "summary": "The murder of a young mother has once again sparked debate in Iran over so-called honor killings, the social acceptance of violence against women and the lack of protection for people vulnerable to gender-based violence."
+            },
+            {
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest",
+              "published": "2026-10-14T17:40:05+00:00",
+              "summary": "<p>A fresh wave of protests by India’s youth-led Cockroach movement has been met with a brutal crackdown by Narendra Modi’s government and the closure of a historic protest site in Delhi. Two of the movement’s leaders have been imprisoned for five days for violating suppression measures. The protests, which began over frustration about education and unemployment, are now focused on voting rights. Modi’s government denies claims it is seeking to disenfranchise millions of voters. But its treatment of protesters has been criticised by the UN and Amnesty International and raised concerns that India is sliding further into autocracy. Lucy Hough speaks to South Asia correspondent Hannah Ellis-Petersen <strong>– </strong><a href=\"https://www.youtube.com/@todayinfocuspodcast\"><strong>watch on YouTube</strong></a></p> <a href=\"https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest\">Continue reading...</a>"
             }
           ],
           "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
+          "verification": "multi-source",
+          "confidence": 83,
+          "evidence_strength": 85,
+          "verification_reason": "two or more independent current publishers",
+          "source_count": 3,
+          "independent_sources": 2,
           "fresh_sources": [
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+            "World | Deutsche Welle",
+            "World news | The Guardian"
           ],
-          "current_sources": 2,
+          "current_sources": 3,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.5,
-          "calibrated_confidence": 77.0
+          "contradiction_flag": true,
+          "contradiction_evidence": [
+            {
+              "source": "World news | The Guardian",
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "markers": [
+                "denies"
+              ]
+            }
+          ],
+          "freshness_hours": 7.5,
+          "calibrated_confidence": 82.0
         },
-        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "who": "",
+        "what": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "who": "Two Mumbai-based",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+        "why_important": "Five Indian nationals and two Mumbai-based firms face potential economic sanctions from the U.S. over their involvement in Iran's oil trade.",
         "key_data": "",
-        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
-        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
-        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
-        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+        "background": "The U.S. has been cracking down on entities involved in Iran's oil trade as part of Operation Economic Outcast since 2018.",
+        "change_since_yesterday": "The sanctions target Indian entities, expanding the scope of U.S. enforcement beyond previous targets.",
+        "next": "The U.S. will likely review the sanctions",
+        "connection": "Other sanctions have been imposed on entities for similar activities, including those from China and the United Arab Emirates.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 77.0,
+        "calibrated_confidence": 82.0,
         "impact": {
           "level": "HIGH",
-          "direction": "negative",
+          "direction": "positive",
           "score": 58,
           "confidence": 0.53,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+          "event": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
           "impact": {
             "level": "HIGH",
-            "direction": "negative",
+            "direction": "positive",
             "score": 58,
             "confidence": 0.53
           },
@@ -1488,55 +1119,55 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.375,
+            "similarity": 0.52,
             "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.129,
-            "date": "2026-09-22",
-            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
             "outcome_score": null
           },
           {
             "similarity": 0.121,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+            "date": "2026-10-05",
+            "headline": "Yemen's government declares a major operation against the Houthis, and other Mideast news",
             "outcome_score": null
           },
           {
-            "similarity": 0.111,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+            "similarity": 0.1,
+            "date": "2026-09-02",
+            "headline": "Rupee falls 2 paise to 94.97 against U.S. dollar in early trade",
             "outcome_score": null
           },
           {
-            "similarity": 0.105,
-            "date": "2026-10-12",
-            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+            "similarity": 0.1,
+            "date": "2026-09-11",
+            "headline": "Rupee falls 27 paise to 95.79 against U.S. dollar in early trade",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.1,
+            "date": "2026-09-15",
+            "headline": "Rupee falls 30 paise to 95.84 against U.S. dollar in early trade",
             "outcome_score": null
           }
         ],
-        "momentum_score": 73.8,
-        "early_signal": true,
+        "momentum_score": 67.5,
+        "early_signal": false,
         "similar_historical_events": [
           {
             "similarity": 1.0,
             "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
             "outcome_score": null
           },
           {
             "similarity": 0.143,
-            "date": "2026-09-23",
-            "headline": "Trump says he would back ban on diesel exports",
+            "date": "2026-09-28",
+            "headline": "Amid concerns over Russia sanctions law, Foreign Secretary meets U.S. delegation",
             "outcome_score": null
           },
           {
-            "similarity": 0.133,
-            "date": "2026-10-11",
-            "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
+            "similarity": 0.136,
+            "date": "2026-09-24",
+            "headline": "Sensex tanks over 600 points in early trade; crude oil trades above $100 per barrel",
             "outcome_score": null
           }
         ]
@@ -1544,268 +1175,107 @@
     ],
     "clusters": [
       {
-        "event_id": "abhijeet|action|after|anti-cec|before|bnss|court|delhi|dipke|live|police|produced",
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "event_id": "face|firms|five|indian|iran|mumbai-based|nationals|oil|over|sanctions|trade|two",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
         "story_count": 1,
         "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
+          "Business News Today – Finance, Industry & Economy | The Hindu"
         ],
         "stories": [
           {
-            "story_id": "eb4d792b455f6edb",
-            "event_id": "54a2540253579bdf",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "importance": 89.1,
-            "ranking_score": 116.3,
-            "personalized_score": 99.1,
-            "personalization_applied": 99.1,
-            "breaking_score": 40,
-            "trend_score": 85,
+            "story_id": "a1d2e046eee5c26f",
+            "event_id": "9d87073a757afb09",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+            "importance": 93.1,
+            "ranking_score": 106.2,
+            "personalized_score": 100.0,
+            "personalization_applied": 100.0,
+            "breaking_score": 20,
+            "trend_score": 87,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
+            "learning_adjustment": 1.4,
+            "category": "business",
             "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/anti-cec-sir-protest-live-updates-oct-17-2026-cjp-tiranga-march-abhijeet-dipke-detained-delhi-police-neha-bora/article71595221.ece",
-            "summary": "AISA president Neha Bora released on Oct. 17; Stalin, Mamata Banerjee, and Arvind Kejriwal condemn the CJP founder's detention",
-            "related_articles": [
-              {
-                "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-                "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-                "published": "2026-10-17T04:38:39+00:00",
-                "summary": "Both were taken into preventive custody ahead of the 'Lehra Do Tiranga' protest march at Connaught Place in New Delhi on Oct. 16"
-              },
-              {
-                "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-                "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-                "published": "2026-10-17T01:00:51+00:00",
-                "summary": "CJP protest LIVE: Delhi Police said that while Neha Bora was released after formal procedures under Section 65 of the Delhi Police Act, action under Section 126/170 of the BNSS was initiated against Dipke"
-              },
-              {
-                "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-                "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-                "published": "2026-10-16T17:22:22+00:00",
-                "summary": "At least 150 people were detained around Janpath Road, CP and Mandi House. CJP founder Abhijeet Dipke and AISA activist Neha Bora were among them.&nbsp;"
-              }
-            ],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "'Law &amp; order flouted': Neha Bora slams overnight detention of women over anti-SIR stir",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/women-ought-to-be-released-after-sunset-neha-bora-questions-night-long-detentions-over-anti-sir-stir/articleshow/135005810.cms",
-                  "published": "2026-10-17T01:33:18+00:00",
-                  "summary": ""
-                },
-                {
-                  "title": "Tricolour-waving crowd of 2,000 takes over Delhi's Connaught Place despite park closure, detentions",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/tricolour-march-held-in-cp-amid-restrictions-detentions-101792199514517.html",
-                  "published": "2026-10-17T01:27:40+00:00",
-                  "summary": "Police detained 100-150 protesters, including CJP founder Abhijeet Dipke and AISA president Neha Bora, as security was tightened across Lutyens’ Delhi."
-                },
-                {
-                  "title": "India’s Cockroach Janta party leader arrested amid crackdown on protests",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests",
-                  "published": "2026-10-16T16:22:32+00:00",
-                  "summary": "<p>Abhijeet Dipke was detained before planned anti-government demonstrations in Delhi</p><p>The leader of the Cockroach Janta party (CJP) youth movement, Abhijeet Dipke, was detained by police on Friday and then later formally arrested as authorities cracked down on fresh anti-government protests in the Indian capital.</p><p>Dipke was detained before a planned Friday evening demonstration he had called in central Delhi, urging supporters of the movement to come out and hold up the Indian flag.</p> <a href=\"https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests\">Continue reading...</a>"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-source",
-              "confidence": 88,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 4,
-              "independent_sources": 3,
-              "fresh_sources": [
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "World news | The Guardian"
-              ],
-              "current_sources": 4,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.3,
-              "calibrated_confidence": 100
-            },
-            "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "who": "Neha Bora",
-            "who_detail": "Abhijeet Dipke - Founder of the Cheeliya Party (CJP), currently in preventive custody; Neha Bora - AISA president, released on Oct. 17.",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
-            "key_data": "",
-            "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-            "change_since_yesterday": "Abhijeet Dipke's detention represents a",
-            "next": "",
-            "connection": "",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 100,
-            "impact": {
-              "level": "HIGH",
-              "direction": "negative",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-              "impact": {
-                "level": "HIGH",
-                "direction": "negative",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.469,
-                "date": "2026-10-17",
-                "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.116,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.111,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.095,
-                "date": "2026-09-24",
-                "headline": "Tensions between India and Bangladesh are in focus after Dhaka skipped the BRICS summit in Delhi",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 73.8,
-            "early_signal": true
-          }
-        ]
-      },
-      {
-        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "d11f63ee39706fad",
-            "event_id": "50ad5a3000b35a1a",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "importance": 89.4,
-            "ranking_score": 97.2,
-            "personalized_score": 99.4,
-            "personalization_applied": 99.4,
-            "breaking_score": 40,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+            "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+            "url": "https://www.thehindu.com/business/two-mumbai-based-firms-five-indian-nationals-face-us-sanctions-over-iran-oil-trade/article71561446.ece",
+            "summary": "The action against the Indian entities and individuals is part of the U.S. crackdown against Iran under Operation Economic Outcast",
             "related_articles": [],
             "verification": {
               "evidence": [
                 {
-                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-                  "published": "2026-10-16T18:53:15+00:00",
-                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+                  "title": "Femicide in Iran: When 'honor' becomes a death sentence",
+                  "source": "World | Deutsche Welle",
+                  "url": "https://www.dw.com/en/femicide-in-iran-when-honor-becomes-a-death-sentence/a-79681977?maca=en-rss-en-world-4025-xml-mrss",
+                  "published": "2026-10-16T14:27:00+00:00",
+                  "summary": "The murder of a young mother has once again sparked debate in Iran over so-called honor killings, the social acceptance of violence against women and the lack of protection for people vulnerable to gender-based violence."
+                },
+                {
+                  "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest",
+                  "published": "2026-10-14T17:40:05+00:00",
+                  "summary": "<p>A fresh wave of protests by India’s youth-led Cockroach movement has been met with a brutal crackdown by Narendra Modi’s government and the closure of a historic protest site in Delhi. Two of the movement’s leaders have been imprisoned for five days for violating suppression measures. The protests, which began over frustration about education and unemployment, are now focused on voting rights. Modi’s government denies claims it is seeking to disenfranchise millions of voters. But its treatment of protesters has been criticised by the UN and Amnesty International and raised concerns that India is sliding further into autocracy. Lucy Hough speaks to South Asia correspondent Hannah Ellis-Petersen <strong>– </strong><a href=\"https://www.youtube.com/@todayinfocuspodcast\"><strong>watch on YouTube</strong></a></p> <a href=\"https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest\">Continue reading...</a>"
                 }
               ],
               "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
+              "verification": "multi-source",
+              "confidence": 83,
+              "evidence_strength": 85,
+              "verification_reason": "two or more independent current publishers",
+              "source_count": 3,
+              "independent_sources": 2,
               "fresh_sources": [
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+                "World | Deutsche Welle",
+                "World news | The Guardian"
               ],
-              "current_sources": 2,
+              "current_sources": 3,
               "official_source": false,
               "primary_derivative": false,
               "primary_fresh": true,
               "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.5,
-              "calibrated_confidence": 77.0
+              "contradiction_flag": true,
+              "contradiction_evidence": [
+                {
+                  "source": "World news | The Guardian",
+                  "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+                  "markers": [
+                    "denies"
+                  ]
+                }
+              ],
+              "freshness_hours": 7.5,
+              "calibrated_confidence": 82.0
             },
-            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "who": "",
+            "what": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+            "who": "Two Mumbai-based",
             "who_detail": "",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+            "why_important": "Five Indian nationals and two Mumbai-based firms face potential economic sanctions from the U.S. over their involvement in Iran's oil trade.",
             "key_data": "",
-            "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
-            "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
-            "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
-            "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+            "background": "The U.S. has been cracking down on entities involved in Iran's oil trade as part of Operation Economic Outcast since 2018.",
+            "change_since_yesterday": "The sanctions target Indian entities, expanding the scope of U.S. enforcement beyond previous targets.",
+            "next": "The U.S. will likely review the sanctions",
+            "connection": "Other sanctions have been imposed on entities for similar activities, including those from China and the United Arab Emirates.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 77.0,
+            "calibrated_confidence": 82.0,
             "impact": {
               "level": "HIGH",
-              "direction": "negative",
+              "direction": "positive",
               "score": 58,
               "confidence": 0.53,
               "learned_rate": 0.75
             },
             "consequences": {
-              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+              "event": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
               "impact": {
                 "level": "HIGH",
-                "direction": "negative",
+                "direction": "positive",
                 "score": 58,
                 "confidence": 0.53
               },
@@ -1824,38 +1294,38 @@
             "lifecycle_v2": "NEW",
             "similar_events": [
               {
-                "similarity": 0.375,
+                "similarity": 0.52,
                 "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.129,
-                "date": "2026-09-22",
-                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+                "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
                 "outcome_score": null
               },
               {
                 "similarity": 0.121,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+                "date": "2026-10-05",
+                "headline": "Yemen's government declares a major operation against the Houthis, and other Mideast news",
                 "outcome_score": null
               },
               {
-                "similarity": 0.111,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+                "similarity": 0.1,
+                "date": "2026-09-02",
+                "headline": "Rupee falls 2 paise to 94.97 against U.S. dollar in early trade",
                 "outcome_score": null
               },
               {
-                "similarity": 0.105,
-                "date": "2026-10-12",
-                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+                "similarity": 0.1,
+                "date": "2026-09-11",
+                "headline": "Rupee falls 27 paise to 95.79 against U.S. dollar in early trade",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.1,
+                "date": "2026-09-15",
+                "headline": "Rupee falls 30 paise to 95.84 against U.S. dollar in early trade",
                 "outcome_score": null
               }
             ],
-            "momentum_score": 73.8,
-            "early_signal": true
+            "momentum_score": 67.5,
+            "early_signal": false
           }
         ]
       }
@@ -1865,131 +1335,54 @@
       "companies": [],
       "places": [],
       "topics": {
-        "anti-cec": 2,
-        "cjp": 2,
-        "delhi": 2,
-        "live": 1,
-        "abhijeet dipke": 1,
-        "sem court": 1,
-        "delhi police": 1,
-        "bnss aisa": 1,
-        "neha bora": 1,
-        "oct.": 1,
-        "stalin": 1,
-        "mamata banerjee": 1,
-        "arvind kejriwal": 1,
-        "september": 1,
-        "aisa": 1,
-        "supreme court": 1,
-        "oct": 1,
-        "the delhi": 1
+        "iran": 3,
+        "indian": 2,
+        "u.s.": 2,
+        "operation economic outcast": 2,
+        "two mumbai-based": 1,
+        "the": 1,
+        "the u.s.": 1
       }
     },
     "entity_profiles": [
       {
-        "entity": "anti-cec",
+        "entity": "iran",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 4
+        "historical_mentions": 36
       },
       {
-        "entity": "cjp",
+        "entity": "indian",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 15
+        "historical_mentions": 33
       },
       {
-        "entity": "delhi",
+        "entity": "u.s.",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 30
+        "historical_mentions": 28
       },
       {
-        "entity": "live",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 18
-      },
-      {
-        "entity": "abhijeet dipke",
+        "entity": "operation economic outcast",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
       },
       {
-        "entity": "sem court",
+        "entity": "two mumbai-based",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
       },
       {
-        "entity": "delhi police",
+        "entity": "the",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 0
+        "historical_mentions": 95
       },
       {
-        "entity": "bnss aisa",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "neha bora",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "oct.",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 1
-      },
-      {
-        "entity": "stalin",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 2
-      },
-      {
-        "entity": "mamata banerjee",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "arvind kejriwal",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "september",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 10
-      },
-      {
-        "entity": "aisa",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "supreme court",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "oct",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 4
-      },
-      {
-        "entity": "the delhi",
+        "entity": "the u.s.",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
@@ -1997,302 +1390,107 @@
     ],
     "event_evolution": [
       {
-        "event_id": "abhijeet|action|after|anti-cec|before|bnss|court|delhi|dipke|live|police|produced",
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "event_id": "face|firms|five|indian|iran|mumbai-based|nationals|oil|over|sanctions|trade|two",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
         "story_count": 1,
         "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
+          "Business News Today – Finance, Industry & Economy | The Hindu"
         ],
         "stories": [
           {
-            "story_id": "eb4d792b455f6edb",
-            "event_id": "54a2540253579bdf",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "importance": 89.1,
-            "ranking_score": 116.3,
-            "personalized_score": 99.1,
-            "personalization_applied": 99.1,
-            "breaking_score": 40,
-            "trend_score": 85,
+            "story_id": "a1d2e046eee5c26f",
+            "event_id": "9d87073a757afb09",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+            "importance": 93.1,
+            "ranking_score": 106.2,
+            "personalized_score": 100.0,
+            "personalization_applied": 100.0,
+            "breaking_score": 20,
+            "trend_score": 87,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
+            "learning_adjustment": 1.4,
+            "category": "business",
             "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/anti-cec-sir-protest-live-updates-oct-17-2026-cjp-tiranga-march-abhijeet-dipke-detained-delhi-police-neha-bora/article71595221.ece",
-            "summary": "AISA president Neha Bora released on Oct. 17; Stalin, Mamata Banerjee, and Arvind Kejriwal condemn the CJP founder's detention",
-            "related_articles": [
-              {
-                "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-                "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-                "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-                "published": "2026-10-17T04:38:39+00:00",
-                "summary": "Both were taken into preventive custody ahead of the 'Lehra Do Tiranga' protest march at Connaught Place in New Delhi on Oct. 16"
-              },
-              {
-                "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-                "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-                "published": "2026-10-17T01:00:51+00:00",
-                "summary": "CJP protest LIVE: Delhi Police said that while Neha Bora was released after formal procedures under Section 65 of the Delhi Police Act, action under Section 126/170 of the BNSS was initiated against Dipke"
-              },
-              {
-                "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-                "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-                "published": "2026-10-16T17:22:22+00:00",
-                "summary": "At least 150 people were detained around Janpath Road, CP and Mandi House. CJP founder Abhijeet Dipke and AISA activist Neha Bora were among them.&nbsp;"
-              }
-            ],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "'Law &amp; order flouted': Neha Bora slams overnight detention of women over anti-SIR stir",
-                  "source": "Times of India",
-                  "url": "https://timesofindia.indiatimes.com/india/women-ought-to-be-released-after-sunset-neha-bora-questions-night-long-detentions-over-anti-sir-stir/articleshow/135005810.cms",
-                  "published": "2026-10-17T01:33:18+00:00",
-                  "summary": ""
-                },
-                {
-                  "title": "Tricolour-waving crowd of 2,000 takes over Delhi's Connaught Place despite park closure, detentions",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/tricolour-march-held-in-cp-amid-restrictions-detentions-101792199514517.html",
-                  "published": "2026-10-17T01:27:40+00:00",
-                  "summary": "Police detained 100-150 protesters, including CJP founder Abhijeet Dipke and AISA president Neha Bora, as security was tightened across Lutyens’ Delhi."
-                },
-                {
-                  "title": "India’s Cockroach Janta party leader arrested amid crackdown on protests",
-                  "source": "World news | The Guardian",
-                  "url": "https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests",
-                  "published": "2026-10-16T16:22:32+00:00",
-                  "summary": "<p>Abhijeet Dipke was detained before planned anti-government demonstrations in Delhi</p><p>The leader of the Cockroach Janta party (CJP) youth movement, Abhijeet Dipke, was detained by police on Friday and then later formally arrested as authorities cracked down on fresh anti-government protests in the Indian capital.</p><p>Dipke was detained before a planned Friday evening demonstration he had called in central Delhi, urging supporters of the movement to come out and hold up the Indian flag.</p> <a href=\"https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests\">Continue reading...</a>"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-source",
-              "confidence": 88,
-              "evidence_strength": 85,
-              "verification_reason": "two or more independent current publishers",
-              "source_count": 4,
-              "independent_sources": 3,
-              "fresh_sources": [
-                "Times of India",
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                "World news | The Guardian"
-              ],
-              "current_sources": 4,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.3,
-              "calibrated_confidence": 100
-            },
-            "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "who": "Neha Bora",
-            "who_detail": "Abhijeet Dipke - Founder of the Cheeliya Party (CJP), currently in preventive custody; Neha Bora - AISA president, released on Oct. 17.",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
-            "key_data": "",
-            "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-            "change_since_yesterday": "Abhijeet Dipke's detention represents a",
-            "next": "",
-            "connection": "",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 100,
-            "impact": {
-              "level": "HIGH",
-              "direction": "negative",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-              "impact": {
-                "level": "HIGH",
-                "direction": "negative",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.469,
-                "date": "2026-10-17",
-                "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.116,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.111,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.095,
-                "date": "2026-09-24",
-                "headline": "Tensions between India and Bangladesh are in focus after Dhaka skipped the BRICS summit in Delhi",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 73.8,
-            "early_signal": true,
-            "similar_historical_events": [
-              {
-                "similarity": 1.0,
-                "date": "2026-10-17",
-                "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.167,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.148,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.138,
-                "date": "2026-10-07",
-                "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-09-29",
-                "headline": "Delhi Police file non-cognisable report against Parvesh Verma after complaint over slap",
-                "outcome_score": null
-              }
-            ]
-          }
-        ],
-        "status": "DEVELOPING",
-        "history_count": 1
-      },
-      {
-        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "d11f63ee39706fad",
-            "event_id": "50ad5a3000b35a1a",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "importance": 89.4,
-            "ranking_score": 97.2,
-            "personalized_score": 99.4,
-            "personalization_applied": 99.4,
-            "breaking_score": 40,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+            "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+            "url": "https://www.thehindu.com/business/two-mumbai-based-firms-five-indian-nationals-face-us-sanctions-over-iran-oil-trade/article71561446.ece",
+            "summary": "The action against the Indian entities and individuals is part of the U.S. crackdown against Iran under Operation Economic Outcast",
             "related_articles": [],
             "verification": {
               "evidence": [
                 {
-                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-                  "published": "2026-10-16T18:53:15+00:00",
-                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+                  "title": "Femicide in Iran: When 'honor' becomes a death sentence",
+                  "source": "World | Deutsche Welle",
+                  "url": "https://www.dw.com/en/femicide-in-iran-when-honor-becomes-a-death-sentence/a-79681977?maca=en-rss-en-world-4025-xml-mrss",
+                  "published": "2026-10-16T14:27:00+00:00",
+                  "summary": "The murder of a young mother has once again sparked debate in Iran over so-called honor killings, the social acceptance of violence against women and the lack of protection for people vulnerable to gender-based violence."
+                },
+                {
+                  "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+                  "source": "World news | The Guardian",
+                  "url": "https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest",
+                  "published": "2026-10-14T17:40:05+00:00",
+                  "summary": "<p>A fresh wave of protests by India’s youth-led Cockroach movement has been met with a brutal crackdown by Narendra Modi’s government and the closure of a historic protest site in Delhi. Two of the movement’s leaders have been imprisoned for five days for violating suppression measures. The protests, which began over frustration about education and unemployment, are now focused on voting rights. Modi’s government denies claims it is seeking to disenfranchise millions of voters. But its treatment of protesters has been criticised by the UN and Amnesty International and raised concerns that India is sliding further into autocracy. Lucy Hough speaks to South Asia correspondent Hannah Ellis-Petersen <strong>– </strong><a href=\"https://www.youtube.com/@todayinfocuspodcast\"><strong>watch on YouTube</strong></a></p> <a href=\"https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest\">Continue reading...</a>"
                 }
               ],
               "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
+              "verification": "multi-source",
+              "confidence": 83,
+              "evidence_strength": 85,
+              "verification_reason": "two or more independent current publishers",
+              "source_count": 3,
+              "independent_sources": 2,
               "fresh_sources": [
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+                "World | Deutsche Welle",
+                "World news | The Guardian"
               ],
-              "current_sources": 2,
+              "current_sources": 3,
               "official_source": false,
               "primary_derivative": false,
               "primary_fresh": true,
               "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.5,
-              "calibrated_confidence": 77.0
+              "contradiction_flag": true,
+              "contradiction_evidence": [
+                {
+                  "source": "World news | The Guardian",
+                  "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+                  "markers": [
+                    "denies"
+                  ]
+                }
+              ],
+              "freshness_hours": 7.5,
+              "calibrated_confidence": 82.0
             },
-            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "who": "",
+            "what": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+            "who": "Two Mumbai-based",
             "who_detail": "",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+            "why_important": "Five Indian nationals and two Mumbai-based firms face potential economic sanctions from the U.S. over their involvement in Iran's oil trade.",
             "key_data": "",
-            "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
-            "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
-            "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
-            "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+            "background": "The U.S. has been cracking down on entities involved in Iran's oil trade as part of Operation Economic Outcast since 2018.",
+            "change_since_yesterday": "The sanctions target Indian entities, expanding the scope of U.S. enforcement beyond previous targets.",
+            "next": "The U.S. will likely review the sanctions",
+            "connection": "Other sanctions have been imposed on entities for similar activities, including those from China and the United Arab Emirates.",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
-            "calibrated_confidence": 77.0,
+            "calibrated_confidence": 82.0,
             "impact": {
               "level": "HIGH",
-              "direction": "negative",
+              "direction": "positive",
               "score": 58,
               "confidence": 0.53,
               "learned_rate": 0.75
             },
             "consequences": {
-              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+              "event": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
               "impact": {
                 "level": "HIGH",
-                "direction": "negative",
+                "direction": "positive",
                 "score": 58,
                 "confidence": 0.53
               },
@@ -2311,55 +1509,55 @@
             "lifecycle_v2": "NEW",
             "similar_events": [
               {
-                "similarity": 0.375,
+                "similarity": 0.52,
                 "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.129,
-                "date": "2026-09-22",
-                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+                "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
                 "outcome_score": null
               },
               {
                 "similarity": 0.121,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+                "date": "2026-10-05",
+                "headline": "Yemen's government declares a major operation against the Houthis, and other Mideast news",
                 "outcome_score": null
               },
               {
-                "similarity": 0.111,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+                "similarity": 0.1,
+                "date": "2026-09-02",
+                "headline": "Rupee falls 2 paise to 94.97 against U.S. dollar in early trade",
                 "outcome_score": null
               },
               {
-                "similarity": 0.105,
-                "date": "2026-10-12",
-                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+                "similarity": 0.1,
+                "date": "2026-09-11",
+                "headline": "Rupee falls 27 paise to 95.79 against U.S. dollar in early trade",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.1,
+                "date": "2026-09-15",
+                "headline": "Rupee falls 30 paise to 95.84 against U.S. dollar in early trade",
                 "outcome_score": null
               }
             ],
-            "momentum_score": 73.8,
-            "early_signal": true,
+            "momentum_score": 67.5,
+            "early_signal": false,
             "similar_historical_events": [
               {
                 "similarity": 1.0,
                 "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+                "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
                 "outcome_score": null
               },
               {
                 "similarity": 0.143,
-                "date": "2026-09-23",
-                "headline": "Trump says he would back ban on diesel exports",
+                "date": "2026-09-28",
+                "headline": "Amid concerns over Russia sanctions law, Foreign Secretary meets U.S. delegation",
                 "outcome_score": null
               },
               {
-                "similarity": 0.133,
-                "date": "2026-10-11",
-                "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
+                "similarity": 0.136,
+                "date": "2026-09-24",
+                "headline": "Sensex tanks over 600 points in early trade; crude oil trades above $100 per barrel",
                 "outcome_score": null
               }
             ]
@@ -2398,16 +1596,8 @@
     ],
     "market_correlation": [
       {
-        "event_id": "54a2540253579bdf",
-        "direction": "negative",
-        "market_samples": 0,
-        "avg_move": null,
-        "market_context_pct": 0.0,
-        "directional_alignment": "UNKNOWN"
-      },
-      {
-        "event_id": "50ad5a3000b35a1a",
-        "direction": "negative",
+        "event_id": "9d87073a757afb09",
+        "direction": "positive",
         "market_samples": 0,
         "avg_move": null,
         "market_context_pct": 0.0,
@@ -2415,10 +1605,10 @@
       }
     ],
     "source_reliability": {
-      "India Latest News: Top National Headlines Today & Breaking News | The Hindu": {
-        "n": 2,
+      "Business News Today – Finance, Industry & Economy | The Hindu": {
+        "n": 1,
         "verified": 0,
-        "high_impact": 2,
+        "high_impact": 1,
         "verification_rate": 0.0
       }
     },
@@ -2429,93 +1619,109 @@
       "signal": 0.0
     },
     "scorecard": {
-      "stories": 2,
-      "high_impact": 2,
+      "stories": 1,
+      "high_impact": 1,
       "medium_impact": 0,
       "low_impact": 0,
       "verified": 0,
-      "early_signals": 2,
+      "early_signals": 0,
       "health": "PASS"
     },
     "personalized_feed": [
       {
-        "story_id": "d11f63ee39706fad",
-        "event_id": "50ad5a3000b35a1a",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "importance": 89.4,
-        "ranking_score": 97.2,
-        "personalized_score": 99.4,
-        "personalization_applied": 99.4,
-        "breaking_score": 40,
-        "trend_score": 85,
+        "story_id": "a1d2e046eee5c26f",
+        "event_id": "9d87073a757afb09",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "importance": 93.1,
+        "ranking_score": 106.2,
+        "personalized_score": 100.0,
+        "personalization_applied": 100.0,
+        "breaking_score": 20,
+        "trend_score": 87,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
+        "learning_adjustment": 1.4,
+        "category": "business",
         "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+        "source": "Business News Today – Finance, Industry & Economy | The Hindu",
+        "url": "https://www.thehindu.com/business/two-mumbai-based-firms-five-indian-nationals-face-us-sanctions-over-iran-oil-trade/article71561446.ece",
+        "summary": "The action against the Indian entities and individuals is part of the U.S. crackdown against Iran under Operation Economic Outcast",
         "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-              "published": "2026-10-16T18:53:15+00:00",
-              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+              "title": "Femicide in Iran: When 'honor' becomes a death sentence",
+              "source": "World | Deutsche Welle",
+              "url": "https://www.dw.com/en/femicide-in-iran-when-honor-becomes-a-death-sentence/a-79681977?maca=en-rss-en-world-4025-xml-mrss",
+              "published": "2026-10-16T14:27:00+00:00",
+              "summary": "The murder of a young mother has once again sparked debate in Iran over so-called honor killings, the social acceptance of violence against women and the lack of protection for people vulnerable to gender-based violence."
+            },
+            {
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "source": "World news | The Guardian",
+              "url": "https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest",
+              "published": "2026-10-14T17:40:05+00:00",
+              "summary": "<p>A fresh wave of protests by India’s youth-led Cockroach movement has been met with a brutal crackdown by Narendra Modi’s government and the closure of a historic protest site in Delhi. Two of the movement’s leaders have been imprisoned for five days for violating suppression measures. The protests, which began over frustration about education and unemployment, are now focused on voting rights. Modi’s government denies claims it is seeking to disenfranchise millions of voters. But its treatment of protesters has been criticised by the UN and Amnesty International and raised concerns that India is sliding further into autocracy. Lucy Hough speaks to South Asia correspondent Hannah Ellis-Petersen <strong>– </strong><a href=\"https://www.youtube.com/@todayinfocuspodcast\"><strong>watch on YouTube</strong></a></p> <a href=\"https://www.theguardian.com/news/audio/2026/oct/14/indias-cockroach-protesters-defy-modis-crackdown-the-latest\">Continue reading...</a>"
             }
           ],
           "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
+          "verification": "multi-source",
+          "confidence": 83,
+          "evidence_strength": 85,
+          "verification_reason": "two or more independent current publishers",
+          "source_count": 3,
+          "independent_sources": 2,
           "fresh_sources": [
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+            "World | Deutsche Welle",
+            "World news | The Guardian"
           ],
-          "current_sources": 2,
+          "current_sources": 3,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
           "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.5,
-          "calibrated_confidence": 77.0
+          "contradiction_flag": true,
+          "contradiction_evidence": [
+            {
+              "source": "World news | The Guardian",
+              "title": "India’s cockroach protesters defy Modi’s crackdown – The Latest",
+              "markers": [
+                "denies"
+              ]
+            }
+          ],
+          "freshness_hours": 7.5,
+          "calibrated_confidence": 82.0
         },
-        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "who": "",
+        "what": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "who": "Two Mumbai-based",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+        "why_important": "Five Indian nationals and two Mumbai-based firms face potential economic sanctions from the U.S. over their involvement in Iran's oil trade.",
         "key_data": "",
-        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
-        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
-        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
-        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+        "background": "The U.S. has been cracking down on entities involved in Iran's oil trade as part of Operation Economic Outcast since 2018.",
+        "change_since_yesterday": "The sanctions target Indian entities, expanding the scope of U.S. enforcement beyond previous targets.",
+        "next": "The U.S. will likely review the sanctions",
+        "connection": "Other sanctions have been imposed on entities for similar activities, including those from China and the United Arab Emirates.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "calibrated_confidence": 77.0,
+        "calibrated_confidence": 82.0,
         "impact": {
           "level": "HIGH",
-          "direction": "negative",
+          "direction": "positive",
           "score": 58,
           "confidence": 0.53,
           "learned_rate": 0.75
         },
         "consequences": {
-          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+          "event": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
           "impact": {
             "level": "HIGH",
-            "direction": "negative",
+            "direction": "positive",
             "score": 58,
             "confidence": 0.53
           },
@@ -2534,295 +1740,89 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.375,
+            "similarity": 0.52,
             "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.129,
-            "date": "2026-09-22",
-            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
             "outcome_score": null
           },
           {
             "similarity": 0.121,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+            "date": "2026-10-05",
+            "headline": "Yemen's government declares a major operation against the Houthis, and other Mideast news",
             "outcome_score": null
           },
           {
-            "similarity": 0.111,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+            "similarity": 0.1,
+            "date": "2026-09-02",
+            "headline": "Rupee falls 2 paise to 94.97 against U.S. dollar in early trade",
             "outcome_score": null
           },
           {
-            "similarity": 0.105,
-            "date": "2026-10-12",
-            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+            "similarity": 0.1,
+            "date": "2026-09-11",
+            "headline": "Rupee falls 27 paise to 95.79 against U.S. dollar in early trade",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.1,
+            "date": "2026-09-15",
+            "headline": "Rupee falls 30 paise to 95.84 against U.S. dollar in early trade",
             "outcome_score": null
           }
         ],
-        "momentum_score": 73.8,
-        "early_signal": true,
+        "momentum_score": 67.5,
+        "early_signal": false,
         "similar_historical_events": [
           {
             "similarity": 1.0,
             "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
             "outcome_score": null
           },
           {
             "similarity": 0.143,
-            "date": "2026-09-23",
-            "headline": "Trump says he would back ban on diesel exports",
+            "date": "2026-09-28",
+            "headline": "Amid concerns over Russia sanctions law, Foreign Secretary meets U.S. delegation",
             "outcome_score": null
           },
           {
-            "similarity": 0.133,
-            "date": "2026-10-11",
-            "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
-            "outcome_score": null
-          }
-        ],
-        "personalization_score": 97.4,
-        "preference_matches": 1
-      },
-      {
-        "story_id": "eb4d792b455f6edb",
-        "event_id": "54a2540253579bdf",
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "importance": 89.1,
-        "ranking_score": 116.3,
-        "personalized_score": 99.1,
-        "personalization_applied": 99.1,
-        "breaking_score": 40,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/anti-cec-sir-protest-live-updates-oct-17-2026-cjp-tiranga-march-abhijeet-dipke-detained-delhi-police-neha-bora/article71595221.ece",
-        "summary": "AISA president Neha Bora released on Oct. 17; Stalin, Mamata Banerjee, and Arvind Kejriwal condemn the CJP founder's detention",
-        "related_articles": [
-          {
-            "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-            "published": "2026-10-17T04:38:39+00:00",
-            "summary": "Both were taken into preventive custody ahead of the 'Lehra Do Tiranga' protest march at Connaught Place in New Delhi on Oct. 16"
-          },
-          {
-            "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-            "published": "2026-10-17T01:00:51+00:00",
-            "summary": "CJP protest LIVE: Delhi Police said that while Neha Bora was released after formal procedures under Section 65 of the Delhi Police Act, action under Section 126/170 of the BNSS was initiated against Dipke"
-          },
-          {
-            "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-            "published": "2026-10-16T17:22:22+00:00",
-            "summary": "At least 150 people were detained around Janpath Road, CP and Mandi House. CJP founder Abhijeet Dipke and AISA activist Neha Bora were among them.&nbsp;"
-          }
-        ],
-        "verification": {
-          "evidence": [
-            {
-              "title": "'Law &amp; order flouted': Neha Bora slams overnight detention of women over anti-SIR stir",
-              "source": "Times of India",
-              "url": "https://timesofindia.indiatimes.com/india/women-ought-to-be-released-after-sunset-neha-bora-questions-night-long-detentions-over-anti-sir-stir/articleshow/135005810.cms",
-              "published": "2026-10-17T01:33:18+00:00",
-              "summary": ""
-            },
-            {
-              "title": "Tricolour-waving crowd of 2,000 takes over Delhi's Connaught Place despite park closure, detentions",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/tricolour-march-held-in-cp-amid-restrictions-detentions-101792199514517.html",
-              "published": "2026-10-17T01:27:40+00:00",
-              "summary": "Police detained 100-150 protesters, including CJP founder Abhijeet Dipke and AISA president Neha Bora, as security was tightened across Lutyens’ Delhi."
-            },
-            {
-              "title": "India’s Cockroach Janta party leader arrested amid crackdown on protests",
-              "source": "World news | The Guardian",
-              "url": "https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests",
-              "published": "2026-10-16T16:22:32+00:00",
-              "summary": "<p>Abhijeet Dipke was detained before planned anti-government demonstrations in Delhi</p><p>The leader of the Cockroach Janta party (CJP) youth movement, Abhijeet Dipke, was detained by police on Friday and then later formally arrested as authorities cracked down on fresh anti-government protests in the Indian capital.</p><p>Dipke was detained before a planned Friday evening demonstration he had called in central Delhi, urging supporters of the movement to come out and hold up the Indian flag.</p> <a href=\"https://www.theguardian.com/world/2026/oct/16/india-cockroach-janta-party-leader-detained-amid-crackdown-protests\">Continue reading...</a>"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-source",
-          "confidence": 88,
-          "evidence_strength": 85,
-          "verification_reason": "two or more independent current publishers",
-          "source_count": 4,
-          "independent_sources": 3,
-          "fresh_sources": [
-            "Times of India",
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "World news | The Guardian"
-          ],
-          "current_sources": 4,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.3,
-          "calibrated_confidence": 100
-        },
-        "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "who": "Neha Bora",
-        "who_detail": "Abhijeet Dipke - Founder of the Cheeliya Party (CJP), currently in preventive custody; Neha Bora - AISA president, released on Oct. 17.",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
-        "key_data": "",
-        "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
-        "next": "",
-        "connection": "",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 100,
-        "impact": {
-          "level": "HIGH",
-          "direction": "negative",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-          "impact": {
-            "level": "HIGH",
-            "direction": "negative",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.469,
-            "date": "2026-10-17",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.116,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.111,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.095,
+            "similarity": 0.136,
             "date": "2026-09-24",
-            "headline": "Tensions between India and Bangladesh are in focus after Dhaka skipped the BRICS summit in Delhi",
+            "headline": "Sensex tanks over 600 points in early trade; crude oil trades above $100 per barrel",
             "outcome_score": null
           }
         ],
-        "momentum_score": 73.8,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-17",
-            "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.167,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.148,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.138,
-            "date": "2026-10-07",
-            "headline": "CEC row LIVE: CJP’s Saurav Das to submit ‘intimation letter’ to Delhi Police ahead of October 10 Jantar Mantar protest; security tightened",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-09-29",
-            "headline": "Delhi Police file non-cognisable report against Parvesh Verma after complaint over slap",
-            "outcome_score": null
-          }
-        ],
-        "personalization_score": 97.1,
-        "preference_matches": 1
+        "personalization_score": 109.1,
+        "preference_matches": 2
       }
     ],
     "alerts": [],
     "trend_report": [
       {
-        "category": "india",
-        "current": 2,
-        "previous": 613,
-        "delta": -611
+        "category": "business",
+        "current": 1,
+        "previous": 209,
+        "delta": -208
       }
     ],
     "knowledge_graph": {
       "nodes": [
         {
           "type": "event",
-          "label": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS"
-        },
-        {
-          "type": "event",
-          "label": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’"
+          "label": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade"
         }
       ],
       "edges": []
     },
-    "contradictions": [],
+    "contradictions": [
+      {
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "reason": "verification contradiction"
+      }
+    ],
     "evidence_gaps": [
       {
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "missing": [
-          "independent_source_count"
-        ]
-      },
-      {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
         "missing": [
           "independent_source_count"
         ]
@@ -2830,45 +1830,8 @@
     ],
     "research_queue": [
       {
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "priority": 76.5,
-        "tasks": [
-          "verify primary source",
-          "find independent confirmation",
-          "retrieve historical analogue"
-        ],
-        "retrieved_evidence": [
-          {
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "title": "Neha Bora released, Abhijeet Dipke to be produced before SEM court: Delhi Police",
-            "url": "https://www.thehindu.com/news/national/neha-bora-released-abhijeet-dipke-to-be-produced-before-sem-court-delhi-police/article71595229.ece",
-            "similarity": 0.444,
-            "source_reliability": 0.7,
-            "evidence_score": 0.521
-          },
-          {
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "title": "CJP protest LIVE: Abhijeet Dipke to be produced before SEM at Mandir Marg police station around noon, says CJP",
-            "url": "https://www.hindustantimes.com/india-news/cjp-protest-live-updates-delhi-abhijeet-dipke-neha-bora-detention-delhi-police-connaught-place-cp-march-gyanesh-kumar-ne-101792198034236.html",
-            "similarity": 0.364,
-            "source_reliability": 0.7,
-            "evidence_score": 0.465
-          },
-          {
-            "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-            "title": "Abhijeet Dipke, Neha Bora among 150 detained in Delhi; Oppn slams police action amid anti-CEC protests",
-            "url": "https://www.hindustantimes.com/india-news/abhijeet-dipke-neha-bora-among-150-detained-in-delhi-oppn-slams-police-action-amid-anti-cec-protests-101792165933018.html",
-            "similarity": 0.261,
-            "source_reliability": 0.7,
-            "evidence_score": 0.393
-          }
-        ],
-        "evidence_count": 3,
-        "research_status": "EVIDENCE_RETRIEVED"
-      },
-      {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "priority": 76.5,
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "priority": 74.9,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -2876,80 +1839,74 @@
         ],
         "retrieved_evidence": [],
         "evidence_count": 0,
+        "independent_source_count": 0,
         "research_status": "RESEARCH_REQUIRED"
       }
     ],
     "weekly_report": {
       "top_events": [
-        "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS"
+        "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade"
       ],
       "top_entities": [
         {
-          "entity": "protest",
-          "current_mentions": 2,
-          "historical_mentions": 32
-        },
-        {
-          "entity": "delhi",
-          "current_mentions": 2,
-          "historical_mentions": 30
-        },
-        {
-          "entity": "abhijeet",
+          "entity": "firms",
           "current_mentions": 1,
-          "historical_mentions": 2
+          "historical_mentions": 8
         },
         {
-          "entity": "under",
+          "entity": "sanctions",
+          "current_mentions": 1,
+          "historical_mentions": 12
+        },
+        {
+          "entity": "trade",
+          "current_mentions": 1,
+          "historical_mentions": 27
+        },
+        {
+          "entity": "five",
           "current_mentions": 1,
           "historical_mentions": 17
         },
         {
-          "entity": "after",
-          "current_mentions": 1,
-          "historical_mentions": 86
-        },
-        {
-          "entity": "produced",
+          "entity": "mumbai-based",
           "current_mentions": 1,
           "historical_mentions": 1
         },
         {
-          "entity": "live",
-          "current_mentions": 1,
-          "historical_mentions": 18
-        },
-        {
-          "entity": "police",
+          "entity": "u.s.",
           "current_mentions": 1,
           "historical_mentions": 28
         },
         {
-          "entity": "anti-cec",
+          "entity": "over",
           "current_mentions": 1,
-          "historical_mentions": 4
+          "historical_mentions": 74
         },
         {
-          "entity": "dipke",
+          "entity": "indian",
           "current_mentions": 1,
-          "historical_mentions": 7
+          "historical_mentions": 33
+        },
+        {
+          "entity": "nationals",
+          "current_mentions": 1,
+          "historical_mentions": 1
+        },
+        {
+          "entity": "iran",
+          "current_mentions": 1,
+          "historical_mentions": 36
         }
       ],
-      "history_size": 1248,
+      "history_size": 1249,
       "anomalies": []
     }
   },
   "smart_alerts": [],
   "evidence_gaps": [
     {
-      "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-      "missing": [
-        "independent_source_count"
-      ]
-    },
-    {
-      "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+      "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
       "missing": [
         "independent_source_count"
       ]
@@ -4618,13 +3575,13 @@
             "test": 30,
             "threshold": 0.45,
             "weights": [
-              0.5,
-              0.1,
-              0.4
+              0.6,
+              0.2,
+              0.2
             ],
-            "precision": 0.176,
-            "recall": 0.75,
-            "f1": 0.265
+            "precision": 0.138,
+            "recall": 1.0,
+            "f1": 0.242
           },
           {
             "train": 150,
@@ -4668,24 +3625,24 @@
           {
             "train": 240,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.1,
+              0.4
             ],
-            "precision": 0.429,
-            "recall": 0.5,
-            "f1": 0.429
+            "precision": 0.278,
+            "recall": 0.833,
+            "f1": 0.417
           },
           {
             "train": 270,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.1,
+              0.4
             ],
             "precision": 0.167,
             "recall": 0.333,
@@ -4694,15 +3651,15 @@
           {
             "train": 300,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.143,
+            "recall": 0.667,
+            "f1": 0.19
           },
           {
             "train": 330,
@@ -4720,15 +3677,15 @@
           {
             "train": 360,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.6,
-              0.3,
-              0.10000000000000003
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.667,
-            "recall": 0.8,
-            "f1": 0.727
+            "precision": 0.278,
+            "recall": 1.0,
+            "f1": 0.435
           },
           {
             "train": 390,
@@ -4759,15 +3716,15 @@
           {
             "train": 450,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.1,
+              0.4
             ],
-            "precision": 1.0,
+            "precision": 0.077,
             "recall": 1.0,
-            "f1": 1.0
+            "f1": 0.143
           },
           {
             "train": 480,
@@ -4863,15 +3820,15 @@
           {
             "train": 690,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.65,
             "weights": [
-              0.5,
-              0.3,
-              0.2
+              0.7,
+              0.2,
+              0.10000000000000003
             ],
-            "precision": 1.0,
+            "precision": 0.333,
             "recall": 1.0,
-            "f1": 1.0
+            "f1": 0.5
           },
           {
             "train": 720,
@@ -4902,11 +3859,11 @@
           {
             "train": 780,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -4915,24 +3872,24 @@
           {
             "train": 810,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.1,
               0.4
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.667,
+            "recall": 1.0,
+            "f1": 0.8
           },
           {
             "train": 840,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -4941,11 +3898,11 @@
           {
             "train": 870,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -4954,15 +3911,15 @@
           {
             "train": 900,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
-            "precision": 0.25,
-            "recall": 0.5,
-            "f1": 0.25
+            "precision": 0.286,
+            "recall": 1.0,
+            "f1": 0.444
           },
           {
             "train": 930,
@@ -4993,15 +3950,15 @@
           {
             "train": 990,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.2,
               0.3
             ],
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.667
+            "recall": 1.0,
+            "f1": 1.0
           },
           {
             "train": 1020,
@@ -5035,12 +3992,12 @@
             "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
-            "precision": 0.312,
+            "precision": 0.294,
             "recall": 0.833,
-            "f1": 0.455
+            "f1": 0.435
           },
           {
             "train": 1110,
@@ -5110,11 +4067,11 @@
           {
             "train": 1260,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5123,11 +4080,11 @@
           {
             "train": 1290,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5136,11 +4093,11 @@
           {
             "train": 1320,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5149,11 +4106,11 @@
           {
             "train": 1350,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.2,
-              0.10000000000000003
+              0.5,
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5162,50 +4119,50 @@
           {
             "train": 1380,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
-            "precision": 1.0,
-            "recall": 0.4,
-            "f1": 0.571
+            "precision": 0.714,
+            "recall": 1.0,
+            "f1": 0.833
           },
           {
             "train": 1410,
             "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 1.0,
-            "recall": 0.6,
-            "f1": 0.75
-          },
-          {
-            "train": 1440,
-            "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.1,
               0.4
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.667,
+            "recall": 0.8,
+            "f1": 0.727
+          },
+          {
+            "train": 1440,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.1,
+              0.4
+            ],
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
           },
           {
             "train": 1470,
             "test": 30,
             "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
-              0.2
+              0.6,
+              0.1,
+              0.30000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5216,13 +4173,13 @@
             "test": 30,
             "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
-              0.2
+              0.6,
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.667
+            "precision": 0.222,
+            "recall": 1.0,
+            "f1": 0.364
           },
           {
             "train": 1530,
@@ -5266,11 +4223,11 @@
           {
             "train": 1620,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5292,54 +4249,54 @@
           {
             "train": 1680,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.462,
+            "precision": 0.353,
             "recall": 1.0,
-            "f1": 0.632
+            "f1": 0.522
           },
           {
             "train": 1710,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.167,
-            "recall": 0.667,
-            "f1": 0.222
+            "recall": 1.0,
+            "f1": 0.286
           },
           {
             "train": 1740,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
-            "precision": 0.5,
-            "recall": 0.667,
-            "f1": 0.571
+            "precision": 0.375,
+            "recall": 1.0,
+            "f1": 0.545
           },
           {
             "train": 1770,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.636,
+            "precision": 0.412,
             "recall": 0.875,
-            "f1": 0.737
+            "f1": 0.56
           },
           {
             "train": 1800,
@@ -5357,24 +4314,24 @@
           {
             "train": 1830,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.083,
+            "recall": 0.5,
+            "f1": 0.083
           },
           {
             "train": 1860,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5383,11 +4340,11 @@
           {
             "train": 1890,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5396,50 +4353,50 @@
           {
             "train": 1920,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.1,
-              0.30000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 1.0,
+            "precision": 0.333,
             "recall": 1.0,
-            "f1": 1.0
+            "f1": 0.5
           },
           {
             "train": 1950,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.333,
+            "recall": 1.0,
+            "f1": 0.5
           },
           {
             "train": 1980,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.1,
-              0.30000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.167,
+            "precision": 0.111,
             "recall": 1.0,
-            "f1": 0.286
+            "f1": 0.2
           },
           {
             "train": 2010,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.714,
             "recall": 1.0,
@@ -5461,11 +4418,11 @@
           {
             "train": 2070,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.1,
-              0.4
+              0.30000000000000004
             ],
             "precision": 1.0,
             "recall": 0.5,
@@ -5604,28 +4561,28 @@
           {
             "train": 2400,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.2,
+              0.3
             ],
-            "precision": 1.0,
+            "precision": 0.667,
             "recall": 1.0,
-            "f1": 1.0
+            "f1": 0.8
           },
           {
             "train": 2430,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.2,
+            "precision": 0.176,
             "recall": 1.0,
-            "f1": 0.333
+            "f1": 0.3
           },
           {
             "train": 2460,
@@ -5643,15 +4600,15 @@
           {
             "train": 2490,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.2,
+              0.3
             ],
-            "precision": 0.364,
+            "precision": 0.308,
             "recall": 1.0,
-            "f1": 0.533
+            "f1": 0.471
           },
           {
             "train": 2520,
@@ -5682,11 +4639,11 @@
           {
             "train": 2580,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5747,11 +4704,11 @@
           {
             "train": 2730,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.1,
-              0.4
+              0.30000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5828,8 +4785,8 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.1,
+              0.4
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5838,11 +4795,11 @@
           {
             "train": 2940,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -5850,6 +4807,110 @@
           },
           {
             "train": 2970,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.667,
+            "recall": 1.0,
+            "f1": 0.8
+          },
+          {
+            "train": 3000,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 1.0,
+            "recall": 0.667,
+            "f1": 0.8
+          },
+          {
+            "train": 3030,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3060,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3090,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.25,
+            "recall": 1.0,
+            "f1": 0.4
+          },
+          {
+            "train": 3120,
+            "test": 30,
+            "threshold": 0.5,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.111,
+            "recall": 1.0,
+            "f1": 0.2
+          },
+          {
+            "train": 3150,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          {
+            "train": 3180,
+            "test": 30,
+            "threshold": 0.6,
+            "weights": [
+              0.6,
+              0.3,
+              0.10000000000000003
+            ],
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667
+          },
+          {
+            "train": 3210,
             "test": 30,
             "threshold": 0.6,
             "weights": [
@@ -5860,110 +4921,6 @@
             "precision": 1.0,
             "recall": 0.5,
             "f1": 0.667
-          },
-          {
-            "train": 3000,
-            "test": 30,
-            "threshold": 0.6,
-            "weights": [
-              0.6,
-              0.3,
-              0.10000000000000003
-            ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          {
-            "train": 3030,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          {
-            "train": 3060,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          {
-            "train": 3090,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.667
-          },
-          {
-            "train": 3120,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.167,
-            "recall": 1.0,
-            "f1": 0.286
-          },
-          {
-            "train": 3150,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
-          },
-          {
-            "train": 3180,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.5,
-            "recall": 1.0,
-            "f1": 0.667
-          },
-          {
-            "train": 3210,
-            "test": 30,
-            "threshold": 0.55,
-            "weights": [
-              0.5,
-              0.1,
-              0.4
-            ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
           },
           {
             "train": 3240,
@@ -5981,11 +4938,11 @@
           {
             "train": 3270,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.6,
             "weights": [
-              0.5,
-              0.2,
-              0.3
+              0.6,
+              0.3,
+              0.10000000000000003
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6007,11 +4964,11 @@
           {
             "train": 3330,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "weights": [
-              0.6,
+              0.5,
               0.3,
-              0.10000000000000003
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6020,11 +4977,11 @@
           {
             "train": 3360,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6033,7 +4990,7 @@
           {
             "train": 3390,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
@@ -6046,28 +5003,28 @@
           {
             "train": 3420,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.5,
-            "recall": 0.5,
-            "f1": 0.5
+            "precision": 0.182,
+            "recall": 1.0,
+            "f1": 0.308
           },
           {
             "train": 3450,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
           },
           {
             "train": 3480,
@@ -6101,8 +5058,8 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6111,72 +5068,72 @@
           {
             "train": 3570,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.4,
+            "recall": 1.0,
+            "f1": 0.571
           },
           {
             "train": 3600,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.286,
+            "precision": 0.154,
             "recall": 1.0,
-            "f1": 0.444
+            "f1": 0.267
           },
           {
             "train": 3630,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.2,
+            "precision": 0.15,
             "recall": 1.0,
-            "f1": 0.333
+            "f1": 0.261
           },
           {
             "train": 3660,
             "test": 30,
-            "threshold": 0.5,
-            "weights": [
-              0.5,
-              0.2,
-              0.3
-            ],
-            "precision": 0.125,
-            "recall": 0.5,
-            "f1": 0.125
-          },
-          {
-            "train": 3690,
-            "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
               0.2
             ],
-            "precision": 0.286,
-            "recall": 0.667,
-            "f1": 0.381
+            "precision": 0.125,
+            "recall": 1.0,
+            "f1": 0.222
+          },
+          {
+            "train": 3690,
+            "test": 30,
+            "threshold": 0.45,
+            "weights": [
+              0.5,
+              0.3,
+              0.2
+            ],
+            "precision": 0.167,
+            "recall": 1.0,
+            "f1": 0.286
           },
           {
             "train": 3720,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
               0.3,
@@ -6244,12 +5201,12 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
-            "precision": 0.067,
+            "precision": 0.071,
             "recall": 1.0,
-            "f1": 0.125
+            "f1": 0.133
           },
           {
             "train": 3900,
@@ -6296,8 +5253,8 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6322,8 +5279,8 @@
             "threshold": 0.5,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.1,
+              0.4
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6345,15 +5302,15 @@
           {
             "train": 4110,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.2,
-              0.3
+              0.6,
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.067,
+            "precision": 0.053,
             "recall": 1.0,
-            "f1": 0.125
+            "f1": 0.1
           },
           {
             "train": 4140,
@@ -6423,11 +5380,11 @@
           {
             "train": 4290,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.6,
             "weights": [
-              0.6,
+              0.7,
               0.1,
-              0.30000000000000004
+              0.20000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6452,12 +5409,12 @@
             "threshold": 0.55,
             "weights": [
               0.6,
-              0.2,
-              0.2
+              0.1,
+              0.30000000000000004
             ],
-            "precision": 0.4,
-            "recall": 1.0,
-            "f1": 0.571
+            "precision": 0.333,
+            "recall": 0.833,
+            "f1": 0.476
           },
           {
             "train": 4380,
@@ -6501,10 +5458,10 @@
           {
             "train": 4470,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
+              0.6,
+              0.2,
               0.2
             ],
             "precision": 0.5,
@@ -6514,10 +5471,10 @@
           {
             "train": 4500,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
+              0.6,
+              0.2,
               0.2
             ],
             "precision": 0.0,
@@ -6527,10 +5484,10 @@
           {
             "train": 4530,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.3,
+              0.6,
+              0.2,
               0.2
             ],
             "precision": 0.0,
@@ -6631,11 +5588,11 @@
           {
             "train": 4770,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.6,
             "weights": [
-              0.5,
+              0.7,
               0.1,
-              0.4
+              0.20000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6644,11 +5601,11 @@
           {
             "train": 4800,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
+              0.6,
               0.1,
-              0.4
+              0.30000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6657,11 +5614,11 @@
           {
             "train": 4830,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.55,
             "weights": [
-              0.5,
-              0.1,
-              0.4
+              0.6,
+              0.2,
+              0.2
             ],
             "precision": 0.667,
             "recall": 1.0,
@@ -6683,11 +5640,11 @@
           {
             "train": 4890,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.6,
             "weights": [
-              0.6,
+              0.7,
               0.1,
-              0.30000000000000004
+              0.20000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6696,24 +5653,24 @@
           {
             "train": 4920,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.6,
             "weights": [
-              0.6,
-              0.2,
-              0.2
+              0.7,
+              0.1,
+              0.20000000000000004
             ],
-            "precision": 0.5,
+            "precision": 0.429,
             "recall": 0.75,
-            "f1": 0.6
+            "f1": 0.545
           },
           {
             "train": 4950,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.6,
             "weights": [
-              0.6,
+              0.7,
               0.1,
-              0.30000000000000004
+              0.20000000000000004
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6722,23 +5679,23 @@
           {
             "train": 4980,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.1,
-              0.30000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.143,
+            "recall": 1.0,
+            "f1": 0.25
           },
           {
             "train": 5010,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.2,
+              0.5,
+              0.3,
               0.2
             ],
             "precision": 0.0,
@@ -6748,10 +5705,10 @@
           {
             "train": 5040,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.2,
+              0.5,
+              0.3,
               0.2
             ],
             "precision": 0.0,
@@ -6761,11 +5718,11 @@
           {
             "train": 5070,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.45,
             "weights": [
-              0.6,
-              0.1,
-              0.30000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6774,76 +5731,76 @@
           {
             "train": 5100,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.095,
+            "precision": 0.133,
             "recall": 1.0,
-            "f1": 0.174
+            "f1": 0.235
           },
           {
             "train": 5130,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.167,
+            "precision": 0.125,
             "recall": 1.0,
-            "f1": 0.286
+            "f1": 0.222
           },
           {
             "train": 5160,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.667,
-            "recall": 0.5,
-            "f1": 0.571
+            "precision": 0.429,
+            "recall": 0.75,
+            "f1": 0.545
           },
           {
             "train": 5190,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.125,
+            "recall": 1.0,
+            "f1": 0.222
           },
           {
             "train": 5220,
             "test": 30,
-            "threshold": 0.6,
+            "threshold": 0.45,
             "weights": [
-              0.7,
-              0.1,
-              0.20000000000000004
+              0.5,
+              0.3,
+              0.2
             ],
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0
+            "precision": 0.2,
+            "recall": 1.0,
+            "f1": 0.333
           },
           {
             "train": 5250,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6852,11 +5809,11 @@
           {
             "train": 5280,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6865,37 +5822,37 @@
           {
             "train": 5310,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.125,
+            "precision": 0.059,
             "recall": 1.0,
-            "f1": 0.222
+            "f1": 0.111
           },
           {
             "train": 5340,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.1,
-              0.4
+              0.3,
+              0.2
             ],
-            "precision": 0.125,
+            "precision": 0.067,
             "recall": 1.0,
-            "f1": 0.222
+            "f1": 0.125
           },
           {
             "train": 5370,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6904,11 +5861,11 @@
           {
             "train": 5400,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6917,11 +5874,11 @@
           {
             "train": 5430,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6930,11 +5887,11 @@
           {
             "train": 5460,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6943,11 +5900,11 @@
           {
             "train": 5490,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -6956,24 +5913,24 @@
           {
             "train": 5520,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
-            "precision": 0.083,
+            "precision": 0.056,
             "recall": 1.0,
-            "f1": 0.154
+            "f1": 0.105
           },
           {
             "train": 5550,
             "test": 30,
-            "threshold": 0.5,
+            "threshold": 0.45,
             "weights": [
               0.5,
-              0.2,
-              0.3
+              0.3,
+              0.2
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -7099,11 +6056,11 @@
           {
             "train": 5850,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -7112,11 +6069,11 @@
           {
             "train": 5880,
             "test": 30,
-            "threshold": 0.55,
+            "threshold": 0.5,
             "weights": [
               0.5,
-              0.3,
-              0.2
+              0.2,
+              0.3
             ],
             "precision": 0.0,
             "recall": 0.0,
@@ -7214,9 +6171,9 @@
             "f1": 0.0
           }
         ],
-        "f1": 0.224,
-        "precision": 0.226,
-        "recall": 0.358,
+        "f1": 0.236,
+        "precision": 0.22,
+        "recall": 0.435,
         "thresholds": [
           0.45,
           0.5,
@@ -7224,26 +6181,7 @@
           0.5,
           0.45,
           0.45,
-          0.55,
-          0.55,
-          0.6,
           0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.55,
-          0.55,
-          0.6,
-          0.6,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
           0.5,
           0.5,
           0.5,
@@ -7251,44 +6189,61 @@
           0.5,
           0.5,
           0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.45,
-          0.6,
-          0.6,
+          0.55,
+          0.55,
+          0.55,
           0.6,
           0.6,
           0.55,
           0.55,
+          0.65,
           0.55,
           0.55,
-          0.55,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
           0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.5,
+          0.5,
+          0.55,
+          0.55,
           0.5,
           0.5,
           0.5,
           0.45,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
           0.45,
           0.5,
-          0.5,
-          0.5,
           0.55,
-          0.5,
           0.55,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.5,
-          0.5,
           0.5,
           0.5,
           0.5,
@@ -7299,27 +6254,64 @@
           0.5,
           0.5,
           0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
           0.5,
+          0.5,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6,
+          0.6,
+          0.6,
+          0.6,
+          0.6,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
           0.45,
           0.45,
           0.5,
           0.5,
           0.5,
-          0.55,
-          0.55,
-          0.5,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
           0.5,
           0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
           0.55,
-          0.6,
-          0.6,
-          0.55,
-          0.55,
-          0.55,
+          0.5,
           0.55,
           0.55,
           0.55,
@@ -7327,70 +6319,46 @@
           0.6,
           0.55,
           0.55,
+          0.5,
+          0.5,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.55,
+          0.5,
+          0.5,
+          0.5,
           0.6,
-          0.6,
-          0.55,
-          0.55,
-          0.6,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.5,
-          0.5,
-          0.55,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
-          0.55,
           0.55,
           0.55,
           0.55,
           0.6,
           0.6,
           0.6,
-          0.6,
-          0.6,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
+          0.45,
           0.5,
           0.5,
           0.5,
@@ -7402,17 +6370,6 @@
           0.5,
           0.5,
           0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.55,
-          0.55,
           0.55,
           0.55,
           0.55,
@@ -7424,19 +6381,19 @@
         "feature_learning": true,
         "leakage_safe": true
       },
-      "delta_f1": 0.102,
-      "delta_precision": 0.156,
+      "delta_f1": 0.114,
+      "delta_precision": 0.15,
       "f1_confidence_interval": {
-        "mean": 0.101,
-        "lower": 0.068,
-        "upper": 0.134,
+        "mean": 0.113,
+        "lower": 0.082,
+        "upper": 0.144,
         "significant": true,
         "n": 202
       },
       "precision_confidence_interval": {
-        "mean": 0.156,
-        "lower": 0.116,
-        "upper": 0.196,
+        "mean": 0.149,
+        "lower": 0.113,
+        "upper": 0.186,
         "significant": true,
         "n": 202
       },
@@ -7448,91 +6405,80 @@
       "bins": [
         {
           "bin": "0.0-0.1",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
+          "samples": 1495,
+          "mean_predicted": 0.072,
+          "actual_rate": 0.046,
+          "gap": 0.026
         },
         {
           "bin": "0.1-0.2",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
-        },
-        {
-          "bin": "0.2-0.3",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
-        },
-        {
-          "bin": "0.3-0.4",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
-        },
-        {
-          "bin": "0.4-0.5",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
-        },
-        {
-          "bin": "0.5-0.6",
-          "samples": 0,
-          "mean_predicted": null,
-          "actual_rate": null,
-          "gap": null
-        },
-        {
-          "bin": "0.6-0.7",
-          "samples": 2101,
-          "mean_predicted": 0.664,
-          "actual_rate": 0.025,
-          "gap": 0.638
-        },
-        {
-          "bin": "0.7-0.8",
-          "samples": 2511,
-          "mean_predicted": 0.747,
-          "actual_rate": 0.092,
-          "gap": 0.655
-        },
-        {
-          "bin": "0.8-0.9",
-          "samples": 1139,
-          "mean_predicted": 0.84,
-          "actual_rate": 0.111,
-          "gap": 0.729
-        },
-        {
-          "bin": "0.9-1.0",
-          "samples": 340,
-          "mean_predicted": 0.948,
-          "actual_rate": 0.1,
-          "gap": 0.848
+          "samples": 333,
+          "mean_predicted": 0.113,
+          "actual_rate": 0.105,
+          "gap": 0.007
         }
       ],
-      "samples": 6091,
-      "ece": 0.674,
-      "brier": 0.524,
-      "status": "OVER_CONFIDENT"
+      "samples": 1828,
+      "train_samples": 4263,
+      "holdout_samples": 1828,
+      "ece": 0.023,
+      "raw_ece": 0.694,
+      "brier": 0.053,
+      "status": "CALIBRATED",
+      "method": "chronological_holdout_smoothed_score_bins",
+      "holdout_start": "2026-10-01",
+      "holdout_end": "2026-10-10",
+      "leakage_safe": true
     },
     "drift": {
-      "mean_distribution_shift": 0.2035,
-      "status": "DRIFT"
+      "mean_distribution_shift": 0.1521,
+      "status": "STABLE",
+      "current_samples": 1248,
+      "baseline_samples": 4988,
+      "current_categories": {
+        "world": 291,
+        "technology": 199,
+        "india": 502,
+        "business": 200,
+        "science": 55,
+        "defence": 1
+      },
+      "baseline_categories": {
+        "technology": 515,
+        "world": 850,
+        "science": 187,
+        "india": 2765,
+        "business": 668,
+        "defence": 3
+      },
+      "method": "total_variation",
+      "threshold": 0.2
     },
     "rollback": false,
+    "evidence": {
+      "stories": 1,
+      "contradictions": [
+        {
+          "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+          "reason": "source contradiction"
+        }
+      ],
+      "evidence_gaps": [],
+      "evidence_gap_rate": 0.0,
+      "corroborated": 1
+    },
     "quality_gate": {
       "status": "HOLD",
       "blockers": [
-        "poor_calibration",
-        "distribution_drift"
-      ]
+        "regional_coverage_shortfall"
+      ],
+      "criteria": {
+        "minimum_paired_folds": 5,
+        "minimum_calibration_holdout": 60,
+        "maximum_calibrated_ece": 0.15,
+        "maximum_evidence_gap_rate": 0.25,
+        "regional_targets_required": true
+      }
     },
     "production_status": "HOLD_V4"
   },
@@ -7556,105 +6502,83 @@
   ],
   "knowledge_daily": {
     "date": "2026-10-17",
-    "stories": 2,
-    "high_impact": 2,
+    "stories": 1,
+    "high_impact": 1,
     "new_events": 0,
-    "developing_events": 2,
+    "developing_events": 1,
     "confirmed_events": 0,
-    "contradictions": 0,
-    "research_items": 2
+    "contradictions": 1,
+    "research_items": 1
   },
   "knowledge_weekly": {
     "week": "2026-W42",
-    "stories": 10,
-    "top_categories": "[[\"india\", 9], [\"world\", 1]]",
-    "top_entities": "[{\"entity\": \"protest\", \"current_mentions\": 2, \"historical_mentions\": 32}, {\"entity\": \"delhi\", \"current_mentions\": 2, \"historical_mentions\": 30}, {\"entity\": \"abhijeet\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"under\", \"current_mentions\": 1, \"historical_mentions\": 17}, {\"entity\": \"after\", \"current_mentions\": 1, \"historical_mentions\": 86}, {\"entity\": \"produced\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"live\", \"current_mentions\": 1, \"historical_mentions\": 18}, {\"entity\": \"police\", \"current_mentions\": 1, \"historical_mentions\": 28}, {\"entity\": \"anti-cec\", \"current_mentions\": 1, \"historical_mentions\": 4}, {\"entity\": \"dipke\", \"current_mentions\": 1, \"historical_mentions\": 7}]",
+    "stories": 11,
+    "top_categories": "[[\"india\", 9], [\"world\", 1], [\"business\", 1]]",
+    "top_entities": "[{\"entity\": \"firms\", \"current_mentions\": 1, \"historical_mentions\": 8}, {\"entity\": \"sanctions\", \"current_mentions\": 1, \"historical_mentions\": 12}, {\"entity\": \"trade\", \"current_mentions\": 1, \"historical_mentions\": 27}, {\"entity\": \"five\", \"current_mentions\": 1, \"historical_mentions\": 17}, {\"entity\": \"mumbai-based\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"u.s.\", \"current_mentions\": 1, \"historical_mentions\": 28}, {\"entity\": \"over\", \"current_mentions\": 1, \"historical_mentions\": 74}, {\"entity\": \"indian\", \"current_mentions\": 1, \"historical_mentions\": 33}, {\"entity\": \"nationals\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"iran\", \"current_mentions\": 1, \"historical_mentions\": 36}]",
     "new_events": 0,
-    "developing_events": 2,
+    "developing_events": 1,
     "confirmed_events": 0,
     "anomalies": 0,
-    "research_items": 2
+    "research_items": 1
   },
   "v5_drift": {
-    "mean_distribution_shift": 0.2035,
-    "status": "DRIFT"
+    "mean_distribution_shift": 0.1521,
+    "status": "STABLE",
+    "current_samples": 1248,
+    "baseline_samples": 4988,
+    "current_categories": {
+      "world": 291,
+      "technology": 199,
+      "india": 502,
+      "business": 200,
+      "science": 55,
+      "defence": 1
+    },
+    "baseline_categories": {
+      "technology": 515,
+      "world": 850,
+      "science": 187,
+      "india": 2765,
+      "business": 668,
+      "defence": 3
+    },
+    "method": "total_variation",
+    "threshold": 0.2,
+    "windows": {
+      "method": "chronological_fallback",
+      "current_start": "2026-10-04",
+      "current_end": "2026-10-17",
+      "baseline_start": "2026-09-23",
+      "baseline_end": "2026-10-04"
+    }
   },
   "v5_calibration": {
     "bins": [
       {
         "bin": "0.0-0.1",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
+        "samples": 1495,
+        "mean_predicted": 0.072,
+        "actual_rate": 0.046,
+        "gap": 0.026
       },
       {
         "bin": "0.1-0.2",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
-      },
-      {
-        "bin": "0.2-0.3",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
-      },
-      {
-        "bin": "0.3-0.4",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
-      },
-      {
-        "bin": "0.4-0.5",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
-      },
-      {
-        "bin": "0.5-0.6",
-        "samples": 0,
-        "mean_predicted": null,
-        "actual_rate": null,
-        "gap": null
-      },
-      {
-        "bin": "0.6-0.7",
-        "samples": 2101,
-        "mean_predicted": 0.664,
-        "actual_rate": 0.025,
-        "gap": 0.638
-      },
-      {
-        "bin": "0.7-0.8",
-        "samples": 2511,
-        "mean_predicted": 0.747,
-        "actual_rate": 0.092,
-        "gap": 0.655
-      },
-      {
-        "bin": "0.8-0.9",
-        "samples": 1139,
-        "mean_predicted": 0.84,
-        "actual_rate": 0.111,
-        "gap": 0.729
-      },
-      {
-        "bin": "0.9-1.0",
-        "samples": 340,
-        "mean_predicted": 0.948,
-        "actual_rate": 0.1,
-        "gap": 0.848
+        "samples": 333,
+        "mean_predicted": 0.113,
+        "actual_rate": 0.105,
+        "gap": 0.007
       }
     ],
-    "samples": 6091,
-    "ece": 0.674,
-    "brier": 0.524,
-    "status": "OVER_CONFIDENT"
+    "samples": 1828,
+    "train_samples": 4263,
+    "holdout_samples": 1828,
+    "ece": 0.023,
+    "raw_ece": 0.694,
+    "brier": 0.053,
+    "status": "CALIBRATED",
+    "method": "chronological_holdout_smoothed_score_bins",
+    "holdout_start": "2026-10-01",
+    "holdout_end": "2026-10-10",
+    "leakage_safe": true
   }
 }

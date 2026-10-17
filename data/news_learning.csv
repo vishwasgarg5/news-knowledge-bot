@@ -6013,13 +6013,13 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-08,1fdd000e748ed978,1944a956248b7f20,Russia rejects second plague scare as WHO demands answers over Siberian lab deaths,Times of India,world,86.5,false,0,0,0,,,0.00,0.00
 2026-10-08,265efb0a04b93fad,a381c4486dfa5ac7,World's largest penguin colony hit by 'alarming' decline in numbers,BBC News,science,76.0,false,1,0,0,,,0.45,0.45
 2026-10-08,52b3c8b937a75a7e,b4b706946113a93c,'Ghost particles' from space telescope wins physics Nobel,BBC News,science,72.7,false,0,0,0,,,0.00,0.00
-2026-10-09,f054da9dc7da1b75,cd5df0107a4eecf0,"Paramount and Warner Bros merge to become one Hollywood giant, Skydance","Business News Today – Finance, Industry & Economy | The Hindu",business,88.0,false,0,0,0,,,0.00,0.00
+2026-10-09,f054da9dc7da1b75,cd5df0107a4eecf0,"Paramount and Warner Bros merge to become one Hollywood giant, Skydance","Business News Today – Finance, Industry & Economy | The Hindu",business,88.0,false,0,0,0,1,,0.00,0.00
 2026-10-09,f4bc00742a8df86e,5274e30caeaf8623,Moment Nasa scientist Margaret Hamilton receives presidential medal of honour,BBC News,science,88.4,false,1,1,0,,,0.80,0.85
 2026-10-09,665cea57bf8e8408,ae6387de5422db24,How Telangana’s MeeSeva migration to open source could make governments rethink software costs,"Technology News Today, Latest Tech News | The Hindu",technology,86.6,false,1,1,0,,,0.80,0.85
 2026-10-09,4fa9e44518bb6b90,a00af75848ec92e4,Why have SLBCs/UTLBCs been asked to report SC beneficiary data for key government schemes for jobs and entrepreneurship? | Explained,"Business News Today – Finance, Industry & Economy | The Hindu",business,100,false,0,0,0,,,0.00,0.00
 2026-10-09,5d63e9a457af9580,dd4fe851608a2f4b,Flávio Bolsonaro’s advance in Brazil’s election is grim jolt for climate campaigners,World news | The Guardian,world,100,false,0,0,0,,,0.00,0.00
 2026-10-09,7b74d3ee44da7e1a,c6ad8f012c5ecff8,Plans for Sydney’s controversial new public square in doubt after NSW government intervention,World news | The Guardian,world,92.8,false,1,0,0,,,0.45,0.45
-2026-10-09,1dbacd7db44a765e,af9ffaeb9fe5681e,HCLTech rolls out a bouquet of industry AI solutions,"Business News Today – Finance, Industry & Economy | The Hindu",business,86.9,false,0,0,0,,,0.00,0.00
+2026-10-09,1dbacd7db44a765e,af9ffaeb9fe5681e,HCLTech rolls out a bouquet of industry AI solutions,"Business News Today – Finance, Industry & Economy | The Hindu",business,86.9,false,0,0,0,1,,0.00,0.00
 2026-10-09,fe3eff633dc60241,429a59e7266c292f,"Fort Hood attacker's execution by firing squad will be livestreamed, Pentagon says",BBC News,world,89.1,false,0,0,0,,,0.00,0.00
 2026-10-09,2b0056b83a85d7be,2dd275cfd28f15d5,Protesters blame 'vulture funds' for Spain's housing crisis,BBC News,world,93.0,false,0,0,0,,,0.00,0.00
 2026-10-09,371e7d49418c3e13,2782a39919acf707,"Sensex hits a three-year low amid rising crude prices, reaction to RBI policy","Business News Today – Finance, Industry & Economy | The Hindu",business,86.4,false,0,0,0,,,0.00,0.00
@@ -6051,12 +6051,12 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-09,85ce35c195866f84,5a175e23b7030c0d,Why are there so many mushrooms around this year?,BBC News,science,74.3,false,0,0,0,,,0.00,0.00
 2026-10-09,17b376907e941b74,5ba754d25908991d,Chemistry Nobel awarded for solving mystery of life's asymmetry,BBC News,science,75.0,false,0,0,0,,,0.00,0.00
 2026-10-09,265efb0a04b93fad,a381c4486dfa5ac7,World's largest penguin colony hit by 'alarming' decline in numbers,BBC News,science,72.0,false,0,0,0,,,0.00,0.00
-2026-10-10,be47c43cb1101835,6ecae8896a6dc9ce,Trump’s move to suspend PERM programme for Indian IT majors raises talent-retention concerns,"Business News Today – Finance, Industry & Economy | The Hindu",business,88.1,false,1,0,0,,,0.45,0.45
+2026-10-10,be47c43cb1101835,6ecae8896a6dc9ce,Trump’s move to suspend PERM programme for Indian IT majors raises talent-retention concerns,"Business News Today – Finance, Industry & Economy | The Hindu",business,88.1,false,1,0,0,1,,0.45,0.45
 2026-10-10,add0478625bee0f1,83d09ac9e78c7ef0,"Kevin Rudd warns U.S., China of potential AI security crisis, calls for urgent cooperation","Technology News Today, Latest Tech News | The Hindu",technology,87.9,false,1,1,1,1,,1.00,1.00
 2026-10-10,665cea57bf8e8408,ae6387de5422db24,How Telangana’s MeeSeva migration to open source could make governments rethink software costs,"Technology News Today, Latest Tech News | The Hindu",technology,86.6,false,1,0,0,,,0.45,0.45
 2026-10-10,186d8dacee5971cd,b17e0c1a54257c51,Rupee rises 16 paise to close at 96.72 against U.S. dollar,"Business News Today – Finance, Industry & Economy | The Hindu",business,98.6,true,1,1,0,,,0.80,0.85
-2026-10-10,9d87073a757afb09,a1d2e046eee5c26f,"Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade","Business News Today – Finance, Industry & Economy | The Hindu",business,93.1,false,1,1,0,,,0.80,0.85
-2026-10-10,70bc052fa435833d,9f21c1eb41153c7a,India’s share of global greenfield investments more than double China’s in 2020-25,"Business News Today – Finance, Industry & Economy | The Hindu",business,90.7,false,1,1,0,,,0.80,0.85
+2026-10-10,9d87073a757afb09,a1d2e046eee5c26f,"Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade","Business News Today – Finance, Industry & Economy | The Hindu",business,93.1,false,1,1,0,1,,0.80,0.85
+2026-10-10,70bc052fa435833d,9f21c1eb41153c7a,India’s share of global greenfield investments more than double China’s in 2020-25,"Business News Today – Finance, Industry & Economy | The Hindu",business,90.7,false,1,1,0,1,,0.80,0.85
 2026-10-10,7e7f02160113c93e,3be7ac4c12fb4195,"Elon Musk ups ante in Starlink row, sarcastically calls Ambani ‘Prime Minister’, alleges monopoly","Business News Today – Finance, Industry & Economy | The Hindu",business,87.1,false,0,0,0,,,0.00,0.00
 2026-10-10,4fa222e73280d475,166dca6a7c3b5665,Boots has a new owner: Three ways it could affect you,BBC News,business,90.6,false,0,0,0,,,0.00,0.00
 2026-10-10,d845fc131c3fe597,1d3621ee5c3633ef,President Trump awards Big Tech donors with nation’s highest science prizes,TechCrunch,technology,86.9,false,0,0,0,,,0.00,0.00
@@ -6235,3 +6235,25 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-17,8b8eeab246834158,9436049cb5641ed8,US senators call for investigation into Ukraine's Starlink restrictions,BBC News,science,75.0,false,,,,,,,
 2026-10-17,c5561490eaa04114,ae4de3bed7f35ddb,"Two dead in Istanbul after heaviest rainfall in 84 years, governor says",BBC News,science,73.7,false,,,,,,,
 2026-10-17,75b43b898862c659,abc6f97fc82951a0,Meta denies accusation of anti-Lula political bias in Brazil after electoral court ruling,"Technology News Today, Latest Tech News | The Hindu",technology,90.9,false,,,,,,,
+2026-10-17,561cefa737df0760,61af368abd18e3ad,"AI data-centre boom puts India’s power grid under pressure, drives up upgrade costs","Business News Today – Finance, Industry & Economy | The Hindu",business,89.4,false,,,,,,,
+2026-10-17,8256a9e9b40ccb2d,50e7da2919e7dad9,Presidential adviser says Ukraine is in talks to lift speed limit on military satellite network,"Technology News Today, Latest Tech News | The Hindu",technology,100,false,,,,,,,
+2026-10-17,186d8dacee5971cd,b17e0c1a54257c51,Rupee rises 16 paise to close at 96.72 against U.S. dollar,"Business News Today – Finance, Industry & Economy | The Hindu",business,98.6,false,,,,,,,
+2026-10-17,70bc052fa435833d,9f21c1eb41153c7a,India’s share of global greenfield investments more than double China’s in 2020-25,"Business News Today – Finance, Industry & Economy | The Hindu",business,94.7,false,,,,,,,
+2026-10-17,9d87073a757afb09,a1d2e046eee5c26f,"Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade","Business News Today – Finance, Industry & Economy | The Hindu",business,93.1,true,,,,,,,
+2026-10-17,be47c43cb1101835,6ecae8896a6dc9ce,Trump’s move to suspend PERM programme for Indian IT majors raises talent-retention concerns,"Business News Today – Finance, Industry & Economy | The Hindu",business,92.1,false,,,,,,,
+2026-10-17,f054da9dc7da1b75,cd5df0107a4eecf0,"Paramount and Warner Bros merge to become one Hollywood giant, Skydance","Business News Today – Finance, Industry & Economy | The Hindu",business,88.0,false,,,,,,,
+2026-10-17,1dbacd7db44a765e,af9ffaeb9fe5681e,HCLTech rolls out a bouquet of industry AI solutions,"Business News Today – Finance, Industry & Economy | The Hindu",business,86.9,false,,,,,,,
+2026-10-17,cc3b9b70fff8eee6,42737733190e8eb8,Manipur needed this much security: Mamata-TMC over police deployment in Delhi for anti-SIR stir,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.1,false,,,,,,,
+2026-10-17,29954aaee1f04489,a79bf74cebc0bc7f,Iran helping Houthis: How Tehran is hitting Saudi Arabia without fighting directly,Times of India,world,97.5,false,,,,,,,
+2026-10-17,8d5d83c1f2b20eaa,1f925d202bb13fe1,Top Pakistan commander criticises Rajnath Singh’s remarks on future terror attacks,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,100,false,,,,,,,
+2026-10-17,c68f474049b75d25,02193b214ff81d3f,"Delhi protest: Stopped at police barricades, daily-wage workers lose day’s earnings",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,100,false,,,,,,,
+2026-10-17,2551c05685875bfb,a8b845cf1ce3e39d,Encounter breaks out between forces and terrorists in J&K’s Kupwara,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,95.3,false,,,,,,,
+2026-10-17,959ced908e522eba,afcd3d45402f522e,USCIS: Anyone who ‘guarantees’ a faster visa or Green Card is scamming you,Times of India,india,100,false,,,,,,,
+2026-10-17,495e2b56fd675bea,dcfb4857adaf68e0,India’s Zorawar light tank faces protection and performance trade-off,Times of India,india,97.7,false,,,,,,,
+2026-10-17,47ca8f24a05d889c,7b31de122990896e,"India hits back at UN rapporteur over youth protests, calls report ‘hearsay, unverified claims’","World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",india,88.2,false,,,,,,,
+2026-10-17,ea55966204596273,5777763d61f62047,"Don’t be afraid, stand up for what you believe in, Rahul tells agitating students",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,87.7,false,,,,,,,
+2026-10-17,6c10a25d11d5994f,7388c92caa3011fa,‘Austerity is inevitably painful’: How Michael Gove justifies his politics | Radical Thinking with Aditya Chakrabortty – podcast,World news | The Guardian,world,87.4,false,,,,,,,
+2026-10-17,664f028753c96212,dc56f3574f57f256,Russian man linked to deadly London hospitals hack arrested,BBC News,technology,79.3,false,,,,,,,
+2026-10-17,8817bd57e8130027,a94269cbb30365c5,Inside Ukrainian offensive pushing Russia back - with Starlink playing a key role,BBC News,world,85.1,false,,,,,,,
+2026-10-17,c7d9ea1f5b8a3c17,3eb71ca5dd9c8e61,Slick diplomacy: Trump’s crude u-turn on Russia sanctions bails out India,Times of India,world,85.8,false,,,,,,,
+2026-10-17,e8f922e607678098,86d32d2ad03b5516,Avian flu and costs among reasons for loss of captive birds at Castle Espie,BBC News,science,74.4,false,,,,,,,
