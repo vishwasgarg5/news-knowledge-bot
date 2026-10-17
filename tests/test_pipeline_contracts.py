@@ -271,6 +271,19 @@ def test_backtest_v2_contract(tmp_path):
     calibration=calibrate_learning_threshold(tmp_path)
     assert {"threshold","precision","recall","f1","samples"} <= calibration.keys()
 
+def test_evidence_corroboration_rejects_shared_geography_only():
+    from app.ai import _corroboration_score
+
+    sanctions = "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade"
+    unrelated_iran = "Femicide in Iran: When honor becomes a death sentence"
+    unrelated_india = "India protesters defy government crackdown over voting rights"
+    corroborating = "US sanctions firms over Iran oil trade network"
+
+    assert _corroboration_score(sanctions, unrelated_iran) == 0.0
+    assert _corroboration_score(sanctions, unrelated_india) == 0.0
+    assert _corroboration_score(sanctions, corroborating) >= 0.55
+
+
 def test_unrelated_unclustered_stories_keep_distinct_event_families():
     from app.ai import rerank_stories
     from app.advanced import consolidate_event_families
