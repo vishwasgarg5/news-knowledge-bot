@@ -790,3 +790,14 @@ def test_research_report_status_is_not_hardcoded_to_queued():
     ])
     assert [row["status"] for row in reports] == ["CORROBORATED", "RESEARCH_REQUIRED"]
     assert reports[0]["actions"] != reports[1]["actions"]
+
+
+def test_telegram_chunks_split_oversized_single_lines():
+    from app.telegram import chunks
+
+    payload = "<b>" + ("longheadline " * 900) + "</b>"
+    parts = chunks(payload, 1200)
+    assert len(parts) > 1
+    assert all(len(part) <= 1200 for part in parts)
+    assert all(part.startswith("<b>") and part.endswith("</b>") for part in parts)
+    assert sum(part.count("longheadline") for part in parts) == 900
