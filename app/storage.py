@@ -51,6 +51,23 @@ def read_rows(path:Path)->list[dict]:
     if not path.exists():return []
     with path.open(newline="",encoding="utf-8") as f:return list(csv.DictReader(f))
 
+
+def outcome_is_mature(row: dict) -> bool:
+    """Only train/evaluate on outcomes with a completed 7-day observation window.
+
+    Persisted CSV rows always contain seen_again_7d, so a blank value means the
+    outcome is provisional. Synthetic in-memory fixtures that omit this column
+    remain usable for deterministic unit tests and explicit experiments.
+    """
+    if not isinstance(row, dict):
+        return False
+    horizon = str(row.get("seen_again_7d", "")).strip()
+    if horizon in {"0", "1"}:
+        return True
+    if "seen_again_7d" not in row:
+        return str(row.get("outcome_score") or row.get("learning_value") or "").strip() not in {"", "None"}
+    return False
+
 def append_rows(path:Path,rows:list[dict],fields:list[str]):
     if not rows:return
     header=not path.exists() or path.stat().st_size==0
