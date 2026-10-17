@@ -801,3 +801,17 @@ def test_telegram_chunks_split_oversized_single_lines():
     assert all(len(part) <= 1200 for part in parts)
     assert all(part.startswith("<b>") and part.endswith("</b>") for part in parts)
     assert sum(part.count("longheadline") for part in parts) == 900
+
+
+def test_diversification_source_limit_uses_canonical_publisher_domain():
+    from app.advanced import diversify_stories
+
+    stories = [
+        {"story_id": "r1", "event_id": "e1", "region": "india", "source": "Reuters India", "url": "https://www.reuters.com/world/a", "importance": 99},
+        {"story_id": "r2", "event_id": "e2", "region": "india", "source": "Reuters", "url": "https://reuters.com/world/b", "importance": 98},
+        {"story_id": "b1", "event_id": "e3", "region": "world", "source": "BBC News", "url": "https://www.bbc.com/news/c", "importance": 97},
+    ]
+    result = diversify_stories(stories, max_total=3, india_target=2, world_target=1, max_per_source=1)
+    assert len(result) == 2
+    assert sum("reuters.com" in row["url"] for row in result) == 1
+    assert sum("bbc.com" in row["url"] for row in result) == 1
