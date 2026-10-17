@@ -190,7 +190,16 @@ jobs:
           assert 0.0 <= float(stats["research_completion_rate"]) <= 1.0
           assert "v5_research_agent" in stats
           assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
-          print("Final audit artifact validated")
+          # A held research/coverage gate must not be reported as a clean final audit.
+          gate=stats.get("v5_quality_gate") or {}
+          final=stats.get("final_audit") or {}
+          if gate.get("status") == "HOLD":
+              assert final.get("health") != "PASS", "Final audit must surface a held production quality gate"
+          scorecard=stats.get("intelligence_scorecard") or {}
+          assert 0 <= int(scorecard.get("verified",0) or 0) <= int(scorecard.get("stories",0) or 0)
+          completion=float(stats.get("research_completion_rate",0) or 0)
+          assert 0.0 <= completion <= 1.0
+          print("Final audit artifact validated with production gate consistency checks")
           PY
 
       - name: Upload final briefing audit
