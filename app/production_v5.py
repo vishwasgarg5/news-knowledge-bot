@@ -171,7 +171,25 @@ def autonomous_research_agent(queue,history):
     return [{"headline":x.get("headline",""),"priority":x.get("priority",0),"actions":["verify primary source","search independent reports","compare historical events","recheck next run"],"retrieved_evidence":x.get("retrieved_evidence",[]),"evidence_count":x.get("evidence_count",0),"research_status":x.get("research_status","RESEARCH_REQUIRED")} for x in queue or []]
 
 def generate_research_reports(agent_queue):
-    return [{"title":"Automated Intelligence Research","headline":x["headline"],"priority":x["priority"],"status":"QUEUED","actions":x["actions"]} for x in agent_queue]
+    reports=[]
+    for item in agent_queue or []:
+        status=str(item.get("research_status","RESEARCH_REQUIRED"))
+        if status=="CORROBORATED":
+            actions=["retain evidence links","monitor for material updates","compare with historical analogue"]
+        elif status=="EVIDENCE_RETRIEVED":
+            actions=["review retrieved evidence relevance","find another independent publisher","check primary-source freshness"]
+        else:
+            actions=["find current primary source","search independent reporting","record unresolved claims explicitly"]
+        reports.append({
+            "title":"Automated Intelligence Research",
+            "headline":item.get("headline",""),
+            "priority":item.get("priority",0),
+            "status":status,
+            "independent_source_count":int(item.get("independent_source_count",0) or 0),
+            "evidence_count":int(item.get("evidence_count",0) or 0),
+            "actions":actions,
+        })
+    return reports
 
 def followup_research_plan(stories):
     return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
