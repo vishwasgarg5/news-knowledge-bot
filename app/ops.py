@@ -49,9 +49,30 @@ def operational_health(stats):
 def final_audit(stats, stories):
     health=operational_health(stats)
     conf=confidence_snapshot(stories)
+    evaluation=stats.get("v5_production_evaluation") or {}
+    evidence=evaluation.get("evidence") or {}
+    coverage=stats.get("regional_coverage_audit") or {}
+    gap_rate=_f(evidence.get("evidence_gap_rate"),1.0)
+    evidence_ok=bool(evidence) and gap_rate<=0.25
+    coverage_ok=(
+        _f(coverage.get("india_shortfall"))==0
+        and _f(coverage.get("world_shortfall"))==0
+    ) if coverage else True
+    checks=dict(health["checks"])
+    checks["evidence"]=evidence_ok
+    checks["regional_coverage"]=coverage_ok
+    blockers=[]
+    if not evidence_ok: blockers.append("evidence_gaps")
+    if not coverage_ok: blockers.append("regional_coverage_shortfall")
+    status=health["status"]
+    if blockers and status=="PASS":
+        status="DEGRADED"
     return {
-        "health":health["status"],
-        "checks":health["checks"],
+        "health":status,
+        "checks":checks,
+        "blockers":blockers,
+        "evidence_gap_rate":round(gap_rate,3) if evidence else None,
+        "production_quality_gate":(stats.get("v5_quality_gate") or {}).get("status","UNKNOWN"),
         "stories":len(stories),
         "india":sum(str(x.get("region","")).lower()=="india" for x in stories),
         "world":sum(str(x.get("region","")).lower()=="world" for x in stories),
