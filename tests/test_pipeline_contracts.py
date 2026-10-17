@@ -613,4 +613,4 @@ def test_single_main_workflow_and_no_push_trigger_after_guardrail_changes():
     triggers=workflow.get(True) or workflow.get("on") or {}
     assert "workflow_dispatch" in triggers and "schedule" in triggers
     assert "push" not in triggers and "pull_request" not in triggers
-    assert "actions/upload-artifact@v6" in read(".github/workflows/morning_news.yml")
+    assert "actions/upload-artifact@v7" in read(".github/workflows/morning_news.yml")
