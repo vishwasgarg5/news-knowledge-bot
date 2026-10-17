@@ -2,6 +2,7 @@ from __future__ import annotations
 from collections import Counter
 from statistics import mean, stdev
 import math
+from .storage import outcome_is_mature
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -53,7 +54,7 @@ def _best_v5_policy(train):
 
 def walk_forward_v5(rows,train_min=60,test_window=30):
     """Leakage-safe V5: learn a constrained composite score + threshold on each training window."""
-    clean=sorted([r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}],
+    clean=sorted([r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}],
                  key=lambda r:str(r.get("run_date","")))
     folds=[]; i=train_min
     while i<len(clean):
@@ -94,7 +95,7 @@ def _evaluate_rows(rows, scorer):
     return precision,recall,f1
 
 def _fixed_threshold_eval(rows,threshold=50,train_min=60,test_window=30):
-    clean=sorted([r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}], key=lambda r:str(r.get("run_date","")))
+    clean=sorted([r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}], key=lambda r:str(r.get("run_date","")))
     folds=[]; i=train_min
     while i<len(clean):
         test=clean[i:i+test_window]
@@ -120,7 +121,7 @@ def shadow_ab_test(v4_rows,v5_rows,train_min=60,test_window=30):
     return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"delta_precision":round(b["precision"]-a["precision"],3),"f1_confidence_interval":f1_ci,"precision_confidence_interval":precision_ci,"paired_folds":n,"promote":promote,"promotion_rule":"V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"}
 
 def calibration_monitor(rows,bins=10):
-    clean=[r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"}]
+    clean=[r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
     out=[]; total_abs=0.0; brier=0.0
     for i in range(bins):
         lo=i/bins; hi=(i+1)/bins
@@ -138,8 +139,9 @@ def calibration_monitor(rows,bins=10):
 def calibrate_confidence(initial_score, rows, bins=10):
     """Map a raw 0-100 score to an empirical outcome probability with shrinkage."""
     score=max(0,min(100,_f(initial_score))); idx=min(bins-1,int(score/100*bins)); lo=idx/bins; hi=(idx+1)/bins
-    bucket=[r for r in rows or [] if str(r.get("outcome_score","")).strip() not in {"","None"} and (lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi))]
-    global_rate=sum(_label(r) for r in rows or [])/max(1,len(rows or []))
+    mature=[r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
+    bucket=[r for r in mature if (lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi))]
+    global_rate=sum(_label(r) for r in mature)/max(1,len(mature))
     rate=(sum(_label(r) for r in bucket)+4*global_rate)/(len(bucket)+4)
     return round(rate*100,1)
 def drift_monitor(current,baseline):
