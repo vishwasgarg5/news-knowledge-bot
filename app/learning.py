@@ -4,7 +4,7 @@ from collections import defaultdict
 import re
 from datetime import date
 from pathlib import Path
-from .storage import HEADERS, append_rows, read_rows
+from .storage import HEADERS, append_rows, read_rows, outcome_is_mature
 
 def _f(v,default=0.0):
     try:return float(v)
@@ -26,6 +26,7 @@ def _same_event(event_id,headline,current):
 def _profile(rows):
     by_source=defaultdict(lambda:[0,0.0]); by_cat=defaultdict(lambda:[0,0.0])
     for r in rows:
+        if not outcome_is_mature(r): continue
         if str(r.get("selected","")).lower()!="true": continue
         val=_f(r.get("outcome_score") or r.get("learning_value"),0)
         by_source[r.get("source","unknown") or "unknown"][0]+=1; by_source[r.get("source","unknown") or "unknown"][1]+=val
@@ -109,7 +110,7 @@ def apply_learning(candidates,profile):
 
 
 def learning_metrics(rows):
-    labeled=[r for r in rows if r.get("learning_value")]
+    labeled=[r for r in rows if r.get("learning_value") and outcome_is_mature(r)]
     selected=[r for r in labeled if str(r.get("selected","")).lower()=="true"]
     misses=[r for r in rows if str(r.get("missed",""))=="1"]
     fp=[r for r in rows if str(r.get("false_positive",""))=="1"]
