@@ -273,7 +273,8 @@ jobs:
           assert wf['leakage_safe'] is True
           assert 'f1' in wf and 'bins' in cal
           assert drift['status'] in {'STABLE','DRIFT'}
-          assert set(evidence)=={'contradictions','evidence_gaps'}
+          assert {'stories','contradictions','evidence_gaps','evidence_gap_rate','corroborated'} <= set(evidence)
+          assert evidence['stories'] == 0 and evidence['evidence_gaps'] == []
           assert isinstance(followup_research_plan([]),list)
           print('Intelligence V5 production gate 27-40 passed')
           PY
