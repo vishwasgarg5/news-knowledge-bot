@@ -18,9 +18,19 @@ def confidence_snapshot(stories):
         "low_confidence":sum(x<60 for x in calibrated),
     }
 
-def historical_trend(history, days=7):
-    cutoff=(date.today()-timedelta(days=max(1,int(days))-1)).isoformat()
-    rows=[x for x in (history or []) if str(x.get("date",""))[:10] >= cutoff]
+def historical_trend(history, days=7, as_of=None):
+    """Summarize a closed calendar window ending at as_of (today by default).
+
+    An explicit anchor keeps reports and contract tests reproducible and prevents
+    future-dated records from contaminating historical trend counts.
+    """
+    try:
+        anchor = as_of if isinstance(as_of, date) else date.fromisoformat(str(as_of)[:10]) if as_of else date.today()
+    except (TypeError, ValueError):
+        anchor = date.today()
+    cutoff=(anchor-timedelta(days=max(1,int(days))-1)).isoformat()
+    end=anchor.isoformat()
+    rows=[x for x in (history or []) if cutoff <= str(x.get("date",""))[:10] <= end]
     by_day=Counter(str(x.get("date","")) for x in rows if x.get("date"))
     by_region=Counter(str(x.get("region","world")).lower() for x in rows)
     by_status=Counter(str(x.get("event_status","NEW")) for x in rows)
