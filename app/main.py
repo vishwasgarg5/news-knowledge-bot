@@ -19,6 +19,7 @@ from .production import time_series_backtest,feedback_snapshot,feedback_adjustme
 from .intelligence_v5 import intelligence_v5
 from .intelligence_v5_plus import run_v5_plus,answer_news_question,research_report
 from .production_v5 import walk_forward_v5,shadow_ab_test,calibration_monitor,drift_monitor,autonomous_research_agent,generate_research_reports,contradiction_and_evidence,followup_research_plan,production_evaluation
+from .guardrails import temporal_drift_windows,coverage_audit
 from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
@@ -452,12 +453,14 @@ def main():
     v5_wf=walk_forward_v5(learning_rows)
     v5_ab=shadow_ab_test(learning_rows,learning_rows)
     v5_calibration=calibration_monitor(learning_rows)
-    v5_drift=drift_monitor(v5plus["stories"],read_rows(DATA/"news_history.csv"))
+    drift_windows=temporal_drift_windows(learning_rows)
+    v5_drift=drift_monitor(drift_windows["current"],drift_windows["baseline"])
+    v5_drift["windows"]={k:drift_windows.get(k) for k in ("method","current_start","current_end","baseline_start","baseline_end")}
     v5_evidence=contradiction_and_evidence(v5plus["stories"])
     v5_followups=followup_research_plan(v5plus["stories"])
     v5_agent=autonomous_research_agent(v5plus["research_queue"],read_rows(DATA/"news_history.csv"))
     v5_reports=generate_research_reports(v5_agent)
-    v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"))
+    v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"),drift_current=drift_windows["current"],drift_baseline=drift_windows["baseline"],coverage=coverage_audit(v5plus["stories"],int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5"))))
     stats["v5_walk_forward"]=v5_wf
     stats["v5_ab_test"]=v5_ab
     stats["v5_calibration"]=v5_calibration
@@ -468,7 +471,9 @@ def main():
     stats["v5_research_reports"]=v5_reports
     stats["v5_production_evaluation"]=v5_eval
     stats["v5_quality_gate"]=v5_eval.get("quality_gate",{})
-    stats["research_completion_rate"]=round(sum(1 for x in v5plus["research_queue"] if x.get("evidence_count",0)>0)/max(1,len(v5plus["research_queue"])),3)
+    stats["regional_coverage_audit"]=coverage_audit(result.get("top_stories",[]),int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5")))
+    stats["research_completion_rate"]=round(sum(1 for x in v5plus["research_queue"] if x.get("research_status")=="CORROBORATED")/max(1,len(v5plus["research_queue"])),3)
+    stats["research_completion_definition"]="share of queued stories with evidence from at least two distinct publishers; evidence retrieval alone is not completion"
 
     for s in result.get("top_stories",[]):
         s["event_id"]=s.get("event_id") or next((x.get("event_id") for x in v5plus["stories"] if x.get("headline")==s.get("headline")), "")

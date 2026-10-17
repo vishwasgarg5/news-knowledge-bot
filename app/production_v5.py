@@ -3,6 +3,7 @@ from collections import Counter
 from statistics import mean, stdev
 import math
 from .storage import outcome_is_mature
+from .guardrails import production_readiness_gate, evidence_audit
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -46,11 +47,13 @@ def _best_v5_policy(train):
             weights=(base_w,source_w,category_w)
             for threshold in [x/100 for x in range(45,81,5)]:
                 p,r,f1=_evaluate_rows(valid,lambda row,w=weights,t=threshold:_score_row(row,rates,w)>=t)
-                candidate=(f1,p,r,weights,threshold)
-                if best is None or candidate[:3]>best[:3]: best=candidate
+                beta2=2.25
+                f_beta=(1+beta2)*p*r/max(1e-9,beta2*p+r)
+                candidate=(f_beta,f1,p,r,weights,threshold)
+                if best is None or candidate[:4]>best[:4]: best=candidate
     full_rates=_fit_rates(train)
-    p,r,f1=_evaluate_rows(train,lambda row,w=best[3],t=best[4]:_score_row(row,full_rates,w)>=t)
-    return {"rates":full_rates,"weights":best[3],"threshold":best[4],"train_f1":round(f1,3),"train_precision":round(p,3),"train_recall":round(r,3),"validation_f1":round(best[0],3),"validation_precision":round(best[1],3),"validation_recall":round(best[2],3)}
+    p,r,f1=_evaluate_rows(train,lambda row,w=best[4],t=best[5]:_score_row(row,full_rates,w)>=t)
+    return {"rates":full_rates,"weights":best[4],"threshold":best[5],"train_f1":round(f1,3),"train_precision":round(p,3),"train_recall":round(r,3),"validation_f_beta_1_5":round(best[0],3),"validation_f1":round(best[1],3),"validation_precision":round(best[2],3),"validation_recall":round(best[3],3)}
 
 def walk_forward_v5(rows,train_min=60,test_window=30):
     """Leakage-safe V5: learn a constrained composite score + threshold on each training window."""
@@ -107,92 +110,54 @@ def _fixed_threshold_eval(rows,threshold=50,train_min=60,test_window=30):
 
 def _delta_ci(values):
     vals=[float(x) for x in values]
-    if len(vals)<2: return {"mean":round(vals[0],3) if vals else 0.0,"lower":None,"upper":None,"significant":False,"n":len(vals)}
-    mu=mean(vals); se=stdev(vals)/math.sqrt(len(vals)); margin=1.96*se
+    if len(vals)<5: return {"mean":round(mean(vals),3) if vals else 0.0,"lower":None,"upper":None,"significant":False,"n":len(vals)}
+    mu=mean(vals); se=stdev(vals)/math.sqrt(len(vals)); critical={5:2.776,6:2.571,7:2.447,8:2.365,9:2.306,10:2.262,11:2.228,12:2.201}.get(len(vals),1.96 if len(vals)>=30 else 2.10); margin=critical*se
     return {"mean":round(mu,3),"lower":round(mu-margin,3),"upper":round(mu+margin,3),"significant":bool(mu>0 and mu-margin>0),"n":len(vals)}
-
-def shadow_ab_test(v4_rows,v5_rows,train_min=60,test_window=30):
-    a=_fixed_threshold_eval(v4_rows,50,train_min,test_window); b=walk_forward_v5(v5_rows,train_min,test_window)
-    n=min(len(a["folds"]),len(b["folds"])); deltas=[b["folds"][i]["f1"]-a["folds"][i]["f1"] for i in range(n)]
-    precision_deltas=[b["folds"][i]["precision"]-a["folds"][i]["precision"] for i in range(n)]
-    f1_ci=_delta_ci(deltas); precision_ci=_delta_ci(precision_deltas)
-    delta=round(b["f1"]-a["f1"],3)
-    promote=bool(delta>0 and b["precision"]>a["precision"] and f1_ci["significant"] and precision_ci["mean"]>0 and a.get("leakage_safe") and b.get("leakage_safe"))
-    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"delta_precision":round(b["precision"]-a["precision"],3),"f1_confidence_interval":f1_ci,"precision_confidence_interval":precision_ci,"paired_folds":n,"promote":promote,"promotion_rule":"V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"}
-
 def calibration_monitor(rows,bins=10):
-    clean=[r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
-    out=[]; total_abs=0.0; brier=0.0
+    """Fit score-to-outcome calibration on earlier rows and evaluate later rows only."""
+    clean=sorted([dict(r) for r in (rows or []) if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}],key=lambda r:str(r.get("run_date","")))
+    n=len(clean)
+    if n<60: return {"bins":[],"samples":0,"train_samples":n,"holdout_samples":0,"ece":None,"brier":None,"status":"INSUFFICIENT_DATA","method":"chronological_holdout"}
+    split=max(40,int(n*0.70))
+    if n-split<20: split=n-20
+    train,holdout=clean[:split],clean[split:]
+    def score_bin(row): return min(bins-1,int(max(0,min(100,_f(row.get("initial_score"))))/100*bins))
+    global_rate=sum(_label(r) for r in train)/max(1,len(train)); counts=Counter(); hits=Counter()
+    for row in train:
+        key=score_bin(row); counts[key]+=1; hits[key]+=int(_label(row))
+    rates={i:(hits[i]+8*global_rate)/(counts[i]+8) for i in range(bins)}
+    scored=[]
+    for row in holdout:
+        raw=max(0,min(1,_f(row.get("initial_score"))/100)); pred=max(0,min(1,rates[score_bin(row)])); scored.append((raw,pred,1.0 if _label(row) else 0.0))
+    ece=0.0; raw_ece=0.0; bucket_rows=[]
     for i in range(bins):
         lo=i/bins; hi=(i+1)/bins
-        bucket=[r for r in clean if lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (i==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi)]
-        predicted=[max(0,min(1,_f(r.get("initial_score"))/100)) for r in bucket]
-        actual=[1.0 if _label(r) else 0.0 for r in bucket]
-        mean_pred=mean(predicted) if predicted else None; actual_rate=mean(actual) if actual else None
-        gap=abs(mean_pred-actual_rate) if bucket else 0.0; total_abs+=gap*len(bucket)
-        brier+=sum((p-y)**2 for p,y in zip(predicted,actual))
-        out.append({"bin":f"{lo:.1f}-{hi:.1f}","samples":len(bucket),"mean_predicted":round(mean_pred,3) if mean_pred is not None else None,"actual_rate":round(actual_rate,3) if actual_rate is not None else None,"gap":round(gap,3) if bucket else None})
-    n=len(clean)
-    ece=total_abs/max(1,n)
-    return {"bins":out,"samples":n,"ece":round(ece,3),"brier":round(brier/max(1,n),3),"status":"CALIBRATED" if ece<=0.08 else ("OVER_CONFIDENT" if sum(1 for x in out if x["gap"] is not None and x["mean_predicted"]>x["actual_rate"] and x["gap"]>.10)>len([x for x in out if x["gap"] is not None])/2 else "UNDER_CONFIDENT")}
-
-def calibrate_confidence(initial_score, rows, bins=10):
-    """Map a raw 0-100 score to an empirical outcome probability with shrinkage."""
-    score=max(0,min(100,_f(initial_score))); idx=min(bins-1,int(score/100*bins)); lo=idx/bins; hi=(idx+1)/bins
-    mature=[r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
-    bucket=[r for r in mature if (lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi))]
-    global_rate=sum(_label(r) for r in mature)/max(1,len(mature))
-    rate=(sum(_label(r) for r in bucket)+4*global_rate)/(len(bucket)+4)
-    return round(rate*100,1)
+        bucket=[x for x in scored if lo<=x[1]<hi or (i==bins-1 and x[1]==hi)]
+        raw_bucket=[x for x in scored if lo<=x[0]<hi or (i==bins-1 and x[0]==hi)]
+        if bucket:
+            mp=mean(x[1] for x in bucket); ar=mean(x[2] for x in bucket); ece+=abs(mp-ar)*len(bucket)/max(1,len(scored))
+            bucket_rows.append({"bin":f"{lo:.1f}-{hi:.1f}","samples":len(bucket),"mean_predicted":round(mp,3),"actual_rate":round(ar,3),"gap":round(abs(mp-ar),3)})
+        if raw_bucket: raw_ece+=abs(mean(x[0] for x in raw_bucket)-mean(x[2] for x in raw_bucket))*len(raw_bucket)/max(1,len(scored))
+    brier=sum((pred-y)**2 for _,pred,y in scored)/max(1,len(scored)); mean_pred=mean(x[1] for x in scored); observed=mean(x[2] for x in scored)
+    status="CALIBRATED" if ece<=0.10 else ("OVER_CONFIDENT" if mean_pred>observed else "UNDER_CONFIDENT")
+    return {"bins":bucket_rows,"samples":len(scored),"train_samples":len(train),"holdout_samples":len(holdout),"ece":round(ece,3),"raw_ece":round(raw_ece,3),"brier":round(brier,3),"status":status,"method":"chronological_holdout_smoothed_score_bins","holdout_start":str(holdout[0].get("run_date",""))[:10],"holdout_end":str(holdout[-1].get("run_date",""))[:10],"leakage_safe":True}
 def drift_monitor(current,baseline):
-    cur=Counter(str(r.get("category","unknown")) for r in current); base=Counter(str(r.get("category","unknown")) for r in baseline)
-    keys=set(cur)|set(base); n=max(1,len(current)); m=max(1,len(baseline))
-    drift=mean(abs(cur[k]/n-base[k]/m) for k in keys) if keys else 0.0
-    return {"mean_distribution_shift":round(drift,4),"status":"DRIFT" if drift>=0.15 else "STABLE"}
-
-def autonomous_research_agent(queue,history):
-    return [{"headline":x.get("headline",""),"priority":x.get("priority",0),"actions":["verify primary source","search independent reports","compare historical events","recheck next run"],"retrieved_evidence":x.get("retrieved_evidence",[]),"evidence_count":x.get("evidence_count",0),"research_status":x.get("research_status","RESEARCH_REQUIRED")} for x in queue or []]
-
-def generate_research_reports(agent_queue):
-    return [{"title":"Automated Intelligence Research","headline":x["headline"],"priority":x["priority"],"status":"QUEUED","actions":x["actions"]} for x in agent_queue]
-
+    """Compare category distributions on distinct reference/current windows."""
+    current=[r for r in (current or []) if isinstance(r,dict)]; baseline=[r for r in (baseline or []) if isinstance(r,dict)]
+    if len(current)<20 or len(baseline)<20: return {"mean_distribution_shift":None,"status":"UNKNOWN","current_samples":len(current),"baseline_samples":len(baseline),"method":"total_variation"}
+    cur=Counter(str(r.get("category","unknown") or "unknown").lower() for r in current); base=Counter(str(r.get("category","unknown") or "unknown").lower() for r in baseline)
+    keys=set(cur)|set(base); n=len(current); m=len(baseline); drift=0.5*sum(abs(cur[k]/n-base[k]/m) for k in keys)
+    return {"mean_distribution_shift":round(drift,4),"status":"DRIFT" if drift>=0.20 else "STABLE","current_samples":n,"baseline_samples":m,"current_categories":dict(cur),"baseline_categories":dict(base),"method":"total_variation","threshold":0.20}
 def contradiction_and_evidence(stories):
-    contradictions=[]; gaps=[]
-    for s in stories or []:
-        v=s.get("verification") or {}
-        if v.get("contradiction_flag"): contradictions.append({"headline":s.get("headline",""),"reason":"source contradiction"})
-        missing=[]
-        if not s.get("source"): missing.append("source")
-        if not s.get("url"): missing.append("url")
-        if not s.get("summary"): missing.append("summary")
-        if not s.get("source_count") and not v.get("sources"): missing.append("independent_sources")
-        if missing:gaps.append({"headline":s.get("headline",""),"missing":missing})
-    return {"contradictions":contradictions,"evidence_gaps":gaps}
+    return evidence_audit(stories)
+def production_quality_gate(ab,cal,drift,evidence,coverage=None):
+    return production_readiness_gate(ab,cal,drift,evidence,coverage)
 
-def followup_research_plan(stories):
-    return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
-
-def production_quality_gate(ab,cal,drift,evidence):
-    blockers=[]
-    if ab.get("paired_folds",0)<2: blockers.append("insufficient_paired_folds")
-    if cal.get("samples",0)>0 and cal.get("ece",0)>0.20: blockers.append("poor_calibration")
-    if drift.get("status")=="DRIFT": blockers.append("distribution_drift")
-    if len(evidence.get("contradictions",[]))>max(3,int(evidence.get("evidence_gaps",[]).__len__()*0.5)): blockers.append("high_contradiction_load")
-    return {"status":"PASS" if not blockers else "HOLD","blockers":blockers}
-
-def production_evaluation(v4_rows,v5_rows,current,baseline):
-    ab=shadow_ab_test(v4_rows,v5_rows)
-    cal=calibration_monitor(v5_rows)
-    drift=drift_monitor(current,baseline)
-    rollback=drift["status"]=="DRIFT" and not ab["promote"]
-    gate=production_quality_gate(ab,cal,drift,{"contradictions":[],"evidence_gaps":[]})
+def production_evaluation(v4_rows,v5_rows,current,baseline,drift_current=None,drift_baseline=None,coverage=None):
+    ab=shadow_ab_test(v4_rows,v5_rows); cal=calibration_monitor(v5_rows)
+    drift=drift_monitor(drift_current if drift_current is not None else current,drift_baseline if drift_baseline is not None else baseline)
+    evidence=contradiction_and_evidence(current); gate=production_quality_gate(ab,cal,drift,evidence,coverage)
+    rollback=drift.get("status") in {"DRIFT","UNKNOWN"} and not ab["promote"]
     status="PROMOTE_V5" if ab["promote"] and gate["status"]=="PASS" and drift["status"]=="STABLE" else "HOLD_V4"
-    return {"ab":ab,"calibration":cal,"drift":drift,"rollback":rollback,"quality_gate":gate,
-            "production_status":status}
+    return {"ab":ab,"calibration":cal,"drift":drift,"rollback":rollback,"evidence":evidence,"quality_gate":gate,"production_status":status}
 
-def run_v5_production_gate(learning_rows,stories,history):
-    wf=walk_forward_v5(learning_rows)
-    evaln=production_evaluation(learning_rows,learning_rows,stories,history)
-    evidence=contradiction_and_evidence(stories)
-    queue=autonomous_research_agent(evaln.get("ab",{}).get("candidate_v5",{}).get("folds",[]),history)
-    return {"walk_forward":wf,"evaluation":evaln,"evidence":evidence,"followups":followup_research_plan(stories)}

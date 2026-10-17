@@ -404,7 +404,7 @@ def rerank_stories(stories,research=None):
             rejection_counts.setdefault("stale_primary",0); rejection_counts["stale_primary"]+=1; continue
         quality_scored.append(pair)
     print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} content_quality={rejection_counts['content_quality']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} stale_primary={rejection_counts['stale_primary']} eligible={len(quality_scored)}",flush=True)
-    india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.60"))]
+    india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.45"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
     # Corroborated evidence must outrank high-scoring single-source items.
     # Importance remains the primary score within each verification class.

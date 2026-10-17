@@ -236,8 +236,16 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
                 reliability={"reuters":1.0,"bbc":0.95,"associated press":0.95,"ap":0.95,"bloomberg":0.9,"financial times":0.9}.get(str(a.get("source","")).lower(),0.7)
                 score=0.7*sim+0.3*reliability
                 if sim>=0.18: evidence.append({"source":a.get("source",""),"title":title,"url":a.get("url",""),"similarity":round(sim,3),"source_reliability":reliability,"evidence_score":round(score,3)})
-            evidence=sorted(evidence,key=lambda x:x["evidence_score"],reverse=True)[:5]
-            queue.append({"headline":s.get("headline",""),"priority":round(priority,1),"tasks":["verify primary source","find independent confirmation","retrieve historical analogue"],"retrieved_evidence":evidence,"evidence_count":len(evidence),"research_status":"EVIDENCE_RETRIEVED" if evidence else "RESEARCH_REQUIRED"})
+            unique=[]; publishers=set()
+            for item in sorted(evidence,key=lambda x:x["evidence_score"],reverse=True):
+                publisher=str(item.get("source","") or "").strip().lower()
+                host=re.sub(r"^www\\.", "", re.sub(r"^https?://", "", str(item.get("url","") or "").lower())).split("/",1)[0]
+                key=publisher or host
+                if not key or key in publishers: continue
+                publishers.add(key); unique.append(item)
+            evidence=unique[:5]; independent_count=len(publishers)
+            status="CORROBORATED" if independent_count>=2 else ("EVIDENCE_RETRIEVED" if evidence else "RESEARCH_REQUIRED")
+            queue.append({"headline":s.get("headline",""),"priority":round(priority,1),"tasks":["verify primary source","find independent confirmation","retrieve historical analogue"],"retrieved_evidence":evidence,"evidence_count":len(evidence),"independent_source_count":independent_count,"research_status":status})
     return sorted(queue,key=lambda x:x["priority"],reverse=True)[:15]
 
 def research_report(stories,queue):

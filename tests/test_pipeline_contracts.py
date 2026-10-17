@@ -581,3 +581,36 @@ def test_phase3_5_learning_audit_and_chronological_evaluation(tmp_path):
     report=build_report(tmp_path)
     assert "learning_data_audit" in report
     assert "chronological_ranking_evaluation" in report
+
+
+def test_guardrails_use_non_overlapping_windows_and_fail_closed():
+    from app.guardrails import temporal_drift_windows, production_readiness_gate, coverage_audit
+    from app.production_v5 import drift_monitor, calibration_monitor
+    rows=[]
+    for day in range(1,121):
+        month=1+(day-1)//28; dom=1+(day-1)%28
+        for j in range(2):
+            rows.append({"run_date":f"2026-{month:02d}-{dom:02d}","category":"india" if day%3 else "world","outcome_score":"0.8","seen_again_7d":"1","initial_score":"70"})
+    windows=temporal_drift_windows(rows,current_days=30,baseline_days=60)
+    assert windows["current"] and windows["baseline"]
+    assert not ({id(x) for x in windows["current"]} & {id(x) for x in windows["baseline"]})
+    assert drift_monitor(windows["current"],windows["baseline"])["status"] in {"STABLE","DRIFT"}
+    cal=calibration_monitor(rows)
+    assert cal["leakage_safe"] is True and cal["holdout_samples"]>=20
+    gate=production_readiness_gate({"paired_folds":1,"promote":False},cal,{"status":"UNKNOWN"},{"stories":0})
+    assert gate["status"]=="HOLD" and "insufficient_paired_folds" in gate["blockers"]
+    assert coverage_audit([{"region":"india"}],5,5)["world_shortfall"]==5
+
+def test_evidence_audit_recognizes_nested_independent_sources():
+    from app.production_v5 import contradiction_and_evidence, production_quality_gate
+    stories=[{"headline":"Verified event","source":"Reuters","url":"https://reuters.com/a","summary":"A verified summary","verification":{"verification":"multi-source","independent_sources":2,"evidence":[{"source":"BBC"},{"source":"AP"}]}}]
+    audit=contradiction_and_evidence(stories)
+    assert audit["evidence_gaps"]==[] and audit["corroborated"]==1
+    assert production_quality_gate({"paired_folds":0},{"samples":0,"ece":None},{"status":"UNKNOWN"},audit)["status"]=="HOLD"
+
+def test_single_main_workflow_and_no_push_trigger_after_guardrail_changes():
+    workflow=yaml.safe_load(read(".github/workflows/morning_news.yml"))
+    triggers=workflow.get(True) or workflow.get("on") or {}
+    assert "workflow_dispatch" in triggers and "schedule" in triggers
+    assert "push" not in triggers and "pull_request" not in triggers
+    assert "actions/upload-artifact@v6" in read(".github/workflows/morning_news.yml")
