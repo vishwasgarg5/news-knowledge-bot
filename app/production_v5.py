@@ -167,6 +167,12 @@ def drift_monitor(current,baseline):
     return {"mean_distribution_shift":round(drift,4),"status":"DRIFT" if drift>=0.20 else "STABLE","current_samples":n,"baseline_samples":m,"current_categories":dict(cur),"baseline_categories":dict(base),"method":"total_variation","threshold":0.20}
 def contradiction_and_evidence(stories):
     return evidence_audit(stories)
+def autonomous_research_agent(queue,history):
+    return [{"headline":x.get("headline",""),"priority":x.get("priority",0),"actions":["verify primary source","search independent reports","compare historical events","recheck next run"],"retrieved_evidence":x.get("retrieved_evidence",[]),"evidence_count":x.get("evidence_count",0),"research_status":x.get("research_status","RESEARCH_REQUIRED")} for x in queue or []]
+
+def generate_research_reports(agent_queue):
+    return [{"title":"Automated Intelligence Research","headline":x["headline"],"priority":x["priority"],"status":"QUEUED","actions":x["actions"]} for x in agent_queue]
+
 def followup_research_plan(stories):
     return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
 
