@@ -551,3 +551,33 @@ def test_provisional_outcomes_are_excluded_from_training(tmp_path):
     assert diagnose_learning(rows,today="2026-10-17")["samples"] == 1
     assert learning_v3_snapshot(rows)["samples"] == 1
     assert impact_outcome_learning([],rows)["samples"] == 1
+
+
+def test_phase3_5_learning_audit_and_chronological_evaluation(tmp_path):
+    from app.analytics import build_report, chronological_ranking_evaluation, learning_data_audit
+    from app.storage import HEADERS, append_rows, ensure_data
+
+    ensure_data(tmp_path)
+    rows=[]
+    for i in range(40):
+        day=f"2026-09-{(i // 2) + 1:02d}"
+        rows.append({
+            "run_date":day,"event_id":f"event-{i}","story_id":f"story-{i}",
+            "source":"Trusted" if i % 2 else "Other",
+            "category":"business" if i % 3 else "india",
+            "initial_score":85 if i % 4 else 55,
+            "selected":"true" if i % 3 else "false",
+            "seen_again_7d":"1" if i % 4 else "0",
+            "outcome_score":"0.8" if i % 4 else "0.1",
+            "learning_value":"0.8" if i % 4 else "0.1",
+        })
+    append_rows(tmp_path/"news_learning.csv",rows,HEADERS["news_learning.csv"])
+    audit=learning_data_audit(tmp_path)
+    assert audit["total_rows"]==40 and audit["mature_rows"]==40
+    evaluation=chronological_ranking_evaluation(tmp_path)
+    assert evaluation["status"]=="OK"
+    assert evaluation["leakage_safe"] is True
+    assert evaluation["train_dates"] < 20
+    report=build_report(tmp_path)
+    assert "learning_data_audit" in report
+    assert "chronological_ranking_evaluation" in report
