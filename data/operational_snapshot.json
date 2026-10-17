@@ -833,144 +833,15 @@
   "intelligence_v5": {
     "stories": [
       {
-        "story_id": "d11f63ee39706fad",
-        "event_id": "50ad5a3000b35a1a",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "importance": 89.4,
-        "ranking_score": 97.7,
-        "personalized_score": 99.4,
-        "personalization_applied": 99.4,
-        "breaking_score": 40,
-        "trend_score": 91,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-              "published": "2026-10-16T18:53:15+00:00",
-              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
-          "fresh_sources": [
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 2,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.4,
-          "calibrated_confidence": 77.0
-        },
-        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "who": "",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The Supreme Court's ruling could lead to a more nuanced approach to protests, potentially easing tensions in Delhi.",
-        "key_data": "",
-        "background": "The court's previous stance on protests in Delhi was often restrictive, leading to frequent shutdowns.",
-        "change_since_yesterday": "The court's decision allows for more flexibility in handling protests, unlike the proposed blanket ban.",
-        "next": "The government may now consider alternative measures to manage protests without imposing a complete shutdown.",
-        "connection": "The court's decision aligns with its earlier rulings on protests in other cities.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 77.0,
-        "impact": {
-          "level": "HIGH",
-          "direction": "negative",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-          "impact": {
-            "level": "HIGH",
-            "direction": "negative",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.375,
-            "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.129,
-            "date": "2026-09-22",
-            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.111,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.105,
-            "date": "2026-10-12",
-            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 75.8,
-        "early_signal": true
-      },
-      {
         "story_id": "eb4d792b455f6edb",
         "event_id": "54a2540253579bdf",
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
         "importance": 89.1,
-        "ranking_score": 116.8,
+        "ranking_score": 116.3,
         "personalized_score": 99.1,
         "personalization_applied": 99.1,
         "breaking_score": 40,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": 0.1,
@@ -1045,7 +916,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.1,
+          "freshness_hours": 0.3,
           "calibrated_confidence": 100
         },
         "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -1055,10 +926,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, potentially leading to further clashes and arrests.",
+        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
         "key_data": "",
         "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a significant escalation in the",
+        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -1125,7 +996,136 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 75.2,
+        "momentum_score": 73.8,
+        "early_signal": true
+      },
+      {
+        "story_id": "d11f63ee39706fad",
+        "event_id": "50ad5a3000b35a1a",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "importance": 89.4,
+        "ranking_score": 97.2,
+        "personalized_score": 99.4,
+        "personalization_applied": 99.4,
+        "breaking_score": 40,
+        "trend_score": 85,
+        "emerging_topic": true,
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": 0.1,
+        "category": "india",
+        "region": "india",
+        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
+        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+        "related_articles": [],
+        "verification": {
+          "evidence": [
+            {
+              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
+              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
+              "published": "2026-10-16T18:53:15+00:00",
+              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+            }
+          ],
+          "historical": [],
+          "verification": "multi-report",
+          "confidence": 70,
+          "evidence_strength": 65,
+          "verification_reason": "one independent current publisher",
+          "source_count": 2,
+          "independent_sources": 1,
+          "fresh_sources": [
+            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+          ],
+          "current_sources": 2,
+          "official_source": false,
+          "primary_derivative": false,
+          "primary_fresh": true,
+          "primary_trust": 0.92,
+          "contradiction_flag": false,
+          "contradiction_evidence": [],
+          "freshness_hours": 0.5,
+          "calibrated_confidence": 77.0
+        },
+        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "who": "",
+        "who_detail": "",
+        "when": "",
+        "where": "",
+        "why": "",
+        "how": "",
+        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+        "key_data": "",
+        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
+        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
+        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
+        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+        "memory_hook": "",
+        "vocabulary": "",
+        "ai_generated": true,
+        "calibrated_confidence": 77.0,
+        "impact": {
+          "level": "HIGH",
+          "direction": "negative",
+          "score": 58,
+          "confidence": 0.53,
+          "learned_rate": 0.75
+        },
+        "consequences": {
+          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+          "impact": {
+            "level": "HIGH",
+            "direction": "negative",
+            "score": 58,
+            "confidence": 0.53
+          },
+          "immediate": [
+            "Monitor official confirmation and affected entities"
+          ],
+          "second_order": [
+            "Monitor related sectors, suppliers, competitors and policy response"
+          ],
+          "watch_next": [
+            "New official statements",
+            "Independent confirmation",
+            "Price/economic data if relevant"
+          ]
+        },
+        "lifecycle_v2": "NEW",
+        "similar_events": [
+          {
+            "similarity": 0.375,
+            "date": "2026-10-17",
+            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.129,
+            "date": "2026-09-22",
+            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.121,
+            "date": "2026-10-13",
+            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.111,
+            "date": "2026-08-31",
+            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.105,
+            "date": "2026-10-12",
+            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+            "outcome_score": null
+          }
+        ],
+        "momentum_score": 73.8,
         "early_signal": true
       }
     ],
@@ -1137,7 +1137,6 @@
         "delhi": 3,
         "court": 2,
         "oct": 2,
-        "supreme": 1,
         "anti-cec": 1,
         "live": 1,
         "abhijeet": 1,
@@ -1153,7 +1152,8 @@
         "banerjee": 1,
         "arvind": 1,
         "kejriwal": 1,
-        "cjp": 1
+        "cjp": 1,
+        "supreme": 1
       }
     },
     "source_event_matrix": {
@@ -1173,19 +1173,19 @@
     },
     "cross_event_links": [
       {
-        "a": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "b": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "a": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "b": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
         "strength": 2
       }
     ],
     "research_queue": [
       {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
         "priority": 58,
         "reason": "high impact or emerging signal"
       },
       {
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
         "priority": 58,
         "reason": "high impact or emerging signal"
       }
@@ -1194,164 +1194,15 @@
   "intelligence_v5_plus": {
     "stories": [
       {
-        "story_id": "d11f63ee39706fad",
-        "event_id": "50ad5a3000b35a1a",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "importance": 89.4,
-        "ranking_score": 97.7,
-        "personalized_score": 99.4,
-        "personalization_applied": 99.4,
-        "breaking_score": 40,
-        "trend_score": 91,
-        "emerging_topic": true,
-        "why_for_you": "priority category + preferred region",
-        "learning_adjustment": 0.1,
-        "category": "india",
-        "region": "india",
-        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-              "published": "2026-10-16T18:53:15+00:00",
-              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
-          "fresh_sources": [
-            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 2,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.92,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 0.4,
-          "calibrated_confidence": 77.0
-        },
-        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "who": "",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The Supreme Court's ruling could lead to a more nuanced approach to protests, potentially easing tensions in Delhi.",
-        "key_data": "",
-        "background": "The court's previous stance on protests in Delhi was often restrictive, leading to frequent shutdowns.",
-        "change_since_yesterday": "The court's decision allows for more flexibility in handling protests, unlike the proposed blanket ban.",
-        "next": "The government may now consider alternative measures to manage protests without imposing a complete shutdown.",
-        "connection": "The court's decision aligns with its earlier rulings on protests in other cities.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "calibrated_confidence": 77.0,
-        "impact": {
-          "level": "HIGH",
-          "direction": "negative",
-          "score": 58,
-          "confidence": 0.53,
-          "learned_rate": 0.75
-        },
-        "consequences": {
-          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-          "impact": {
-            "level": "HIGH",
-            "direction": "negative",
-            "score": 58,
-            "confidence": 0.53
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.375,
-            "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.129,
-            "date": "2026-09-22",
-            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.121,
-            "date": "2026-10-13",
-            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.111,
-            "date": "2026-08-31",
-            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.105,
-            "date": "2026-10-12",
-            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 75.8,
-        "early_signal": true,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-17",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-23",
-            "headline": "Trump says he would back ban on diesel exports",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.133,
-            "date": "2026-10-11",
-            "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
-            "outcome_score": null
-          }
-        ]
-      },
-      {
         "story_id": "eb4d792b455f6edb",
         "event_id": "54a2540253579bdf",
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
         "importance": 89.1,
-        "ranking_score": 116.8,
+        "ranking_score": 116.3,
         "personalized_score": 99.1,
         "personalization_applied": 99.1,
         "breaking_score": 40,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": 0.1,
@@ -1426,7 +1277,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.1,
+          "freshness_hours": 0.3,
           "calibrated_confidence": 100
         },
         "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -1436,10 +1287,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, potentially leading to further clashes and arrests.",
+        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
         "key_data": "",
         "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a significant escalation in the",
+        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -1506,7 +1357,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 75.2,
+        "momentum_score": 73.8,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -1540,148 +1391,158 @@
             "outcome_score": null
           }
         ]
+      },
+      {
+        "story_id": "d11f63ee39706fad",
+        "event_id": "50ad5a3000b35a1a",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "importance": 89.4,
+        "ranking_score": 97.2,
+        "personalized_score": 99.4,
+        "personalization_applied": 99.4,
+        "breaking_score": 40,
+        "trend_score": 85,
+        "emerging_topic": true,
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": 0.1,
+        "category": "india",
+        "region": "india",
+        "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+        "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
+        "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+        "related_articles": [],
+        "verification": {
+          "evidence": [
+            {
+              "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
+              "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
+              "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
+              "published": "2026-10-16T18:53:15+00:00",
+              "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+            }
+          ],
+          "historical": [],
+          "verification": "multi-report",
+          "confidence": 70,
+          "evidence_strength": 65,
+          "verification_reason": "one independent current publisher",
+          "source_count": 2,
+          "independent_sources": 1,
+          "fresh_sources": [
+            "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+          ],
+          "current_sources": 2,
+          "official_source": false,
+          "primary_derivative": false,
+          "primary_fresh": true,
+          "primary_trust": 0.92,
+          "contradiction_flag": false,
+          "contradiction_evidence": [],
+          "freshness_hours": 0.5,
+          "calibrated_confidence": 77.0
+        },
+        "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "who": "",
+        "who_detail": "",
+        "when": "",
+        "where": "",
+        "why": "",
+        "how": "",
+        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+        "key_data": "",
+        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
+        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
+        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
+        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+        "memory_hook": "",
+        "vocabulary": "",
+        "ai_generated": true,
+        "calibrated_confidence": 77.0,
+        "impact": {
+          "level": "HIGH",
+          "direction": "negative",
+          "score": 58,
+          "confidence": 0.53,
+          "learned_rate": 0.75
+        },
+        "consequences": {
+          "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+          "impact": {
+            "level": "HIGH",
+            "direction": "negative",
+            "score": 58,
+            "confidence": 0.53
+          },
+          "immediate": [
+            "Monitor official confirmation and affected entities"
+          ],
+          "second_order": [
+            "Monitor related sectors, suppliers, competitors and policy response"
+          ],
+          "watch_next": [
+            "New official statements",
+            "Independent confirmation",
+            "Price/economic data if relevant"
+          ]
+        },
+        "lifecycle_v2": "NEW",
+        "similar_events": [
+          {
+            "similarity": 0.375,
+            "date": "2026-10-17",
+            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.129,
+            "date": "2026-09-22",
+            "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.121,
+            "date": "2026-10-13",
+            "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.111,
+            "date": "2026-08-31",
+            "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.105,
+            "date": "2026-10-12",
+            "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+            "outcome_score": null
+          }
+        ],
+        "momentum_score": 73.8,
+        "early_signal": true,
+        "similar_historical_events": [
+          {
+            "similarity": 1.0,
+            "date": "2026-10-17",
+            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.143,
+            "date": "2026-09-23",
+            "headline": "Trump says he would back ban on diesel exports",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.133,
+            "date": "2026-10-11",
+            "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
+            "outcome_score": null
+          }
+        ]
       }
     ],
     "clusters": [
-      {
-        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "d11f63ee39706fad",
-            "event_id": "50ad5a3000b35a1a",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "importance": 89.4,
-            "ranking_score": 97.7,
-            "personalized_score": 99.4,
-            "personalization_applied": 99.4,
-            "breaking_score": 40,
-            "trend_score": 91,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-                  "published": "2026-10-16T18:53:15+00:00",
-                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
-              "fresh_sources": [
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 2,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.4,
-              "calibrated_confidence": 77.0
-            },
-            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "who": "",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The Supreme Court's ruling could lead to a more nuanced approach to protests, potentially easing tensions in Delhi.",
-            "key_data": "",
-            "background": "The court's previous stance on protests in Delhi was often restrictive, leading to frequent shutdowns.",
-            "change_since_yesterday": "The court's decision allows for more flexibility in handling protests, unlike the proposed blanket ban.",
-            "next": "The government may now consider alternative measures to manage protests without imposing a complete shutdown.",
-            "connection": "The court's decision aligns with its earlier rulings on protests in other cities.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 77.0,
-            "impact": {
-              "level": "HIGH",
-              "direction": "negative",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-              "impact": {
-                "level": "HIGH",
-                "direction": "negative",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.375,
-                "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.129,
-                "date": "2026-09-22",
-                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.111,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.105,
-                "date": "2026-10-12",
-                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 75.8,
-            "early_signal": true
-          }
-        ]
-      },
       {
         "event_id": "abhijeet|action|after|anti-cec|before|bnss|court|delhi|dipke|live|police|produced",
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -1695,11 +1556,11 @@
             "event_id": "54a2540253579bdf",
             "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
             "importance": 89.1,
-            "ranking_score": 116.8,
+            "ranking_score": 116.3,
             "personalized_score": 99.1,
             "personalization_applied": 99.1,
             "breaking_score": 40,
-            "trend_score": 89,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": 0.1,
@@ -1774,7 +1635,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 0.1,
+              "freshness_hours": 0.3,
               "calibrated_confidence": 100
             },
             "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -1784,10 +1645,10 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, potentially leading to further clashes and arrests.",
+            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
             "key_data": "",
             "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-            "change_since_yesterday": "Abhijeet Dipke's detention represents a significant escalation in the",
+            "change_since_yesterday": "Abhijeet Dipke's detention represents a",
             "next": "",
             "connection": "",
             "memory_hook": "",
@@ -1854,7 +1715,146 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 75.2,
+            "momentum_score": 73.8,
+            "early_signal": true
+          }
+        ]
+      },
+      {
+        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "story_count": 1,
+        "sources": [
+          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
+        ],
+        "stories": [
+          {
+            "story_id": "d11f63ee39706fad",
+            "event_id": "50ad5a3000b35a1a",
+            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "importance": 89.4,
+            "ranking_score": 97.2,
+            "personalized_score": 99.4,
+            "personalization_applied": 99.4,
+            "breaking_score": 40,
+            "trend_score": 85,
+            "emerging_topic": true,
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": 0.1,
+            "category": "india",
+            "region": "india",
+            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
+            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+            "related_articles": [],
+            "verification": {
+              "evidence": [
+                {
+                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
+                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
+                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
+                  "published": "2026-10-16T18:53:15+00:00",
+                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+                }
+              ],
+              "historical": [],
+              "verification": "multi-report",
+              "confidence": 70,
+              "evidence_strength": 65,
+              "verification_reason": "one independent current publisher",
+              "source_count": 2,
+              "independent_sources": 1,
+              "fresh_sources": [
+                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+              ],
+              "current_sources": 2,
+              "official_source": false,
+              "primary_derivative": false,
+              "primary_fresh": true,
+              "primary_trust": 0.92,
+              "contradiction_flag": false,
+              "contradiction_evidence": [],
+              "freshness_hours": 0.5,
+              "calibrated_confidence": 77.0
+            },
+            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "who": "",
+            "who_detail": "",
+            "when": "",
+            "where": "",
+            "why": "",
+            "how": "",
+            "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+            "key_data": "",
+            "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
+            "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
+            "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
+            "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+            "memory_hook": "",
+            "vocabulary": "",
+            "ai_generated": true,
+            "calibrated_confidence": 77.0,
+            "impact": {
+              "level": "HIGH",
+              "direction": "negative",
+              "score": 58,
+              "confidence": 0.53,
+              "learned_rate": 0.75
+            },
+            "consequences": {
+              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+              "impact": {
+                "level": "HIGH",
+                "direction": "negative",
+                "score": 58,
+                "confidence": 0.53
+              },
+              "immediate": [
+                "Monitor official confirmation and affected entities"
+              ],
+              "second_order": [
+                "Monitor related sectors, suppliers, competitors and policy response"
+              ],
+              "watch_next": [
+                "New official statements",
+                "Independent confirmation",
+                "Price/economic data if relevant"
+              ]
+            },
+            "lifecycle_v2": "NEW",
+            "similar_events": [
+              {
+                "similarity": 0.375,
+                "date": "2026-10-17",
+                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.129,
+                "date": "2026-09-22",
+                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.121,
+                "date": "2026-10-13",
+                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.111,
+                "date": "2026-08-31",
+                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.105,
+                "date": "2026-10-12",
+                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+                "outcome_score": null
+              }
+            ],
+            "momentum_score": 73.8,
             "early_signal": true
           }
         ]
@@ -1865,12 +1865,9 @@
       "companies": [],
       "places": [],
       "topics": {
-        "delhi": 3,
         "anti-cec": 2,
         "cjp": 2,
-        "supreme court": 1,
-        "oct": 1,
-        "the": 1,
+        "delhi": 2,
         "live": 1,
         "abhijeet dipke": 1,
         "sem court": 1,
@@ -1882,16 +1879,13 @@
         "mamata banerjee": 1,
         "arvind kejriwal": 1,
         "september": 1,
-        "aisa": 1
+        "aisa": 1,
+        "supreme court": 1,
+        "oct": 1,
+        "the delhi": 1
       }
     },
     "entity_profiles": [
-      {
-        "entity": "delhi",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 30
-      },
       {
         "entity": "anti-cec",
         "type": "topic",
@@ -1905,22 +1899,10 @@
         "historical_mentions": 15
       },
       {
-        "entity": "supreme court",
+        "entity": "delhi",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
-        "entity": "oct",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 4
-      },
-      {
-        "entity": "the",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 95
+        "historical_mentions": 30
       },
       {
         "entity": "live",
@@ -1993,170 +1975,27 @@
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
+      },
+      {
+        "entity": "supreme court",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
+        "entity": "oct",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 4
+      },
+      {
+        "entity": "the delhi",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
       }
     ],
     "event_evolution": [
-      {
-        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "story_count": 1,
-        "sources": [
-          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
-        ],
-        "stories": [
-          {
-            "story_id": "d11f63ee39706fad",
-            "event_id": "50ad5a3000b35a1a",
-            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "importance": 89.4,
-            "ranking_score": 97.7,
-            "personalized_score": 99.4,
-            "personalization_applied": 99.4,
-            "breaking_score": 40,
-            "trend_score": 91,
-            "emerging_topic": true,
-            "why_for_you": "priority category + preferred region",
-            "learning_adjustment": 0.1,
-            "category": "india",
-            "region": "india",
-            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
-            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
-            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
-                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
-                  "published": "2026-10-16T18:53:15+00:00",
-                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
-              "fresh_sources": [
-                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 2,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.92,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 0.4,
-              "calibrated_confidence": 77.0
-            },
-            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-            "who": "",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The Supreme Court's ruling could lead to a more nuanced approach to protests, potentially easing tensions in Delhi.",
-            "key_data": "",
-            "background": "The court's previous stance on protests in Delhi was often restrictive, leading to frequent shutdowns.",
-            "change_since_yesterday": "The court's decision allows for more flexibility in handling protests, unlike the proposed blanket ban.",
-            "next": "The government may now consider alternative measures to manage protests without imposing a complete shutdown.",
-            "connection": "The court's decision aligns with its earlier rulings on protests in other cities.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "calibrated_confidence": 77.0,
-            "impact": {
-              "level": "HIGH",
-              "direction": "negative",
-              "score": 58,
-              "confidence": 0.53,
-              "learned_rate": 0.75
-            },
-            "consequences": {
-              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-              "impact": {
-                "level": "HIGH",
-                "direction": "negative",
-                "score": 58,
-                "confidence": 0.53
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.375,
-                "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.129,
-                "date": "2026-09-22",
-                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.121,
-                "date": "2026-10-13",
-                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.111,
-                "date": "2026-08-31",
-                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.105,
-                "date": "2026-10-12",
-                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 75.8,
-            "early_signal": true,
-            "similar_historical_events": [
-              {
-                "similarity": 1.0,
-                "date": "2026-10-17",
-                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-09-23",
-                "headline": "Trump says he would back ban on diesel exports",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.133,
-                "date": "2026-10-11",
-                "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
-                "outcome_score": null
-              }
-            ]
-          }
-        ],
-        "status": "DEVELOPING",
-        "history_count": 1
-      },
       {
         "event_id": "abhijeet|action|after|anti-cec|before|bnss|court|delhi|dipke|live|police|produced",
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -2170,11 +2009,11 @@
             "event_id": "54a2540253579bdf",
             "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
             "importance": 89.1,
-            "ranking_score": 116.8,
+            "ranking_score": 116.3,
             "personalized_score": 99.1,
             "personalization_applied": 99.1,
             "breaking_score": 40,
-            "trend_score": 89,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": 0.1,
@@ -2249,7 +2088,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 0.1,
+              "freshness_hours": 0.3,
               "calibrated_confidence": 100
             },
             "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -2259,10 +2098,10 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, potentially leading to further clashes and arrests.",
+            "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
             "key_data": "",
             "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-            "change_since_yesterday": "Abhijeet Dipke's detention represents a significant escalation in the",
+            "change_since_yesterday": "Abhijeet Dipke's detention represents a",
             "next": "",
             "connection": "",
             "memory_hook": "",
@@ -2329,7 +2168,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 75.2,
+            "momentum_score": 73.8,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -2360,6 +2199,167 @@
                 "similarity": 0.125,
                 "date": "2026-09-29",
                 "headline": "Delhi Police file non-cognisable report against Parvesh Verma after complaint over slap",
+                "outcome_score": null
+              }
+            ]
+          }
+        ],
+        "status": "DEVELOPING",
+        "history_count": 1
+      },
+      {
+        "event_id": "backs|ban|blanket|delhi|over-reaching|protest|right|says|transit",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "story_count": 1,
+        "sources": [
+          "India Latest News: Top National Headlines Today & Breaking News | The Hindu"
+        ],
+        "stories": [
+          {
+            "story_id": "d11f63ee39706fad",
+            "event_id": "50ad5a3000b35a1a",
+            "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "importance": 89.4,
+            "ranking_score": 97.2,
+            "personalized_score": 99.4,
+            "personalization_applied": 99.4,
+            "breaking_score": 40,
+            "trend_score": 85,
+            "emerging_topic": true,
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": 0.1,
+            "category": "india",
+            "region": "india",
+            "source": "India Latest News: Top National Headlines Today & Breaking News | The Hindu",
+            "url": "https://www.thehindu.com/news/national/supreme-court-backs-right-to-association-peaceful-protest-seeks-permission-details-of-oct-10-protests/article71563250.ece",
+            "summary": "Supreme Court’s remarks came in an oral mention by senior lawyers against the ‘complete shutdown’ of Delhi ahead of Oct 10 protests",
+            "related_articles": [],
+            "verification": {
+              "evidence": [
+                {
+                  "title": "SC warns of ‘constitutional tort’ over protest-related hardship to traders, workers",
+                  "source": "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",
+                  "url": "https://www.hindustantimes.com/india-news/sc-warns-of-constitutional-tort-over-protest-related-hardship-to-traders-workers-101792176795771.html",
+                  "published": "2026-10-16T18:53:15+00:00",
+                  "summary": "Supreme Court warns of compensation for traders, daily-wage earners hit by Delhi protests during festive season"
+                }
+              ],
+              "historical": [],
+              "verification": "multi-report",
+              "confidence": 70,
+              "evidence_strength": 65,
+              "verification_reason": "one independent current publisher",
+              "source_count": 2,
+              "independent_sources": 1,
+              "fresh_sources": [
+                "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times"
+              ],
+              "current_sources": 2,
+              "official_source": false,
+              "primary_derivative": false,
+              "primary_fresh": true,
+              "primary_trust": 0.92,
+              "contradiction_flag": false,
+              "contradiction_evidence": [],
+              "freshness_hours": 0.5,
+              "calibrated_confidence": 77.0
+            },
+            "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+            "who": "",
+            "who_detail": "",
+            "when": "",
+            "where": "",
+            "why": "",
+            "how": "",
+            "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
+            "key_data": "",
+            "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
+            "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
+            "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
+            "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
+            "memory_hook": "",
+            "vocabulary": "",
+            "ai_generated": true,
+            "calibrated_confidence": 77.0,
+            "impact": {
+              "level": "HIGH",
+              "direction": "negative",
+              "score": 58,
+              "confidence": 0.53,
+              "learned_rate": 0.75
+            },
+            "consequences": {
+              "event": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+              "impact": {
+                "level": "HIGH",
+                "direction": "negative",
+                "score": 58,
+                "confidence": 0.53
+              },
+              "immediate": [
+                "Monitor official confirmation and affected entities"
+              ],
+              "second_order": [
+                "Monitor related sectors, suppliers, competitors and policy response"
+              ],
+              "watch_next": [
+                "New official statements",
+                "Independent confirmation",
+                "Price/economic data if relevant"
+              ]
+            },
+            "lifecycle_v2": "NEW",
+            "similar_events": [
+              {
+                "similarity": 0.375,
+                "date": "2026-10-17",
+                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.129,
+                "date": "2026-09-22",
+                "headline": "Supreme Court says Delhi SIR notices seem ‘machine-generated’ and mechanically issued",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.121,
+                "date": "2026-10-13",
+                "headline": "Anti-CEC protests LIVE: Supreme Court to hear pleas challenging closure of metro stations in Delhi on Oct. 13",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.111,
+                "date": "2026-08-31",
+                "headline": "After Supreme Court refusal to halt CJP march, Delhi Police seeks quashing of FIRs against NEET-UG protesters, students",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.105,
+                "date": "2026-10-12",
+                "headline": "Anti-CEC protests continue; journalists detained despite SC order, Rahul Gandhi announces march to Supreme Court as Delhi braces for fresh curbs",
+                "outcome_score": null
+              }
+            ],
+            "momentum_score": 73.8,
+            "early_signal": true,
+            "similar_historical_events": [
+              {
+                "similarity": 1.0,
+                "date": "2026-10-17",
+                "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.143,
+                "date": "2026-09-23",
+                "headline": "Trump says he would back ban on diesel exports",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.133,
+                "date": "2026-10-11",
+                "headline": "'Cockroach' group leaders among hundreds detained in Delhi protest",
                 "outcome_score": null
               }
             ]
@@ -2398,7 +2398,7 @@
     ],
     "market_correlation": [
       {
-        "event_id": "50ad5a3000b35a1a",
+        "event_id": "54a2540253579bdf",
         "direction": "negative",
         "market_samples": 0,
         "avg_move": null,
@@ -2406,7 +2406,7 @@
         "directional_alignment": "UNKNOWN"
       },
       {
-        "event_id": "54a2540253579bdf",
+        "event_id": "50ad5a3000b35a1a",
         "direction": "negative",
         "market_samples": 0,
         "avg_move": null,
@@ -2443,11 +2443,11 @@
         "event_id": "50ad5a3000b35a1a",
         "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
         "importance": 89.4,
-        "ranking_score": 97.7,
+        "ranking_score": 97.2,
         "personalized_score": 99.4,
         "personalization_applied": 99.4,
         "breaking_score": 40,
-        "trend_score": 91,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": 0.1,
@@ -2484,7 +2484,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.4,
+          "freshness_hours": 0.5,
           "calibrated_confidence": 77.0
         },
         "what": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
@@ -2494,12 +2494,12 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The Supreme Court's ruling could lead to a more nuanced approach to protests, potentially easing tensions in Delhi.",
+        "why_important": "The SC's decision could lead to a more balanced approach to managing protests, potentially reducing tensions and ensuring public safety.",
         "key_data": "",
-        "background": "The court's previous stance on protests in Delhi was often restrictive, leading to frequent shutdowns.",
-        "change_since_yesterday": "The court's decision allows for more flexibility in handling protests, unlike the proposed blanket ban.",
-        "next": "The government may now consider alternative measures to manage protests without imposing a complete shutdown.",
-        "connection": "The court's decision aligns with its earlier rulings on protests in other cities.",
+        "background": "The Delhi government had proposed a blanket transit ban ahead of planned protests, which was opposed by some legal experts.",
+        "change_since_yesterday": "The SC's stance could result in a more nuanced approach to managing protests, unlike the proposed blanket ban.",
+        "next": "The Delhi government may now consider alternative measures to manage the protests while respecting the right to",
+        "connection": "The SC's decision aligns with previous court rulings that have balanced the rights of protesters with public safety.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2564,7 +2564,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 75.8,
+        "momentum_score": 73.8,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2594,11 +2594,11 @@
         "event_id": "54a2540253579bdf",
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
         "importance": 89.1,
-        "ranking_score": 116.8,
+        "ranking_score": 116.3,
         "personalized_score": 99.1,
         "personalization_applied": 99.1,
         "breaking_score": 40,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": 0.1,
@@ -2673,7 +2673,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.1,
+          "freshness_hours": 0.3,
           "calibrated_confidence": 100
         },
         "what": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
@@ -2683,10 +2683,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, potentially leading to further clashes and arrests.",
+        "why_important": "Abhijeet Dipke's detention could escalate tensions in the anti-CEC protests, while Bora's release may ease some of the pressure.",
         "key_data": "",
         "background": "Anti-CEC protests have been ongoing since September, with CJP and AISA playing key roles in organizing and participating in the demonstrations.",
-        "change_since_yesterday": "Abhijeet Dipke's detention represents a significant escalation in the",
+        "change_since_yesterday": "Abhijeet Dipke's detention represents a",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -2753,7 +2753,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 75.2,
+        "momentum_score": 73.8,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2804,11 +2804,11 @@
       "nodes": [
         {
           "type": "event",
-          "label": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’"
+          "label": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS"
         },
         {
           "type": "event",
-          "label": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS"
+          "label": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’"
         }
       ],
       "edges": []
@@ -2816,13 +2816,13 @@
     "contradictions": [],
     "evidence_gaps": [
       {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
         "missing": [
           "independent_source_count"
         ]
       },
       {
-        "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
         "missing": [
           "independent_source_count"
         ]
@@ -2830,20 +2830,8 @@
     ],
     "research_queue": [
       {
-        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
-        "priority": 77.0,
-        "tasks": [
-          "verify primary source",
-          "find independent confirmation",
-          "retrieve historical analogue"
-        ],
-        "retrieved_evidence": [],
-        "evidence_count": 0,
-        "research_status": "RESEARCH_REQUIRED"
-      },
-      {
         "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
-        "priority": 76.8,
+        "priority": 76.5,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -2877,6 +2865,18 @@
         ],
         "evidence_count": 3,
         "research_status": "EVIDENCE_RETRIEVED"
+      },
+      {
+        "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+        "priority": 76.5,
+        "tasks": [
+          "verify primary source",
+          "find independent confirmation",
+          "retrieve historical analogue"
+        ],
+        "retrieved_evidence": [],
+        "evidence_count": 0,
+        "research_status": "RESEARCH_REQUIRED"
       }
     ],
     "weekly_report": {
@@ -2896,36 +2896,6 @@
           "historical_mentions": 30
         },
         {
-          "entity": "backs",
-          "current_mentions": 1,
-          "historical_mentions": 5
-        },
-        {
-          "entity": "transit",
-          "current_mentions": 1,
-          "historical_mentions": 1
-        },
-        {
-          "entity": "blanket",
-          "current_mentions": 1,
-          "historical_mentions": 1
-        },
-        {
-          "entity": "right",
-          "current_mentions": 1,
-          "historical_mentions": 2
-        },
-        {
-          "entity": "over-reaching",
-          "current_mentions": 1,
-          "historical_mentions": 1
-        },
-        {
-          "entity": "says",
-          "current_mentions": 1,
-          "historical_mentions": 105
-        },
-        {
           "entity": "abhijeet",
           "current_mentions": 1,
           "historical_mentions": 2
@@ -2934,6 +2904,36 @@
           "entity": "under",
           "current_mentions": 1,
           "historical_mentions": 17
+        },
+        {
+          "entity": "after",
+          "current_mentions": 1,
+          "historical_mentions": 86
+        },
+        {
+          "entity": "produced",
+          "current_mentions": 1,
+          "historical_mentions": 1
+        },
+        {
+          "entity": "live",
+          "current_mentions": 1,
+          "historical_mentions": 18
+        },
+        {
+          "entity": "police",
+          "current_mentions": 1,
+          "historical_mentions": 28
+        },
+        {
+          "entity": "anti-cec",
+          "current_mentions": 1,
+          "historical_mentions": 4
+        },
+        {
+          "entity": "dipke",
+          "current_mentions": 1,
+          "historical_mentions": 7
         }
       ],
       "history_size": 1248,
@@ -2943,13 +2943,13 @@
   "smart_alerts": [],
   "evidence_gaps": [
     {
-      "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
+      "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
       "missing": [
         "independent_source_count"
       ]
     },
     {
-      "headline": "Anti-CEC protest LIVE | Abhijeet Dipke to be produced before SEM Court after Delhi Police action under BNSS",
+      "headline": "SC backs right to protest, says blanket transit ban in Delhi ‘over-reaching’",
       "missing": [
         "independent_source_count"
       ]
@@ -7568,7 +7568,7 @@
     "week": "2026-W42",
     "stories": 10,
     "top_categories": "[[\"india\", 9], [\"world\", 1]]",
-    "top_entities": "[{\"entity\": \"protest\", \"current_mentions\": 2, \"historical_mentions\": 32}, {\"entity\": \"delhi\", \"current_mentions\": 2, \"historical_mentions\": 30}, {\"entity\": \"backs\", \"current_mentions\": 1, \"historical_mentions\": 5}, {\"entity\": \"transit\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"blanket\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"right\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"over-reaching\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"says\", \"current_mentions\": 1, \"historical_mentions\": 105}, {\"entity\": \"abhijeet\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"under\", \"current_mentions\": 1, \"historical_mentions\": 17}]",
+    "top_entities": "[{\"entity\": \"protest\", \"current_mentions\": 2, \"historical_mentions\": 32}, {\"entity\": \"delhi\", \"current_mentions\": 2, \"historical_mentions\": 30}, {\"entity\": \"abhijeet\", \"current_mentions\": 1, \"historical_mentions\": 2}, {\"entity\": \"under\", \"current_mentions\": 1, \"historical_mentions\": 17}, {\"entity\": \"after\", \"current_mentions\": 1, \"historical_mentions\": 86}, {\"entity\": \"produced\", \"current_mentions\": 1, \"historical_mentions\": 1}, {\"entity\": \"live\", \"current_mentions\": 1, \"historical_mentions\": 18}, {\"entity\": \"police\", \"current_mentions\": 1, \"historical_mentions\": 28}, {\"entity\": \"anti-cec\", \"current_mentions\": 1, \"historical_mentions\": 4}, {\"entity\": \"dipke\", \"current_mentions\": 1, \"historical_mentions\": 7}]",
     "new_events": 0,
     "developing_events": 2,
     "confirmed_events": 0,

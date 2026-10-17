@@ -1,5 +1,5 @@
 {
-  "learning_samples": 6235,
+  "learning_samples": 6236,
   "selected_samples": 910,
   "mature_outcome_samples": 6091,
   "avg_outcome": 0.137,
@@ -48,6 +48,41 @@
       35
     ]
   ],
+  "learning_data_audit": {
+    "total_rows": 6236,
+    "mature_rows": 6091,
+    "provisional_rows": 145,
+    "mature_label_coverage": 0.977,
+    "selected_mature_rows": 900
+  },
+  "chronological_ranking_evaluation": {
+    "status": "OK",
+    "samples": 6091,
+    "train_samples": 5087,
+    "test_samples": 1004,
+    "train_dates": 12,
+    "test_dates": 6,
+    "threshold": 75,
+    "baseline_threshold": 50,
+    "baseline": {
+      "precision": 0.025,
+      "recall": 1.0,
+      "f1": 0.049,
+      "predicted_positive": 1004,
+      "actual_positive": 25,
+      "samples": 1004
+    },
+    "challenger": {
+      "precision": 0.039,
+      "recall": 0.84,
+      "f1": 0.075,
+      "predicted_positive": 532,
+      "actual_positive": 25,
+      "samples": 1004
+    },
+    "delta_f1": 0.026,
+    "leakage_safe": true
+  },
   "outcome_horizon_coverage": {
     "24h": 6200,
     "48h": 6200,
