@@ -698,3 +698,95 @@ def test_research_verification_rejects_unrelated_same_topic_articles():
     result = verify_article(story, unrelated + [corroborating])
     assert result["independent_sources"] == 1
     assert [row["source"] for row in result["evidence"]] == ["Reuters"]
+
+
+def test_research_queue_uses_event_matched_independent_evidence():
+    from app.intelligence_v5_plus import autonomous_research
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "Two Mumbai-based firms face U.S. sanctions over Iran oil trade",
+        "summary": "The United States sanctioned firms accused of facilitating Iranian oil exports.",
+        "source": "The Hindu",
+        "url": "https://www.thehindu.com/example-primary",
+        "published": now,
+        "impact": {"score": 90},
+        "momentum_score": 0,
+    }
+    unrelated = {
+        "title": "Femicide in Iran: When honor becomes a death sentence",
+        "summary": "A report about violence against women in Iran.",
+        "source": "Deutsche Welle",
+        "url": "https://www.dw.com/example-femicide",
+        "published": now,
+    }
+    reuters = {
+        "title": "US sanctions firms over Iran oil trade network",
+        "summary": "Officials announced sanctions against firms accused of facilitating Iranian oil exports.",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/world/example-sanctions",
+        "published": now,
+    }
+    bbc = {
+        "title": "Iran oil trade: US sanctions target firms accused of helping exports",
+        "summary": "The United States announced sanctions on firms over Iranian oil exports.",
+        "source": "BBC",
+        "url": "https://www.bbc.com/news/example-sanctions",
+        "published": now,
+    }
+
+    result = autonomous_research([story], evidence_pool=[unrelated])[0]
+    assert result["independent_source_count"] == 0
+    assert result["research_status"] == "RESEARCH_REQUIRED"
+    assert result["retrieved_evidence"] == []
+
+    result = autonomous_research([story], evidence_pool=[unrelated, reuters, bbc])[0]
+    assert result["independent_source_count"] == 2
+    assert result["research_status"] == "CORROBORATED"
+    assert {row["source"] for row in result["retrieved_evidence"]} == {"Reuters", "BBC"}
+
+
+def test_research_queue_does_not_complete_with_stale_primary_or_duplicate_publisher():
+    from app.intelligence_v5_plus import autonomous_research
+
+    now = datetime.now(timezone.utc).isoformat()
+    old = "2020-01-01T00:00:00+00:00"
+    story = {
+        "headline": "US sanctions firms over Iran oil trade network",
+        "summary": "The United States announced sanctions over Iranian oil exports.",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/example-primary",
+        "published": old,
+        "impact": {"score": 90},
+        "momentum_score": 0,
+    }
+    same_publisher = [
+        {
+            "title": "US sanctions firms over Iran oil trade network",
+            "summary": "The United States announced sanctions over Iranian oil exports.",
+            "source": "Reuters",
+            "url": "https://www.reuters.com/example-followup",
+            "published": now,
+        },
+        {
+            "title": "Iran oil trade: US sanctions target firms accused of helping exports",
+            "summary": "The United States announced sanctions over Iranian oil exports.",
+            "source": "Reuters",
+            "url": "https://www.reuters.com/example-second-followup",
+            "published": now,
+        },
+    ]
+    result = autonomous_research([story], evidence_pool=same_publisher)[0]
+    assert result["independent_source_count"] <= 1
+    assert result["research_status"] != "CORROBORATED"
+
+
+def test_research_report_status_is_not_hardcoded_to_queued():
+    from app.production_v5 import generate_research_reports
+
+    reports = generate_research_reports([
+        {"headline": "A", "priority": 90, "research_status": "CORROBORATED", "independent_source_count": 2, "evidence_count": 2},
+        {"headline": "B", "priority": 80, "research_status": "RESEARCH_REQUIRED", "independent_source_count": 0, "evidence_count": 0},
+    ])
+    assert [row["status"] for row in reports] == ["CORROBORATED", "RESEARCH_REQUIRED"]
+    assert reports[0]["actions"] != reports[1]["actions"]
