@@ -525,6 +525,11 @@ def test_provisional_outcomes_are_excluded_from_training(tmp_path):
     from app.storage import HEADERS, append_rows, ensure_data, outcome_is_mature, read_rows
     from app.analytics import backtest_learning_v2
     from app.learning import _profile, learning_metrics
+    from app.production import time_series_backtest
+    from app.production_v5 import walk_forward_v5, calibration_monitor
+    from app.intelligence_v4 import diagnose_learning
+    from app.advanced import learning_v3_snapshot
+    from app.intelligence_v5_plus import impact_outcome_learning
 
     ensure_data(tmp_path)
     provisional={"run_date":"2026-10-10","event_id":"provisional","story_id":"p","source":"Noisy","category":"world",
@@ -538,3 +543,9 @@ def test_provisional_outcomes_are_excluded_from_training(tmp_path):
     assert backtest_learning_v2(tmp_path)["samples"] == 1
     assert _profile(rows)["source_observations"] == {"Trusted":1}
     assert learning_metrics(rows)["evaluated"] == 1
+    assert time_series_backtest(rows,minimum_train=1)["samples"] == 1
+    assert walk_forward_v5(rows,train_min=1)["samples"] == 1
+    assert calibration_monitor(rows)["samples"] == 1
+    assert diagnose_learning(rows,today="2026-10-17")["samples"] == 1
+    assert learning_v3_snapshot(rows)["samples"] == 1
+    assert impact_outcome_learning([],rows)["samples"] == 1
