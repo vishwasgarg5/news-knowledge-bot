@@ -271,6 +271,31 @@ def test_backtest_v2_contract(tmp_path):
     calibration=calibrate_learning_threshold(tmp_path)
     assert {"threshold","precision","recall","f1","samples"} <= calibration.keys()
 
+def test_unrelated_unclustered_stories_keep_distinct_event_families():
+    from app.ai import rerank_stories
+    from app.advanced import consolidate_event_families
+
+    stories = [
+        {"story_id": "ecb-rate", "event_id": "ecb-rate", "headline": "European Central Bank cuts benchmark interest rate by quarter point",
+         "importance": 92, "region": "world", "region_confidence": 1.0, "source": "Reuters",
+         "url": "https://example.com/ecb-rate", "category": "business"},
+        {"story_id": "lunar-mission", "event_id": "lunar-mission", "headline": "Japan launches new lunar exploration mission after successful rocket test",
+         "importance": 90, "region": "world", "region_confidence": 1.0, "source": "BBC",
+         "url": "https://example.com/lunar-mission", "category": "science"},
+    ]
+    research = {
+        "ecb-rate": {"verification": "multi-source", "confidence": 95, "independent_sources": 2,
+                     "primary_fresh": True, "primary_derivative": False},
+        "lunar-mission": {"verification": "multi-source", "confidence": 93, "independent_sources": 2,
+                          "primary_fresh": True, "primary_derivative": False},
+    }
+
+    selected = rerank_stories(stories, research)
+    assert len(selected) == 2
+    assert len({story["event_family"] for story in selected}) == 2
+    assert len(consolidate_event_families(selected)) == 2
+
+
 def test_advanced_intelligence_v3_contract(tmp_path):
     from app.advanced import adaptive_threshold,diversify_stories,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
     threshold=adaptive_threshold({"threshold":72})
