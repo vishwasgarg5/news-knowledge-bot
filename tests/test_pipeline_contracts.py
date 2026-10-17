@@ -263,7 +263,7 @@ def test_quality_intelligence_v2_contract(tmp_path):
     assert snap["strong"]==1
 
 def test_backtest_v2_contract(tmp_path):
-    from app.analytics import backtest_learning_v2, calibrate_learning_threshold
+    from app.analytics import backtest_learning_v2, build_report, calibrate_learning_threshold, calibrate_learning_threshold
     from app.storage import ensure_data
     ensure_data(tmp_path)
     result=backtest_learning_v2(tmp_path)
@@ -541,6 +541,8 @@ def test_provisional_outcomes_are_excluded_from_training(tmp_path):
     append_rows(tmp_path/"news_learning.csv",[provisional,mature],HEADERS["news_learning.csv"])
     rows=read_rows(tmp_path/"news_learning.csv")
     assert backtest_learning_v2(tmp_path)["samples"] == 1
+    assert build_report(tmp_path)["mature_outcome_samples"] == 1
+    assert calibrate_learning_threshold(tmp_path)["samples"] == 1
     assert _profile(rows)["source_observations"] == {"Trusted":1}
     assert learning_metrics(rows)["evaluated"] == 1
     assert time_series_backtest(rows,minimum_train=1)["samples"] == 1
