@@ -62,10 +62,11 @@ def outcome_is_mature(row: dict) -> bool:
     if not isinstance(row, dict):
         return False
     horizon = str(row.get("seen_again_7d", "")).strip()
+    has_outcome = str(row.get("outcome_score") or row.get("learning_value") or "").strip() not in {"", "None"}
     if horizon in {"0", "1"}:
-        return True
+        return has_outcome
     if "seen_again_7d" not in row:
-        return str(row.get("outcome_score") or row.get("learning_value") or "").strip() not in {"", "None"}
+        return has_outcome
     return False
 
 def append_rows(path:Path,rows:list[dict],fields:list[str]):
