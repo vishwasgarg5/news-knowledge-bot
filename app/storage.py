@@ -62,7 +62,10 @@ def outcome_is_mature(row: dict) -> bool:
     if not isinstance(row, dict):
         return False
     horizon = str(row.get("seen_again_7d", "")).strip()
-    has_outcome = str(row.get("outcome_score") or row.get("learning_value") or "").strip() not in {"", "None"}
+    outcome = row.get("outcome_score")
+    if outcome is None or str(outcome).strip() in {"", "None"}:
+        outcome = row.get("learning_value")
+    has_outcome = outcome is not None and str(outcome).strip() not in {"", "None"}
     if horizon in {"0", "1"}:
         return has_outcome
     if "seen_again_7d" not in row:
