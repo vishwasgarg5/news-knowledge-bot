@@ -2,7 +2,7 @@ from __future__ import annotations
 from collections import Counter,defaultdict
 import json
 from datetime import date, timedelta
-from .storage import read_rows
+from .storage import read_rows, outcome_is_mature
 
 def build_report(data_path):
     learning=read_rows(data_path/"news_learning.csv")
@@ -12,9 +12,10 @@ def build_report(data_path):
         try:return float(x)
         except:return 0.0
     selected=[r for r in learning if str(r.get("selected","")).lower() in {"true","1","yes"}]
-    outcomes=[f(r.get("outcome_score") or r.get("learning_value")) for r in learning]
+    labeled=[r for r in learning if outcome_is_mature(r)]
+    outcomes=[f(r.get("outcome_score") or r.get("learning_value")) for r in labeled]
     source=defaultdict(list); category=defaultdict(list)
-    for r,v in zip(learning,outcomes):
+    for r,v in zip(labeled,outcomes):
         source[r.get("source","unknown")].append(v); category[r.get("category","unknown")].append(v)
     def averages(d):
         return {k:round(sum(v)/len(v),3) for k,v in sorted(d.items(),key=lambda z:-len(z[1])) if v}
@@ -27,7 +28,7 @@ def build_report(data_path):
         "7d":coverage("seen_again_7d"),
     }
     return {
-        "learning_samples":len(learning),"selected_samples":len(selected),
+        "learning_samples":len(learning),"selected_samples":len(selected),"mature_outcome_samples":len(labeled),
         "avg_outcome":round(sum(outcomes)/len(outcomes),3) if outcomes else 0,
         "daily_runs":len(daily),"history_stories":len(history),
         "source_reliability":averages(source),"category_reliability":averages(category),
@@ -45,6 +46,7 @@ def backtest_learning(data_path, min_score=0):
     rows=read_rows(data_path/"news_learning.csv")
     evaluated=[]
     for r in rows:
+        if not outcome_is_mature(r): continue
         try:
             initial=float(r.get("initial_score") or 0)
             outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
@@ -68,6 +70,7 @@ def backtest_learning_v2(data_path, min_score=0):
     """Leakage-safe diagnostic backtest with precision, recall and score buckets."""
     rows=read_rows(data_path/"news_learning.csv"); samples=[]
     for r in rows:
+        if not outcome_is_mature(r): continue
         try: score=float(r.get("initial_score") or 0); outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
         except (TypeError,ValueError): continue
         if score>=float(min_score): samples.append((score,outcome))
@@ -85,6 +88,7 @@ def calibrate_learning_threshold(data_path, minimum=35, maximum=85, step=5):
     """Find the historical score threshold with the best F1 without future leakage."""
     rows=read_rows(data_path/"news_learning.csv"); samples=[]
     for r in rows:
+        if not outcome_is_mature(r): continue
         try: score=float(r.get("initial_score") or 0); outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)
         except (TypeError,ValueError): continue
         samples.append((score,outcome>=0.5))
@@ -137,6 +141,7 @@ def backtest_learning_v3(data_path, min_score=0):
     rows=read_rows(data_path/"news_learning.csv")
     samples=[]
     for r in rows:
+        if not outcome_is_mature(r): continue
         try:
             score=float(r.get("initial_score") or 0)
             outcome=float(r.get("outcome_score") or r.get("learning_value") or 0)

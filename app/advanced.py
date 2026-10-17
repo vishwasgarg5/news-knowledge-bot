@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections import Counter
+from .storage import outcome_is_mature
 
 def _f(v, default=0.0):
     try: return float(v)
@@ -49,7 +50,7 @@ def consolidate_event_families(stories):
 
 def learning_v3_snapshot(learning_rows):
     rows=list(learning_rows or [])
-    labeled=[r for r in rows if str(r.get("outcome_score","")).strip() not in {"","None"}]
+    labeled=[r for r in rows if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
     if not labeled: return {"samples":0,"selected":0,"hit_rate":0.0,"false_positive_rate":0.0,"avg_outcome":0.0}
     selected=[r for r in labeled if str(r.get("selected","")).lower()=="true"]
     hits=[r for r in selected if _f(r.get("outcome_score"))>=0.5]

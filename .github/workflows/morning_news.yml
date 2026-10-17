@@ -129,7 +129,7 @@ jobs:
           stories=[{"region":"india","calibrated_confidence":90,"verification":{"confidence":80}},
                    {"region":"world","calibrated_confidence":70,"verification":{"confidence":65}}]
           assert confidence_snapshot(stories)["high_confidence"] == 1
-          assert historical_trend([{"date":"2026-10-07","region":"world"}])["stories"] == 1
+          assert historical_trend([{"date":"2026-10-07","region":"world"}], as_of="2026-10-07")["stories"] == 1
           stats={"source_failures":0,"source_warnings":0,"current_evidence":2,"total":2,
                  "data_quality":{"ok":True},"db_path":"data/news_knowledge.db","learning_labeled":1}
           assert operational_health(stats)["status"] == "PASS"

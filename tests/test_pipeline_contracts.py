@@ -263,7 +263,7 @@ def test_quality_intelligence_v2_contract(tmp_path):
     assert snap["strong"]==1
 
 def test_backtest_v2_contract(tmp_path):
-    from app.analytics import backtest_learning_v2, calibrate_learning_threshold
+    from app.analytics import backtest_learning_v2, build_report, calibrate_learning_threshold, calibrate_learning_threshold
     from app.storage import ensure_data
     ensure_data(tmp_path)
     result=backtest_learning_v2(tmp_path)
@@ -309,7 +309,7 @@ def test_ops_and_final_audit_contract():
     stories=[{"region":"india","breaking_score":60,"calibrated_confidence":90,"verification":{"confidence":80}},
              {"region":"world","breaking_score":0,"calibrated_confidence":70,"verification":{"confidence":65}}]
     assert confidence_snapshot(stories)["high_confidence"]==1
-    assert historical_trend([{"date":"2026-10-07","region":"world","event_status":"CONFIRMED"}])["stories"]==1
+    assert historical_trend([{"date":"2026-10-07","region":"world","event_status":"CONFIRMED"}], as_of="2026-10-07")["stories"]==1
     stats={"source_failures":0,"source_warnings":0,"current_evidence":2,"total":2,"data_quality":{"ok":True},"db_path":"data/news_knowledge.db","learning_labeled":10}
     assert operational_health(stats)["status"]=="PASS"
     assert final_audit(stats,stories)["world"]==1
@@ -340,13 +340,16 @@ def test_production_v4_feedback_and_monitoring(tmp_path):
     assert alerts == []
 
 
-def test_operational_trend_uses_calendar_window():
+def test_operational_trend_uses_closed_calendar_window():
     from app.ops import historical_trend
     result=historical_trend([
-        {"date":"2020-01-01","region":"world"},
+        {"date":"2026-09-30","region":"world"},
+        {"date":"2026-10-07","region":"world"},
+        {"date":"2026-10-08","region":"india"},
         {"date":"2099-01-01","region":"india"},
-    ],days=7)
-    assert result["stories"] <= 1
+    ],days=7,as_of="2026-10-07")
+    assert result["stories"] == 1
+    assert result["regions"] == {"world": 1}
 
 
 def test_feedback_schema_and_production_wiring():
@@ -517,3 +520,34 @@ def test_knowledge_daily_is_unique_by_date(tmp_path):
           {"date":"2026-10-07","stories":2,"high_impact":1,"new_events":0,"developing_events":1,"confirmed_events":0,"contradictions":0,"research_items":2}]
     replace_rows(path,[rows[-1]],HEADERS["knowledge_daily.csv"])
     assert len([r for r in read_rows(path) if r["date"]=="2026-10-07"])==1
+
+def test_provisional_outcomes_are_excluded_from_training(tmp_path):
+    from app.storage import HEADERS, append_rows, ensure_data, outcome_is_mature, read_rows
+    from app.analytics import backtest_learning_v2, build_report, calibrate_learning_threshold
+    from app.learning import _profile, learning_metrics
+    from app.production import time_series_backtest
+    from app.production_v5 import walk_forward_v5, calibration_monitor
+    from app.intelligence_v4 import diagnose_learning
+    from app.advanced import learning_v3_snapshot
+    from app.intelligence_v5_plus import impact_outcome_learning
+
+    ensure_data(tmp_path)
+    provisional={"run_date":"2026-10-10","event_id":"provisional","story_id":"p","source":"Noisy","category":"world",
+                 "initial_score":"90","selected":"true","seen_again_7d":"","learning_value":"1.00","outcome_score":"1.00"}
+    mature={"run_date":"2026-10-01","event_id":"mature","story_id":"m","source":"Trusted","category":"india",
+            "initial_score":"80","selected":"true","seen_again_7d":"1","learning_value":"0.80","outcome_score":"0.80"}
+    assert not outcome_is_mature(provisional)
+    assert outcome_is_mature(mature)
+    append_rows(tmp_path/"news_learning.csv",[provisional,mature],HEADERS["news_learning.csv"])
+    rows=read_rows(tmp_path/"news_learning.csv")
+    assert backtest_learning_v2(tmp_path)["samples"] == 1
+    assert build_report(tmp_path)["mature_outcome_samples"] == 1
+    assert calibrate_learning_threshold(tmp_path)["samples"] == 1
+    assert _profile(rows)["source_observations"] == {"Trusted":1}
+    assert learning_metrics(rows)["evaluated"] == 1
+    assert time_series_backtest(rows,minimum_train=1)["samples"] == 1
+    assert walk_forward_v5(rows,train_min=1)["samples"] == 1
+    assert calibration_monitor(rows)["samples"] == 1
+    assert diagnose_learning(rows,today="2026-10-17")["samples"] == 1
+    assert learning_v3_snapshot(rows)["samples"] == 1
+    assert impact_outcome_learning([],rows)["samples"] == 1

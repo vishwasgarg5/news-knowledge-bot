@@ -4,6 +4,7 @@ from collections import Counter, defaultdict
 from datetime import date, timedelta
 import json
 from pathlib import Path
+from .storage import outcome_is_mature
 
 
 def _f(v, default=0.0):
@@ -17,6 +18,8 @@ def time_series_backtest(rows, minimum_train=30, test_window=20, minimum_thresho
     """Rolling-origin backtest: thresholds are learned only from rows before each test window."""
     clean=[]
     for r in rows or []:
+        if not outcome_is_mature(r):
+            continue
         try:
             score=_f(r.get("initial_score"))
             outcome=_f(r.get("outcome_score") or r.get("learning_value"))
