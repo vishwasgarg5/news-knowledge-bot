@@ -66,19 +66,43 @@ def send(text: str):
     raise RuntimeError("Telegram delivery failed after retries")
 
 
-def chunks(text: str, size: int = 3800):
-    lines, current, length = [], [], 0
-    for line in text.splitlines():
-        if length + len(line) + 1 > size and current:
-            lines.append("\n".join(current))
-            current = []
-            length = 0
-        current.append(line)
-        length += len(line) + 1
-    if current:
-        lines.append("\n".join(current))
-    return lines
+def chunks(text: str, size: int = 3500):
+    """Split at line/word boundaries and guarantee no single chunk exceeds size."""
+    if size < 100:
+        raise ValueError("Telegram chunk size must be at least 100 characters")
 
+    def split_line(line):
+        if len(line) <= size:
+            return [line]
+        bold = "<b>" in line and "</b>" in line
+        body = line.replace("<b>", "").replace("</b>", "") if bold else line
+        parts=[]; current=""
+        for word in body.split():
+            if len(word) > size:
+                if current:
+                    parts.append(current); current=""
+                parts.extend(word[i:i+size] for i in range(0,len(word),size))
+                continue
+            candidate=(current+" "+word).strip()
+            if len(candidate)>size and current:
+                parts.append(current); current=word
+            else:
+                current=candidate
+        if current:
+            parts.append(current)
+        return [f"<b>{part}</b>" for part in parts] if bold else parts
+
+    result=[]; current=""
+    for line in str(text).splitlines():
+        for part in split_line(line):
+            candidate=(current+"\n"+part).strip() if current else part
+            if len(candidate)>size and current:
+                result.append(current); current=part
+            else:
+                current=candidate
+    if current:
+        result.append(current)
+    return result
 
 def send_text(text: str):
     parts=chunks(text)
