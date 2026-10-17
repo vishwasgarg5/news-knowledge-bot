@@ -817,3 +817,63 @@ def test_diversification_source_limit_uses_canonical_publisher_domain():
     assert len(result) == 2
     assert sum("reuters.com" in row["url"] for row in result) == 1
     assert sum("bbc.com" in row["url"] for row in result) == 1
+
+def test_v5_scorecard_reads_nested_verification_and_source_counts():
+    from app.intelligence_v5_plus import missing_evidence, scorecard
+
+    stories = [
+        {
+            "headline": "Corroborated event",
+            "source": "Reuters",
+            "url": "https://reuters.com/story",
+            "summary": "A specific event summary.",
+            "verification": {
+                "verification": "multi-source",
+                "independent_sources": 2,
+                "source_count": 3,
+                "evidence": [{"source": "BBC"}],
+            },
+        },
+        {
+            "headline": "Single-source event",
+            "source": "AP",
+            "url": "https://apnews.com/story",
+            "summary": "Another event summary.",
+            "verification": {
+                "verification": "single-source",
+                "source_count": 1,
+                "independent_sources": 0,
+            },
+        },
+    ]
+    assert scorecard(stories, {"health": "PASS"})["verified"] == 1
+    assert missing_evidence(stories) == []
+
+
+def test_final_audit_does_not_hide_evidence_or_coverage_gaps(tmp_path):
+    from app.ops import final_audit
+
+    stats = {
+        "source_failures": 0,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(tmp_path / "news_knowledge.db"),
+        "learning_labeled": 0,
+        "v5_production_evaluation": {
+            "evidence": {"stories": 2, "evidence_gap_rate": 0.5}
+        },
+        "regional_coverage_audit": {
+            "india_shortfall": 1,
+            "world_shortfall": 0,
+        },
+        "v5_quality_gate": {"status": "HOLD"},
+    }
+    (tmp_path / "news_knowledge.db").touch()
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert result["checks"]["evidence"] is False
+    assert result["checks"]["regional_coverage"] is False
+    assert set(result["blockers"]) == {"evidence_gaps", "regional_coverage_shortfall"}
+    assert result["production_quality_gate"] == "HOLD"
