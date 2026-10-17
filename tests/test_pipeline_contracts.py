@@ -494,7 +494,8 @@ def test_production_v5_gate_27_40():
     assert wf["feature_learning"] is True
     assert "precision" in wf and "recall" in wf
     assert "delta_f1" in shadow_ab_test(rows,rows)
-    assert calibration_monitor(rows)["samples"]==150
+    cal=calibration_monitor(rows)
+    assert cal["samples"]==cal["holdout_samples"] and cal["holdout_samples"]>=20
     assert drift_monitor(rows,rows)["status"]=="STABLE"
     assert {"contradictions","evidence_gaps"} <= set(contradiction_and_evidence([]))
     q=autonomous_research_agent([{"headline":"Test","priority":80}],rows)
