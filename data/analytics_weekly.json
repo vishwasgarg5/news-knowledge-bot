@@ -1,36 +1,35 @@
 {
-  "learning_samples": 6200,
-  "selected_samples": 908,
-  "avg_outcome": 0.136,
-  "daily_runs": 21,
-  "history_stories": 1246,
+  "learning_samples": 6235,
+  "selected_samples": 910,
+  "mature_outcome_samples": 6091,
+  "avg_outcome": 0.137,
+  "daily_runs": 22,
+  "history_stories": 1248,
   "source_reliability": {
-    "BBC News": 0.285,
+    "BBC News": 0.29,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.028,
-    "Times of India": 0.029,
+    "Times of India": 0.03,
     "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": 0.033,
-    "Business News Today – Finance, Industry & Economy | The Hindu": 0.31,
+    "Business News Today – Finance, Industry & Economy | The Hindu": 0.315,
     "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.059,
     "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.025,
-    "Technology News Today, Latest Tech News | The Hindu": 0.41,
-    "TechCrunch": 0.114,
-    "World | Deutsche Welle": 0.241,
-    "World news | The Guardian": 0.112,
-    "NPR Topics: World": 0.0,
-    "Al Jazeera – Breaking News, World News and Video from Al Jazeera": 0.0
+    "Technology News Today, Latest Tech News | The Hindu": 0.417,
+    "TechCrunch": 0.119,
+    "World | Deutsche Welle": 0.242,
+    "World news | The Guardian": 0.129
   },
   "category_reliability": {
     "india": 0.044,
-    "world": 0.149,
-    "business": 0.314,
-    "technology": 0.27,
-    "science": 0.29,
+    "world": 0.151,
+    "business": 0.32,
+    "technology": 0.277,
+    "science": 0.299,
     "defence": 0.338
   },
   "top_categories": [
     [
       "india",
-      611
+      613
     ],
     [
       "world",
@@ -50,21 +49,21 @@
     ]
   ],
   "outcome_horizon_coverage": {
-    "24h": 6163,
-    "48h": 6128,
-    "7d": 5722
+    "24h": 6200,
+    "48h": 6200,
+    "7d": 6091
   },
   "outcome_maturity": {
-    "24h": 6163,
-    "48h": 6128,
-    "7d": 5722
+    "24h": 6200,
+    "48h": 6200,
+    "7d": 6091
   },
-  "false_positives": 585,
-  "missed_stories": 340,
+  "false_positives": 603,
+  "missed_stories": 351,
   "last_7_days": {
-    "runs": 8,
-    "avg_success_rate": 0.328,
-    "avg_false_positive_rate": 0.631,
-    "avg_miss_rate": 0.066
+    "runs": 5,
+    "avg_success_rate": 0.327,
+    "avg_false_positive_rate": 0.636,
+    "avg_miss_rate": 0.065
   }
 }
