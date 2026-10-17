@@ -342,10 +342,19 @@ def test_backtest_v3_contract(tmp_path):
 
 def test_main_wires_advanced_v3():
     text=read("app/main.py")
-    for item in ("apply_adaptive_threshold","diversify_stories","consolidate_event_families",
-                 "learning_v3_snapshot","source_fallback_plan","breaking_fast_lane",
-                 "calibrate_confidence","backtest_learning_v3"):
+    for item in ("apply_adaptive_threshold","learning_v3_snapshot","source_fallback_plan",
+                 "breaking_fast_lane","calibrate_confidence","backtest_learning_v3"):
         assert item in text
+    # Diversity/family consolidation is intentionally not applied a second time
+    # after rerank_stories, because that can drop stories without regional backfill.
+    advanced=read("app/advanced.py")
+    assert "def diversify_stories(" in advanced
+    assert "def consolidate_event_families(" in advanced
+    selection=text.split("selected=rerank_stories(candidates,research)",1)[1].split(
+        "result=generate_briefing",1
+    )[0]
+    assert "diversify_stories(selected" not in selection
+    assert "consolidate_event_families(selected)" not in selection
 
 
 def test_ops_and_final_audit_contract():
