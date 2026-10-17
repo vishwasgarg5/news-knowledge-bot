@@ -179,13 +179,13 @@ def test_telegram_chunks_preserve_content():
 
 
 def test_workflow_is_schedule_only_and_linked():
-    workflow = yaml.safe_load(read(".github/workflows/morning_news.yml"))
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
     triggers = workflow.get(True) or workflow.get("on") or {}
     assert "workflow_dispatch" in triggers
     assert "schedule" in triggers
     assert "push" not in triggers
 
-    text = read(".github/workflows/morning_news.yml")
+    text = read(".github/workflows/news_intelligence.yml")
     assert "python -m compileall -q app" in text
     assert "python -m app.main" in text
     assert "actions/upload-artifact@v7" in text
@@ -649,11 +649,11 @@ def test_evidence_audit_recognizes_nested_independent_sources():
     assert production_quality_gate({"paired_folds":0},{"samples":0,"ece":None},{"status":"UNKNOWN"},audit)["status"]=="HOLD"
 
 def test_single_main_workflow_and_no_push_trigger_after_guardrail_changes():
-    workflow=yaml.safe_load(read(".github/workflows/morning_news.yml"))
+    workflow=yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
     triggers=workflow.get(True) or workflow.get("on") or {}
     assert "workflow_dispatch" in triggers and "schedule" in triggers
     assert "push" not in triggers and "pull_request" not in triggers
-    assert "actions/upload-artifact@v7" in read(".github/workflows/morning_news.yml")
+    assert "actions/upload-artifact@v7" in read(".github/workflows/news_intelligence.yml")
 
 
 def test_research_verification_rejects_unrelated_same_topic_articles():
