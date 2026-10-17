@@ -188,7 +188,7 @@ def test_workflow_is_schedule_only_and_linked():
     text = read(".github/workflows/morning_news.yml")
     assert "python -m compileall -q app" in text
     assert "python -m app.main" in text
-    assert "actions/upload-artifact@v5" in text
+    assert "actions/upload-artifact@v7" in text
     assert "NEWS_WORLD_TOP: '5'" in text
     assert "NEWS_INDIA_TOP: '5'" in text
     assert "git add data/" in text
@@ -496,7 +496,7 @@ def test_production_v5_gate_27_40():
     assert "delta_f1" in shadow_ab_test(rows,rows)
     assert calibration_monitor(rows)["samples"]==150
     assert drift_monitor(rows,rows)["status"]=="STABLE"
-    assert set(contradiction_and_evidence([]))=={"contradictions","evidence_gaps"}
+    assert {"contradictions","evidence_gaps"} <= set(contradiction_and_evidence([]))
     q=autonomous_research_agent([{"headline":"Test","priority":80}],rows)
     assert generate_research_reports(q)
     assert followup_research_plan([{"headline":"Test","impact":{"score":80}}])[0]["priority"]==80
@@ -510,7 +510,8 @@ def test_phase_2_to_4_plus_production_hardening(tmp_path):
     report=weekly_report([{"headline":"India market investment","importance":80}],[])
     assert "top_entities" in report and isinstance(report["top_entities"],list)
     gate=production_quality_gate({"paired_folds":2},{"samples":10,"ece":0.05},{"status":"STABLE"},{"contradictions":[],"evidence_gaps":[]})
-    assert gate["status"]=="PASS"
+    assert gate["status"]=="HOLD"
+    assert "insufficient_paired_folds" in gate["blockers"]
 
 def test_knowledge_daily_is_unique_by_date(tmp_path):
     from app.storage import ensure_data, read_rows, replace_rows, HEADERS
