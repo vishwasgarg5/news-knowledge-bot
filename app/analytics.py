@@ -210,3 +210,13 @@ def chronological_ranking_evaluation(data_path, train_fraction=0.7):
             "baseline_threshold": 50, "baseline": baseline, "challenger": challenger,
             "delta_f1": round(challenger["f1"] - baseline["f1"], 3),
             "leakage_safe": max(train_dates) < min(test_dates)}
+
+
+def learning_data_audit(data_path):
+    rows=read_rows(data_path/"news_learning.csv")
+    mature=[r for r in rows if outcome_is_mature(r)]
+    selected=[r for r in mature if str(r.get("selected","")).lower() in {"true","1","yes"}]
+    return {"total_rows":len(rows),"mature_rows":len(mature),
+            "provisional_rows":len(rows)-len(mature),
+            "mature_label_coverage":round(len(mature)/max(1,len(rows)),3),
+            "selected_mature_rows":len(selected)}
