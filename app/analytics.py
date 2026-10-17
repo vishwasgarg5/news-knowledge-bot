@@ -165,3 +165,48 @@ def backtest_learning_v3(data_path, min_score=0):
         return sum(actual for _,score,actual in rows if score>=50)/max(1,sum(score>=50 for _,score,_ in rows))
     temporal=max(0.0,1.0-abs(hr(a)-hr(b)))
     return {"samples":len(samples),"hit_rate":round(hits/max(1,selected),3),"precision":round(precision,3),"recall":round(recall,3),"f1":round(f1,3),"mae":round(mae,3),"temporal_stability":round(temporal,3)}
+
+
+def chronological_ranking_evaluation(data_path, train_fraction=0.7):
+    """Train a score threshold on earlier mature labels and test on later dates."""
+    rows = []
+    for row in read_rows(data_path / "news_learning.csv"):
+        if not outcome_is_mature(row):
+            continue
+        day = str(row.get("run_date", ""))[:10]
+        try:
+            score = max(0.0, min(100.0, float(row.get("initial_score") or 0)))
+            outcome = float(row.get("outcome_score") or row.get("learning_value") or 0)
+        except (TypeError, ValueError):
+            continue
+        if day and 0 <= outcome <= 1:
+            rows.append((day, score, outcome >= 0.5))
+    dates = sorted({r[0] for r in rows})
+    if len(dates) < 3:
+        return {"status": "INSUFFICIENT_DATES", "samples": len(rows), "leakage_safe": True}
+    split = max(1, min(len(dates) - 1, int(len(dates) * train_fraction)))
+    train_dates, test_dates = set(dates[:split]), set(dates[split:])
+    train = [(s, y) for d, s, y in rows if d in train_dates]
+    test = [(s, y) for d, s, y in rows if d in test_dates]
+
+    def metrics(samples, threshold):
+        pred = [s >= threshold for s, _ in samples]
+        actual = [y for _, y in samples]
+        tp = sum(p and y for p, y in zip(pred, actual))
+        fp = sum(p and not y for p, y in zip(pred, actual))
+        fn = sum(not p and y for p, y in zip(pred, actual))
+        precision = tp / max(1, tp + fp)
+        recall = tp / max(1, tp + fn)
+        return {"precision": round(precision, 3), "recall": round(recall, 3),
+                "f1": round(2 * precision * recall / max(1e-12, precision + recall), 3),
+                "predicted_positive": sum(pred), "actual_positive": sum(actual),
+                "samples": len(samples)}
+    choices = [(metrics(train, t)["f1"], t) for t in range(50, 96, 5)]
+    _, threshold = max(choices, key=lambda x: (x[0], x[1]))
+    baseline, challenger = metrics(test, 50), metrics(test, threshold)
+    return {"status": "OK", "samples": len(rows), "train_samples": len(train),
+            "test_samples": len(test), "train_dates": len(train_dates),
+            "test_dates": len(test_dates), "threshold": threshold,
+            "baseline_threshold": 50, "baseline": baseline, "challenger": challenger,
+            "delta_f1": round(challenger["f1"] - baseline["f1"], 3),
+            "leakage_safe": max(train_dates) < min(test_dates)}
