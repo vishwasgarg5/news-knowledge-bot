@@ -3,8 +3,8 @@ name: News Intelligence
 on:
   workflow_dispatch:
   schedule:
-    - cron: '7 4 * * *'
-      timezone: 'Asia/Kolkata'
+    # 04:07 Asia/Kolkata = 22:37 UTC on the previous day.
+    - cron: '37 22 * * *'
 
 permissions:
   contents: write
@@ -87,6 +87,10 @@ jobs:
           assert _fallback_why({"summary":"The move was made because demand increased significantly."})
           print("News enrichment smoke tests passed")
           PY
+      - name: Run regression contract tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: pytest -q
       - name: Security and dependency audit
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
