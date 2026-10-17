@@ -151,17 +151,17 @@ def verify_article(story, articles, memory=None):
         if str(a.get("url",""))==str(story.get("url","")): continue
         if _is_derivative_report(a): continue
         if not _published_recent(a.get("published",""),72): continue
+        # Corroboration must match the actual headline, not just a broad or
+        # contaminated primary summary. Summaries from unrelated stories can
+        # share names/topics and falsely inflate independent-source counts.
         title_sim=_event_similarity(headline,a.get("title",""))
-        primary_context=f"{headline} {primary_summary}".strip()
-        article_context=f"{a.get('title','')} {a.get('summary','')}".strip()
-        context_sim=_event_similarity(primary_context,article_context)
-        sim=max(title_sim, context_sim*0.92)
-        strong_match=_strong_event_match(headline,primary_summary,a)
-        relaxed_match=_relaxed_event_match(headline,primary_summary,a)
-        if sim>=0.55 or strong_match or relaxed_match:
+        strong_match=_strong_event_match(headline,"",a)
+        relaxed_match=_relaxed_event_match(headline,"",a)
+        sim=title_sim
+        if title_sim>=0.55 or strong_match or relaxed_match:
             source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
             match_score=max(sim,0.58 if strong_match else sim)
-            matches.append((match_score*0.7+trust*0.3,a,title_sim,context_sim))
+            matches.append((match_score*0.7+trust*0.3,a,title_sim,0.0))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
     for score,a,title_sim,context_sim in matches:
@@ -169,12 +169,12 @@ def verify_article(story, articles, memory=None):
         article_tokens=_tokens(a.get("title","")); article_summary_tokens=_tokens(a.get("summary",""))
         distinctive_title=len((headline_tokens & article_tokens) - {"supreme","court","government","president","commission","election","india","world"})
         distinctive_context=len(((headline_tokens|primary_tokens) & (article_tokens|article_summary_tokens)) - {"supreme","court","government","president","commission","election","india","world","news","report","today","latest"})
-        # A summary can recover differently-worded reports, but it still needs
-        # concrete overlap; this avoids turning broad topical similarity into corroboration.
-        strong_match=_strong_event_match(headline,primary_summary,a)
-        relaxed_match=_relaxed_event_match(headline,primary_summary,a)
-        if not strong_match and not relaxed_match and title_sim < 0.55 and (context_sim < 0.55 or distinctive_context < 3): continue
-        if not strong_match and title_sim < 0.55 and distinctive_title < 1 and distinctive_context < 4: continue
+        # Only count a report when the story headline itself is matched.
+        # Do not let primary-summary overlap rescue an unrelated headline.
+        strong_match=_strong_event_match(headline,"",a)
+        relaxed_match=_relaxed_event_match(headline,"",a)
+        if not strong_match and not relaxed_match and title_sim < 0.55: continue
+        if not strong_match and title_sim < 0.55: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
