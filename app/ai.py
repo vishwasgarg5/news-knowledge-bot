@@ -364,7 +364,7 @@ def rerank_stories(stories,research=None):
         item["ranking_score"]=round(final,1)
         item["personalization_applied"]=round(personal,1)
         item["source_reliability_applied"]=round(float(s.get("source_reliability",0) or 0),3)
-        item["event_family"]=_event_family_key(item.get("headline","")) or "unclustered"
+        item["event_family"]=_event_family_key(item.get("headline","")) or str(item.get("event_id") or item.get("story_id") or item.get("url") or item.get("headline") or "")
         item["_verification"]=verification
         scored.append((final,item))
 
