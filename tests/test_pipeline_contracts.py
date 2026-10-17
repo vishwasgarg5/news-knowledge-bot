@@ -523,7 +523,7 @@ def test_knowledge_daily_is_unique_by_date(tmp_path):
 
 def test_provisional_outcomes_are_excluded_from_training(tmp_path):
     from app.storage import HEADERS, append_rows, ensure_data, outcome_is_mature, read_rows
-    from app.analytics import backtest_learning_v2
+    from app.analytics import backtest_learning_v2, build_report, calibrate_learning_threshold
     from app.learning import _profile, learning_metrics
     from app.production import time_series_backtest
     from app.production_v5 import walk_forward_v5, calibration_monitor
