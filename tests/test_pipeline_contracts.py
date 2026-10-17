@@ -654,3 +654,47 @@ def test_single_main_workflow_and_no_push_trigger_after_guardrail_changes():
     assert "workflow_dispatch" in triggers and "schedule" in triggers
     assert "push" not in triggers and "pull_request" not in triggers
     assert "actions/upload-artifact@v7" in read(".github/workflows/morning_news.yml")
+
+
+def test_research_verification_rejects_unrelated_same_topic_articles():
+    from app.research import verify_article
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "Two Mumbai-based firms, five Indian nationals face U.S. sanctions over Iran oil trade",
+        "summary": "The United States announced sanctions on firms accused of facilitating Iranian oil trade.",
+        "source": "The Hindu",
+        "url": "https://thehindu.com/example-primary-story",
+        "published": now,
+    }
+    unrelated = [
+        {
+            "title": "Femicide in Iran: When honor becomes a death sentence",
+            "summary": "A report about violence against women and honor killings in Iran.",
+            "source": "Deutsche Welle",
+            "url": "https://dw.com/example-iran-femicide",
+            "published": now,
+        },
+        {
+            "title": "India protesters defy government crackdown over voting rights",
+            "summary": "Protesters challenged a government crackdown during a demonstration.",
+            "source": "The Guardian",
+            "url": "https://theguardian.com/example-india-protest",
+            "published": now,
+        },
+    ]
+    result = verify_article(story, unrelated)
+    assert result["independent_sources"] == 0
+    assert result["evidence"] == []
+    assert result["verification"] == "single-source"
+
+    corroborating = {
+        "title": "US sanctions firms over Iran oil trade network",
+        "summary": "Officials announced sanctions against firms accused of facilitating Iranian oil exports.",
+        "source": "Reuters",
+        "url": "https://reuters.com/example-iran-oil-sanctions",
+        "published": now,
+    }
+    result = verify_article(story, unrelated + [corroborating])
+    assert result["independent_sources"] == 1
+    assert [row["source"] for row in result["evidence"]] == ["Reuters"]
