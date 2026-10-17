@@ -32,12 +32,18 @@ def send(text: str):
         time.sleep(wait)
 
     for attempt in range(MAX_RETRIES):
-        r = requests.post(API.format(TELEGRAM_BOT_TOKEN), data={
-            "chat_id": TELEGRAM_CHAT_ID,
-            "text": _html(text),
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        }, timeout=30)
+        try:
+            r = requests.post(API.format(TELEGRAM_BOT_TOKEN), data={
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": _html(text),
+                "parse_mode": "HTML",
+                "disable_web_page_preview": True,
+            }, timeout=30)
+        except requests.RequestException as exc:
+            if attempt >= MAX_RETRIES - 1:
+                raise RuntimeError("Telegram delivery failed after network retries") from exc
+            time.sleep(min(2 ** attempt, 15))
+            continue
 
         if r.ok:
             _LAST_SEND = time.monotonic()
