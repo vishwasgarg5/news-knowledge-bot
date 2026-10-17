@@ -4,6 +4,7 @@ from collections import defaultdict
 from datetime import date
 from statistics import mean, pstdev
 from typing import Iterable
+from .storage import outcome_is_mature
 
 
 def _f(v, default=0.0):
@@ -21,7 +22,7 @@ def _past(rows, today):
     out=[]
     for r in rows or []:
         d=str(r.get("run_date",""))[:10]
-        if d and d < str(today):
+        if d and d < str(today) and outcome_is_mature(r):
             out.append(r)
     return out
 
