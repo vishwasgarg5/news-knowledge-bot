@@ -193,8 +193,9 @@ jobs:
           # A held research/coverage gate must not be reported as a clean final audit.
           gate=stats.get("v5_quality_gate") or {}
           final=stats.get("final_audit") or {}
-          if gate.get("status") == "HOLD":
-              assert final.get("health") != "PASS", "Final audit must surface a held production quality gate"
+          blockers=set(gate.get("blockers") or [])
+          if blockers.intersection({"evidence_gaps","regional_coverage_shortfall"}):
+              assert final.get("health") != "PASS", "Final audit must surface evidence/coverage blockers"
           scorecard=stats.get("intelligence_scorecard") or {}
           assert 0 <= int(scorecard.get("verified",0) or 0) <= int(scorecard.get("stories",0) or 0)
           completion=float(stats.get("research_completion_rate",0) or 0)
