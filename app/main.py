@@ -13,7 +13,7 @@ from .learning import evaluate_and_learn,apply_learning,learning_metrics
 from .intelligence import enrich_trends,personalize,intelligence_summary
 from .analytics import build_report,write_reports,backtest_learning_v2,backtest_learning_v3,quality_dashboard
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
-from .advanced import adaptive_threshold,apply_adaptive_threshold,diversify_stories,consolidate_event_families,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
+from .advanced import adaptive_threshold,apply_adaptive_threshold,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
 from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
 from .intelligence_v5 import intelligence_v5
@@ -335,9 +335,10 @@ def main():
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
+    # rerank_stories already enforces verification, event-family, source and
+    # regional quotas. A second destructive filter here removed eligible stories
+    # without backfilling, causing avoidable India/World coverage shortfalls.
     selected=rerank_stories(candidates,research)
-    selected=consolidate_event_families(selected)
-    selected=diversify_stories(selected,max_total=int(os.getenv("NEWS_MAX_STORIES","10")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")),world_target=int(os.getenv("NEWS_WORLD_TOP","5")),max_per_source=int(os.getenv("NEWS_MAX_STORIES_PER_SOURCE","2")))
     fast_lane=breaking_fast_lane(selected)
     result=generate_briefing(selected,all_articles,timeline,today,research)
     source_by_url={a.get("url"):a.get("source","") for a in all_articles}
