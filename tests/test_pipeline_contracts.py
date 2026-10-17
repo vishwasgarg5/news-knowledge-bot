@@ -877,3 +877,16 @@ def test_final_audit_does_not_hide_evidence_or_coverage_gaps(tmp_path):
     assert result["checks"]["regional_coverage"] is False
     assert set(result["blockers"]) == {"evidence_gaps", "regional_coverage_shortfall"}
     assert result["production_quality_gate"] == "HOLD"
+
+def test_append_rows_preserves_records_with_atomic_replacement(tmp_path):
+    from app.storage import append_rows, read_rows
+
+    path = tmp_path / "history.csv"
+    fields = ["date", "story_id"]
+    append_rows(path, [{"date": "2026-10-16", "story_id": "old"}], fields)
+    append_rows(path, [{"date": "2026-10-17", "story_id": "new"}], fields)
+    assert read_rows(path) == [
+        {"date": "2026-10-16", "story_id": "old"},
+        {"date": "2026-10-17", "story_id": "new"},
+    ]
+    assert not path.with_name(".history.csv.tmp").exists()
