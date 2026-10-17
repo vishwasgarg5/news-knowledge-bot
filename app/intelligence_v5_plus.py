@@ -2,6 +2,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, UTC
 import math,re,requests
+from .storage import outcome_is_mature
 
 def _f(v,d=0.0):
     try:return float(v)
@@ -76,7 +77,7 @@ def event_evolution(current,timeline):
     return out
 
 def impact_outcome_learning(stories,learning_rows):
-    labels=[r for r in learning_rows or [] if str(r.get("outcome_score","")).strip()]
+    labels=[r for r in learning_rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip()]
     rates={}
     for level in ("HIGH","MEDIUM","LOW"):
         xs=[_f(r.get("outcome_score")) for r in labels if str(r.get("impact_level","")).upper()==level]
