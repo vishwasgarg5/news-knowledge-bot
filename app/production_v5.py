@@ -113,11 +113,28 @@ def _delta_ci(values):
     if len(vals)<5: return {"mean":round(mean(vals),3) if vals else 0.0,"lower":None,"upper":None,"significant":False,"n":len(vals)}
     mu=mean(vals); se=stdev(vals)/math.sqrt(len(vals)); critical={5:2.776,6:2.571,7:2.447,8:2.365,9:2.306,10:2.262,11:2.228,12:2.201}.get(len(vals),1.96 if len(vals)>=30 else 2.10); margin=critical*se
     return {"mean":round(mu,3),"lower":round(mu-margin,3),"upper":round(mu+margin,3),"significant":bool(mu>0 and mu-margin>0),"n":len(vals)}
+def shadow_ab_test(v4_rows,v5_rows,train_min=60,test_window=30):
+    a=_fixed_threshold_eval(v4_rows,50,train_min,test_window); b=walk_forward_v5(v5_rows,train_min,test_window)
+    n=min(len(a["folds"]),len(b["folds"])); deltas=[b["folds"][i]["f1"]-a["folds"][i]["f1"] for i in range(n)]
+    precision_deltas=[b["folds"][i]["precision"]-a["folds"][i]["precision"] for i in range(n)]
+    f1_ci=_delta_ci(deltas); precision_ci=_delta_ci(precision_deltas)
+    delta=round(b["f1"]-a["f1"],3)
+    promote=bool(delta>0 and b["precision"]>a["precision"] and f1_ci["significant"] and precision_ci["mean"]>0 and a.get("leakage_safe") and b.get("leakage_safe"))
+    return {"baseline_v4":a,"candidate_v5":b,"delta_f1":delta,"delta_precision":round(b["precision"]-a["precision"],3),"f1_confidence_interval":f1_ci,"precision_confidence_interval":precision_ci,"paired_folds":n,"promote":promote,"promotion_rule":"V5 must improve both out-of-sample F1 and precision with positive 95% fold CI"}
+
+def calibrate_confidence(initial_score, rows, bins=10):
+    """Map a raw 0-100 score to an empirical outcome probability with shrinkage."""
+    score=max(0,min(100,_f(initial_score))); idx=min(bins-1,int(score/100*bins)); lo=idx/bins; hi=(idx+1)/bins
+    mature=[r for r in rows or [] if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}]
+    bucket=[r for r in mature if (lo<=max(0,min(100,_f(r.get("initial_score"))))/100<hi or (idx==bins-1 and max(0,min(100,_f(r.get("initial_score"))))/100==hi))]
+    global_rate=sum(_label(r) for r in mature)/max(1,len(mature))
+    rate=(sum(_label(r) for r in bucket)+4*global_rate)/(len(bucket)+4)
+    return round(rate*100,1)
 def calibration_monitor(rows,bins=10):
     """Fit score-to-outcome calibration on earlier rows and evaluate later rows only."""
     clean=sorted([dict(r) for r in (rows or []) if outcome_is_mature(r) and str(r.get("outcome_score","")).strip() not in {"","None"}],key=lambda r:str(r.get("run_date","")))
     n=len(clean)
-    if n<60: return {"bins":[],"samples":0,"train_samples":n,"holdout_samples":0,"ece":None,"brier":None,"status":"INSUFFICIENT_DATA","method":"chronological_holdout"}
+    if n<60: return {"bins":[],"samples":n,"train_samples":n,"holdout_samples":0,"ece":None,"brier":None,"status":"INSUFFICIENT_DATA","method":"chronological_holdout","leakage_safe":True}
     split=max(40,int(n*0.70))
     if n-split<20: split=n-20
     train,holdout=clean[:split],clean[split:]
@@ -150,6 +167,9 @@ def drift_monitor(current,baseline):
     return {"mean_distribution_shift":round(drift,4),"status":"DRIFT" if drift>=0.20 else "STABLE","current_samples":n,"baseline_samples":m,"current_categories":dict(cur),"baseline_categories":dict(base),"method":"total_variation","threshold":0.20}
 def contradiction_and_evidence(stories):
     return evidence_audit(stories)
+def followup_research_plan(stories):
+    return [{"headline":s.get("headline",""),"next_check":["official confirmation","independent confirmation","new developments"],"priority":_f((s.get("impact") or {}).get("score"))} for s in stories or []]
+
 def production_quality_gate(ab,cal,drift,evidence,coverage=None):
     return production_readiness_gate(ab,cal,drift,evidence,coverage)
 
