@@ -174,7 +174,7 @@ def verify_article(story, articles, memory=None):
         strong_match=_strong_event_match(headline,"",a)
         relaxed_match=_relaxed_event_match(headline,"",a)
         if not strong_match and not relaxed_match and title_sim < 0.55: continue
-        if not strong_match and title_sim < 0.55: continue
+        if not (strong_match or relaxed_match) and title_sim < 0.55: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
