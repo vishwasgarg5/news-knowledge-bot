@@ -343,7 +343,7 @@ def test_production_v4_feedback_and_monitoring(tmp_path):
 def test_operational_trend_uses_closed_calendar_window():
     from app.ops import historical_trend
     result=historical_trend([
-        {"date":"2026-10-01","region":"world"},
+        {"date":"2026-09-30","region":"world"},
         {"date":"2026-10-07","region":"world"},
         {"date":"2026-10-08","region":"india"},
         {"date":"2099-01-01","region":"india"},
