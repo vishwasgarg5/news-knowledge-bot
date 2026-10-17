@@ -153,7 +153,14 @@ def advanced_feedback(feedback_rows):
 
 def scorecard(stories,diagnostics):
     total=len(stories); impacts=Counter((s.get("impact") or {}).get("level","LOW") for s in stories)
-    return {"stories":total,"high_impact":impacts["HIGH"],"medium_impact":impacts["MEDIUM"],"low_impact":impacts["LOW"],"verified":sum(1 for s in stories if str(s.get("verification_level",s.get("verification",""))).lower() in {"multi-source","multi-report","official","strong"}),"early_signals":sum(bool(s.get("early_signal")) for s in stories),"health":diagnostics.get("health","UNKNOWN")}
+    def is_verified(story):
+        verification=story.get("verification") or {}
+        if isinstance(verification,dict):
+            status=verification.get("verification",story.get("verification_level",""))
+        else:
+            status=story.get("verification_level",verification)
+        return str(status).strip().lower() in {"multi-source","multi-report","official","official-source","strong"}
+    return {"stories":total,"high_impact":impacts["HIGH"],"medium_impact":impacts["MEDIUM"],"low_impact":impacts["LOW"],"verified":sum(1 for s in stories if is_verified(s)),"early_signals":sum(bool(s.get("early_signal")) for s in stories),"health":diagnostics.get("health","UNKNOWN")}
 
 def personalized_feed(stories,preferences):
     prefs=preferences or {}; terms=set()
@@ -215,10 +222,26 @@ def missing_evidence(stories):
     gaps=[]
     for s in stories or []:
         missing=[]
+        verification=s.get("verification") or {}
         if not s.get("url"): missing.append("source_url")
         if not s.get("source"): missing.append("source")
         if not s.get("summary"): missing.append("summary")
-        if not (s.get("verification") or {}).get("sources") and not s.get("source_count"): missing.append("independent_source_count")
+        # Source counts normally live inside the verification object; accept both
+        # supported shapes so a valid nested count is not reported as missing.
+        has_count=any(
+            value not in (None,"")
+            for value in (
+                verification.get("independent_sources") if isinstance(verification,dict) else None,
+                verification.get("source_count") if isinstance(verification,dict) else None,
+                s.get("source_count"),
+            )
+        )
+        has_evidence=bool(
+            (verification.get("sources") or verification.get("evidence"))
+            if isinstance(verification,dict) else False
+        )
+        if not has_count and not has_evidence:
+            missing.append("independent_source_count")
         if missing:gaps.append({"headline":s.get("headline",""),"missing":missing})
     return gaps
 
