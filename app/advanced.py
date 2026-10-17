@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections import Counter
+from urllib.parse import urlparse
 from .storage import outcome_is_mature
 
 def _f(v, default=0.0):
@@ -21,7 +22,12 @@ def diversify_stories(stories, max_total=10, india_target=5, world_target=5, max
     def add(row):
         sid=str(row.get("story_id",""))
         event=str(row.get("event_id","") or sid)
-        source=str(row.get("source","unknown")).lower()
+        source=str(row.get("source","unknown")).strip().lower()
+        host=urlparse(str(row.get("url","") or "")).netloc.lower().split(":")[0]
+        if host.startswith("www."): host=host[4:]
+        if host:
+            aliases=(("bbc.co.uk","bbc"),("bbc.com","bbc"),("reuters.com","reuters"),("thehindu.com","the hindu"),("indianexpress.com","indian express"),("apnews.com","associated press"),("pib.gov.in","pib"),("rbi.org.in","reserve bank of india"))
+            source=next((canonical for suffix,canonical in aliases if host==suffix or host.endswith("."+suffix)),host)
         if sid in {str(x.get("story_id","")) for x in selected} or event in used_events: return False
         if source_counts[source]>=max_per_source: return False
         selected.append(row); used_events.add(event); source_counts[source]+=1
