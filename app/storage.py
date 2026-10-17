@@ -73,12 +73,11 @@ def outcome_is_mature(row: dict) -> bool:
     return False
 
 def append_rows(path:Path,rows:list[dict],fields:list[str]):
+    """Append rows using atomic replacement so interruption cannot leave a partial CSV."""
     if not rows:return
-    header=not path.exists() or path.stat().st_size==0
-    with path.open("a",newline="",encoding="utf-8") as f:
-        w=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore")
-        if header:w.writeheader()
-        w.writerows(rows)
+    path=Path(path)
+    existing=read_rows(path) if path.exists() and path.stat().st_size else []
+    _write(path,[*existing,*rows],fields)
 
 def replace_rows(path:Path,rows:list[dict],fields:list[str]):_write(path,rows,fields)
 
