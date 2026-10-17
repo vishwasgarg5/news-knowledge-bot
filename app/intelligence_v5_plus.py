@@ -239,7 +239,7 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
             unique=[]; publishers=set()
             for item in sorted(evidence,key=lambda x:x["evidence_score"],reverse=True):
                 publisher=str(item.get("source","") or "").strip().lower()
-                host=re.sub(r"^www\\.", "", re.sub(r"^https?://", "", str(item.get("url","") or "").lower())).split("/",1)[0]
+                host=re.sub(r"^www\.", "", re.sub(r"^https?://", "", str(item.get("url","") or "").lower())).split("/",1)[0]
                 key=publisher or host
                 if not key or key in publishers: continue
                 publishers.add(key); unique.append(item)
