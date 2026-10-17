@@ -504,7 +504,7 @@ def test_phase2_4_intelligence_layers():
     stories=[{"headline":"India economy growth update","summary":"growth outlook","category":"economy","region":"india","importance":70,"impact":{"score":80}}]
     feed=personalized_feed(stories,prefs)
     assert feed and feed[0]["preference_matches"]>=2
-    evidence=[{"title":"India economy growth update confirmed","source":"Reuters","url":"https://reuters.com/x"}]
+    evidence=[{"title":"India economy growth update confirmed","source":"Reuters","url":"https://reuters.com/x","published":datetime.now(timezone.utc).isoformat()}]
     queue=autonomous_research(stories,evidence_pool=evidence)
     assert queue and queue[0]["evidence_count"]>=1
     market=[{"symbol":"NIFTY 50","status":"OK","change_pct":0.8}]
@@ -544,7 +544,7 @@ def test_phase_2_to_4_plus_production_hardening(tmp_path):
     from app.intelligence_v5_plus import autonomous_research, weekly_report
     from app.production_v5 import production_quality_gate
     queue=autonomous_research([{"headline":"India market investment","impact":{"score":80},"momentum_score":20}],
-                              evidence_pool=[{"title":"India market investment confirmed","source":"Reuters","url":"https://reuters.example"}])
+                              evidence_pool=[{"title":"India market investment confirmed","source":"Reuters","url":"https://reuters.example","published":datetime.now(timezone.utc).isoformat()}])
     assert queue and queue[0]["evidence_count"] >= 1
     report=weekly_report([{"headline":"India market investment","importance":80}],[])
     assert "top_entities" in report and isinstance(report["top_entities"],list)
