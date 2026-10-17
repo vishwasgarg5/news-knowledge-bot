@@ -448,9 +448,17 @@ def _corroboration_score(a,b):
     named=named_a&named_b
     event_terms={"breach","hack","attack","arrest","ban","blocked","access","symbol","logo","launch","launched","deal","trade","truce","visit","arrives","arrived","glasses","intelligence","result","results","election","judge","verdict","trial","crash","earthquake","cyclone","hurricane","storm","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","renamed","rename","bars","barred","opens","reopens","offer","appoint","appointed"}
     event_overlap=common&event_terms
-    if base>=0.58 and len(common)>=5: return base
-    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=4: return max(base,0.56)
-    if len(named)>=2 and len(common)>=4: return max(base,0.56)
+    # Shared geography or a generic topic is not enough to corroborate a claim.
+    # Require both a shared named anchor and a concrete event/action term.
+    # This blocks false matches such as an Iran femicide story being attached
+    # to an Iran oil-sanctions story merely because both mention Iran.
+    if len(named)>=1 and len(event_overlap)>=1 and len(common)>=3:
+        return max(base,0.56)
+    # Permit very strong lexical matches for headlines that omit a proper name,
+    # but only when multiple concrete event terms overlap.
+    concrete_overlap=common & (event_terms-{"access","order","deal","strike","result","results"})
+    if len(concrete_overlap)>=2 and len(common)>=5 and base>=0.58:
+        return base
     return 0.0
 def _evidence(selected,articles,research):
     by_url={str(a.get("url","")):a for a in articles}; out=[]
