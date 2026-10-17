@@ -2,9 +2,6 @@ name: Contract Tests
 
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - main
   workflow_dispatch:
 
 permissions:
