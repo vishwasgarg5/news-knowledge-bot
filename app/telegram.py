@@ -76,15 +76,16 @@ def chunks(text: str, size: int = 3500):
             return [line]
         bold = "<b>" in line and "</b>" in line
         body = line.replace("<b>", "").replace("</b>", "") if bold else line
+        budget = size - 7 if bold else size
         parts=[]; current=""
         for word in body.split():
-            if len(word) > size:
+            if len(word) > budget:
                 if current:
                     parts.append(current); current=""
-                parts.extend(word[i:i+size] for i in range(0,len(word),size))
+                parts.extend(word[i:i+budget] for i in range(0,len(word),budget))
                 continue
             candidate=(current+" "+word).strip()
-            if len(candidate)>size and current:
+            if len(candidate)>budget and current:
                 parts.append(current); current=word
             else:
                 current=candidate
