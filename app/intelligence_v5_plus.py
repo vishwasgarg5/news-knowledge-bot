@@ -240,7 +240,11 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
             for item in sorted(evidence,key=lambda x:x["evidence_score"],reverse=True):
                 publisher=str(item.get("source","") or "").strip().lower()
                 host=re.sub(r"^www\.", "", re.sub(r"^https?://", "", str(item.get("url","") or "").lower())).split("/",1)[0]
-                key=publisher or host
+                aliases=(("bbc.co.uk","bbc"),("bbc.com","bbc"),("reuters.com","reuters"),("thehindu.com","the hindu"),("indianexpress.com","indian express"),("apnews.com","associated press"),("pib.gov.in","pib"),("rbi.org.in","reserve bank of india"))
+                for suffix,canonical in aliases:
+                    if host==suffix or host.endswith("."+suffix):
+                        host=canonical; break
+                key=host or publisher
                 if not key or key in publishers: continue
                 publishers.add(key); unique.append(item)
             evidence=unique[:5]; independent_count=len(publishers)
