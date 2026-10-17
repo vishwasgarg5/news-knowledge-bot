@@ -214,6 +214,12 @@ def test_main_links_all_pipeline_layers():
         "send_text(m)",
     )
     assert all(item in text for item in required)
+    selection = text.split("selected=rerank_stories(candidates,research)", 1)[1].split(
+        "result=generate_briefing", 1
+    )[0]
+    assert "consolidate_event_families(selected)" not in selection
+    assert "diversify_stories(selected" not in selection
+    assert selection.lstrip().startswith("fast_lane=breaking_fast_lane(selected)")
 
 
 def test_no_debug_or_secret_literals_in_application():
