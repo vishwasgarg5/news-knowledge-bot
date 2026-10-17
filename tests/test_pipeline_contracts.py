@@ -501,10 +501,11 @@ def test_phase1_v5_accuracy_calibration_and_utc_contracts():
 def test_phase2_4_intelligence_layers():
     from app.intelligence_v5_plus import personalized_feed, autonomous_research, news_market_correlation
     prefs={"priority_categories":["economy"],"preferred_regions":["india"]}
-    stories=[{"headline":"India economy growth update","summary":"growth outlook","category":"economy","region":"india","importance":70,"impact":{"score":80}}]
+    published=datetime.now(timezone.utc).isoformat()
+    stories=[{"headline":"India economy update: RBI announced rate cut","summary":"RBI announced a rate cut, affecting India's economy.","category":"economy","region":"india","importance":70,"impact":{"score":80},"source":"The Hindu","url":"https://thehindu.com/primary","published":published}]
     feed=personalized_feed(stories,prefs)
     assert feed and feed[0]["preference_matches"]>=2
-    evidence=[{"title":"India economy growth update confirmed","source":"Reuters","url":"https://reuters.com/x","published":datetime.now(timezone.utc).isoformat()}]
+    evidence=[{"title":"RBI announced rate cut as India economy update confirmed","source":"Reuters","url":"https://reuters.com/x","published":published}]
     queue=autonomous_research(stories,evidence_pool=evidence)
     assert queue and queue[0]["evidence_count"]>=1
     market=[{"symbol":"NIFTY 50","status":"OK","change_pct":0.8}]
@@ -543,8 +544,9 @@ def test_production_v5_gate_27_40():
 def test_phase_2_to_4_plus_production_hardening(tmp_path):
     from app.intelligence_v5_plus import autonomous_research, weekly_report
     from app.production_v5 import production_quality_gate
-    queue=autonomous_research([{"headline":"India market investment","impact":{"score":80},"momentum_score":20}],
-                              evidence_pool=[{"title":"India market investment confirmed","source":"Reuters","url":"https://reuters.example","published":datetime.now(timezone.utc).isoformat()}])
+    published=datetime.now(timezone.utc).isoformat()
+    queue=autonomous_research([{"headline":"India market investment follows RBI rate cut announced","summary":"RBI announced a rate cut affecting investment markets in India.","source":"The Hindu","url":"https://thehindu.com/market-primary","published":published,"impact":{"score":80},"momentum_score":20}],
+                              evidence_pool=[{"title":"RBI announced rate cut; India market investment confirmed","source":"Reuters","url":"https://reuters.com/market-followup","published":published}])
     assert queue and queue[0]["evidence_count"] >= 1
     report=weekly_report([{"headline":"India market investment","importance":80}],[])
     assert "top_entities" in report and isinstance(report["top_entities"],list)
