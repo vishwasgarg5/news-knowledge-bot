@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 
 import feedparser
+import requests
 
 
 @dataclass
@@ -90,10 +91,34 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
 
 
 def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article], bool, str]:
-    parsed = feedparser.parse(url)
+    # Fetch explicitly instead of relying on feedparser's implicit HTTP client:
+    # this gives every publisher a consistent User-Agent, bounded timeouts and
+    # auditable HTTP status/error messages when feeds are blocked or unavailable.
+    try:
+        response = requests.get(
+            url,
+            headers={
+                "User-Agent": "NewsKnowledgeBot/1.0 (+https://github.com/vishwasgarg5/news-knowledge-bot; RSS reader)",
+                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+            },
+            timeout=(5, 15),
+        )
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        status = getattr(getattr(exc, "response", None), "status_code", None)
+        detail = f"HTTP {status}: {exc}" if status else f"request failed: {exc}"
+        return [], False, detail
+
+    parsed = feedparser.parse(response.content)
     entries = getattr(parsed, "entries", [])
     if not entries:
-        return [], False, "empty feed"
+        status = getattr(response, "status_code", "unknown")
+        content_type = str(getattr(response, "headers", {}).get("Content-Type", "unknown"))[:80]
+        parser_error = str(getattr(parsed, "bozo_exception", "") or "").strip()
+        detail = f"empty feed (HTTP {status}, content-type={content_type})"
+        if parser_error:
+            detail += f"; parser={parser_error[:180]}"
+        return [], False, detail
     parse_warning = ""
     if getattr(parsed, "bozo", False):
         parse_warning = str(getattr(parsed, "bozo_exception", "malformed feed"))
