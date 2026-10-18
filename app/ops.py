@@ -64,6 +64,16 @@ def final_audit(stats, stories):
     blockers=[]
     if not evidence_ok: blockers.append("evidence_gaps")
     if not coverage_ok: blockers.append("regional_coverage_shortfall")
+    gate=stats.get("v5_quality_gate") or {}
+    gate_status=str(gate.get("status","UNKNOWN")).upper()
+    gate_blockers=[str(x) for x in (gate.get("blockers") or []) if str(x)]
+    # Surface every production-gate blocker in the final audit, not only
+    # evidence/coverage issues; otherwise calibration, drift, or ranking holds
+    # can be misreported as a clean PASS.
+    for blocker in gate_blockers:
+        if blocker not in blockers:
+            blockers.append(blocker)
+    checks["production_quality_gate"] = gate_status == "PASS"
     status=health["status"]
     if blockers and status=="PASS":
         status="DEGRADED"
@@ -72,7 +82,7 @@ def final_audit(stats, stories):
         "checks":checks,
         "blockers":blockers,
         "evidence_gap_rate":round(gap_rate,3) if evidence else None,
-        "production_quality_gate":(stats.get("v5_quality_gate") or {}).get("status","UNKNOWN"),
+        "production_quality_gate":gate_status,
         "stories":len(stories),
         "india":sum(str(x.get("region","")).lower()=="india" for x in stories),
         "world":sum(str(x.get("region","")).lower()=="world" for x in stories),

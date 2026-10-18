@@ -893,6 +893,39 @@ def test_final_audit_does_not_hide_evidence_or_coverage_gaps(tmp_path):
     assert set(result["blockers"]) == {"evidence_gaps", "regional_coverage_shortfall"}
     assert result["production_quality_gate"] == "HOLD"
 
+def test_final_audit_surfaces_non_evidence_production_gate_blockers(tmp_path):
+    from app.ops import final_audit
+
+    db = tmp_path / "news_knowledge.db"
+    db.touch()
+    stats = {
+        "source_failures": 0,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(db),
+        "learning_labeled": 0,
+        "v5_production_evaluation": {
+            "evidence": {"stories": 2, "evidence_gap_rate": 0.0}
+        },
+        "regional_coverage_audit": {
+            "india_shortfall": 0,
+            "world_shortfall": 0,
+        },
+        "v5_quality_gate": {
+            "status": "HOLD",
+            "blockers": ["ranking_improvement_not_proven", "poor_calibration"],
+        },
+    }
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert result["checks"]["production_quality_gate"] is False
+    assert set(result["blockers"]) == {
+        "ranking_improvement_not_proven", "poor_calibration"
+    }
+
+
 def test_append_rows_preserves_records_with_atomic_replacement(tmp_path):
     from app.storage import append_rows, read_rows
 
