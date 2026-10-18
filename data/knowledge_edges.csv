@@ -1,3 +1,5 @@
 date,from_node,to_node,edge_type
 2026-10-09,258d4c87a704441e,entity:reserve bank,mentions
 2026-10-12,66823363ff4f7657,entity:corporation,mentions
+2026-10-18,20c84249fced3950,entity:the west bank,mentions
+2026-10-18,20c84249fced3950,entity:west bank the,mentions
