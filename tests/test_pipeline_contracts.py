@@ -987,3 +987,50 @@ def test_final_audit_blocks_hold_status_without_explicit_blockers(tmp_path):
     assert result["checks"]["production_quality_gate"] is False
     assert "production_quality_gate_hold" in result["blockers"]
 
+
+
+def test_research_does_not_corroborate_shared_names_without_same_event():
+    from app.research import verify_article
+    from datetime import datetime, timezone
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "Trump's war chief goes on anti-Russia, anti-China rant: Putin and Xi in Hegseth's crosshairs",
+        "summary": "The defence chief criticized Russia and China during a speech.",
+        "source": "Hindustan Times",
+        "url": "https://www.hindustantimes.com/example-war-chief",
+        "published": now,
+    }
+    unrelated = [
+        {
+            "title": "Trump's pause on Russia sanctions is a reward for Putin, Zelenskyy says",
+            "summary": "The US president temporarily paused sanctions on Russian oil buyers.",
+            "source": "The Guardian",
+            "url": "https://www.theguardian.com/example-russia-sanctions",
+            "published": now,
+        },
+        {
+            "title": "US sanctions firms over Iran oil trade network",
+            "summary": "Officials announced sanctions against firms accused of facilitating Iranian oil exports.",
+            "source": "Reuters",
+            "url": "https://www.reuters.com/example-iran-sanctions",
+            "published": now,
+        },
+    ]
+    result = verify_article(story, unrelated)
+    assert result["independent_sources"] == 0
+    assert result["evidence"] == []
+    assert result["verification"] == "single-source"
+
+
+def test_canadian_military_story_is_not_classified_as_india_from_feed_category():
+    from app.news import _region
+
+    region, confidence, evidence = _region(
+        "india",
+        "Major fire at Canadian military base in Alberta",
+        "A serious incident was reported at a Canadian military installation.",
+    )
+    assert region == "world"
+    assert confidence >= 0.85
+    assert "canadian" in evidence.lower() or "alberta" in evidence.lower()
