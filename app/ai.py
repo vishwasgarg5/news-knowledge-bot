@@ -172,6 +172,7 @@ def _event_family_key(title):
     raw=str(title or "").lower()
     t=_content_tokens(title)
     families=[
+        ("canada_military_base_fire",{"canada","canadian","military","base","fire","deaths","fatalities","alberta","wainwright"}),
         ("openai_australia",{"openai","australia","hack","hacked","breach","infiltrated","portal"}),
         ("meta_muse",{"muse","meta","wearable","glasses","tamagotchi"}),
         ("sennheiser_momentum5",{"sennheiser","momentum","wireless","earbuds","headphones"}),
@@ -190,6 +191,10 @@ def _event_family_key(title):
         ("south_africa_killings",{"south","africa","women","killings","ekurhuleni","body"}),
         ("ethiopia_tigray",{"ethiopia","tigray","eritrea","fighting","conflict","internet","restricted","army","attacks"}),
     ]
+    # Normalize Canada/Canadian variants so multiple reports on one military-base fire
+    # corroborate a single story rather than consuming separate briefing slots.
+    if re.search(r"\\bcanad(?:a|ian)\\b",raw) and re.search(r"\\bmilitary\\b",raw) and re.search(r"\\bbase\\b",raw) and re.search(r"\\bfire\\b",raw):
+        return "canada_military_base_fire"
     # High-signal anchors prevent two reports of the same development from occupying separate slots.
     if re.search(r"\btrump\b",raw) and re.search(r"\bxi\b",raw):
         return "trump_xi"
