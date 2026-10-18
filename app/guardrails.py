@@ -50,5 +50,8 @@ def production_readiness_gate(ranking,calibration,drift,evidence,coverage=None):
     elif float(ev.get("evidence_gap_rate",1.0) or 0)>0.25: blockers.append("evidence_gaps")
     cov=coverage or {}
     if int(cov.get("stories",0) or 0)>0 and (int(cov.get("india_shortfall",0) or 0)>0 or int(cov.get("world_shortfall",0) or 0)>0): blockers.append("regional_coverage_shortfall")
+    if int(cov.get("source_failures",0) or 0)>0: blockers.append("source_collection_failures")
+    if int(cov.get("source_warnings",0) or 0)>0: blockers.append("source_collection_warnings")
+    if "research_completion_rate" in cov and float(cov.get("research_completion_rate",0) or 0)<1.0: blockers.append("research_incomplete")
     if not (ranking or {}).get("promote",False): blockers.append("ranking_improvement_not_proven")
     return {"status":"PASS" if not blockers else "HOLD","blockers":list(dict.fromkeys(blockers)),"criteria":{"minimum_paired_folds":5,"minimum_calibration_holdout":60,"maximum_calibrated_ece":0.15,"maximum_evidence_gap_rate":0.25,"regional_targets_required":True}}
