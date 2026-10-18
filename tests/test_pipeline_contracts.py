@@ -1034,3 +1034,46 @@ def test_canadian_military_story_is_not_classified_as_india_from_feed_category()
     assert region == "world"
     assert confidence >= 0.85
     assert "canadian" in evidence.lower() or "alberta" in evidence.lower()
+
+
+def test_production_gate_holds_for_source_failures_and_incomplete_research():
+    from app.guardrails import production_readiness_gate
+
+    ranking = {"paired_folds": 8, "promote": True}
+    calibration = {"samples": 100, "ece": 0.05}
+    drift = {"status": "STABLE"}
+    evidence = {"stories": 10, "evidence_gap_rate": 0.0}
+    coverage = {
+        "stories": 10,
+        "india_shortfall": 0,
+        "world_shortfall": 0,
+        "source_failures": 2,
+        "source_warnings": 0,
+        "research_completion_rate": 0.8,
+    }
+    gate = production_readiness_gate(ranking, calibration, drift, evidence, coverage)
+    assert gate["status"] == "HOLD"
+    assert "source_collection_failures" in gate["blockers"]
+    assert "research_incomplete" in gate["blockers"]
+
+
+def test_final_audit_surfaces_source_collection_failures(tmp_path):
+    from app.ops import final_audit
+
+    db = tmp_path / "news_knowledge.db"
+    db.touch()
+    stats = {
+        "source_failures": 2,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(db),
+        "learning_labeled": 1,
+        "v5_production_evaluation": {"evidence": {"stories": 2, "evidence_gap_rate": 0.0}},
+        "regional_coverage_audit": {"india_shortfall": 0, "world_shortfall": 0},
+        "v5_quality_gate": {"status": "HOLD", "blockers": ["source_collection_failures"]},
+    }
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert "source_collection_failures" in result["blockers"]
