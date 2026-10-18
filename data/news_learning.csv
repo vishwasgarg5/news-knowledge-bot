@@ -5131,7 +5131,7 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-05,e2a157eb59fcacd1,4dc2d4e9b387e7fa,Government raises deepwater gas price ceiling to $9.89/MMBtu; APM gas cap at $7,"Business News Today – Finance, Industry & Economy | The Hindu",business,82.9,false,1,0,0,,,0.45,0.45
 2026-10-05,0b0944a64dca61b3,f1e4a946903905f2,RBI chief lays down 5 key priorities to maintain financial stability amidst emerging risks,"Business News Today – Finance, Industry & Economy | The Hindu",business,82.7,false,1,0,0,,,0.45,0.45
 2026-10-05,2279dfd7727dfb45,e53415e614e60c56,"OpenAI safety employee resigns, claiming the company’s ‘culture is broken’",TechCrunch,technology,81.6,false,0,0,0,,,0.00,0.00
-2026-10-05,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,82.9,false,1,1,0,,,0.80,0.85
+2026-10-05,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,82.9,false,1,1,0,1,,0.80,0.85
 2026-10-05,cb23383f7da10bd0,6b2b8641346a56ef,"Muziris to be made international heritage tourism destination, says Satheesan",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,80.7,false,0,0,0,,,0.00,0.00
 2026-10-05,7a5f217d24878ace,1133bd285bd294ad,"Koder House fire may have originated in adjacent building, says Electrical Inspectorate",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,80.1,false,0,0,0,,,0.00,0.00
 2026-10-05,c55cfb9ea1171223,387df4a24ff2fbb3,Flydubai co-pilot allegedly tried to crash plane after hijack attempt failed,Times of India,india,80.1,false,0,0,0,,,0.00,0.00
@@ -5370,7 +5370,7 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-06,564600c23184d989,29f674b19bda37fa,China launches anti-dumping probe into EU chemical imports ahead of trade talks,"Business News Today – Finance, Industry & Economy | The Hindu",business,78.4,false,0,0,0,,,0.00,0.00
 2026-10-06,efb25066d0efb5d2,bd717b6dd1755e75,Deepfake alarm: AI’s shadow looms over entertainment industry after Rashmika Mandanna speaks out,"Technology News Today, Latest Tech News | The Hindu",technology,79.0,false,1,0,0,,,0.45,0.45
 2026-10-06,254fb8c0bb8ff922,91bea60b95c9a129,"MSMEs seek curbs on steel, metal price surge; urge Centre to cut import duties","Business News Today – Finance, Industry & Economy | The Hindu",business,78.4,false,1,0,0,,,0.45,0.45
-2026-10-06,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,78.9,false,1,0,0,,,0.45,0.45
+2026-10-06,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,78.9,false,1,0,0,1,,0.45,0.45
 2026-10-06,aa565cea6158b5fb,088c76c1cc4a4e85,All six passengers presumed dead after plane went missing off US coast,BBC News,world,78.0,false,0,0,0,,,0.00,0.00
 2026-10-06,fc2e30a9d2184bf9,b92c76d134022dc0,"Case registered over FB post using Sudhakaran’s name, photo",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,76.7,false,0,0,0,,,0.00,0.00
 2026-10-06,63577ca0eaf7870d,2bef5fcdf6708d71,"Rawat defies warning by Congress brass, carries on Uttarakhand yatra",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,76.7,false,0,0,0,,,0.00,0.00
@@ -5804,7 +5804,7 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-07,7efb3019fb92c2dd,94f1c4b11c7c5f34,Kasturi Cotton gains traction as India puts traceability on the textile map,"Business News Today – Finance, Industry & Economy | The Hindu",business,76.4,false,0,0,0,,,0.00,0.00
 2026-10-07,2ff06de74d6b6415,45c1e19581f4394f,Govt steps in to stop Adani’s Mumbai airport slot cuts,"Business News Today – Finance, Industry & Economy | The Hindu",business,76.4,false,0,0,0,,,0.00,0.00
 2026-10-07,0ac49e981213d6b6,48bac2a8cca1bacf,Tech Life,BBC News,technology,76.3,false,0,0,0,,,0.00,0.00
-2026-10-07,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,76.0,false,0,0,0,,,0.00,0.00
+2026-10-07,0d45d2216c4b861e,67d2daa5126076c0,From lab to life: Why translating AI advances to the real world is a major challenge,"Technology News Today, Latest Tech News | The Hindu",technology,76.0,false,0,0,0,1,,0.00,0.00
 2026-10-07,6b3c00f7d495c870,4945bb5a493773d6,"Anthropic is giving startups a free year of Claude Team and $1,000 in credits",TechCrunch,technology,75.8,false,0,0,0,,,0.00,0.00
 2026-10-07,9eefff7c04a1b2a4,c868f9af46d33712,Ofcom investigates Meta over Instagram Instants feature,BBC News,technology,75.8,false,0,0,0,,,0.00,0.00
 2026-10-07,15feff9d12ea523b,bfea6bc7fd15aeca,Last call for the mall? How shopping centres are reinventing themselves,BBC News,business,75.7,false,0,0,0,,,0.00,0.00
