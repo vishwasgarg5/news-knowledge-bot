@@ -406,6 +406,9 @@ def rerank_stories(stories,research=None):
     print(f"[INFO] selection gates rejected derivative={rejection_counts['primary_derivative']} content_quality={rejection_counts['content_quality']} single_source_below_gate={rejection_counts['single_source_below_gate']} single_source_untrusted={rejection_counts['single_source_untrusted']} single_source_commentary={rejection_counts['single_source_commentary']} unverified={rejection_counts['unverified']} stale_primary={rejection_counts['stale_primary']} eligible={len(quality_scored)}",flush=True)
     india=[x for x in quality_scored if str(x[1].get("region","")).lower()=="india" and float(x[1].get("region_confidence",0) or 0)>=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.45"))]
     world=[x for x in quality_scored if str(x[1].get("region","")).lower()=="world"]
+    india_tiers={tier:sum(1 for _,item in india if item.get("_verification")==tier) for tier in ("multi-source","official-source","multi-report","single-source")}
+    world_tiers={tier:sum(1 for _,item in world if item.get("_verification")==tier) for tier in ("multi-source","official-source","multi-report","single-source")}
+    print(f"[INFO] eligible regional tiers india={india_tiers} world={world_tiers}",flush=True)
     # Corroborated evidence must outrank high-scoring single-source items.
     # Importance remains the primary score within each verification class.
     def _quality_key(pair):
@@ -432,6 +435,8 @@ def rerank_stories(stories,research=None):
     # Backfill only from candidates that pass the same geographic and event-family
     # rules. Never fill an India slot with an item whose geography is uncertain.
     selected=india_selected[:india_limit] + world_selected[:world_limit]
+    selected_regions={region:sum(1 for item in selected if str(item.get("region","")).lower()==region) for region in ("india","world")}
+    print(f"[INFO] selected regional coverage={selected_regions} targets={{'india':{india_limit},'world':{world_limit}}}",flush=True)
     for rank,item in enumerate(selected,1):
         item["rank"]=rank
         if not item.get("selection_reason"):
