@@ -4,7 +4,7 @@
   "mature_outcome_samples": 6128,
   "avg_outcome": 0.137,
   "daily_runs": 23,
-  "history_stories": 1282,
+  "history_stories": 1284,
   "source_reliability": {
     "BBC News": 0.288,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.028,
@@ -31,11 +31,11 @@
   "top_categories": [
     [
       "india",
-      627
+      628
     ],
     [
       "world",
-      274
+      275
     ],
     [
       "business",
