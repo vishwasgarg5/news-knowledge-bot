@@ -959,3 +959,27 @@ def test_restore_source_metadata_preserves_real_publication_time():
     assert result[0]["source"] == "Example News"
     assert "published" not in result[1]
 
+def test_final_audit_blocks_hold_status_without_explicit_blockers(tmp_path):
+    from app.ops import final_audit
+
+    db = tmp_path / "news_knowledge.db"
+    db.touch()
+    stats = {
+        "source_failures": 0,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(db),
+        "learning_labeled": 10,
+        "v5_production_evaluation": {
+            "evidence": {"stories": 2, "evidence_gap_rate": 0.0}
+        },
+        "regional_coverage_audit": {"india_shortfall": 0, "world_shortfall": 0},
+        "v5_quality_gate": {"status": "HOLD"},
+    }
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert result["checks"]["production_quality_gate"] is False
+    assert "production_quality_gate_hold" in result["blockers"]
+
