@@ -938,3 +938,24 @@ def test_append_rows_preserves_records_with_atomic_replacement(tmp_path):
         {"date": "2026-10-17", "story_id": "new"},
     ]
     assert not path.with_name(".history.csv.tmp").exists()
+
+def test_restore_source_metadata_preserves_real_publication_time():
+    from app.main import _restore_source_metadata
+
+    stories = [
+        {"story_id": "fresh", "url": "https://example.com/fresh", "headline": "Fresh story"},
+        {"story_id": "unknown", "url": "https://example.com/unknown", "headline": "No feed match"},
+    ]
+    articles = [
+        {
+            "url": "https://example.com/fresh",
+            "source": "Example News",
+            "published": "2026-10-18T03:00:00+00:00",
+        }
+    ]
+
+    result = _restore_source_metadata(stories, articles)
+    assert result[0]["published"] == "2026-10-18T03:00:00+00:00"
+    assert result[0]["source"] == "Example News"
+    assert "published" not in result[1]
+
