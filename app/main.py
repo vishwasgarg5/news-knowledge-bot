@@ -486,7 +486,13 @@ def main():
     v5_followups=followup_research_plan(v5plus["stories"])
     v5_agent=autonomous_research_agent(v5plus["research_queue"],read_rows(DATA/"news_history.csv"))
     v5_reports=generate_research_reports(v5_agent)
-    v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"),drift_current=drift_windows["current"],drift_baseline=drift_windows["baseline"],coverage=coverage_audit(v5plus["stories"],int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5"))))
+    production_coverage=coverage_audit(v5plus["stories"],int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5")))
+    production_coverage.update({
+        "source_failures":source_failures,
+        "source_warnings":source_warnings,
+        "research_completion_rate":sum(1 for x in v5plus["research_queue"] if x.get("research_status")=="CORROBORATED")/max(1,len(v5plus["research_queue"])),
+    })
+    v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"),drift_current=drift_windows["current"],drift_baseline=drift_windows["baseline"],coverage=production_coverage)
     stats["v5_walk_forward"]=v5_wf
     stats["v5_ab_test"]=v5_ab
     stats["v5_calibration"]=v5_calibration
