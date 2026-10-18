@@ -28,6 +28,28 @@ def _safe_float(v):
     try:return float(v)
     except:return 0.0
 
+
+def _restore_source_metadata(stories, articles):
+    """Restore source-published fields lost during AI enrichment.
+
+    Research freshness checks must use the original feed timestamp, not an
+    enrichment payload that may omit it. Never synthesize a publication time.
+    """
+    by_url = {
+        str(article.get("url", "")).strip(): article
+        for article in (articles or [])
+        if isinstance(article, dict) and str(article.get("url", "")).strip()
+    }
+    for story in stories or []:
+        article = by_url.get(str(story.get("url", "")).strip())
+        if not article:
+            continue
+        if article.get("published"):
+            story["published"] = article["published"]
+        if article.get("source"):
+            story["source"] = article["source"]
+    return stories
+
 def load_preferences():
     p=CONFIG.parent/"preferences.yaml"
     if not p.exists(): return {}
@@ -341,6 +363,9 @@ def main():
     selected=rerank_stories(candidates,research)
     fast_lane=breaking_fast_lane(selected)
     result=generate_briefing(selected,all_articles,timeline,today,research)
+    # AI enrichment can omit the original feed timestamp. Restore source-backed
+    # metadata before V5 research so freshness is evaluated against real evidence.
+    _restore_source_metadata(result.get("top_stories", []), all_articles)
     source_by_url={a.get("url"):a.get("source","") for a in all_articles}
     for s in result.get("top_stories",[]):
         s["verification"]=research.get(s.get("story_id"),{})
