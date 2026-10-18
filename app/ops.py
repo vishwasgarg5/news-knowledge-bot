@@ -67,6 +67,13 @@ def final_audit(stats, stories):
     gate=stats.get("v5_quality_gate") or {}
     gate_status=str(gate.get("status","UNKNOWN")).upper()
     gate_blockers=[str(x) for x in (gate.get("blockers") or []) if str(x)]
+    # A HOLD status is itself a blocker even when an older/malformed gate
+    # payload omitted its blocker list. Never allow that to become a clean PASS.
+    if gate and gate_status != "PASS" and not gate_blockers:
+        gate_blockers.append(
+            "production_quality_gate_hold" if gate_status == "HOLD"
+            else "production_quality_gate_unresolved"
+        )
     # Surface every production-gate blocker in the final audit, not only
     # evidence/coverage issues; otherwise calibration, drift, or ranking holds
     # can be misreported as a clean PASS.
