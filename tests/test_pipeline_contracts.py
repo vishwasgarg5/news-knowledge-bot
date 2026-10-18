@@ -1077,3 +1077,28 @@ def test_final_audit_surfaces_source_collection_failures(tmp_path):
     result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
     assert result["health"] == "DEGRADED"
     assert "source_collection_failures" in result["blockers"]
+
+
+def test_fetch_feed_uses_explicit_http_and_reports_status(monkeypatch):
+    from app import news
+    import requests
+
+    class BadResponse:
+        status_code = 503
+        headers = {"Content-Type": "text/html"}
+
+        def raise_for_status(self):
+            raise requests.HTTPError("503 Server Error", response=self)
+
+    seen = {}
+    def fake_get(url, **kwargs):
+        seen["url"] = url
+        seen.update(kwargs)
+        return BadResponse()
+
+    monkeypatch.setattr(news.requests, "get", fake_get)
+    articles, ok, error = news.fetch_feed("https://example.com/feed.xml", "india")
+    assert articles == [] and ok is False
+    assert "HTTP 503" in error
+    assert seen["timeout"] == (5, 15)
+    assert "User-Agent" in seen["headers"]
