@@ -81,9 +81,9 @@ def final_audit(stats, stories):
         if blocker not in blockers:
             blockers.append(blocker)
     checks["production_quality_gate"] = gate_status == "PASS"
-    if _f(stats.get("source_failures"))>0:
+    if _f(stats.get("source_failures"))>0 and "source_collection_failures" not in blockers:
         blockers.append("source_collection_failures")
-    if _f(stats.get("source_warnings"))>0:
+    if _f(stats.get("source_warnings"))>0 and "source_collection_warnings" not in blockers:
         blockers.append("source_collection_warnings")
     status=health["status"]
     if blockers:
