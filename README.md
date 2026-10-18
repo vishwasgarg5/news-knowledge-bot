@@ -67,3 +67,12 @@ Each run produces machine-readable analytics covering learning samples, outcome 
 The final ranking incorporates personalization, breaking-news and trend signals while retaining verification gates. Event memory now supports NEW, DEVELOPING, ESCALATING, CONFIRMED and RESOLVED states. CSV writes use atomic replacement to reduce partial-write corruption, and the workflow compiles the complete application and runs cross-module smoke validation before delivery.
 
 The latest successful scheduled production run should be treated as the baseline; subsequent code changes require the next scheduled/manual run to validate the new code in GitHub Actions.
+
+
+## Continuous integration and production safety
+
+- `.github/workflows/ci.yml` runs on pushes to `main`, pull requests targeting `main`, and manual dispatch. It compiles the application, validates YAML configuration, runs the regression contract tests, and audits installed dependencies. It does not send Telegram messages or write production memory.
+- `.github/workflows/news_intelligence.yml` remains a separate delivery workflow, scheduled daily or manually dispatched. Code pushes must not trigger a live briefing.
+- Production quality stays on `HOLD` when regional targets are missed, source collection fails, queued research remains uncorroborated, evidence gaps exceed the threshold, calibration/drift checks fail, or out-of-sample ranking improvement is not proven.
+- RSS collection uses explicit HTTP timeouts and a bot User-Agent; source errors report HTTP status and parser context where available. Failed feeds remain visible in health checks rather than being silently treated as successful.
+- Source metadata timestamps are restored from the original feed article when enrichment drops them. Missing timestamps are never invented.
