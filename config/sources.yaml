@@ -5,6 +5,8 @@ sources:
     - https://timesofindia.indiatimes.com/rssfeedstopstories.cms
     - https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml
     - https://www.hindustantimes.com/feeds/rss/latest/rssfeed.xml
+    - https://indianexpress.com/section/india/feed/
+    - https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1
   world:
     - https://feeds.bbci.co.uk/news/world/rss.xml
     - https://rss.dw.com/xml/rss-en-world
