@@ -20,41 +20,60 @@ def _named_tokens(text):
     return {w.lower().strip(".,") for w in words if w.lower() not in STOP and w.lower() not in generic}
 
 def _event_similarity(a,b):
-    """Match the same concrete event across differently worded publisher reports."""
+    """Conservative same-event matching; shared names/topics alone are insufficient."""
     base=_similar(a,b)
-    na,nb=_named_tokens(a),_named_tokens(b)
-    named_overlap=len(na&nb)
     ta,tb=_tokens(a),_tokens(b)
     common=ta&tb
-    event_terms={"breach","hack","attack","arrest","ban","blocked","access","launch","launched","deal","trade","truce","visit","arrives","arrived","intelligence","result","results","election","judge","verdict","trial","crash","earthquake","cyclone","fire","flood","death","dies","killed","injured","strike","protest","approval","approved","agreement","summit","sanctions","dispute","ruling","order","warn","warning","suspended","suspension","wins","won","silver","gold","medal","meeting","decision","decisions","appointed","summoned","filed","signed","reopens","reopened","withdraws","withdrawn","rolls","voters","names","probe"}
-    event_overlap=len(common & event_terms)
-    generic={"supreme","court","government","president","prime","minister","chief","election","commission","india","world","news","today","latest","report","reports","officials","official"}
+    event_terms={
+        "breach","hack","attack","arrest","ban","blocked","access","launch","launched",
+        "deal","trade","truce","visit","arrives","arrived","intelligence","result","results",
+        "election","judge","verdict","trial","crash","earthquake","cyclone","fire","flood",
+        "death","dies","killed","injured","strike","protest","approval","approved","agreement",
+        "summit","sanction","sanctions","dispute","ruling","order","warn","warning","suspended",
+        "suspension","wins","won","silver","gold","medal","meeting","decision","decisions",
+        "appointed","summoned","filed","signed","reopens","reopened","withdraws","withdrawn",
+        "rolls","voters","names","probe"
+    }
+    event_overlap=common&event_terms
+    generic={"supreme","court","government","president","prime","minister","chief","election",
+             "commission","india","world","news","today","latest","report","reports","officials","official"}
     distinctive=common-generic
-    if base>=0.62 and len(common)>=5: return base
-    if named_overlap>=1 and event_overlap>=1 and len(common)>=2: return max(base,0.56)
-    if named_overlap>=2 and len(common)>=3: return max(base,0.56)
-    if len(distinctive)>=3 and len(common)>=4 and base>=0.28: return max(base,0.56)
-    if event_overlap>=1 and len(distinctive)>=3 and len(common)>=3 and base>=0.32: return max(base,0.56)
-    if named_overlap>=1 and len(distinctive)>=3 and base>=0.22: return max(base,0.56)
-    if len(distinctive)>=4 and event_overlap>=1 and base>=0.20: return max(base,0.56)
+    # Near-identical headlines can match directly. Otherwise require a shared
+    # concrete action plus several distinctive shared terms, not just two names
+    # (e.g. Trump/Russia/Putin in otherwise unrelated stories).
+    if base>=0.72 and len(common)>=5:
+        return base
+    if event_overlap and len(common)>=4 and len(distinctive)>=3 and base>=0.25:
+        return max(base,0.56)
+    if len(event_overlap)>=2 and len(common)>=5 and base>=0.30:
+        return max(base,0.56)
     return 0.0
 
 def _strong_event_match(headline, primary_summary, article):
-    """Evidence-level match for differently worded reports of one concrete event."""
+    """Evidence-level match requires both shared context and a shared action."""
     other=f"{article.get('title','')} {article.get('summary','')}"
     primary=f"{headline} {primary_summary}"
     na,nb=_named_tokens(primary),_named_tokens(other)
     common=_tokens(primary)&_tokens(other)
-    event_terms={"attack","attacked","arrest","arrested","ban","banned","blocked","breach","breached","hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone","landfall","protest","protested","ruling","verdict","order","ordered","approved","announced","launched","signed","summoned","filed","probe","investigation","withdrawn","reopened","election","vote","voters","medal","gold","silver"}
+    event_terms={
+        "attack","attacked","arrest","arrested","ban","banned","blocked","breach","breached",
+        "hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone",
+        "landfall","protest","protested","ruling","verdict","order","ordered","approved",
+        "announced","launched","signed","summoned","filed","probe","investigation","withdrawn",
+        "reopened","election","vote","voters","medal","gold","silver","sanction","sanctions",
+        "trade","agreement","summit","strike","resigned","resignation"
+    }
     events=common & event_terms
     named=na&nb
-    distinctive=common-{"government","president","minister","court","election","commission","india","world","news","today","latest","report","reports","official"}
-    # One shared named actor + one concrete action + two additional shared terms
-    # is enough when both reports are fresh and from different publishers.
-    if named and events and len(distinctive)>=4: return True
-    if len(named)>=2 and len(distinctive)>=3: return True
-    if events and len(distinctive)>=5: return True
+    generic={"government","president","minister","court","election","commission","india","world",
+             "news","today","latest","report","reports","official"}
+    distinctive=common-generic
+    if named and events and len(distinctive)>=4:
+        return True
+    if events and len(distinctive)>=5:
+        return True
     return False
+
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
 def _source_key(source, url=""):
     try:
