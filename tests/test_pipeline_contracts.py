@@ -1102,3 +1102,17 @@ def test_fetch_feed_uses_explicit_http_and_reports_status(monkeypatch):
     assert "HTTP 503" in error
     assert seen["timeout"] == (5, 15)
     assert "User-Agent" in seen["headers"]
+
+
+def test_reports_on_same_canadian_military_base_fire_share_one_event_family():
+    from app.ai import _same_event_family
+
+    first = {
+        "headline": "Deaths confirmed in major fire at Canada military base",
+        "event_id": "report-a",
+    }
+    second = {
+        "headline": "Major fire at Canadian military base in Alberta, Carney calls it serious incident",
+        "event_id": "report-b",
+    }
+    assert _same_event_family(first, second)
