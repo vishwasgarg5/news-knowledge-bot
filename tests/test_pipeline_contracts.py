@@ -1490,3 +1490,19 @@ def test_production_gate_fails_closed_when_research_completion_metric_missing():
     )
     assert gate["status"] == "HOLD"
     assert "research_incomplete" in gate["blockers"]
+
+
+def test_main_verification_counts_do_not_promote_single_source_to_evidence():
+    from app.main import _verification_counts
+
+    rows = [
+        {"verification": "single-source"},
+        {"verification": "unverified"},
+        {"verification": "multi-report"},
+        {"verification": "multi-source"},
+        {"verification": "official-source"},
+    ]
+    evidence, verified, strong = _verification_counts(rows)
+    assert evidence == 3
+    assert verified == 3
+    assert strong == 2

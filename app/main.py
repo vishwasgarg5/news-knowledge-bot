@@ -29,6 +29,16 @@ def _safe_float(v):
     except:return 0.0
 
 
+def _verification_counts(research_rows):
+    """Count evidence-backed stories without inflating counts from single-source reports."""
+    statuses = [str(row.get("verification", "") or "") for row in (research_rows or [])]
+    evidence_statuses = {"multi-source", "multi-report", "official-source"}
+    strong_statuses = {"multi-source", "official-source"}
+    evidence = sum(status in evidence_statuses for status in statuses)
+    strong = sum(status in strong_statuses for status in statuses)
+    return evidence, evidence, strong
+
+
 def _restore_source_metadata(stories, articles):
     """Restore source-published fields lost during AI enrichment.
 
@@ -375,9 +385,7 @@ def main():
 
     current_ids={s.get("story_id") for s in result.get("top_stories",[])}
     current_research=[research.get(sid,{}) for sid in current_ids]
-    current_evidence=sum(1 for r in current_research if r.get("verification") in {"multi-source","multi-report","official-source","single-source"})
-    current_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source","single-source"})
-    strong_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source"})
+    current_evidence,current_verified,strong_verified=_verification_counts(current_research)
     total_selected=len(result.get("top_stories",[]))
     current_coverage=current_evidence/max(1,total_selected)
     source_failures=cstats.get("source_failures",0)
@@ -397,9 +405,7 @@ def main():
     result["top_stories"]=clean
     current_ids={s.get("story_id") for s in clean}
     current_research=[research.get(sid,{}) for sid in current_ids]
-    current_evidence=sum(1 for r in current_research if r.get("verification") in {"multi-source","multi-report","official-source","single-source"})
-    current_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source","single-source"})
-    strong_verified=sum(1 for r in current_research if r.get("verification") in {"multi-source","official-source"})
+    current_evidence,current_verified,strong_verified=_verification_counts(current_research)
     total_selected=len(clean)
     current_coverage=current_evidence/max(1,total_selected)
 
