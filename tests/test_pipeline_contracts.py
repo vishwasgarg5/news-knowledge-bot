@@ -1331,3 +1331,82 @@ def test_learning_adjustments_are_neutral_without_history_and_signed_with_eviden
     assert out[0]["learning_adjustment"] > 0
     assert out[1]["learning_adjustment"] < 0
     assert all(abs(x["learning_adjustment"]) <= 4 for x in out)
+
+
+def test_research_matches_same_event_across_verb_inflections():
+    from app.research import verify_article
+    from datetime import datetime, timezone
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "India regulator approves Nova Bank merger after review",
+        "summary": "The regulator approved the merger following a review.",
+        "source": "India Today",
+        "url": "https://www.indiatoday.in/example-merger",
+        "published": now,
+    }
+    corroborating = {
+        "title": "Regulator approves Nova Bank merger after review",
+        "summary": "Officials confirmed the merger approval.",
+        "source": "The Guardian",
+        "url": "https://www.theguardian.com/example-merger",
+        "published": now,
+    }
+    result = verify_article(story, [corroborating])
+    assert result["independent_sources"] == 1
+    assert result["verification"] == "multi-report"
+    assert result["evidence"][0]["url"] == corroborating["url"]
+
+
+def test_research_rejects_same_publisher_and_stale_reports():
+    from app.research import verify_article
+    from datetime import datetime, timedelta, timezone
+
+    now = datetime.now(timezone.utc)
+    story = {
+        "headline": "ISRO launches new weather satellite from Sriharikota",
+        "summary": "ISRO launched a weather satellite today.",
+        "source": "NDTV",
+        "url": "https://www.ndtv.com/example-satellite",
+        "published": now.isoformat(),
+    }
+    same_publisher = {
+        "title": "ISRO launched new weather satellite from Sriharikota",
+        "summary": "The satellite was launched today.",
+        "source": "NDTV",
+        "url": "https://www.ndtv.com/another-satellite-report",
+        "published": now.isoformat(),
+    }
+    stale = {
+        "title": "ISRO launches new weather satellite from Sriharikota",
+        "summary": "Satellite launch details.",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/example-satellite",
+        "published": (now - timedelta(days=5)).isoformat(),
+    }
+    result = verify_article(story, [same_publisher, stale])
+    assert result["independent_sources"] == 0
+    assert result["evidence"] == []
+    assert result["verification"] == "single-source"
+
+
+def test_research_status_reason_explains_unresolved_evidence():
+    from app.intelligence_v5_plus import autonomous_research
+
+    story = {
+        "headline": "Example major public policy announcement",
+        "importance": 90,
+        "impact": {"score": 90},
+        "source": "Unknown publisher",
+        "url": "https://example.org/policy",
+        "published": "2000-01-01T00:00:00+00:00",
+        "summary": "A public policy announcement was reported.",
+    }
+    queue = autonomous_research([story], evidence_pool=[])
+    assert queue
+    assert queue[0]["research_status"] == "RESEARCH_REQUIRED"
+    assert queue[0]["research_status_reason"] in {
+        "primary_source_missing_or_stale",
+        "no_strict_event_matched_independent_evidence",
+    }
+    assert queue[0]["evidence_publishers"] == []

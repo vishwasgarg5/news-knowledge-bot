@@ -5,10 +5,40 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
 STOP={"gets","says","this","that","with","from","into","after","about","will","have","been","their","they","what","when","where","which","today","latest","india","news"}
-TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"prime minister's office":0.98,"pm india":0.98,"ministry of defence":0.98,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90}
+TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"prime minister's office":0.98,"pm india":0.98,"ministry of defence":0.98,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90,"india today":0.82,"hindustan times":0.82,"the guardian":0.90,"al jazeera":0.85,"dw":0.85,"npr":0.85,"techcrunch":0.80}
 OFFICIAL={"pib","reserve bank of india","rbi","supreme court of india","prime minister's office","pm india","ministry of defence","isro","nasa","sebi"}
 
 def _tokens(text): return {x for x in re.findall(r"[a-zA-Z]{4,}",str(text).lower()) if x not in STOP}
+
+# Normalize common inflections only for event matching. This helps independent
+# publishers describe the same development with different verb forms without
+# weakening the requirement for concrete event overlap.
+_EVENT_ALIASES = {
+    "announced":"announce", "announces":"announce", "announcing":"announce",
+    "launched":"launch", "launches":"launch", "launching":"launch",
+    "approved":"approve", "approves":"approve", "approving":"approve",
+    "signed":"sign", "signs":"sign", "signing":"sign",
+    "arrested":"arrest", "arrests":"arrest", "arresting":"arrest",
+    "banned":"ban", "bans":"ban", "banning":"ban",
+    "blocked":"block", "blocks":"block", "blocking":"block",
+    "attacked":"attack", "attacks":"attack", "attacking":"attack",
+    "killed":"kill", "kills":"kill", "killing":"kill",
+    "injured":"injure", "injures":"injure", "injuring":"injure",
+    "warned":"warn", "warns":"warn", "warning":"warn",
+    "withdrawn":"withdraw", "withdraws":"withdraw", "withdrew":"withdraw",
+    "reopened":"reopen", "reopens":"reopen", "reopening":"reopen",
+    "ordered":"order", "orders":"order", "ordering":"order",
+    "filed":"file", "files":"file", "filing":"file",
+    "summoned":"summon", "summons":"summon", "summoning":"summon",
+    "protested":"protest", "protests":"protest", "protesting":"protest",
+    "sanctions":"sanction", "agreements":"agreement", "results":"result",
+    "elections":"election", "voters":"voter", "deaths":"death",
+}
+
+def _event_tokens(text):
+    words = re.findall(r"[a-z]{3,}", str(text or "").lower())
+    return {_EVENT_ALIASES.get(word, word) for word in words if word not in STOP}
+
 def _similar(a,b):
     x,y=_tokens(a),_tokens(b)
     if not x or not y: return 0.0
@@ -21,18 +51,18 @@ def _named_tokens(text):
 
 def _event_similarity(a,b):
     """Conservative same-event matching; shared names/topics alone are insufficient."""
-    base=_similar(a,b)
-    ta,tb=_tokens(a),_tokens(b)
+    ta,tb=_event_tokens(a),_event_tokens(b)
     common=ta&tb
+    base=len(common)/max(1,len(ta|tb))
     event_terms={
-        "breach","hack","attack","arrest","ban","blocked","access","launch","launched",
-        "deal","trade","truce","visit","arrives","arrived","intelligence","result","results",
+        "breach","hack","attack","arrest","ban","block","access","launch",
+        "deal","trade","truce","visit","arrive","intelligence","result",
         "election","judge","verdict","trial","crash","earthquake","cyclone","fire","flood",
-        "death","dies","killed","injured","strike","protest","approval","approved","agreement",
-        "summit","sanction","sanctions","dispute","ruling","order","warn","warning","suspended",
-        "suspension","wins","won","silver","gold","medal","meeting","decision","decisions",
-        "appointed","summoned","filed","signed","reopens","reopened","withdraws","withdrawn",
-        "rolls","voters","names","probe"
+        "death","die","kill","injure","strike","protest","approval","approve","agreement",
+        "summit","sanction","dispute","ruling","order","warn","suspend",
+        "win","silver","gold","medal","meeting","decision",
+        "appoint","summon","file","sign","reopen","withdraw",
+        "roll","voter","name","probe"
     }
     event_overlap=common&event_terms
     generic={"supreme","court","government","president","prime","minister","chief","election",
@@ -54,14 +84,11 @@ def _strong_event_match(headline, primary_summary, article):
     other=f"{article.get('title','')} {article.get('summary','')}"
     primary=f"{headline} {primary_summary}"
     na,nb=_named_tokens(primary),_named_tokens(other)
-    common=_tokens(primary)&_tokens(other)
+    common=_event_tokens(primary)&_event_tokens(other)
     event_terms={
-        "attack","attacked","arrest","arrested","ban","banned","blocked","breach","breached",
-        "hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone",
-        "landfall","protest","protested","ruling","verdict","order","ordered","approved",
-        "announced","launched","signed","summoned","filed","probe","investigation","withdrawn",
-        "reopened","election","vote","voters","medal","gold","silver","sanction","sanctions",
-        "trade","agreement","summit","strike","resigned","resignation"
+        "attack","arrest","ban","block","breach","hack","kill","death","injure","crash","fire","flood","storm","cyclone",
+        "landfall","protest","rule","verdict","order","approve","announce","launch","sign","summon","file","probe","investigation","withdraw",
+        "reopen","election","vote","voter","medal","gold","silver","sanction","trade","agreement","summit","strike","resign"
     }
     events=common & event_terms
     named=na&nb
@@ -100,6 +127,11 @@ def _source_key(source, url=""):
             if _host_is(host, "sci.gov.in"): return "supreme court of india"
             if _host_is(host, "mod.gov.in"): return "ministry of defence"
             if _host_is(host, "ndtv.com"): return "ndtv"
+            if _host_is(host, "theguardian.com"): return "the guardian"
+            if _host_is(host, "aljazeera.com"): return "al jazeera"
+            if _host_is(host, "dw.com"): return "dw"
+            if _host_is(host, "npr.org"): return "npr"
+            if _host_is(host, "techcrunch.com"): return "techcrunch"
             if _host_is(host, "timesofindia.indiatimes.com") or _host_is(host, "timesofindia.com"): return "times of india"
             if _host_is(host, "indiatoday.in"): return "india today"
             if _host_is(host, "hindustantimes.com"): return "hindustan times"
@@ -119,6 +151,7 @@ def _source_trust(source_key):
 TRUSTED_SINGLE_SOURCE = {
     "reuters", "bbc", "associated press", "the hindu", "indian express",
     "times of india", "pib", "nasa", "ndtv", "hindustan times",
+    "india today", "the guardian", "al jazeera", "dw", "npr", "techcrunch",
 }
 
 
@@ -178,8 +211,8 @@ def _published_recent(value, hours=72):
 
 def _relaxed_event_match(headline, primary_summary, article):
     primary=f"{headline} {primary_summary}"; other=f"{article.get('title','')} {article.get('summary','')}"
-    na,nb=_named_tokens(primary),_named_tokens(other); common=_tokens(primary)&_tokens(other)
-    events=common & {"attack","arrest","arrested","ban","blocked","breach","hack","hacked","killed","death","injured","crash","fire","flood","storm","cyclone","protest","ruling","verdict","order","approved","announced","launched","signed","summoned","filed","probe","investigation","withdrawn","reopened","election","vote","medal","gold","agreement","sanctions","strike"}
+    na,nb=_named_tokens(primary),_named_tokens(other); common=_event_tokens(primary)&_event_tokens(other)
+    events=common & {"attack","arrest","ban","block","breach","hack","kill","death","injure","crash","fire","flood","storm","cyclone","protest","rule","verdict","order","approve","announce","launch","sign","summon","file","probe","investigation","withdraw","reopen","election","vote","medal","gold","agreement","sanction","strike"}
     distinctive=common-{"government","president","minister","court","election","commission","india","world","news","today","latest","report","reports","official"}
     return bool(na & nb and events and len(distinctive)>=2 and len(common)>=4)
 

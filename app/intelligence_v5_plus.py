@@ -263,12 +263,22 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
         verification=verify_article(story,pool,similarity_history or [])
         evidence=list(verification.get("evidence") or [])
         independent_count=int(verification.get("independent_sources",0) or 0)
-        if independent_count>=2 and verification.get("primary_fresh"):
+        primary_fresh=bool(verification.get("primary_fresh"))
+        if independent_count>=2 and primary_fresh:
             status="CORROBORATED"
+            status_reason="two_independent_current_publishers"
+        elif independent_count==1 and primary_fresh:
+            status="EVIDENCE_RETRIEVED"
+            status_reason="one_independent_current_publisher"
         elif evidence:
             status="EVIDENCE_RETRIEVED"
+            status_reason="evidence_found_but_freshness_or_source_count_insufficient"
+        elif not primary_fresh:
+            status="RESEARCH_REQUIRED"
+            status_reason="primary_source_missing_or_stale"
         else:
             status="RESEARCH_REQUIRED"
+            status_reason="no_strict_event_matched_independent_evidence"
         queue.append({
             "headline":story.get("headline",""),
             "priority":round(priority,1),
@@ -280,6 +290,8 @@ def autonomous_research(stories,similarity_history=None,evidence_pool=None):
             "verification_reason":verification.get("verification_reason",""),
             "primary_fresh":bool(verification.get("primary_fresh")),
             "research_status":status,
+            "research_status_reason":status_reason,
+            "evidence_publishers":sorted({str(item.get("source","")).strip() for item in evidence if str(item.get("source","")).strip()}),
         })
     return sorted(queue,key=lambda x:x["priority"],reverse=True)[:15]
 
