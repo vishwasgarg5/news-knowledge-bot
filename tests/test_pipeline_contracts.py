@@ -1246,3 +1246,21 @@ def test_official_indian_domains_are_exactly_canonicalized():
     assert _is_official(_source_key("Supreme Court", "https://www.sci.gov.in/"))
     assert _is_official(_source_key("Ministry of Defence", "https://mod.gov.in/"))
     assert not _is_official(_source_key("PM India", "https://notpmindia.gov.in/"))
+
+
+def test_final_audit_cannot_pass_with_any_production_gate_blocker():
+    from app.ops import final_audit
+
+    stats={
+        "source_failures":0,
+        "source_warnings":0,
+        "current_evidence":1,
+        "total":1,
+        "data_quality":{"ok":True},
+        "db_path":"data/news_knowledge.db",
+        "learning_labeled":10,
+        "v5_quality_gate":{"status":"HOLD","blockers":["research_incomplete"]},
+    }
+    audit=final_audit(stats,[{"region":"world","importance":90,"verification":{"verification":"multi-source","confidence":90}}])
+    assert audit["health"] != "PASS"
+    assert "research_incomplete" in audit["blockers"]

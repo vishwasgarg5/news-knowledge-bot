@@ -242,7 +242,7 @@ jobs:
           gate=stats.get("v5_quality_gate") or {}
           final=stats.get("final_audit") or {}
           blockers=set(gate.get("blockers") or [])
-          if blockers.intersection({"evidence_gaps","regional_coverage_shortfall"}):
+          if blockers:
               assert final.get("health") != "PASS", "Final audit must surface evidence/coverage blockers"
           scorecard=stats.get("intelligence_scorecard") or {}
           assert 0 <= int(scorecard.get("verified",0) or 0) <= int(scorecard.get("stories",0) or 0)
