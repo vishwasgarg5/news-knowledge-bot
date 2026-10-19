@@ -1237,3 +1237,12 @@ def test_personalization_preserves_headroom_for_high_importance_stories():
     })[0]
     assert out["personalized_score"] < 100
     assert out["personalization_adjustment"] <= 2
+
+
+def test_official_indian_domains_are_exactly_canonicalized():
+    from app.research import _is_official, _source_key
+
+    assert _is_official(_source_key("PM India", "https://www.pmindia.gov.in/"))
+    assert _is_official(_source_key("Supreme Court", "https://www.sci.gov.in/"))
+    assert _is_official(_source_key("Ministry of Defence", "https://mod.gov.in/"))
+    assert not _is_official(_source_key("PM India", "https://notpmindia.gov.in/"))

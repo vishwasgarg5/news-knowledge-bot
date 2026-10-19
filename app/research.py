@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
 STOP={"gets","says","this","that","with","from","into","after","about","will","have","been","their","they","what","when","where","which","today","latest","india","news"}
-TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90}
+TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"prime minister's office":0.98,"pm india":0.98,"ministry of defence":0.98,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90}
 OFFICIAL={"pib","reserve bank of india","rbi","supreme court of india","prime minister's office","pm india","ministry of defence","isro","nasa","sebi"}
 
 def _tokens(text): return {x for x in re.findall(r"[a-zA-Z]{4,}",str(text).lower()) if x not in STOP}
@@ -95,6 +95,10 @@ def _source_key(source, url=""):
             if _host_is(host, "isro.gov.in"): return "isro"
             if _host_is(host, "nasa.gov"): return "nasa"
             if _host_is(host, "sebi.gov.in"): return "sebi"
+            if _host_is(host, "pmindia.gov.in"): return "pm india"
+            if _host_is(host, "pmo.gov.in"): return "prime minister's office"
+            if _host_is(host, "sci.gov.in"): return "supreme court of india"
+            if _host_is(host, "mod.gov.in"): return "ministry of defence"
             if _host_is(host, "ndtv.com"): return "ndtv"
             if _host_is(host, "timesofindia.indiatimes.com") or _host_is(host, "timesofindia.com"): return "times of india"
             if _host_is(host, "indiatoday.in"): return "india today"
