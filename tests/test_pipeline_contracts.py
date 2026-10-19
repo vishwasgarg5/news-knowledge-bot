@@ -1303,3 +1303,31 @@ def test_final_audit_fails_closed_when_coverage_shortfall_fields_are_missing(tmp
     result=final_audit(stats,[{"region":"india"},{"region":"world"}])
     assert result["checks"]["regional_coverage"] is False
     assert "regional_coverage_shortfall" in result["blockers"]
+
+
+def test_learning_adjustments_are_neutral_without_history_and_signed_with_evidence():
+    from app.learning import _profile, apply_learning
+
+    empty=apply_learning([{"source":"New source","category":"new category","importance":70}],{})
+    assert empty[0]["learning_adjustment"] == 0.0
+
+    rows=[]
+    for i in range(6):
+        rows.append({
+            "run_date":"2026-09-01","event_id":f"good-{i}","story_id":f"good-{i}",
+            "source":"Strong source","category":"business","selected":"true",
+            "outcome_score":"0.9","learning_value":"0.9","seen_again_7d":"1",
+        })
+    rows.append({
+        "run_date":"2026-09-01","event_id":"weak","story_id":"weak",
+        "source":"Weak source","category":"india","selected":"true",
+        "outcome_score":"0.0","learning_value":"0.0","seen_again_7d":"0",
+    })
+    profile=_profile(rows)
+    out=apply_learning([
+        {"source":"Strong source","category":"business","importance":70},
+        {"source":"Weak source","category":"india","importance":70},
+    ],profile)
+    assert out[0]["learning_adjustment"] > 0
+    assert out[1]["learning_adjustment"] < 0
+    assert all(abs(x["learning_adjustment"]) <= 4 for x in out)

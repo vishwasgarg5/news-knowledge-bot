@@ -37,9 +37,10 @@ def _profile(rows):
         out={}
         prior=4.0
         for k,(n,total) in d.items():
-            raw=total/max(1,n)
-            shrunk=raw*n/(n+prior)
-            out[k]=max(-1,min(1,shrunk))
+            # Persistence is a weak impact proxy, not ground truth. Shrink sparse
+            # source/category observations toward a neutral 0.5 prior.
+            shrunk=(total+0.5*prior)/(n+prior)
+            out[k]=max(0.0,min(1.0,shrunk))
         return out
     source_scores=norm(by_source); category_scores=norm(by_cat)
     source_observations={k:v[0] for k,v in by_source.items()}; category_observations={k:v[0] for k,v in by_cat.items()}
@@ -102,8 +103,12 @@ def apply_learning(candidates,profile):
     source=profile.get("source_reliability",profile.get("source",{})); category=profile.get("category",{})
     obs=profile.get("source_observations",{}); out=[]
     for c in candidates:
-        src=str(c.get("source","") or ""); sr=float(source.get(src,0) or 0); cat=float(category.get(c.get("category",""),0) or 0)
-        bonus=max(-4.0,min(4.0,2.0*sr+2.0*cat))
+        src=str(c.get("source","") or "")
+        # No history means neutral, not zero reliability. Center both signals
+        # on the prior so weak historical persistence can penalize as well as boost.
+        sr=float(source.get(src,0.5) if source.get(src,0.5) is not None else 0.5)
+        cat=float(category.get(c.get("category",""),0.5) if category.get(c.get("category",""),0.5) is not None else 0.5)
+        bonus=max(-4.0,min(4.0,4.0*(sr-0.5)+4.0*(cat-0.5)))
         x=dict(c); x["source_reliability"]=round(sr,3); x["source_observations"]=int(obs.get(src,0) or 0)
         x["learning_adjustment"]=round(bonus,1); x["importance"]=round(max(0,min(100,float(x.get("importance",0))+bonus)),1); out.append(x)
     return out
