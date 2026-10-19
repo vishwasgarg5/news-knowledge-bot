@@ -1525,3 +1525,48 @@ def test_region_classifier_covers_additional_world_geographies():
     for category, headline, summary, expected in cases:
         region, confidence, evidence = _region(category, headline, summary)
         assert region == expected, (headline, region, confidence, evidence)
+
+
+def test_research_discovery_parses_google_news_publisher_and_freshness(monkeypatch):
+    from types import SimpleNamespace
+    import app.research as research
+
+    class Response:
+        content = b"<rss/>"
+        def raise_for_status(self):
+            return None
+
+    entry = {
+        "title": "Major fire at Canadian military base - BBC News",
+        "source": {"title": "BBC News"},
+        "link": "https://news.google.com/rss/articles/example",
+        "summary": "Four people were killed in a fire.",
+        "published_parsed": (2026, 10, 19, 8, 0, 0, 0, 292, 0),
+    }
+    monkeypatch.setattr(research.requests, "get", lambda *a, **k: Response())
+    monkeypatch.setattr(research.feedparser, "parse", lambda content: SimpleNamespace(entries=[entry]))
+    found, metrics = research.discover_related_articles(
+        [{"headline": "Major fire at Canadian military base", "importance": 90, "region": "world"}],
+        existing_articles=[],
+        max_queries=1,
+    )
+    assert len(found) == 1
+    assert found[0]["source"] == "BBC News"
+    assert found[0]["published"].startswith("2026-10-19T08:00:00")
+    assert metrics == {"queries": 1, "failed_queries": 0, "articles_found": 1}
+    assert research._source_key(found[0]["source"], found[0]["url"]) == "bbc"
+
+
+def test_research_discovery_is_bounded_and_tolerates_network_failures(monkeypatch):
+    import app.research as research
+
+    def fail(*args, **kwargs):
+        raise TimeoutError("simulated timeout")
+
+    monkeypatch.setattr(research.requests, "get", fail)
+    found, metrics = research.discover_related_articles(
+        [{"headline": f"Important world event number {i}", "importance": 90-i, "region": "world"} for i in range(5)],
+        max_queries=2,
+    )
+    assert found == []
+    assert metrics == {"queries": 2, "failed_queries": 2, "articles_found": 0}

@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 import yaml
 from .ai import configured_model,generate_briefing,rerank_stories,select_stories,selection_diagnostics
 from .news import collect, _region
-from .research import research_stories
+from .research import research_stories, discover_related_articles
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
 from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
@@ -366,6 +366,24 @@ def main():
     plan=coverage_plan(candidates,world_target=int(os.getenv("NEWS_WORLD_TOP","5")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")))
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
 
+    # Expand corroboration beyond configured publisher feeds with a bounded,
+    # region-balanced search. All results still pass strict verification below.
+    query_limit=max(0,int(os.getenv("NEWS_RESEARCH_SEARCH_QUERIES","12")))
+    per_region_limit=max(0,int(os.getenv("NEWS_RESEARCH_QUERIES_PER_REGION","6")))
+    search_candidates=sorted(
+        [c for c in candidates if _safe_float(c.get("importance",c.get("personalized_score",0)))>=70],
+        key=lambda c:_safe_float(c.get("importance",c.get("personalized_score",0))), reverse=True)
+    research_targets=[]; region_counts={"india":0,"world":0}
+    for candidate in search_candidates:
+        region=str(candidate.get("region","world") or "world").lower()
+        if region not in region_counts or region_counts[region]>=per_region_limit: continue
+        research_targets.append(candidate); region_counts[region]+=1
+        if len(research_targets)>=query_limit: break
+    discovered_articles,research_discovery_stats=discover_related_articles(
+        research_targets,all_articles,max_queries=query_limit)
+    if discovered_articles:
+        all_articles.extend(discovered_articles)
+
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
     # rerank_stories already enforces verification, event-family, source and
     # regional quotas. A second destructive filter here removed eligible stories
@@ -422,6 +440,7 @@ def main():
     intel=intelligence_summary(result.get("top_stories",[]))
     stats={"data_quality":data_quality,"db_path":str(db),"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"current_evidence":current_evidence,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated")),
 "contradictions":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("contradiction_flag")),"contradiction_evidence":sum(len((s.get("verification") or {}).get("contradiction_evidence") or []) for s in result.get("top_stories",[])),"breaking_stories":intel["breaking"],"emerging_topics":intel["emerging"],"avg_personalized_score":intel["avg_personalized"]}
+    stats["research_discovery"]=research_discovery_stats
     stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 and strong_verified/max(1,total_selected)>=0.30 else ("WARN" if current_coverage>=0.20 and source_failures<=2 else "DEGRADED")
 
     # Keep an exact, machine-readable snapshot of the final briefing outside the

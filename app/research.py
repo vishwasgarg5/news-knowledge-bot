@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from urllib.parse import urlparse
+from email.utils import parsedate_to_datetime
+from urllib.parse import quote, urlparse
+
+import feedparser
+import requests
 
 STOP={"gets","says","this","that","with","from","into","after","about","will","have","been","their","they","what","when","where","which","today","latest","india","news"}
 TRUST={"reuters":1.0,"associated press":1.0,"bbc":0.95,"the hindu":0.92,"indian express":0.90,"times of india":0.82,"pib":0.92,"reserve bank of india":1.0,"supreme court of india":1.0,"prime minister's office":0.98,"pm india":0.98,"ministry of defence":0.98,"isro":0.98,"nasa":0.98,"sebi":0.98,"ndtv":0.86,"indian express":0.90,"india today":0.82,"hindustan times":0.82,"the guardian":0.90,"al jazeera":0.85,"dw":0.85,"npr":0.85,"techcrunch":0.80}
@@ -111,7 +115,9 @@ def _source_key(source, url=""):
     try:
         host=(urlparse(str(url or "")).hostname or "").lower().rstrip(".")
         if host.startswith("www."): host=host[4:]
-        if host:
+        # Google News RSS wraps publisher links. Its source.title is the
+        # publisher identity; do not collapse every result into news.google.com.
+        if host and not _host_is(host, "news.google.com"):
             if _host_is(host, "bbc.co.uk") or _host_is(host, "bbc.com"): return "bbc"
             if _host_is(host, "reuters.com"): return "reuters"
             if _host_is(host, "thehindu.com"): return "the hindu"
@@ -215,6 +221,89 @@ def _relaxed_event_match(headline, primary_summary, article):
     events=common & {"attack","arrest","ban","block","breach","hack","kill","death","injure","crash","fire","flood","storm","cyclone","protest","rule","verdict","order","approve","announce","launch","sign","summon","file","probe","investigation","withdraw","reopen","election","vote","medal","gold","agreement","sanction","strike"}
     distinctive=common-{"government","president","minister","court","election","commission","india","world","news","today","latest","report","reports","official"}
     return bool(na & nb and events and len(distinctive)>=2 and len(common)>=4)
+
+def discover_related_articles(stories, existing_articles=None, max_queries=12, per_query=8):
+    """Search Google News RSS for fresh independent reports on high-priority events.
+
+    Search results are discovery candidates only: verify_article still requires
+    strict event matching, freshness, and distinct publisher identities before
+    counting corroboration. Network failures are non-fatal and auditable.
+    """
+    pool = list(existing_articles or [])
+    known_urls = {str(row.get("url", "")).strip() for row in pool if isinstance(row, dict)}
+    results = []
+    queried = 0
+    failed = 0
+    seen_headlines = set()
+    candidates = sorted(
+        [row for row in (stories or []) if isinstance(row, dict) and str(row.get("headline", "")).strip()],
+        key=lambda row: float(row.get("importance", row.get("personalized_score", 0)) or 0),
+        reverse=True,
+    )
+    for story in candidates:
+        if queried >= max(0, int(max_queries)):
+            break
+        headline = re.sub(r"\s+", " ", str(story.get("headline", "") or "")).strip()
+        key = headline.casefold()
+        if not headline or key in seen_headlines:
+            continue
+        seen_headlines.add(key)
+        region = str(story.get("region", "world") or "world").lower()
+        gl, ceid = ("IN", "IN:en") if region == "india" else ("US", "US:en")
+        url = f"https://news.google.com/rss/search?q={quote(headline)}&hl=en&gl={gl}&ceid={ceid}"
+        queried += 1
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": "NewsKnowledgeBot/1.0 (+https://github.com/vishwasgarg5/news-knowledge-bot; RSS research)"},
+                timeout=(3, 6),
+            )
+            response.raise_for_status()
+            parsed = feedparser.parse(response.content)
+        except Exception:
+            failed += 1
+            continue
+        entries = getattr(parsed, "entries", []) or []
+        for entry in entries[:max(0, int(per_query))]:
+            publisher_info = entry.get("source", {}) or {}
+            publisher = publisher_info.get("title", "") if isinstance(publisher_info, dict) else ""
+            title = re.sub(r"\s+", " ", str(entry.get("title", "") or "")).strip()
+            if publisher and title.lower().endswith(" - " + str(publisher).lower()):
+                title = title[:-(len(str(publisher)) + 3)].strip()
+            link = str(entry.get("link", "") or "").strip()
+            if not publisher or not title or not link or link in known_urls:
+                continue
+            published = ""
+            parsed_time = entry.get("published_parsed") or entry.get("updated_parsed")
+            if parsed_time:
+                try:
+                    published = datetime(*parsed_time[:6], tzinfo=timezone.utc).isoformat()
+                except (TypeError, ValueError):
+                    published = ""
+            if not published:
+                try:
+                    dt = parsedate_to_datetime(str(entry.get("published", "") or entry.get("updated", "")))
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    published = dt.astimezone(timezone.utc).isoformat()
+                except (TypeError, ValueError, OverflowError):
+                    published = ""
+            if not published:
+                continue
+            known_urls.add(link)
+            results.append({
+                "title": title,
+                "headline": title,
+                "summary": re.sub(r"<[^>]+>", " ", str(entry.get("summary", "") or ""))[:1600],
+                "url": link,
+                "source": str(publisher).strip(),
+                "published": published,
+                "category": "research",
+            })
+    metrics = {"queries": queried, "failed_queries": failed, "articles_found": len(results)}
+    print(f"[RESEARCH_DISCOVERY] queries={queried} failed={failed} articles={len(results)}", flush=True)
+    return results, metrics
+
 
 def verify_article(story, articles, memory=None):
     """Build an auditable, freshness-aware verification record for one event.
