@@ -1431,3 +1431,62 @@ def test_research_diagnostics_survive_into_operational_report():
     assert report["research_status_reason"] == "no_strict_event_matched_independent_evidence"
     assert report["primary_fresh"] is True
     assert report["evidence_publishers"] == []
+
+
+def test_region_classifier_prefers_explicit_foreign_headline_over_feed_category():
+    from app.news import _region
+
+    cases = [
+        ("India", "Why is France burning? Khanna pits wealth theory against Vance's imports", "A debate about French protests and US political commentary.", "world"),
+        ("india", "Charles Schwab blocks AI agents as US banks weigh automation", "A US financial-services story.", "world"),
+        ("business", "Supreme Court ruling changes policy in France", "French officials discussed the ruling.", "world"),
+        ("india", "Supreme Court of India issues a ruling in Delhi", "The ruling affects Indian law.", "india"),
+    ]
+    for category, headline, summary, expected in cases:
+        region, confidence, evidence = _region(category, headline, summary)
+        assert region == expected, (headline, region, confidence, evidence)
+
+
+def test_business_category_does_not_bias_mixed_geography_toward_india():
+    from app.news import _region
+
+    headline = "Global firms respond to policy changes"
+    summary = "Companies in France and India reported different responses."
+    business = _region("business", headline, summary)
+    world = _region("world", headline, summary)
+    assert business[0] == "world"
+    assert business[0] == world[0]
+
+
+def test_single_source_is_not_counted_as_independently_verified():
+    from app.quality import quality_snapshot
+
+    stories = [
+        {"story_id": "multi", "importance": 80},
+        {"story_id": "single", "importance": 85},
+        {"story_id": "official", "importance": 75},
+    ]
+    research = {
+        "multi": {"verification": "multi-source", "independent_sources": 2},
+        "single": {"verification": "single-source", "independent_sources": 0},
+        "official": {"verification": "official-source", "independent_sources": 0},
+    }
+    result = quality_snapshot(stories, research)
+    assert result["stories"] == 3
+    assert result["verified"] == 2
+    assert result["strong"] == 2
+    assert result["verification_rate"] == round(2 / 3, 3)
+
+
+def test_production_gate_fails_closed_when_research_completion_metric_missing():
+    from app.guardrails import production_readiness_gate
+
+    gate = production_readiness_gate(
+        {"paired_folds": 8, "promote": True},
+        {"samples": 100, "ece": 0.05},
+        {"status": "STABLE"},
+        {"stories": 10, "evidence_gap_rate": 0.0},
+        {"stories": 10, "india_shortfall": 0, "world_shortfall": 0},
+    )
+    assert gate["status"] == "HOLD"
+    assert "research_incomplete" in gate["blockers"]

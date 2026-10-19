@@ -42,7 +42,7 @@ def source_health(candidates):
 
 def quality_snapshot(stories,research):
     total=len(stories)
-    verified=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("verification") in {"multi-source","multi-report","official-source","single-source"})
+    verified=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("verification") in {"multi-source","multi-report","official-source"})
     strong=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("verification") in {"multi-source","official-source"})
     conflicts=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("contradiction_flag"))
     return {"stories":total,"verified":verified,"strong":strong,"conflicts":conflicts,"verification_rate":round(verified/max(1,total),3),"strong_rate":round(strong/max(1,total),3),"avg_importance":round(sum(_f(s.get("importance")) for s in stories)/max(1,total),1),"avg_quality":round(sum(_f(s.get("quality_score",s.get("importance"))) for s in stories)/max(1,total),1)}

@@ -52,9 +52,9 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
     title_text=str(title or "").lower()
     body_text=f"{title} {summary}".lower()
     india_terms=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","wayanad","modi","parliament","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","tamil nadu","t.n.","coimbatore","chennai","bombay","iit bombay","iit-bombay","azad maidan","cbi","mahadev","kashmiri pandits","goa","election commission of india","cec","eci","obc","creamy layer","union government","central government","assembly constituency","lok sabha","rajya sabha","rupee","crore","lakh","asian games","shaili singh","shaili","ancy sojan","pv sindhu","sindhu","tajinderpal","neeraj chopra","avni lekhara","manu bhaker","india team","indian team")
-    world_terms=("united states","u.s.","america","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","canadian","alberta","iran","japan","korea","taiwan","nebraska","new york city","new york","california","texas","florida","washington","washington dc","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco","washington state")
-    strong_india=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","modi","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","azad maidan","cbi","mahadev","supreme court","election commission of india","cec","eci","obc","creamy layer","union government","lok sabha","rajya sabha","t.n.","coimbatore","chennai","shaili singh","ancy sojan","pv sindhu","sindhu","tajinderpal","neeraj chopra","india team","indian team")
-    strong_world=("mexico","hawaii","canada","canadian","alberta","china","xi jinping","trump","australia","ukraine","russia","gaza","israel","nato","iran","japan","taiwan","united states","u.s.","united nations","nebraska","new york city","california","texas","florida","washington","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco")
+    world_terms=("united states","u.s.","us banks","american banks","america","france","french","paris","european union","european","mexico","hawaii","china","xi jinping","trump","ukraine","russia","europe","britain","australia","ethiopia","poland","gaza","israel","nato","united nations","bangladesh","south africa","thailand","czech","czechia","finland","nokia","canada","canadian","alberta","iran","japan","korea","taiwan","nebraska","new york city","new york","california","texas","florida","washington","washington dc","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco","washington state")
+    strong_india=("india","indian","delhi","mumbai","bengaluru","karnataka","kolkata","modi","rbi","isro","trinamool","tamil nadu","uttar pradesh","west bengal","maharashtra","haryana","bombay","iit bombay","azad maidan","cbi","mahadev","election commission of india","cec","eci","obc","creamy layer","union government","lok sabha","rajya sabha","t.n.","coimbatore","chennai","shaili singh","ancy sojan","pv sindhu","sindhu","tajinderpal","neeraj chopra","india team","indian team")
+    strong_world=("mexico","hawaii","canada","canadian","alberta","france","french","paris","us banks","american banks","european union","european","china","xi jinping","trump","australia","ukraine","russia","gaza","israel","nato","iran","japan","taiwan","united states","u.s.","united nations","nebraska","new york city","california","texas","florida","washington","illinois","pennsylvania","ohio","michigan","massachusetts","virginia","georgia","colorado","arizona","seattle","boston","chicago","los angeles","san francisco")
     def hits(text, terms):
         return [x for x in terms if re.search(rf"\b{re.escape(x)}\b", text)]
     ti=hits(title_text,india_terms); tw=hits(title_text,world_terms)
@@ -81,11 +81,10 @@ def _region(category: str, title: str, summary: str) -> tuple[str, float, str]:
     if bi and bw:
         india_score=sum(3 if x in strong_india else 1 for x in bi)
         world_score=sum(3 if x in strong_world else 1 for x in bw)
-        if str(category or "").lower() in {"india","national","politics","business"}: india_score += 2
-        if world_score > india_score:
+        if world_score >= india_score:
             return "world",0.76,"body mixed; World anchors: "+", ".join(bw[:5])
         return "india",0.76,"body mixed; India anchors: "+", ".join(bi[:5])
-    if str(category or "").lower() in {"india","national","politics"}:
+    if str(category or "").lower() in {"india","national"}:
         return "india",0.58,"category fallback: "+str(category)
     return "world",0.35,"no explicit geographic evidence"
 
