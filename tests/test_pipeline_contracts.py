@@ -183,9 +183,9 @@ def test_single_main_workflow_separates_validation_from_production():
     workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
     triggers = workflow.get(True) or workflow.get("on") or {}
     assert {"push", "pull_request", "workflow_dispatch", "schedule"} <= set(triggers)
-    assert list((ROOT / ".github" / "workflows").glob("*.yml")) == [
-        ROOT / ".github" / "workflows" / "news_intelligence.yml"
-    ]
+    workflow_dir = ROOT / ".github" / "workflows"
+    workflow_files = sorted(list(workflow_dir.glob("*.yml")) + list(workflow_dir.glob("*.yaml")))
+    assert workflow_files == [workflow_dir / "news_intelligence.yml"]
 
     text = read(".github/workflows/news_intelligence.yml")
     assert "  validate:" in text and "  run-news:" in text
