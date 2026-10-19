@@ -908,6 +908,7 @@ def test_final_audit_does_not_hide_evidence_or_coverage_gaps(tmp_path):
         "evidence_gaps",
         "regional_coverage_shortfall",
         "production_quality_gate_hold",
+        "research_incomplete",
     }
     assert result["production_quality_gate"] == "HOLD"
 
@@ -940,7 +941,7 @@ def test_final_audit_surfaces_non_evidence_production_gate_blockers(tmp_path):
     assert result["health"] == "DEGRADED"
     assert result["checks"]["production_quality_gate"] is False
     assert set(result["blockers"]) == {
-        "ranking_improvement_not_proven", "poor_calibration"
+        "ranking_improvement_not_proven", "poor_calibration", "research_incomplete"
     }
 
 
