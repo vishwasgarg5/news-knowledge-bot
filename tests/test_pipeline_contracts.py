@@ -1179,3 +1179,11 @@ def test_single_source_trust_requires_a_real_publisher_domain():
     assert is_trusted_publisher("Reuters", "https://www.reuters.com/world/story")
     assert not is_trusted_publisher("BBC News", "https://notbbc.com/news")
     assert not is_trusted_publisher("PIB", "https://notpib.gov.in/news")
+
+
+def test_publisher_diversity_does_not_alias_lookalike_domains():
+    from app.ai import _publisher_key
+
+    assert _publisher_key({"source":"BBC News","url":"https://www.bbc.com/news"}) == "bbc"
+    assert _publisher_key({"source":"BBC News","url":"https://notbbc.com/news"}) == "notbbc.com"
+    assert _publisher_key({"source":"PIB","url":"https://notpib.gov.in/news"}) == "notpib.gov.in"
