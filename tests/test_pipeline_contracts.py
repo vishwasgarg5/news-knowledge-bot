@@ -138,7 +138,8 @@ def test_breaking_and_personalization_are_deterministic():
     story={"headline":"Breaking: major earthquake hits India","summary":"Emergency response begins.","published":"2099-01-01T00:00:00+00:00","region":"india","category":"india","importance":70}
     assert breaking_score(story)>=50
     out=personalize([story],{"priority_categories":["india"],"preferred_regions":["india"],"category_weight":7,"region_weight":2,"breaking_weight":4,"emerging_weight":3})
-    assert out and out[0]["personalized_score"]>=79
+    assert out and 77 <= out[0]["personalized_score"] <= 80
+    assert out[0]["personalized_score"] < 100
 
 def test_learning_exposes_source_reliability():
     from app.learning import _profile, apply_learning
@@ -1209,3 +1210,30 @@ def test_selection_diagnostics_explain_regional_and_verification_rejections(monk
     assert out["eligible_after_geography"]["india"]==0
     assert out["rejections"]["india_region_confidence"]==1
     assert out["rejections"]["unverified"]==1
+
+
+def test_personalization_preserves_headroom_for_high_importance_stories():
+    from app.intelligence import personalize
+
+    story={
+        "headline":"Breaking India economy update",
+        "importance":95,
+        "category":"india",
+        "region":"india",
+        "breaking_score":90,
+        "emerging_topic":True,
+        "novelty_score":90,
+        "event_momentum":90,
+    }
+    out=personalize([story],{
+        "priority_categories":["india"],
+        "preferred_regions":["india"],
+        "category_weight":6,
+        "region_weight":2,
+        "breaking_weight":4,
+        "emerging_weight":3,
+        "novelty_weight":1,
+        "momentum_weight":2,
+    })[0]
+    assert out["personalized_score"] < 100
+    assert out["personalization_adjustment"] <= 2

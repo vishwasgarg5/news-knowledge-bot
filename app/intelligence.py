@@ -54,7 +54,7 @@ def personalize(stories,preferences=None):
  minimum=float(p.get("minimum_personal_score",58) or 58)
  out=[]
  for s in stories:
-  x=dict(s); base=float(x.get("importance",0) or 0); score=base; reasons=[]
+  x=dict(s); base=max(0.0,min(100.0,float(x.get("importance",0) or 0))); score=base; reasons=[]
   if str(x.get("category","")).lower() in cats: score+=category_weight; reasons.append("priority category")
   if str(x.get("region","")).lower() in regions: score+=region_weight; reasons.append("preferred region")
   if float(x.get("breaking_score",0) or 0)>=50: score+=breaking_weight; reasons.append("breaking")
@@ -62,11 +62,16 @@ def personalize(stories,preferences=None):
   if float(x.get("novelty_score",0) or 0)>=70: score+=novelty_weight; reasons.append("novel")
   if float(x.get("event_momentum",0) or 0)>=60: score+=momentum_weight; reasons.append("momentum")
   # Learning feedback is already applied to importance; expose it without
-  # double-counting it here.
+  # double-counting it here. Personalization must not flatten most high-scoring
+  # stories to 100: its positive adjustment shrinks with available score headroom.
   learning=float(x.get("learning_adjustment",0) or 0)
   if learning>0: reasons.append("historically reliable")
   elif learning<0: reasons.append("historically weaker")
-  score=min(100,score)
+  raw_bonus=score-base
+  allowed_bonus=min(8.0,max(0.0,(100.0-base)*0.35))
+  bounded_bonus=max(-8.0,min(raw_bonus,allowed_bonus))
+  score=max(0.0,min(100.0,base+bounded_bonus))
+  x["personalization_adjustment"]=round(score-base,1)
   x["personalized_score"]=round(score,1)
   x["personalization_relevant"]=bool(score>=minimum)
   x["why_for_you"]=" + ".join(reasons[:2]) if reasons else "high general importance"
