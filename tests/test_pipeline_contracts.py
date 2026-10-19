@@ -1410,3 +1410,24 @@ def test_research_status_reason_explains_unresolved_evidence():
         "no_strict_event_matched_independent_evidence",
     }
     assert queue[0]["evidence_publishers"] == []
+
+
+def test_research_diagnostics_survive_into_operational_report():
+    from app.production_v5 import autonomous_research_agent, generate_research_reports
+
+    queue = [{
+        "headline": "Example event",
+        "priority": 90,
+        "research_status": "RESEARCH_REQUIRED",
+        "research_status_reason": "no_strict_event_matched_independent_evidence",
+        "evidence_publishers": [],
+        "primary_fresh": True,
+        "independent_source_count": 0,
+        "evidence_count": 0,
+    }]
+    agent = autonomous_research_agent(queue, [])
+    report = generate_research_reports(agent)[0]
+    assert agent[0]["research_status_reason"] == "no_strict_event_matched_independent_evidence"
+    assert report["research_status_reason"] == "no_strict_event_matched_independent_evidence"
+    assert report["primary_fresh"] is True
+    assert report["evidence_publishers"] == []

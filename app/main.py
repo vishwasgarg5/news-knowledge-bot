@@ -488,10 +488,15 @@ def main():
     v5_agent=autonomous_research_agent(v5plus["research_queue"],read_rows(DATA/"news_history.csv"))
     v5_reports=generate_research_reports(v5_agent)
     production_coverage=coverage_audit(v5plus["stories"],int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5")))
+    research_queue_size=len(v5plus["research_queue"])
+    research_corroborated=sum(1 for x in v5plus["research_queue"] if x.get("research_status")=="CORROBORATED")
     production_coverage.update({
         "source_failures":source_failures,
         "source_warnings":source_warnings,
-        "research_completion_rate":sum(1 for x in v5plus["research_queue"] if x.get("research_status")=="CORROBORATED")/max(1,len(v5plus["research_queue"])),
+        "research_queue_size":research_queue_size,
+        "research_corroborated":research_corroborated,
+        "research_unresolved":research_queue_size-research_corroborated,
+        "research_completion_rate":research_corroborated/max(1,research_queue_size),
     })
     v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"),drift_current=drift_windows["current"],drift_baseline=drift_windows["baseline"],coverage=production_coverage)
     stats["v5_walk_forward"]=v5_wf
@@ -505,8 +510,11 @@ def main():
     stats["v5_production_evaluation"]=v5_eval
     stats["v5_quality_gate"]=v5_eval.get("quality_gate",{})
     stats["regional_coverage_audit"]=coverage_audit(result.get("top_stories",[]),int(os.getenv("NEWS_INDIA_TOP","5")),int(os.getenv("NEWS_WORLD_TOP","5")))
-    stats["research_completion_rate"]=round(sum(1 for x in v5plus["research_queue"] if x.get("research_status")=="CORROBORATED")/max(1,len(v5plus["research_queue"])),3)
-    stats["research_completion_definition"]="share of queued stories with evidence from at least two distinct publishers; evidence retrieval alone is not completion"
+    stats["research_queue_size"]=research_queue_size
+    stats["research_corroborated"]=research_corroborated
+    stats["research_unresolved"]=research_queue_size-research_corroborated
+    stats["research_completion_rate"]=round(research_corroborated/max(1,research_queue_size),3)
+    stats["research_completion_definition"]="share of queued stories with a fresh primary source and evidence from at least two distinct publishers; evidence retrieval alone is not completion"
 
     for s in result.get("top_stories",[]):
         s["event_id"]=s.get("event_id") or next((x.get("event_id") for x in v5plus["stories"] if x.get("headline")==s.get("headline")), "")

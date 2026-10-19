@@ -168,7 +168,19 @@ def drift_monitor(current,baseline):
 def contradiction_and_evidence(stories):
     return evidence_audit(stories)
 def autonomous_research_agent(queue,history):
-    return [{"headline":x.get("headline",""),"priority":x.get("priority",0),"actions":["verify primary source","search independent reports","compare historical events","recheck next run"],"retrieved_evidence":x.get("retrieved_evidence",[]),"evidence_count":x.get("evidence_count",0),"research_status":x.get("research_status","RESEARCH_REQUIRED")} for x in queue or []]
+    """Preserve the reason and provenance behind every research status."""
+    return [{
+        "headline":x.get("headline",""),
+        "priority":x.get("priority",0),
+        "actions":["verify primary source","search independent reports","compare historical events","recheck next run"],
+        "retrieved_evidence":x.get("retrieved_evidence",[]),
+        "evidence_count":x.get("evidence_count",0),
+        "independent_source_count":x.get("independent_source_count",0),
+        "evidence_publishers":x.get("evidence_publishers",[]),
+        "primary_fresh":x.get("primary_fresh",False),
+        "research_status":x.get("research_status","RESEARCH_REQUIRED"),
+        "research_status_reason":x.get("research_status_reason","status_reason_unavailable"),
+    } for x in queue or []]
 
 def generate_research_reports(agent_queue):
     reports=[]
@@ -187,6 +199,9 @@ def generate_research_reports(agent_queue):
             "status":status,
             "independent_source_count":int(item.get("independent_source_count",0) or 0),
             "evidence_count":int(item.get("evidence_count",0) or 0),
+            "research_status_reason":item.get("research_status_reason","status_reason_unavailable"),
+            "evidence_publishers":item.get("evidence_publishers",[]),
+            "primary_fresh":bool(item.get("primary_fresh",False)),
             "actions":actions,
         })
     return reports
