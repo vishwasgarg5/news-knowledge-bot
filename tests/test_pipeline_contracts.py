@@ -1092,6 +1092,52 @@ def test_final_audit_surfaces_source_collection_failures(tmp_path):
     assert result["health"] == "DEGRADED"
     assert "source_collection_failures" in result["blockers"]
 
+def test_final_audit_fails_closed_when_quality_gate_or_research_metric_is_missing(tmp_path):
+    from app.ops import final_audit
+
+    db = tmp_path / "news_knowledge.db"
+    db.touch()
+    stats = {
+        "source_failures": 0,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(db),
+        "learning_labeled": 1,
+        "v5_production_evaluation": {"evidence": {"stories": 2, "evidence_gap_rate": 0.0}},
+        "regional_coverage_audit": {"india_shortfall": 0, "world_shortfall": 0},
+    }
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert result["production_quality_gate"] == "UNKNOWN"
+    assert "production_quality_gate_unresolved" in result["blockers"]
+    assert "research_incomplete" in result["blockers"]
+    assert result["checks"]["research_completion"] is False
+
+
+def test_final_audit_requires_complete_research_even_if_gate_claims_pass(tmp_path):
+    from app.ops import final_audit
+
+    db = tmp_path / "news_knowledge.db"
+    db.touch()
+    stats = {
+        "source_failures": 0,
+        "source_warnings": 0,
+        "current_evidence": 2,
+        "total": 2,
+        "data_quality": {"ok": True},
+        "db_path": str(db),
+        "learning_labeled": 1,
+        "research_completion_rate": 0.75,
+        "v5_production_evaluation": {"evidence": {"stories": 2, "evidence_gap_rate": 0.0}},
+        "regional_coverage_audit": {"india_shortfall": 0, "world_shortfall": 0},
+        "v5_quality_gate": {"status": "PASS", "blockers": []},
+    }
+    result = final_audit(stats, [{"region": "india"}, {"region": "world"}])
+    assert result["health"] == "DEGRADED"
+    assert "research_incomplete" in result["blockers"]
+
 
 def test_fetch_feed_uses_explicit_http_and_reports_status(monkeypatch):
     from app import news

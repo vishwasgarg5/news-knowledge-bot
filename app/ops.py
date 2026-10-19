@@ -85,6 +85,22 @@ def final_audit(stats, stories):
         if blocker not in blockers:
             blockers.append(blocker)
     checks["production_quality_gate"] = gate_status == "PASS"
+    # A missing gate is unknown, not a pass. Always surface the failed check
+    # as a blocker so the summary health cannot contradict the check matrix.
+    if gate_status != "PASS" and not gate_blockers:
+        blocker = (
+            "production_quality_gate_hold" if gate_status == "HOLD"
+            else "production_quality_gate_unresolved"
+        )
+        if blocker not in blockers:
+            blockers.append(blocker)
+    # Research completion is a first-class final-audit requirement too; do not
+    # depend exclusively on the upstream gate payload being present/correct.
+    completion = stats.get("research_completion_rate")
+    research_complete = completion is not None and _f(completion, 0.0) >= 1.0
+    checks["research_completion"] = research_complete
+    if not research_complete and "research_incomplete" not in blockers:
+        blockers.append("research_incomplete")
     if _f(stats.get("source_failures"))>0 and "source_collection_failures" not in blockers:
         blockers.append("source_collection_failures")
     if _f(stats.get("source_warnings"))>0 and "source_collection_warnings" not in blockers:

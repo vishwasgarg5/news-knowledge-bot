@@ -576,6 +576,9 @@ def main():
     stats["historical_trend"]=historical_trend(read_rows(DATA/"news_history.csv"),7)
     stats["operational_health"]=operational_health(stats)
     stats["final_audit"]=final_audit(stats,result.get("top_stories",[]))
+    # Keep the headline health value consistent with the stricter final audit.
+    # The legacy operational summary alone can pass while research/quality gates hold.
+    stats["health"]=stats["final_audit"].get("health","DEGRADED")
     stats["learning_v3"]=learning_v3
     stats["source_fallback"]=source_fallback_plan(stats["source_health"])
     stats["breaking_fast_lane"]=len(fast_lane)
