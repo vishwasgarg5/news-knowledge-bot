@@ -825,3 +825,67 @@ def _is_non_news_content(article):
     if re.search(r"\b(?:forecast|weather outlook)\b",title,re.I) and not re.search(r"\b(?:storm|cyclone|hurricane|flood|landfall|evacuat|warning)\b",title,re.I):
         return True
     return False
+
+
+def selection_diagnostics(candidates, research, selected=None):
+    """Explain selection pressure without changing any publication decision."""
+    region_counts={"india":0,"world":0,"other":0}
+    tier_counts={}
+    rejected={
+        "malformed":0,
+        "primary_derivative":0,
+        "content_quality":0,
+        "unverified":0,
+        "stale_primary":0,
+        "single_source_below_importance":0,
+        "single_source_untrusted":0,
+        "single_source_commentary":0,
+        "india_region_confidence":0,
+    }
+    eligible={"india":0,"world":0,"other":0}
+    after_geo={"india":0,"world":0,"other":0}
+    min_single=float(os.getenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE","85"))
+    min_india_conf=float(os.getenv("NEWS_INDIA_MIN_REGION_CONFIDENCE","0.45"))
+    for item in candidates or []:
+        region=str(item.get("region","other") or "other").lower()
+        if region not in region_counts: region="other"
+        region_counts[region]+=1
+        sid=str(item.get("story_id","") or "")
+        rr=(research or {}).get(sid,{}) or {}
+        verification=str(rr.get("verification","unverified"))
+        tier_counts[verification]=tier_counts.get(verification,0)+1
+        if not sid or not str(item.get("url","")).strip() or not str(item.get("headline","")).strip():
+            rejected["malformed"]+=1; continue
+        if rr.get("primary_derivative"):
+            rejected["primary_derivative"]+=1; continue
+        if not _story_content_quality_ok(item):
+            rejected["content_quality"]+=1; continue
+        if verification=="unverified":
+            rejected["unverified"]+=1; continue
+        if not rr.get("primary_fresh",True):
+            rejected["stale_primary"]+=1; continue
+        if verification=="single-source":
+            if float(item.get("importance",0) or 0)<min_single:
+                rejected["single_source_below_importance"]+=1; continue
+            if not is_trusted_publisher(item.get("source",""),item.get("url","")):
+                rejected["single_source_untrusted"]+=1; continue
+            if not _single_source_quality_ok(item):
+                rejected["single_source_commentary"]+=1; continue
+        eligible[region]+=1
+        if region=="india" and float(item.get("region_confidence",0) or 0)<min_india_conf:
+            rejected["india_region_confidence"]+=1; continue
+        after_geo[region]+=1
+    selected_counts={"india":0,"world":0,"other":0}
+    for item in selected or []:
+        region=str(item.get("region","other") or "other").lower()
+        selected_counts[region if region in selected_counts else "other"]+=1
+    return {
+        "candidate_count":sum(region_counts.values()),
+        "candidate_regions":region_counts,
+        "research_tiers":tier_counts,
+        "eligible_before_geography":eligible,
+        "eligible_after_geography":after_geo,
+        "selected_regions":selected_counts,
+        "selected_count":sum(selected_counts.values()),
+        "rejections":rejected,
+    }

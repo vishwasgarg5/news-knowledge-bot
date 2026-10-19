@@ -3,7 +3,7 @@ import json,os,re,time
 from datetime import datetime,timedelta
 from zoneinfo import ZoneInfo
 import yaml
-from .ai import configured_model,generate_briefing,rerank_stories,select_stories
+from .ai import configured_model,generate_briefing,rerank_stories,select_stories,selection_diagnostics
 from .news import collect, _region
 from .research import research_stories
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
@@ -440,6 +440,7 @@ def main():
     report=write_reports(DATA)
     stats["analytics"]=report
     stats["quality_snapshot"]=quality_snapshot(result.get("top_stories",[]),research)
+    stats["selection_diagnostics"]=selection_diagnostics(candidates,research,result.get("top_stories",[]))
     stats["coverage_gaps"]=coverage_gaps(candidates)
     stats["coverage_plan"]=plan
     stats["source_health"]=source_health(candidates)

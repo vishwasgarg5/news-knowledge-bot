@@ -1187,3 +1187,25 @@ def test_publisher_diversity_does_not_alias_lookalike_domains():
     assert _publisher_key({"source":"BBC News","url":"https://www.bbc.com/news"}) == "bbc"
     assert _publisher_key({"source":"BBC News","url":"https://notbbc.com/news"}) == "notbbc.com"
     assert _publisher_key({"source":"PIB","url":"https://notpib.gov.in/news"}) == "notpib.gov.in"
+
+
+
+def test_selection_diagnostics_explain_regional_and_verification_rejections(monkeypatch):
+    from app.ai import selection_diagnostics
+
+    monkeypatch.setenv("NEWS_SINGLE_SOURCE_MIN_IMPORTANCE", "85")
+    monkeypatch.setenv("NEWS_INDIA_MIN_REGION_CONFIDENCE", "0.45")
+    candidates=[
+        {"story_id":"india-low","url":"https://example.com/i","headline":"India story","region":"india","region_confidence":0.2,"importance":90,"source":"Reuters"},
+        {"story_id":"world-unverified","url":"https://example.com/w","headline":"World story","region":"world","region_confidence":1.0,"importance":95,"source":"Unknown"},
+    ]
+    research={
+        "india-low":{"verification":"multi-source","primary_fresh":True},
+        "world-unverified":{"verification":"unverified","primary_fresh":True},
+    }
+    out=selection_diagnostics(candidates,research,[])
+    assert out["candidate_regions"]=={"india":1,"world":1,"other":0}
+    assert out["eligible_before_geography"]["india"]==1
+    assert out["eligible_after_geography"]["india"]==0
+    assert out["rejections"]["india_region_confidence"]==1
+    assert out["rejections"]["unverified"]==1
