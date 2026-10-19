@@ -111,7 +111,7 @@ def _is_derivative_report(article):
     title=str(article.get("title","") or article.get("headline","") or "")
     source=str(article.get("source","") or "")
     return bool(_ROUNDUP_RE.search(title) or _ROUNDUP_RE.search(source))
-def _is_official(source): return any(x in _source_key(source) for x in OFFICIAL)
+def _is_official(source): return _source_key(source) in OFFICIAL
 
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
     """Link only to a genuinely similar prior event, never to generic topic overlap."""
@@ -163,8 +163,8 @@ def verify_article(story, articles, memory=None):
     primary_source=str(story.get("source","") or "")
     primary_key=_source_key(primary_source, story.get("url",""))
     primary_fresh=_published_recent(story.get("published",""),72)
-    primary_trust=max((v for k,v in TRUST.items() if k in primary_key),default=0.65)
-    primary_official=_is_official(primary_source)
+    primary_trust=_source_trust(primary_key)
+    primary_official=_is_official(primary_key)
     matches=[]
     for a in articles:
         if str(a.get("url",""))==str(story.get("url","")): continue
@@ -178,7 +178,7 @@ def verify_article(story, articles, memory=None):
         relaxed_match=_relaxed_event_match(headline,"",a)
         sim=title_sim
         if title_sim>=0.55 or strong_match or relaxed_match:
-            source=_source_key(a.get("source",""), a.get("url","")); trust=max((v for k,v in TRUST.items() if k in source),default=0.65)
+            source=_source_key(a.get("source",""), a.get("url","")); trust=_source_trust(source)
             match_score=max(sim,0.58 if strong_match else sim)
             matches.append((match_score*0.7+trust*0.3,a,title_sim,0.0))
     matches.sort(key=lambda x:-x[0])

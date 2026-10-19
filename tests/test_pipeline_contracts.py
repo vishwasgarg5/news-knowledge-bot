@@ -178,14 +178,20 @@ def test_telegram_chunks_preserve_content():
     assert all(len(x) <= 3800 for x in parts)
 
 
-def test_workflow_is_schedule_only_and_linked():
+def test_single_main_workflow_separates_validation_from_production():
     workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
     triggers = workflow.get(True) or workflow.get("on") or {}
-    assert "workflow_dispatch" in triggers
-    assert "schedule" in triggers
-    assert "push" not in triggers
+    assert {"push", "pull_request", "workflow_dispatch", "schedule"} <= set(triggers)
+    assert list((ROOT / ".github" / "workflows").glob("*.yml")) == [
+        ROOT / ".github" / "workflows" / "news_intelligence.yml"
+    ]
 
     text = read(".github/workflows/news_intelligence.yml")
+    assert "  validate:" in text and "  run-news:" in text
+    assert "needs: validate" in text
+    assert "github.event_name == 'schedule'" in text
+    assert "inputs.mode == 'production'" in text
+    assert "contents: write" in text
     assert "python -m compileall -q app" in text
     assert "python -m app.main" in text
     assert "actions/upload-artifact@v7" in text
@@ -1116,3 +1122,34 @@ def test_reports_on_same_canadian_military_base_fire_share_one_event_family():
         "event_id": "report-b",
     }
     assert _same_event_family(first, second)
+
+
+
+def test_lookalike_domains_never_receive_trusted_or_official_status():
+    from app.research import _is_official, _source_key, _source_trust
+
+    assert _source_key("PIB", "https://pib.gov.in/news") == "pib"
+    assert _source_key("PIB", "https://notpib.gov.in/news") == "notpib.gov.in"
+    assert _source_key("BBC News", "https://notbbc.com/story") == "notbbc.com"
+    assert _source_key("Reuters", "https://reuters.com/story") == "reuters"
+    assert _is_official("pib")
+    assert not _is_official("notpib.gov.in")
+    assert _source_trust("bbc") == 0.95
+    assert _source_trust("notbbc.com") == 0.65
+
+
+def test_official_label_cannot_override_untrusted_article_domain():
+    from app.research import verify_article
+
+    published = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "Ministry announces a new public programme",
+        "summary": "The ministry announced the programme today.",
+        "source": "PIB",
+        "url": "https://notpib.gov.in/story",
+        "published": published,
+    }
+    result = verify_article(story, [], [])
+    assert result["verification"] == "single-source"
+    assert result["official_source"] is False
+    assert result["primary_trust"] == 0.65

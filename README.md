@@ -69,10 +69,11 @@ The final ranking incorporates personalization, breaking-news and trend signals 
 The latest successful scheduled production run should be treated as the baseline; subsequent code changes require the next scheduled/manual run to validate the new code in GitHub Actions.
 
 
-## Continuous integration and production safety
+## Single main workflow and production safety
 
-- `.github/workflows/ci.yml` runs on pushes to `main`, pull requests targeting `main`, and manual dispatch. It compiles the application, validates YAML configuration, runs the regression contract tests, and audits installed dependencies. It does not send Telegram messages or write production memory.
-- `.github/workflows/news_intelligence.yml` remains a separate delivery workflow, scheduled daily or manually dispatched. Code pushes must not trigger a live briefing.
+- `.github/workflows/news_intelligence.yml` is the only workflow file. Its validation job runs on pushes to `main`, pull requests targeting `main`, manual dispatches, and the daily schedule. It compiles the application, validates YAML configuration, runs regression contract tests, and audits installed dependencies.
+- The production job depends on validation and can run only on the daily schedule or an explicit `workflow_dispatch` with `mode=production` on `main`. Pushes and pull requests never send Telegram messages or write production memory. Choose `mode=validate` for a validation-only manual run.
+- Production writes are scoped to the production job; the validation job has read-only repository permissions.
 - Production quality stays on `HOLD` when regional targets are missed, source collection fails, queued research remains uncorroborated, evidence gaps exceed the threshold, calibration/drift checks fail, or out-of-sample ranking improvement is not proven.
 - RSS collection uses explicit HTTP timeouts and a bot User-Agent; source errors report HTTP status and parser context where available. Failed feeds remain visible in health checks rather than being silently treated as successful.
 - Source metadata timestamps are restored from the original feed article when enrichment drops them. Missing timestamps are never invented.
