@@ -336,7 +336,11 @@ def test_advanced_intelligence_v3_contract(tmp_path):
     assert snap["hit_rate"]==1.0
     assert source_fallback_plan({"weak":{"quality_rate":0.1}})["fallback_required"]
     assert breaking_fast_lane([{"breaking_score":80}])
-    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":80,"verification":"multi-source","independent_sources":2}})>80
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":80,"verification":"multi-source","independent_sources":2}})==80
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":99,"verification":"multi-source","independent_sources":4}})==95
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":92,"verification":"multi-source","primary_fresh":False}})==60
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":92,"verification":"multi-source","contradiction_flag":True}})==50
+    assert calibrate_confidence({"story_id":"x"},{"x":{"confidence":55,"verification":"single-source"}})==55
     assert adaptive_personalization({"category_weight":6},{"hit_rate":0.8})["category_weight"]==7
 
 def test_backtest_v3_contract(tmp_path):

@@ -72,14 +72,28 @@ def breaking_fast_lane(stories, limit=2):
     return [x for x in rows if _f(x.get("breaking_score"))>=50][:int(limit)]
 
 def calibrate_confidence(story, research):
+    """Apply conservative evidence-tier caps; never inflate a publisher's raw confidence.
+
+    Verification already incorporates independent-source counts. Adding another
+    source-count bonus here double-counted the same evidence and routinely
+    saturated unrelated stories at 100%.
+    """
     v=(research or {}).get(story.get("story_id"),{})
-    raw=_f(v.get("confidence"),50)
-    sources=int(v.get("independent_sources",0) or 0)
-    verification=str(v.get("verification",""))
-    bonus=8 if verification in {"multi-source","official-source"} else (4 if verification=="multi-report" else 0)
-    bonus+=min(8,sources*3)
-    if v.get("contradiction_flag"): bonus-=15
-    return round(max(0,min(100,raw+bonus)),1)
+    raw=max(0.0,min(100.0,_f(v.get("confidence"),50)))
+    verification=str(v.get("verification","unverified"))
+    caps={
+        "official-source":98.0,
+        "multi-source":95.0,
+        "multi-report":75.0,
+        "single-source":60.0,
+        "unverified":40.0,
+    }
+    cap=caps.get(verification,50.0)
+    if not v.get("primary_fresh",True):
+        cap=min(cap,60.0)
+    if v.get("contradiction_flag"):
+        cap=min(cap,50.0)
+    return round(min(raw,cap),1)
 
 def adaptive_personalization(preferences, learning_snapshot):
     prefs=dict(preferences or {})
