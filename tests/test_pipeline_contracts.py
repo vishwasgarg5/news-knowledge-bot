@@ -1643,3 +1643,8 @@ def test_story_and_vocabulary_renderers_have_one_authoritative_definition():
     names = [node.name for node in tree.body if isinstance(node, ast.FunctionDef)]
     assert names.count("_story_block") == 1
     assert names.count("_vocab_block") == 1
+
+
+def test_main_anchors_historical_trend_to_ist_run_date():
+    source = read("app/main.py")
+    assert 'historical_trend(read_rows(DATA/"news_history.csv"),7,as_of=today)' in source

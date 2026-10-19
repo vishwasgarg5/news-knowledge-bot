@@ -511,7 +511,7 @@ def main():
     wkpath=DATA/"knowledge_weekly.csv"; wkrows=read_rows(wkpath)
     if not any(r.get("week")==week for r in wkrows): append_rows(wkpath,[weekly],HEADERS["knowledge_weekly.csv"])
     stats["confidence_snapshot"]=confidence_snapshot(result.get("top_stories",[]))
-    stats["historical_trend"]=historical_trend(read_rows(DATA/"news_history.csv"),7)
+    stats["historical_trend"]=historical_trend(read_rows(DATA/"news_history.csv"),7,as_of=today)
     stats["operational_health"]=operational_health(stats)
     stats["final_audit"]=final_audit(stats,result.get("top_stories",[]))
     # Keep the headline health value consistent with the stricter final audit.
