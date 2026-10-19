@@ -1,10 +1,10 @@
 {
-  "learning_samples": 6423,
-  "selected_samples": 961,
+  "learning_samples": 6426,
+  "selected_samples": 963,
   "mature_outcome_samples": 6163,
   "avg_outcome": 0.136,
   "daily_runs": 24,
-  "history_stories": 1315,
+  "history_stories": 1317,
   "source_reliability": {
     "BBC News": 0.286,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.028,
@@ -31,11 +31,11 @@
   "top_categories": [
     [
       "india",
-      645
+      646
     ],
     [
       "world",
-      286
+      287
     ],
     [
       "business",
@@ -51,10 +51,10 @@
     ]
   ],
   "learning_data_audit": {
-    "total_rows": 6423,
+    "total_rows": 6426,
     "mature_rows": 6163,
-    "provisional_rows": 260,
-    "mature_label_coverage": 0.96,
+    "provisional_rows": 263,
+    "mature_label_coverage": 0.959,
     "selected_mature_rows": 905
   },
   "chronological_ranking_evaluation": {
