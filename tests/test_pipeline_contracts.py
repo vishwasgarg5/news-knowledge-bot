@@ -1634,3 +1634,12 @@ def test_research_completion_rate_fails_closed_on_invalid_counts():
     assert research_completion_rate(None, 0) == 0.0
     assert research_completion_rate(4, -1) == 0.0
     assert research_completion_rate(-1, 0) == 0.0
+
+
+def test_story_and_vocabulary_renderers_have_one_authoritative_definition():
+    import ast
+
+    tree = ast.parse(read("app/main.py"))
+    names = [node.name for node in tree.body if isinstance(node, ast.FunctionDef)]
+    assert names.count("_story_block") == 1
+    assert names.count("_vocab_block") == 1

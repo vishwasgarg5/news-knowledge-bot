@@ -129,68 +129,6 @@ def persist(stories,today):
             append_rows(tp,[{"story_id":sid,"event_id":s.get("event_id",""),"date":today,"headline":s.get("headline",""),"event":s.get("what",s.get("headline","")),"importance":s.get("importance",0),"source":s.get("source",""),"url":s.get("url",""),"change_type":s.get("change_since_yesterday",""),"event_status":_event_status(s,timeline)}],HEADERS["story_timeline.csv"]); keys.add((sid,today))
     return added
 
-def _story_block(s,index,total):
-    flag="🇮🇳" if s.get("region")=="india" else "🌍"; v=s.get("verification") or {}
-    importance=float(s.get("importance",0) or 0); rank=float(s.get("ranking_score",importance) or importance)
-    lines=[f"{flag} <b>#{index} · {s.get('category','NEWS').upper()} · {importance:.0f}/100</b>",f"<b>{s.get('headline','')}</b>"]
-    if s.get("what"): lines += ["",f"<b>WHAT</b>\n{s.get('what')}"]
-    if s.get("why") and str(s.get("why")).strip(): lines += ["",f"<b>WHY</b>\n{s.get('why')}"]
-    if s.get("who") and str(s.get("who")).strip():
-        lines += ["",f"<b>WHO</b>\n{s.get('who')}"]
-    if s.get("who_detail") and str(s.get("who_detail")).lower() not in {"not stated in supplied sources","none"}:
-        lines += ["",f"<b>PERSON / ROLE</b>\n{s.get('who_detail')}"]
-    if s.get("how") and str(s.get("how")).lower() not in {"not stated in supplied sources","none"}:
-        lines += ["",f"<b>HOW</b>\n{s.get('how')}"]
-    if s.get("when") and str(s.get("when")).strip(): lines += ["",f"<b>WHEN</b>\n{s.get('when')}"]
-    if s.get("where") and str(s.get("where")).strip(): lines += ["",f"<b>WHERE</b>\n{s.get('where')}"]
-    if s.get("why_important") and str(s.get("why_important")).strip(): lines += ["",f"<b>IMPACT</b>\n{s.get('why_important')}"]
-    key_data=str(s.get("key_data","")).strip()
-    if key_data and key_data.upper() not in {"NONE","NOT STATED IN SUPPLIED SOURCES"}:
-        lines += ["",f"<b>KEY DATA</b>\n{key_data}"]
-    background=str(s.get("background","")).strip()
-    if background and background.lower() not in {"not stated in supplied sources","none"}:
-        lines += ["",f"<b>BACKGROUND</b>\n{background}"]
-    history=v.get("historical") or []
-    if history: lines += ["",f"<b>HISTORY</b>\n{_history_line(s)}"]
-    change=s.get("change_since_yesterday")
-    if change and change.lower() not in {"unknown","new today"}: lines += ["",f"<b>CHANGE</b>\n{change}"]
-    if s.get("next") and str(s.get("next")).strip(): lines += ["",f"<b>NEXT</b>\n{s.get('next')}"]
-    if s.get("connection") and str(s.get("connection")).lower() not in {"not stated in supplied sources","none"}:
-        lines += ["",f"<b>CONNECTION</b>\n{s.get('connection')}"]
-    if s.get("memory_hook") and str(s.get("memory_hook")).lower() not in {"not stated in supplied sources","none"}:
-        lines += ["",f"<b>MEMORY</b>\n{s.get('memory_hook')}"]
-    verification=v.get("verification","unverified")
-    confidence=v.get("confidence","n/a")
-    sources=v.get("source_count",0)
-    if v.get("contradiction_flag"):
-        status="⚠️ CONFLICTING REPORTS"
-    elif verification=="unverified":
-        status="SINGLE SOURCE / PENDING" if sources==1 else "UNVERIFIED"
-    elif verification=="single-source":
-        status="SINGLE SOURCE"
-    elif verification=="multi-report":
-        status="CONFIRMED · 1 INDEPENDENT SOURCE"
-    elif verification=="multi-source":
-        status="CONFIRMED · MULTI-SOURCE"
-    elif verification=="official-source":
-        status="OFFICIAL SOURCE"
-    else:
-        status=str(verification).upper()
-    ai="AI" if s.get("ai_generated") else "FALLBACK"
-    lines += ["",f"🔎 {status} · {confidence}% · {sources} source{'s' if sources!=1 else ''} · {ai}"]
-    if verification=="unverified" and sources==1:
-        lines += ["", "<b>VERIFICATION</b>\nCredible single-source report; independent confirmation is pending. This does not mean the report is false."]
-    return "\n".join(lines)
-
-def _vocab_block(s,index):
-    vocab=str(s.get("vocabulary","")).strip()
-    if not vocab or vocab.upper()=="NONE":return None
-    terms=[]
-    for raw in re.split(r"\s*;\s*|\s*\|\s*\n",vocab):
-        raw=raw.strip(" -•")
-        if raw and raw.upper()!="NONE":terms.append(raw)
-    return "\n".join([f"📚 <b>VOCABULARY · #{index}</b>"]+[f"{n}. {term}" for n,term in enumerate(terms[:3],1)]) if terms else None
-
 def _status_label(story):
     v=story.get("verification") or {}
     if v.get("contradiction_flag"): return "⚠️ CONFLICT"
