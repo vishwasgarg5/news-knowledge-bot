@@ -3,8 +3,12 @@ name: News Intelligence
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'data/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'data/**'
   workflow_dispatch:
     inputs:
       mode:

@@ -71,7 +71,7 @@ The latest successful scheduled production run should be treated as the baseline
 
 ## Single main workflow and production safety
 
-- `.github/workflows/news_intelligence.yml` is the only workflow file. Its validation job runs on pushes to `main`, pull requests targeting `main`, manual dispatches, and the daily schedule. It compiles the application, validates YAML configuration, runs regression contract tests, and audits installed dependencies.
+- `.github/workflows/news_intelligence.yml` is the only workflow file. Its validation job runs on code/configuration pushes to `main`, pull requests targeting `main`, manual dispatches, and the daily schedule; data-only memory commits are excluded to avoid redundant test runs. It compiles the application, validates YAML configuration, runs regression contract tests, and audits installed dependencies.
 - The production job depends on validation and can run only on the daily schedule or an explicit `workflow_dispatch` with `mode=production` on `main`. Pushes and pull requests never send Telegram messages or write production memory. Choose `mode=validate` for a validation-only manual run.
 - Production writes are scoped to the production job; the validation job has read-only repository permissions.
 - Production quality stays on `HOLD` when regional targets are missed, source collection fails, queued research remains uncorroborated, evidence gaps exceed the threshold, calibration/drift checks fail, or out-of-sample ranking improvement is not proven.
