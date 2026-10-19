@@ -1264,3 +1264,42 @@ def test_final_audit_cannot_pass_with_any_production_gate_blocker():
     audit=final_audit(stats,[{"region":"world","importance":90,"verification":{"verification":"multi-source","confidence":90}}])
     assert audit["health"] != "PASS"
     assert "research_incomplete" in audit["blockers"]
+
+
+def test_final_audit_fails_closed_when_regional_coverage_is_missing(tmp_path):
+    from app.ops import final_audit
+
+    db=tmp_path/"news_knowledge.db"
+    db.touch()
+    stats={
+        "source_failures":0,
+        "source_warnings":0,
+        "current_evidence":2,
+        "total":2,
+        "data_quality":{"ok":True},
+        "db_path":str(db),
+        "learning_labeled":0,
+        "v5_production_evaluation":{"evidence":{"stories":2,"evidence_gap_rate":0.0}},
+        "v5_quality_gate":{"status":"PASS"},
+    }
+    result=final_audit(stats,[{"region":"india"},{"region":"world"}])
+    assert result["checks"]["regional_coverage"] is False
+    assert result["health"]=="DEGRADED"
+    assert "regional_coverage_shortfall" in result["blockers"]
+
+
+def test_final_audit_fails_closed_when_coverage_shortfall_fields_are_missing(tmp_path):
+    from app.ops import final_audit
+
+    db=tmp_path/"news_knowledge.db"
+    db.touch()
+    stats={
+        "source_failures":0,"source_warnings":0,"current_evidence":2,"total":2,
+        "data_quality":{"ok":True},"db_path":str(db),"learning_labeled":0,
+        "v5_production_evaluation":{"evidence":{"stories":2,"evidence_gap_rate":0.0}},
+        "regional_coverage_audit":{"india_shortfall":0},
+        "v5_quality_gate":{"status":"PASS"},
+    }
+    result=final_audit(stats,[{"region":"india"},{"region":"world"}])
+    assert result["checks"]["regional_coverage"] is False
+    assert "regional_coverage_shortfall" in result["blockers"]

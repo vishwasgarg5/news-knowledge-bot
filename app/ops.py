@@ -54,10 +54,14 @@ def final_audit(stats, stories):
     coverage=stats.get("regional_coverage_audit") or {}
     gap_rate=_f(evidence.get("evidence_gap_rate"),1.0)
     evidence_ok=bool(evidence) and gap_rate<=0.25
-    coverage_ok=(
-        _f(coverage.get("india_shortfall"))==0
-        and _f(coverage.get("world_shortfall"))==0
-    ) if coverage else True
+    # Missing coverage telemetry is unknown, not a pass. Fail closed so a
+    # malformed/older audit cannot hide a regional shortfall.
+    coverage_ok=bool(coverage) and (
+        _f(coverage.get("india_shortfall"),1.0)==0
+        and _f(coverage.get("world_shortfall"),1.0)==0
+        and "india_shortfall" in coverage
+        and "world_shortfall" in coverage
+    )
     checks=dict(health["checks"])
     checks["evidence"]=evidence_ok
     checks["regional_coverage"]=coverage_ok
