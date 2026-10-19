@@ -1506,3 +1506,22 @@ def test_main_verification_counts_do_not_promote_single_source_to_evidence():
     assert evidence == 3
     assert verified == 3
     assert strong == 2
+
+
+def test_region_classifier_covers_additional_world_geographies():
+    from app.news import _region
+
+    cases = [
+        ("india", "German parliament debates a new budget in Berlin", "German officials outlined the proposal.", "world"),
+        ("india", "Spain announces new climate measures in Madrid", "Spanish officials announced the policy.", "world"),
+        ("india", "Brazil central bank changes its interest-rate outlook", "Brazilian markets reacted to the announcement.", "world"),
+        ("india", "Pakistan announces new energy policy in Islamabad", "Pakistani officials described the changes.", "world"),
+        ("india", "Kenya launches new public health initiative", "Officials in Nairobi described the initiative.", "world"),
+        ("india", "Indonesia announces new technology export rules", "The policy applies across Indonesia.", "world"),
+        ("india", "Saudi Arabia announces new investment plan in Riyadh", "Officials discussed the investment plan.", "world"),
+        ("india", "London officials announce a new transport plan", "The policy affects commuters in Britain.", "world"),
+        ("india", "Indian parliament debates a new bill in Delhi", "Indian officials outlined the proposal.", "india"),
+    ]
+    for category, headline, summary, expected in cases:
+        region, confidence, evidence = _region(category, headline, summary)
+        assert region == expected, (headline, region, confidence, evidence)
