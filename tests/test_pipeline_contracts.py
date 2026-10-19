@@ -1160,3 +1160,22 @@ def test_official_label_cannot_override_untrusted_article_domain():
     assert result["verification"] == "single-source"
     assert result["official_source"] is False
     assert result["primary_trust"] == 0.65
+
+
+def test_distinct_supreme_court_events_do_not_collapse_into_obc_family():
+    from app.ai import _event_family_key, _same_event
+
+    obc = "Supreme Court issues verdict on retrospective OBC creamy layer rule"
+    environment = "Supreme Court orders hearing on environmental pollution case"
+    assert _event_family_key(obc) == "obc_creamy_layer"
+    assert _event_family_key(environment) != "obc_creamy_layer"
+    assert not _same_event(obc, environment)
+
+
+def test_single_source_trust_requires_a_real_publisher_domain():
+    from app.research import is_trusted_publisher
+
+    assert is_trusted_publisher("BBC News", "https://www.bbc.com/news")
+    assert is_trusted_publisher("Reuters", "https://www.reuters.com/world/story")
+    assert not is_trusted_publisher("BBC News", "https://notbbc.com/news")
+    assert not is_trusted_publisher("PIB", "https://notpib.gov.in/news")

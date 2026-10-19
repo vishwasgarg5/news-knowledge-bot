@@ -2,6 +2,8 @@ from __future__ import annotations
 import hashlib,json,os,re
 from datetime import datetime,timezone
 
+from .research import _source_key, is_trusted_publisher
+
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
 
@@ -93,33 +95,13 @@ def _event_similarity(a,b):
     if base>=0.50 and len(common)>=4: return max(base,0.64)
     return base
 def _same_event(a,b):
-    """Conservative final-selection duplicate detector."""
+    """Conservative duplicate detector: near-identical headlines or same specific event family."""
     ta=_content_tokens(a); tb=_content_tokens(b); common=ta&tb
     base=len(common)/max(1,len(ta|tb))
-    # Broad lexical overlap was collapsing unrelated stories. Only collapse
-    # near-identical headlines here, plus explicit multi-token event families.
     if base>=0.80: return True
-    families=[
-        {"openai","australia","hack","hacked","breach","breached","infiltrated","portal","cyber"},
-        {"muse","agent","wearable","glasses","meta","tamagotchi"},
-        {"gyanesh","cec","eci","election","commission","resign","resignation","removal","remove","notice","motion","vote","voter"},
-        {"rahul","gandhi","vote","voter","chori","cec","election","commission"},
-        {"iit","bombay","student","death","professor","director","azad","maidan"},
-        {"polo","hurricane","mexico","hawaii","storm","landfall","nolo"},
-        {"xi","jinping","trump","china","white","house","dinner"},
-        {"netanyahu","iran","unga","israel","united","nations","gaza"},
-        {"cauvery","tamil","karnataka","water","tmc","drought"},
-        {"hilsa","bangladesh","fish","importing","exports"},
-        {"asian","games","medal","medallist","medallists","shooters","table","tennis"},
-        {"obc","creamy","layer","supreme","court","retrospective","verdict"},
-        {"hormuz","iran","trump","strait","proposal","reopen","talks"},
-        {"south","africa","women","killings","ekurhuleni","body"},
-    ]
-    for family in families:
-        shared=common & family
-        if len(shared)>=2:
-            return True
-    return False
+    family_a=_event_family_key(a)
+    family_b=_event_family_key(b)
+    return bool(family_a and family_a==family_b)
 
 def select_stories(articles,top_n=None,excluded_headlines=None):
     excluded=list(excluded_headlines or []); ranked=[]; seen=[]
@@ -213,7 +195,7 @@ def _event_family_key(title):
     if "sir" in t and (t & {"election","voter","voters","rolls","electoral","commission","cec","eci","protest","barricaded","barricade","jantar","mantar"}):
         return "election_commission_sir"
     for key,family in families:
-        if len(t & family)>=2:
+        if len(t & family)>=3:
             return key
     return ""
 
@@ -381,7 +363,7 @@ def rerank_stories(stories,research=None):
         if r.get("primary_derivative"): return False
         if v=="single-source":
             source=str(item.get("source","") or "").lower()
-            trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
+            trusted=is_trusted_publisher(item.get("source",""),item.get("url",""))
             return float(item.get("importance",0) or 0) >= min_single_importance and trusted
         if v=="unverified": return False
         if not r.get("primary_fresh",True): return False
@@ -396,7 +378,7 @@ def rerank_stories(stories,research=None):
             rejection_counts.setdefault("content_quality",0); rejection_counts["content_quality"]+=1; continue
         if vv=="single-source":
             source=str(item.get("source","") or "").lower()
-            trusted=any(x in source for x in ("reuters","bbc","associated press","ap news","the hindu","indian express","times of india","pib","nasa","ndtv","hindustan times"))
+            trusted=is_trusted_publisher(item.get("source",""),item.get("url",""))
             if float(item.get("importance",0) or 0)<min_single_importance:
                 rejection_counts["single_source_below_gate"]+=1; continue
             if not trusted:

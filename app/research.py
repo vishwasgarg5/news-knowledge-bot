@@ -111,6 +111,17 @@ def _source_trust(source_key):
     """Trust is granted to canonical publisher keys, not substrings in lookalike domains."""
     return float(TRUST.get(str(source_key or "").lower().strip(), 0.65))
 
+
+TRUSTED_SINGLE_SOURCE = {
+    "reuters", "bbc", "associated press", "the hindu", "indian express",
+    "times of india", "pib", "nasa", "ndtv", "hindustan times",
+}
+
+
+def is_trusted_publisher(source, url=""):
+    """Check single-source eligibility against the canonical URL publisher."""
+    return _source_key(source, url) in TRUSTED_SINGLE_SOURCE
+
 _ROUNDUP_RE=re.compile(
     r"\b(?:evening|morning|daily)\s+news\s+(?:brief|briefing|roundup|round-up)\b|"
     r"\b(?:top|main)\s+(?:stories|news)\b|"
