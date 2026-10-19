@@ -14,7 +14,7 @@ from .intelligence import enrich_trends,personalize,intelligence_summary
 from .analytics import build_report,write_reports,backtest_learning_v2,backtest_learning_v3,quality_dashboard
 from .quality import prepare_candidates,source_health,quality_snapshot,coverage_gaps,coverage_plan
 from .advanced import adaptive_threshold,apply_adaptive_threshold,learning_v3_snapshot,source_fallback_plan,breaking_fast_lane,calibrate_confidence,adaptive_personalization
-from .ops import confidence_snapshot,historical_trend,operational_health,final_audit
+from .ops import confidence_snapshot,historical_trend,operational_health,final_audit,research_completion_rate
 from .production import time_series_backtest,feedback_snapshot,feedback_adjustment,source_fallback_order,lifecycle_summary,monitoring_alerts,persist_operational_snapshot
 from .intelligence_v5 import intelligence_v5
 from .intelligence_v5_plus import run_v5_plus,answer_news_question,research_report
@@ -521,7 +521,7 @@ def main():
         "research_queue_size":research_queue_size,
         "research_corroborated":research_corroborated,
         "research_unresolved":research_queue_size-research_corroborated,
-        "research_completion_rate":research_corroborated/max(1,research_queue_size),
+        "research_completion_rate":research_completion_rate(research_queue_size,research_corroborated),
     })
     v5_eval=production_evaluation(learning_rows,learning_rows,v5plus["stories"],read_rows(DATA/"news_history.csv"),drift_current=drift_windows["current"],drift_baseline=drift_windows["baseline"],coverage=production_coverage)
     stats["v5_walk_forward"]=v5_wf
@@ -538,7 +538,7 @@ def main():
     stats["research_queue_size"]=research_queue_size
     stats["research_corroborated"]=research_corroborated
     stats["research_unresolved"]=research_queue_size-research_corroborated
-    stats["research_completion_rate"]=round(research_corroborated/max(1,research_queue_size),3)
+    stats["research_completion_rate"]=research_completion_rate(research_queue_size,research_corroborated)
     stats["research_completion_definition"]="share of queued stories with a fresh primary source and evidence from at least two distinct publishers; evidence retrieval alone is not completion"
 
     for s in result.get("top_stories",[]):

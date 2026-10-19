@@ -1617,3 +1617,20 @@ def test_research_discovery_is_bounded_and_tolerates_network_failures(monkeypatc
     )
     assert found == []
     assert metrics == {"queries": 2, "failed_queries": 2, "articles_found": 0}
+
+
+def test_research_completion_rate_treats_empty_queue_as_complete():
+    from app.ops import research_completion_rate
+
+    assert research_completion_rate(0, 0) == 1.0
+    assert research_completion_rate(4, 4) == 1.0
+    assert research_completion_rate(4, 3) == 0.75
+    assert research_completion_rate(4, 9) == 1.0
+
+
+def test_research_completion_rate_fails_closed_on_invalid_counts():
+    from app.ops import research_completion_rate
+
+    assert research_completion_rate(None, 0) == 0.0
+    assert research_completion_rate(4, -1) == 0.0
+    assert research_completion_rate(-1, 0) == 0.0

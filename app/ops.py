@@ -7,6 +7,23 @@ def _f(v,d=0.0):
     try:return float(v)
     except (TypeError,ValueError):return d
 
+def research_completion_rate(queue_size, corroborated):
+    """Return completed/queued research, treating an empty queue as complete.
+
+    Invalid metrics fail closed; counts are bounded to the actual queue size.
+    """
+    try:
+        queued = int(queue_size)
+        completed = int(corroborated)
+    except (TypeError, ValueError, OverflowError):
+        return 0.0
+    if queued < 0 or completed < 0:
+        return 0.0
+    if queued == 0:
+        return 1.0
+    return round(min(queued, completed) / queued, 6)
+
+
 def confidence_snapshot(stories):
     vals=[_f((s.get("verification") or {}).get("confidence")) for s in stories]
     calibrated=[_f(s.get("calibrated_confidence"),_f((s.get("verification") or {}).get("confidence"))) for s in stories]
