@@ -671,12 +671,15 @@ def test_evidence_audit_recognizes_nested_independent_sources():
     assert audit["evidence_gaps"]==[] and audit["corroborated"]==1
     assert production_quality_gate({"paired_folds":0},{"samples":0,"ece":None},{"status":"UNKNOWN"},audit)["status"]=="HOLD"
 
-def test_single_main_workflow_and_no_push_trigger_after_guardrail_changes():
+def test_single_main_workflow_guards_production_triggers():
     workflow=yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
     triggers=workflow.get(True) or workflow.get("on") or {}
-    assert "workflow_dispatch" in triggers and "schedule" in triggers
-    assert "push" not in triggers and "pull_request" not in triggers
-    assert "actions/upload-artifact@v7" in read(".github/workflows/news_intelligence.yml")
+    assert {"push","pull_request","workflow_dispatch","schedule"} <= set(triggers)
+    text=read(".github/workflows/news_intelligence.yml")
+    assert "needs: validate" in text
+    assert "inputs.mode == 'production'" in text
+    assert "actions/upload-artifact@v7" in text
+    assert len(list((ROOT / ".github" / "workflows").glob("*.yml")))==1
 
 
 def test_research_verification_rejects_unrelated_same_topic_articles():

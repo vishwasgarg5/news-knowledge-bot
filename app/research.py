@@ -75,28 +75,41 @@ def _strong_event_match(headline, primary_summary, article):
     return False
 
 ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
+def _host_is(host, domain):
+    """Match an exact domain or a true subdomain, never a lookalike suffix."""
+    return host == domain or host.endswith("." + domain)
+
+
 def _source_key(source, url=""):
     try:
-        host=urlparse(str(url or "")).netloc.lower().split(":")[0]
+        host=(urlparse(str(url or "")).hostname or "").lower().rstrip(".")
         if host.startswith("www."): host=host[4:]
         if host:
-            if host.endswith("bbc.co.uk") or host.endswith("bbc.com"): return "bbc"
-            if host.endswith("reuters.com"): return "reuters"
-            if host.endswith("thehindu.com"): return "the hindu"
-            if host.endswith("indianexpress.com"): return "indian express"
-            if host.endswith("apnews.com"): return "associated press"
-            if host.endswith("pib.gov.in"): return "pib"
-            if host.endswith("rbi.org.in"): return "reserve bank of india"
-            if host.endswith("isro.gov.in"): return "isro"
-            if host.endswith("nasa.gov"): return "nasa"
-            if host.endswith("sebi.gov.in"): return "sebi"
+            if _host_is(host, "bbc.co.uk") or _host_is(host, "bbc.com"): return "bbc"
+            if _host_is(host, "reuters.com"): return "reuters"
+            if _host_is(host, "thehindu.com"): return "the hindu"
+            if _host_is(host, "indianexpress.com"): return "indian express"
+            if _host_is(host, "apnews.com"): return "associated press"
+            if _host_is(host, "pib.gov.in"): return "pib"
+            if _host_is(host, "rbi.org.in"): return "reserve bank of india"
+            if _host_is(host, "isro.gov.in"): return "isro"
+            if _host_is(host, "nasa.gov"): return "nasa"
+            if _host_is(host, "sebi.gov.in"): return "sebi"
+            if _host_is(host, "ndtv.com"): return "ndtv"
+            if _host_is(host, "timesofindia.indiatimes.com") or _host_is(host, "timesofindia.com"): return "times of india"
+            if _host_is(host, "indiatoday.in"): return "india today"
+            if _host_is(host, "hindustantimes.com"): return "hindustan times"
             return host
     except Exception:
         pass
     raw=str(source or "").lower().strip()
-    for alias,key in ALIASES.items():
-        if alias in raw:return key
-    return raw
+    # Source labels are untrusted metadata: only exact aliases receive canonical trust.
+    return ALIASES.get(raw, raw)
+
+
+def _source_trust(source_key):
+    """Trust is granted to canonical publisher keys, not substrings in lookalike domains."""
+    return float(TRUST.get(str(source_key or "").lower().strip(), 0.65))
 
 _ROUNDUP_RE=re.compile(
     r"\b(?:evening|morning|daily)\s+news\s+(?:brief|briefing|roundup|round-up)\b|"
