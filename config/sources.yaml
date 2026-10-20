@@ -14,6 +14,8 @@ sources:
     - https://www.theguardian.com/world/rss
     - https://feeds.npr.org/1004/rss.xml
     - https://www.aljazeera.com/xml/rss/all.xml
+  economy:
+    - https://www.rbi.org.in/pressreleases_rss.xml
   business:
     - https://feeds.bbci.co.uk/news/business/rss.xml
     - https://www.thehindu.com/business/feeder/default.rss
