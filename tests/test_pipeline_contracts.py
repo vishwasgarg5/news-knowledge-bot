@@ -1968,7 +1968,7 @@ def test_model_benchmark_rewards_evidence_and_rejects_unsupported_claims():
     supported = next(task for task in TASKS if task["name"] == "supported_fact_extraction")
     assert score_response(supported, '{"fact":"repo rate reduction","number":"25 basis points"}')["passed"]
     restraint = next(task for task in TASKS if task["name"] == "unsupported_claim_restraint")
-    assert score_response(restraint, "The evidence does not state a rate decision.")["passed"]
+    assert score_response(restraint, "The rate decision is not stated in the evidence.")["passed"]
     assert not score_response(restraint, "The central bank cut the rate.")["passed"]
 
 
@@ -1976,3 +1976,9 @@ def test_independent_source_search_budget_defaults_are_expanded():
     source = read("app/main.py")
     assert 'NEWS_RESEARCH_SEARCH_QUERIES","20"' in source
     assert 'NEWS_RESEARCH_QUERIES_PER_REGION","10"' in source
+
+
+def test_official_rbi_economy_feed_is_configured():
+    sources = yaml.safe_load(read("config/sources.yaml"))
+    assert "economy" in sources["sources"]
+    assert any("rbi.org.in/pressreleases_rss.xml" in url for url in sources["sources"]["economy"])
