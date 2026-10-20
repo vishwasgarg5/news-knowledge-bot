@@ -1705,3 +1705,22 @@ def test_research_verification_metrics_are_persisted_to_audit_snapshot():
     source = read("app/main.py")
     assert 'research_stats=research.get("_stats",{})' in source
     assert 'stats["research_verification"]=research_stats' in source
+
+
+def test_source_health_and_diversity_use_canonical_publisher_identity():
+    from app.quality import prepare_candidates, source_health
+
+    candidates = [
+        {"headline": "Story A", "source": "BBC News", "url": "https://www.bbc.co.uk/news/a", "importance": 80},
+        {"headline": "Story B", "source": "BBC", "url": "https://www.bbc.com/news/b", "importance": 60},
+        {"headline": "Story C", "source": "Reuters", "url": "https://www.reuters.com/world/c", "importance": 90},
+    ]
+    health = source_health(candidates)
+    assert health["bbc"]["articles"] == 2
+    assert health["bbc"]["high_value"] == 1
+    assert health["reuters"]["articles"] == 1
+
+    prepared = prepare_candidates(candidates, [])
+    bbc_rows = [row for row in prepared if row["source"] in {"BBC News", "BBC"}]
+    assert len(bbc_rows) == 2
+    assert all(row["source_diversity_score"] == 2.0 for row in bbc_rows)

@@ -13,12 +13,21 @@ def _similar(a,b):
     x,y=_tokens(a),_tokens(b)
     return len(x&y)/max(1,len(x|y))
 
+def _publisher_key(candidate):
+    """Use the canonical publisher identity when scoring diversity and health."""
+    from .research import _source_key
+
+    if not isinstance(candidate, dict):
+        return "unknown"
+    key = _source_key(candidate.get("source", ""), candidate.get("url", ""))
+    return key or "unknown"
+
 def prepare_candidates(candidates, history=None):
     """Add novelty, momentum, source diversity and coverage-gap signals."""
     history=list(history or [])
     old_titles=[str(x.get("headline","")) for x in history]
     seen_categories=Counter(str(x.get("category","other")).lower() for x in history[-500:])
-    source_counts=Counter(str(x.get("source","unknown")) for x in candidates)
+    source_counts=Counter(_publisher_key(x) for x in candidates)
     priority=("india","economy","business","technology","science","defence")
     out=[]
     for c in candidates:
@@ -27,7 +36,7 @@ def prepare_candidates(candidates, history=None):
         novelty=max(0.0,1.0-repeated)
         momentum=min(100.0,_f(x.get("trend_score"),30)+_f(x.get("breaking_score"))*0.35)
         gap=8.0 if cat in priority and seen_categories[cat] < 3 else 0.0
-        diversity=min(6.0,max(0,3-source_counts.get(str(x.get("source","unknown")),1))*2.0)
+        diversity=min(6.0,max(0,3-source_counts.get(_publisher_key(x),1))*2.0)
         quality=max(0.0,min(100.0,_f(x.get("importance"))+gap+diversity+novelty*4.0+min(5.0,_f(x.get("breaking_score"))/20.0)+min(5.0,_f(x.get("trend_score"))/20.0)))
         x.update({"novelty_score":round(novelty*100,1),"event_momentum":round(momentum,1),"coverage_gap_score":round(gap,1),"source_diversity_score":round(diversity,1),"quality_score":round(quality,1)})
         out.append(x)
@@ -36,7 +45,7 @@ def prepare_candidates(candidates, history=None):
 def source_health(candidates):
     grouped=defaultdict(lambda:{"articles":0,"high_value":0})
     for c in candidates:
-        key=str(c.get("source","unknown") or "unknown"); grouped[key]["articles"]+=1
+        key=_publisher_key(c); grouped[key]["articles"]+=1
         if _f(c.get("importance"))>=75: grouped[key]["high_value"]+=1
     return {k:{"articles":v["articles"],"high_value":v["high_value"],"quality_rate":round(v["high_value"]/max(1,v["articles"]),3)} for k,v in grouped.items()}
 
