@@ -350,7 +350,7 @@ def discover_category_articles(categories, max_queries=4, per_query=8, existing_
         for entry in (getattr(parsed, "entries", []) or [])[:max(0, int(per_query))]:
             source_info = entry.get("source", {}) or {}
             publisher = source_info.get("title", "") if isinstance(source_info, dict) else ""
-            title = re.sub(r"\\s+", " ", str(entry.get("title", "") or "")).strip()
+            title = re.sub(r"\s+", " ", str(entry.get("title", "") or "")).strip()
             if publisher and title.lower().endswith(" - " + str(publisher).lower()):
                 title = title[:-(len(str(publisher)) + 3)].strip()
             link = str(entry.get("link", "") or "").strip()
