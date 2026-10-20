@@ -1724,3 +1724,29 @@ def test_source_health_and_diversity_use_canonical_publisher_identity():
     bbc_rows = [row for row in prepared if row["source"] in {"BBC News", "BBC"}]
     assert len(bbc_rows) == 2
     assert all(row["source_diversity_score"] == 2.0 for row in bbc_rows)
+
+
+def test_coverage_plan_keeps_requested_targets_visible_when_candidates_are_missing():
+    from app.quality import coverage_plan
+
+    plan = coverage_plan([
+        {"region": "india", "category": "india"},
+        {"region": "world", "category": "world"},
+        {"region": "world", "category": "world"},
+    ], world_target=5, india_target=5)
+    assert plan["india_target"] == 5
+    assert plan["world_target"] == 5
+    assert plan["india_available"] == 1
+    assert plan["world_available"] == 2
+    assert plan["india_shortfall"] == 4
+    assert plan["world_shortfall"] == 3
+
+
+def test_coverage_plan_clamps_negative_requested_targets_to_zero():
+    from app.quality import coverage_plan
+
+    plan = coverage_plan([], world_target=-3, india_target=-1)
+    assert plan["world_target"] == 0
+    assert plan["india_target"] == 0
+    assert plan["world_shortfall"] == 0
+    assert plan["india_shortfall"] == 0

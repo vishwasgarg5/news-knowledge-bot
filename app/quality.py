@@ -65,7 +65,18 @@ def category_counts(candidates):
     return dict(Counter(str(x.get('category','other')).lower() for x in candidates))
 
 def coverage_plan(candidates, world_target=5, india_target=5):
+    """Report requested targets separately from candidate availability."""
     rows=list(candidates or [])
+    requested_india=max(0,int(india_target))
+    requested_world=max(0,int(world_target))
     india=sum(1 for x in rows if str(x.get('region','')).lower()=='india')
     world=sum(1 for x in rows if str(x.get('region','')).lower()=='world')
-    return {'india_target':min(int(india_target),india),'world_target':min(int(world_target),world),'india_available':india,'world_available':world,'world_shortfall':max(0,int(world_target)-world),'india_shortfall':max(0,int(india_target)-india),'categories':category_counts(rows)}
+    return {
+        'india_target':requested_india,
+        'world_target':requested_world,
+        'india_available':india,
+        'world_available':world,
+        'world_shortfall':max(0,requested_world-world),
+        'india_shortfall':max(0,requested_india-india),
+        'categories':category_counts(rows),
+    }
