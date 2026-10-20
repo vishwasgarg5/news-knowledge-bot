@@ -1699,3 +1699,9 @@ def test_source_identity_rejects_lookalike_domains():
     assert _source_key("Reuters", "https://www.reuters.com/world/story") == "reuters"
     assert _source_key("Reuters", "https://reuters.com.example.org/story") == "reuters.com.example.org"
     assert _source_key("BBC News", "https://news.google.com/rss/articles/example") == "bbc"
+
+
+def test_research_verification_metrics_are_persisted_to_audit_snapshot():
+    source = read("app/main.py")
+    assert 'research_stats=research.get("_stats",{})' in source
+    assert 'stats["research_verification"]=research_stats' in source
