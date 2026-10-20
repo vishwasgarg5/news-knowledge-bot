@@ -306,8 +306,8 @@ def main():
 
     # Expand corroboration beyond configured publisher feeds with a bounded,
     # region-balanced search. All results still pass strict verification below.
-    query_limit=max(0,int(os.getenv("NEWS_RESEARCH_SEARCH_QUERIES","12")))
-    per_region_limit=max(0,int(os.getenv("NEWS_RESEARCH_QUERIES_PER_REGION","6")))
+    query_limit=max(0,int(os.getenv("NEWS_RESEARCH_SEARCH_QUERIES","20")))
+    per_region_limit=max(0,int(os.getenv("NEWS_RESEARCH_QUERIES_PER_REGION","10")))
     search_candidates=sorted(
         [c for c in candidates if _safe_float(c.get("importance",c.get("personalized_score",0)))>=70],
         key=lambda c:_safe_float(c.get("importance",c.get("personalized_score",0))), reverse=True)
