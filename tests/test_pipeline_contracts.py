@@ -58,14 +58,14 @@ def test_category_research_uses_fresh_results_and_deduplicates(monkeypatch):
     import app.research as research
 
     now = datetime.now(timezone.utc)
-    fresh = SimpleNamespace(
-        title="RBI signals policy review as inflation eases - Example News",
-        link="https://example.com/economy-story",
-        published=format_datetime(now),
-        published_parsed=now.utctimetuple(),
-        summary="<p>Reserve Bank of India discusses inflation and policy.</p>",
-        source={"title": "Example News"},
-    )
+    fresh = {
+        "title": "RBI signals policy review as inflation eases - Example News",
+        "link": "https://example.com/economy-story",
+        "published": format_datetime(now),
+        "published_parsed": now.utctimetuple(),
+        "summary": "<p>Reserve Bank of India discusses inflation and policy.</p>",
+        "source": {"title": "Example News"},
+    }
     monkeypatch.setattr(research.requests, "get", lambda *a, **k: SimpleNamespace(
         content=b"feed", raise_for_status=lambda: None
     ))
