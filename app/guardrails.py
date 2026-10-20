@@ -96,22 +96,46 @@ def evidence_audit(stories):
         "independent_source_coverage":round(independent_stories/max(1,total),3),
         "mean_independent_sources":round(independent_total/max(1,total),2),
     }
+def _safe_float(value, default=0.0):
+    import math
+    try:
+        result=float(value)
+    except (TypeError,ValueError,OverflowError):
+        return default
+    return result if math.isfinite(result) else default
+
 def production_readiness_gate(ranking,calibration,drift,evidence,coverage=None):
+    """Evaluate readiness without allowing malformed telemetry to crash or pass."""
+    ranking=ranking if isinstance(ranking,dict) else {}
+    cal=calibration if isinstance(calibration,dict) else {}
+    drift=drift if isinstance(drift,dict) else {}
+    ev=evidence if isinstance(evidence,dict) else {}
+    cov=coverage if isinstance(coverage,dict) else {}
     blockers=[]
-    if int((ranking or {}).get("paired_folds",0) or 0)<5: blockers.append("insufficient_paired_folds")
-    cal=calibration or {}
-    if int(cal.get("samples",0) or 0)<60: blockers.append("insufficient_calibration_holdout")
+    if _safe_count(ranking.get("paired_folds"))<5: blockers.append("insufficient_paired_folds")
+    if _safe_count(cal.get("samples"))<60: blockers.append("insufficient_calibration_holdout")
     ece=cal.get("ece")
-    if ece is None or float(ece)>0.15: blockers.append("poor_calibration")
-    if (drift or {}).get("status")!="STABLE": blockers.append("distribution_drift_or_insufficient_window")
-    ev=evidence or {}
-    if int(ev.get("stories",0) or 0)==0: blockers.append("missing_evidence_audit")
-    elif float(ev.get("evidence_gap_rate",1.0) or 0)>0.25: blockers.append("evidence_gaps")
-    cov=coverage or {}
-    if int(cov.get("stories",0) or 0)>0 and (int(cov.get("india_shortfall",0) or 0)>0 or int(cov.get("world_shortfall",0) or 0)>0): blockers.append("regional_coverage_shortfall")
-    if int(cov.get("source_failures",0) or 0)>0: blockers.append("source_collection_failures")
-    if int(cov.get("source_warnings",0) or 0)>0: blockers.append("source_collection_warnings")
-    # Fail closed: a missing completion metric is not proof research finished.
-    if "research_completion_rate" not in cov or float(cov.get("research_completion_rate",0) or 0)<1.0: blockers.append("research_incomplete")
-    if not (ranking or {}).get("promote",False): blockers.append("ranking_improvement_not_proven")
-    return {"status":"PASS" if not blockers else "HOLD","blockers":list(dict.fromkeys(blockers)),"criteria":{"minimum_paired_folds":5,"minimum_calibration_holdout":60,"maximum_calibrated_ece":0.15,"maximum_evidence_gap_rate":0.25,"regional_targets_required":True}}
+    if ece is None or _safe_float(ece,1.0)>0.15: blockers.append("poor_calibration")
+    if drift.get("status")!="STABLE": blockers.append("distribution_drift_or_insufficient_window")
+    if _safe_count(ev.get("stories"))==0: blockers.append("missing_evidence_audit")
+    elif _safe_float(ev.get("evidence_gap_rate"),1.0)>0.25: blockers.append("evidence_gaps")
+    if _safe_count(cov.get("stories"))>0 and (
+        _safe_count(cov.get("india_shortfall"))>0 or _safe_count(cov.get("world_shortfall"))>0
+    ): blockers.append("regional_coverage_shortfall")
+    if _safe_count(cov.get("source_failures"))>0: blockers.append("source_collection_failures")
+    if _safe_count(cov.get("source_warnings"))>0: blockers.append("source_collection_warnings")
+    # Fail closed: missing, invalid, or non-finite completion telemetry is not proof of completion.
+    if "research_completion_rate" not in cov or _safe_float(cov.get("research_completion_rate"),0.0)<1.0:
+        blockers.append("research_incomplete")
+    if not ranking.get("promote",False): blockers.append("ranking_improvement_not_proven")
+    return {
+        "status":"PASS" if not blockers else "HOLD",
+        "blockers":list(dict.fromkeys(blockers)),
+        "criteria":{
+            "minimum_paired_folds":5,
+            "minimum_calibration_holdout":60,
+            "maximum_calibrated_ece":0.15,
+            "maximum_evidence_gap_rate":0.25,
+            "regional_targets_required":True,
+        },
+    }

@@ -1894,3 +1894,38 @@ def test_quality_snapshots_fail_safely_on_malformed_rows_and_research_records():
     assert snapshot["avg_importance"] == 25.0
     assert snapshot["avg_quality"] == 25.0
     assert quality_snapshot(None, None)["stories"] == 0
+
+
+def test_production_readiness_gate_fails_closed_on_malformed_telemetry():
+    from app.guardrails import production_readiness_gate
+
+    result = production_readiness_gate(
+        {"paired_folds": "many", "promote": True},
+        {"samples": float("inf"), "ece": float("nan")},
+        {"status": "STABLE"},
+        {"stories": 2, "evidence_gap_rate": float("nan")},
+        {
+            "stories": 2,
+            "india_shortfall": "unknown",
+            "world_shortfall": 0,
+            "source_failures": float("inf"),
+            "source_warnings": "bad",
+            "research_completion_rate": float("nan"),
+        },
+    )
+    assert result["status"] == "HOLD"
+    assert "insufficient_paired_folds" in result["blockers"]
+    assert "insufficient_calibration_holdout" in result["blockers"]
+    assert "poor_calibration" in result["blockers"]
+    assert "evidence_gaps" in result["blockers"]
+    assert "research_incomplete" in result["blockers"]
+
+
+def test_production_readiness_gate_handles_non_mapping_inputs():
+    from app.guardrails import production_readiness_gate
+
+    result = production_readiness_gate(None, [], None, "bad", [])
+    assert result["status"] == "HOLD"
+    assert "insufficient_paired_folds" in result["blockers"]
+    assert "missing_evidence_audit" in result["blockers"]
+    assert "research_incomplete" in result["blockers"]
