@@ -50,17 +50,23 @@ def prepare_candidates(candidates, history=None):
 
 def source_health(candidates):
     grouped=defaultdict(lambda:{"articles":0,"high_value":0})
-    for c in candidates:
+    for c in (candidates or []):
+        if not isinstance(c,dict):
+            continue
         key=_publisher_key(c); grouped[key]["articles"]+=1
         if _f(c.get("importance"))>=75: grouped[key]["high_value"]+=1
     return {k:{"articles":v["articles"],"high_value":v["high_value"],"quality_rate":round(v["high_value"]/max(1,v["articles"]),3)} for k,v in grouped.items()}
 
 def quality_snapshot(stories,research):
-    total=len(stories)
-    verified=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("verification") in {"multi-source","multi-report","official-source"})
-    strong=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("verification") in {"multi-source","official-source"})
-    conflicts=sum(1 for s in stories if research.get(s.get("story_id"),{}).get("contradiction_flag"))
-    return {"stories":total,"verified":verified,"strong":strong,"conflicts":conflicts,"verification_rate":round(verified/max(1,total),3),"strong_rate":round(strong/max(1,total),3),"avg_importance":round(sum(_f(s.get("importance")) for s in stories)/max(1,total),1),"avg_quality":round(sum(_f(s.get("quality_score",s.get("importance"))) for s in stories)/max(1,total),1)}
+    rows=[s for s in (stories or []) if isinstance(s,dict)]
+    research=research if isinstance(research,dict) else {}
+    total=len(rows)
+    records=[research.get(s.get("story_id"),{}) for s in rows]
+    records=[r if isinstance(r,dict) else {} for r in records]
+    verified=sum(1 for r in records if r.get("verification") in {"multi-source","multi-report","official-source"})
+    strong=sum(1 for r in records if r.get("verification") in {"multi-source","official-source"})
+    conflicts=sum(1 for r in records if r.get("contradiction_flag"))
+    return {"stories":total,"verified":verified,"strong":strong,"conflicts":conflicts,"verification_rate":round(verified/max(1,total),3),"strong_rate":round(strong/max(1,total),3),"avg_importance":round(sum(_f(s.get("importance")) for s in rows)/max(1,total),1),"avg_quality":round(sum(_f(s.get("quality_score",s.get("importance"))) for s in rows)/max(1,total),1)}
 
 def coverage_gaps(candidates):
     counts=Counter(str(x.get("category","other")).lower() for x in candidates)

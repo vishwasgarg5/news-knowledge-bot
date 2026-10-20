@@ -1872,3 +1872,25 @@ def test_quality_ranking_has_stable_tiebreakers_independent_of_input_order():
     first = [row["story_id"] for row in prepare_candidates(rows, [])]
     second = [row["story_id"] for row in prepare_candidates(list(reversed(rows)), [])]
     assert first == second == ["a", "b", "c"]
+
+
+def test_quality_snapshots_fail_safely_on_malformed_rows_and_research_records():
+    from app.quality import quality_snapshot, source_health
+
+    assert source_health(None) == {}
+    assert source_health([None, "bad", {"source": "Reuters", "importance": float("nan")}])["reuters"]["articles"] == 1
+    snapshot = quality_snapshot([
+        None,
+        {"story_id": "good", "importance": float("inf"), "quality_score": "invalid"},
+        {"story_id": "bad-record", "importance": 50},
+    ], {
+        "good": {"verification": "multi-source", "contradiction_flag": True},
+        "bad-record": None,
+    })
+    assert snapshot["stories"] == 2
+    assert snapshot["verified"] == 1
+    assert snapshot["strong"] == 1
+    assert snapshot["conflicts"] == 1
+    assert snapshot["avg_importance"] == 25.0
+    assert snapshot["avg_quality"] == 25.0
+    assert quality_snapshot(None, None)["stories"] == 0
