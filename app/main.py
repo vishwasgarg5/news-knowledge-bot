@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 import yaml
 from .ai import configured_model,generate_briefing,rerank_stories,select_stories,selection_diagnostics
 from .news import collect, _region
-from .research import research_stories, discover_related_articles
+from .research import research_stories, discover_related_articles, discover_category_articles
 from .settings import CONFIG,DATA,TELEGRAM_BOT_TOKEN,TELEGRAM_CHAT_ID
 from .storage import HEADERS,append_rows,ensure_data,read_rows,sync_sqlite
 from .telegram import send_text
@@ -284,6 +284,17 @@ def main():
     os.environ["NEWS_MIN_IMPORTANCE"]=str(int(adaptive))
     print(f"[LEARNING] calibrated_threshold={calibration.get('threshold')} production_threshold={adaptive}",flush=True)
     candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
+    initial_candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
+    initial_gaps=[gap for gap in coverage_gaps(initial_candidates) if gap in {"economy","defence"}]
+    category_articles,category_research_stats=discover_category_articles(
+        initial_gaps,
+        max_queries=max(0,int(os.getenv("NEWS_CATEGORY_RESEARCH_QUERIES","4"))),
+        existing_articles=all_articles,
+    )
+    if category_articles:
+        existing_urls={str(a.get("url","")).strip() for a in all_articles}
+        all_articles.extend(a for a in category_articles if str(a.get("url","")).strip() not in existing_urls)
+    print(f"[CATEGORY_RESEARCH] preflight_gaps={initial_gaps} added={len(category_articles)}",flush=True)
     candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
 
     # Evaluate only mature historical records here. Do not record today's run yet.
@@ -378,6 +389,7 @@ def main():
     intel=intelligence_summary(result.get("top_stories",[]))
     stats={"data_quality":data_quality,"db_path":str(db),"importance_threshold":float(os.getenv("NEWS_MIN_IMPORTANCE","62")),"articles":cstats.get("scanned",len(articles)),"candidates":len(candidates),"exact_duplicates":cstats.get("exact_duplicates",0),"semantic_filtered":cstats.get("semantic_filtered",0),"source_failures":source_failures,"source_warnings":cstats.get("source_warnings",0),"source_total":len(cstats.get("source_status") or []),"source_ok":sum(1 for x in (cstats.get("source_status") or []) if x.get("ok")),"stories":total_selected,"current_evidence":current_evidence,"verified":current_verified,"strong_verified":strong_verified,"total":total_selected,"runtime":f"{time.monotonic()-started:.1f}s","learning_labeled":final_learning.get("evaluated",0),"learning_misses":final_learning.get("misses",0),"learning_false_positives":final_learning.get("false_positives",0),"learning_success_rate":lm.get("success_rate",0),"failed_sources":[str(x.get("url","")).split("//")[-1].split("/")[0] for x in (cstats.get("source_status") or []) if not x.get("ok")],"learning_fp_rate":lm.get("false_positive_rate",0),"learning_miss_rate":lm.get("miss_rate",0),"ai_generated":sum(1 for s in result.get("top_stories",[]) if s.get("ai_generated")),"ai_fallback":sum(1 for s in result.get("top_stories",[]) if not s.get("ai_generated")),
 "contradictions":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("contradiction_flag")),"contradiction_evidence":sum(len((s.get("verification") or {}).get("contradiction_evidence") or []) for s in result.get("top_stories",[])),"breaking_stories":intel["breaking"],"emerging_topics":intel["emerging"],"avg_personalized_score":intel["avg_personalized"]}
+    stats["category_research"]=category_research_stats
     stats["research_discovery"]=research_discovery_stats
     stats["research_verification"]=research_stats
     stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 and strong_verified/max(1,total_selected)>=0.30 else ("WARN" if current_coverage>=0.20 and source_failures<=2 else "DEGRADED")
