@@ -43,6 +43,10 @@ Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
 
 Final regional selection now balances three goals in order: verification strength first, category diversity second, and the existing quality ranking third. Within the same verification tier, categories already represented in the briefing are deprioritized so strong stories from economy, science, technology, defence, and other available categories have a better chance to appear. Publisher caps, event-family deduplication, single-source limits, freshness checks, and evidence gates remain in force. Diversity never promotes a lower verification tier over a higher one, and it never invents a missing category: regional/category shortfalls remain visible in the audit.
 
+## Targeted category-gap discovery
+
+Before final candidate selection, the pipeline checks whether the configured feeds yielded eligible economy or defence stories. When either category is missing, it runs a bounded Google News RSS search (up to four queries by default, configurable with `NEWS_CATEGORY_RESEARCH_QUERIES`). Results must be fresh, unique, and still pass normal deterministic scoring, event deduplication, independent verification, and production quality gates. Discovery counts and failures are recorded in the audit and briefing; this mechanism adds candidates, not automatic verification or a guaranteed category quota.
+
 ## Research coverage and model evaluation
 
 The default corroboration search budget is 20 Google News RSS queries, balanced up to 10 candidates per region. Override with `NEWS_RESEARCH_SEARCH_QUERIES` and `NEWS_RESEARCH_QUERIES_PER_REGION` if runtime budgets require it. An official Reserve Bank of India RSS source is also configured under `economy`; feed availability and category coverage are measured at run time, so an unavailable feed is reported rather than silently treated as evidence.
