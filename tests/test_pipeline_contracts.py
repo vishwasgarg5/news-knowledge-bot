@@ -1929,3 +1929,34 @@ def test_production_readiness_gate_handles_non_mapping_inputs():
     assert "insufficient_paired_folds" in result["blockers"]
     assert "missing_evidence_audit" in result["blockers"]
     assert "research_incomplete" in result["blockers"]
+
+
+def test_adaptive_selection_diversifies_categories_within_verification_tier(monkeypatch):
+    from app import ai
+
+    monkeypatch.setattr(ai, "_same_event_family", lambda left, right: False)
+    monkeypatch.setattr(ai, "_event_family_key", lambda headline: "")
+    pool = [
+        (95, {"headline": "Politics update one", "category": "politics", "_verification": "multi-source", "source": "Reuters", "url": "https://reuters.com/1"}),
+        (90, {"headline": "Politics update two", "category": "politics", "_verification": "multi-source", "source": "BBC", "url": "https://bbc.com/2"}),
+        (85, {"headline": "Economy update", "category": "economy", "_verification": "multi-source", "source": "AP", "url": "https://apnews.com/3"}),
+        (80, {"headline": "Science update", "category": "science", "_verification": "multi-source", "source": "DW", "url": "https://dw.com/4"}),
+    ]
+
+    selected = ai._select_diverse(pool, 4)
+    assert [item["category"] for item in selected] == ["politics", "economy", "science", "politics"]
+
+
+def test_adaptive_category_diversity_never_overrides_verification_tier(monkeypatch):
+    from app import ai
+
+    monkeypatch.setattr(ai, "_same_event_family", lambda left, right: False)
+    monkeypatch.setattr(ai, "_event_family_key", lambda headline: "")
+    pool = [
+        (95, {"headline": "Politics one", "category": "politics", "_verification": "multi-source", "source": "Reuters", "url": "https://reuters.com/1"}),
+        (90, {"headline": "Politics two", "category": "politics", "_verification": "multi-source", "source": "BBC", "url": "https://bbc.com/2"}),
+        (99, {"headline": "Science report", "category": "science", "_verification": "multi-report", "source": "AP", "url": "https://apnews.com/3"}),
+    ]
+
+    selected = ai._select_diverse(pool, 2)
+    assert [item["_verification"] for item in selected] == ["multi-source", "multi-source"]
