@@ -1750,3 +1750,48 @@ def test_coverage_plan_clamps_negative_requested_targets_to_zero():
     assert plan["india_target"] == 0
     assert plan["world_shortfall"] == 0
     assert plan["india_shortfall"] == 0
+
+
+def test_coverage_audit_counts_canonical_publishers_not_alias_labels():
+    from app.guardrails import coverage_audit
+
+    result = coverage_audit([
+        {"region": "india", "source": "BBC News", "url": "https://www.bbc.co.uk/news/a", "category": "india"},
+        {"region": "world", "source": "BBC", "url": "https://www.bbc.com/news/b", "category": "world"},
+        {"region": "world", "source": "Reuters", "url": "https://www.reuters.com/world/c", "category": "world"},
+    ])
+    assert result["distinct_sources"] == 2
+    assert result["distinct_categories"] == 2
+    assert result["india_target"] == 5
+    assert result["india_shortfall"] == 4
+    assert result["world_shortfall"] == 3
+
+
+def test_evidence_audit_reports_source_metrics_and_handles_malformed_counts():
+    from app.guardrails import evidence_audit
+
+    result = evidence_audit([
+        {
+            "headline": "Corroborated event", "source": "Reuters",
+            "url": "https://reuters.com/a", "summary": "An event happened.",
+            "verification": {
+                "verification": "multi-report", "independent_sources": 2,
+                "evidence": [{"source": "BBC"}], "contradiction_flag": True,
+            },
+        },
+        {
+            "headline": "Malformed metadata", "source": "Unknown",
+            "url": "https://example.org/b", "summary": "Another event.",
+            "verification": {"verification": "single-source", "independent_sources": "invalid"},
+        },
+    ])
+    assert result["stories"] == 2
+    assert result["corroborated"] == 1
+    assert result["independent_source_stories"] == 1
+    assert result["independent_sources_total"] == 2
+    assert result["independent_source_coverage"] == 0.5
+    assert result["mean_independent_sources"] == 1.0
+    assert result["contradiction_count"] == 1
+    assert result["contradiction_rate"] == 0.5
+    assert result["verification_tiers"] == {"multi-report": 1, "single-source": 1}
+    assert len(result["evidence_gaps"]) == 1

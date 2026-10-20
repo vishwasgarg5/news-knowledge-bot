@@ -22,21 +22,75 @@ def temporal_drift_windows(rows,current_days=30,baseline_days=180):
     if len(clean)>=40 and split<len(clean):
         return {"current":clean[split:],"baseline":clean[:split],"current_start":_date(clean[split]) or None,"current_end":_date(clean[-1]) or None,"baseline_start":_date(clean[0]) or None,"baseline_end":_date(clean[split-1]) or None,"method":"chronological_fallback"}
     return {"current":[],"baseline":[],"current_start":None,"current_end":None,"baseline_start":None,"baseline_end":None,"method":"insufficient_data"}
+def _safe_count(value):
+    try:
+        return max(0, int(value or 0))
+    except (TypeError, ValueError, OverflowError):
+        return 0
+
+def _publisher_key(row):
+    """Canonicalize known publisher aliases using the research identity rules."""
+    from .research import _source_key
+
+    if not isinstance(row, dict):
+        return ""
+    source = str(row.get("source", "") or "").strip()
+    url = str(row.get("url", "") or "").strip()
+    return _source_key(source, url) or ""
+
 def coverage_audit(stories,india_target=5,world_target=5):
-    rows=list(stories or []); india=[r for r in rows if str(r.get("region","")).lower()=="india"]; world=[r for r in rows if str(r.get("region","")).lower()=="world"]
-    return {"stories":len(rows),"india":len(india),"world":len(world),"india_target":max(0,int(india_target)),"world_target":max(0,int(world_target)),"india_shortfall":max(0,int(india_target)-len(india)),"world_shortfall":max(0,int(world_target)-len(world)),"distinct_sources":len({str(r.get("source","")).strip().lower() for r in rows if r.get("source")}),"distinct_categories":len({str(r.get("category","")).strip().lower() for r in rows if r.get("category")})}
+    rows=[r for r in (stories or []) if isinstance(r,dict)]
+    india=[r for r in rows if str(r.get("region","")).lower()=="india"]
+    world=[r for r in rows if str(r.get("region","")).lower()=="world"]
+    requested_india=max(0,_safe_count(india_target))
+    requested_world=max(0,_safe_count(world_target))
+    return {
+        "stories":len(rows),
+        "india":len(india),
+        "world":len(world),
+        "india_target":requested_india,
+        "world_target":requested_world,
+        "india_shortfall":max(0,requested_india-len(india)),
+        "world_shortfall":max(0,requested_world-len(world)),
+        "distinct_sources":len({key for r in rows if (key:=_publisher_key(r))}),
+        "distinct_categories":len({str(r.get("category","")).strip().lower() for r in rows if r.get("category")}),
+    }
+
 def evidence_audit(stories):
-    rows=list(stories or []); gaps=[]; contradictions=[]
+    rows=[s for s in (stories or []) if isinstance(s,dict)]
+    gaps=[]; contradictions=[]; tiers=Counter(); independent_total=0; independent_stories=0
     for story in rows:
-        v=story.get("verification") or {}; missing=[]
+        raw=story.get("verification") or {}
+        v=raw if isinstance(raw,dict) else {}
+        missing=[]
         if not str(story.get("source","") or "").strip(): missing.append("source")
         if not str(story.get("url","") or "").strip(): missing.append("url")
         if not str(story.get("summary","") or "").strip(): missing.append("summary")
-        independent=int(v.get("independent_sources",0) or 0); evidence=v.get("evidence") or v.get("sources") or []
-        if independent<1 and not evidence and v.get("verification")!="official-source": missing.append("independent_corroboration")
+        independent=_safe_count(v.get("independent_sources",0))
+        independent_total+=independent
+        independent_stories+=int(independent>0)
+        tier=str(v.get("verification","unverified") or "unverified").lower()
+        tiers[tier]+=1
+        evidence=v.get("evidence") or v.get("sources") or []
+        if independent<1 and not evidence and tier!="official-source": missing.append("independent_corroboration")
         if missing: gaps.append({"headline":story.get("headline",""),"missing":missing})
         if v.get("contradiction_flag"): contradictions.append({"headline":story.get("headline",""),"reason":"source contradiction"})
-    return {"stories":len(rows),"contradictions":contradictions,"evidence_gaps":gaps,"evidence_gap_rate":round(len(gaps)/max(1,len(rows)),3),"corroborated":sum(1 for s in rows if (s.get("verification") or {}).get("verification") in {"multi-source","multi-report","official-source"})}
+    total=len(rows)
+    corroborated=sum(tiers[t] for t in ("multi-source","multi-report","official-source"))
+    return {
+        "stories":total,
+        "contradictions":contradictions,
+        "contradiction_count":len(contradictions),
+        "contradiction_rate":round(len(contradictions)/max(1,total),3),
+        "evidence_gaps":gaps,
+        "evidence_gap_rate":round(len(gaps)/max(1,total),3),
+        "corroborated":corroborated,
+        "verification_tiers":dict(tiers),
+        "independent_source_stories":independent_stories,
+        "independent_sources_total":independent_total,
+        "independent_source_coverage":round(independent_stories/max(1,total),3),
+        "mean_independent_sources":round(independent_total/max(1,total),2),
+    }
 def production_readiness_gate(ranking,calibration,drift,evidence,coverage=None):
     blockers=[]
     if int((ranking or {}).get("paired_folds",0) or 0)<5: blockers.append("insufficient_paired_folds")
