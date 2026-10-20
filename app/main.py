@@ -256,6 +256,7 @@ def build_messages(result,today,stats,timeline=None):
         "",
         f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
         f"Coverage gaps: {', '.join(stats.get('coverage_gaps') or []) or 'none'}",
+        f"Category research {int((stats.get('category_research') or {}).get('queries',0))} queries · {int((stats.get('category_research') or {}).get('articles_found',0))} fresh candidates",
         f"Fallback sources: {len((stats.get('source_fallback') or {}).get('weak_sources',[]))}",
         f"Final audit: {(stats.get('final_audit') or {}).get('health','UNKNOWN')}",
     ]
