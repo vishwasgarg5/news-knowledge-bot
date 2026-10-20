@@ -271,7 +271,7 @@ def test_quality_intelligence_v2_contract(tmp_path):
     assert isinstance(coverage_gaps(out),list)
     plan=coverage_plan(out,world_target=5,india_target=5)
     assert {"world_target","india_target","world_shortfall","india_shortfall"} <= plan.keys()
-    assert source_health(out)["Reuters"]["articles"]==1
+    assert source_health(out)["reuters"]["articles"]==1
     snap=quality_snapshot(out,{"1":{"verification":"multi-source","contradiction_flag":False}})
     assert snap["strong"]==1
 
