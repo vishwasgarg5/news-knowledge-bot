@@ -1842,3 +1842,17 @@ def test_coverage_audit_surfaces_unknown_and_missing_regions():
     assert result["missing_region"] == 1
     assert result["india_shortfall"] == 0
     assert result["world_shortfall"] == 0
+
+
+def test_confidence_snapshot_never_emits_non_finite_values():
+    from app.ops import confidence_snapshot
+
+    snapshot = confidence_snapshot([
+        {"verification": {"confidence": float("nan")}, "calibrated_confidence": float("inf")},
+        {"verification": {"confidence": "invalid"}, "calibrated_confidence": "-inf"},
+        {"verification": {"confidence": 85}, "calibrated_confidence": 82},
+    ])
+    assert snapshot["avg_raw"] == 28.3
+    assert snapshot["avg_calibrated"] == 27.3
+    assert snapshot["high_confidence"] == 1
+    assert snapshot["low_confidence"] == 2

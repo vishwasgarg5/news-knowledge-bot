@@ -4,8 +4,13 @@ from datetime import date,timedelta
 from pathlib import Path
 
 def _f(v,d=0.0):
-    try:return float(v)
-    except (TypeError,ValueError):return d
+    """Keep non-finite telemetry out of operational and confidence summaries."""
+    import math
+    try:
+        value=float(v)
+    except (TypeError,ValueError,OverflowError):
+        return d
+    return value if math.isfinite(value) else d
 
 def research_completion_rate(queue_size, corroborated):
     """Return completed/queued research, treating an empty queue as complete.
