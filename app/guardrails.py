@@ -43,7 +43,7 @@ def coverage_audit(stories,india_target=5,world_target=5):
     regions=[str(r.get("region","") or "").strip().lower() for r in rows]
     india=[r for r,region in zip(rows,regions) if region=="india"]
     world=[r for r,region in zip(rows,regions) if region=="world"]
-    other_region=sum(1 for region in regions if region not in {"india","world"})
+    other_region=sum(1 for region in regions if region and region not in {"india","world"})
     missing_region=sum(1 for region in regions if not region)
     requested_india=max(0,_safe_count(india_target))
     requested_world=max(0,_safe_count(world_target))
