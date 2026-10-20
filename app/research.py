@@ -305,6 +305,86 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
     return results, metrics
 
 
+
+_CATEGORY_QUERY_MAP = {
+    "economy": (
+        "India economy RBI inflation GDP growth jobs",
+        "India economy fiscal policy interest rates inflation",
+    ),
+    "defence": (
+        "India defence military procurement Ministry of Defence",
+        "India defence border security military technology",
+    ),
+}
+
+def discover_category_articles(categories, max_queries=4, per_query=8, existing_articles=None):
+    """Find fresh category-specific candidates when source feeds leave coverage gaps.
+
+    Results are discovery candidates, not proof: they still pass deterministic
+    scoring, event deduplication, freshness, verification and production gates.
+    """
+    allowed = ("economy", "defence")
+    requested = list(dict.fromkeys(str(c).strip().lower() for c in (categories or [])))
+    queries = [(_category, query) for _category in allowed if _category in requested
+               for query in _CATEGORY_QUERY_MAP[_category]]
+    queries = queries[:max(0, int(max_queries))]
+    known_urls = {str(row.get("url", "")).strip() for row in (existing_articles or [])
+                  if isinstance(row, dict) and str(row.get("url", "")).strip()}
+    results, failed, queried = [], 0, 0
+    seen_titles = set()
+    for category, query in queries:
+        gl, ceid = ("IN", "IN:en")
+        url = f"https://news.google.com/rss/search?q={quote(query)}&hl=en&gl={gl}&ceid={ceid}"
+        queried += 1
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": "NewsKnowledgeBot/1.0 (+https://github.com/vishwasgarg5/news-knowledge-bot; category research)"},
+                timeout=(3, 6),
+            )
+            response.raise_for_status()
+            parsed = feedparser.parse(response.content)
+        except Exception:
+            failed += 1
+            continue
+        for entry in (getattr(parsed, "entries", []) or [])[:max(0, int(per_query))]:
+            source_info = entry.get("source", {}) or {}
+            publisher = source_info.get("title", "") if isinstance(source_info, dict) else ""
+            title = re.sub(r"\\s+", " ", str(entry.get("title", "") or "")).strip()
+            if publisher and title.lower().endswith(" - " + str(publisher).lower()):
+                title = title[:-(len(str(publisher)) + 3)].strip()
+            link = str(entry.get("link", "") or "").strip()
+            title_key = title.casefold()
+            if not publisher or not title or not link or link in known_urls or title_key in seen_titles:
+                continue
+            published = ""
+            parsed_time = entry.get("published_parsed") or entry.get("updated_parsed")
+            if parsed_time:
+                try:
+                    published = datetime(*parsed_time[:6], tzinfo=timezone.utc).isoformat()
+                except (TypeError, ValueError, OverflowError):
+                    published = ""
+            if not published:
+                published = _parse_date(entry.get("published", "") or entry.get("updated", ""))
+                published = published.isoformat() if published else ""
+            if not _published_recent(published, 72):
+                continue
+            summary = re.sub(r"<[^>]+>", " ", str(entry.get("summary", "") or ""))
+            known_urls.add(link)
+            seen_titles.add(title_key)
+            results.append({
+                "title": title, "headline": title, "summary": summary[:1600],
+                "url": link, "source": str(publisher).strip(), "published": published,
+                "category": category, "region": "india", "region_confidence": 0.75,
+                "region_evidence": f"targeted category search: {category}",
+            })
+    metrics = {
+        "categories": [category for category in allowed if category in requested],
+        "queries": queried, "failed_queries": failed, "articles_found": len(results),
+    }
+    print(f"[CATEGORY_RESEARCH] categories={','.join(metrics['categories']) or 'none'} queries={queried} failed={failed} articles={len(results)}", flush=True)
+    return results, metrics
+
 def verify_article(story, articles, memory=None):
     """Build an auditable, freshness-aware verification record for one event.
     Only current, independent publishers can raise the verification tier."""
