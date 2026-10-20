@@ -236,39 +236,48 @@ def _select_diverse(pool,limit,family_counts=None):
     max_family=max(1,int(os.getenv("NEWS_MAX_EVENT_FAMILY","3")))
     max_single=max(0,int(os.getenv("NEWS_MAX_SINGLE_SOURCE_PER_REGION","2")))
     max_source=max(0,int(os.getenv("NEWS_MAX_STORIES_PER_SOURCE","2")))
+    verification_rank={"multi-source":0,"official-source":0,"multi-report":1,"single-source":2}
+    remaining=list(enumerate(pool))
     single_count=0
     source_counts={}
-    for score,item in pool:
-        if len(selected)>=limit: break
-        verification=str(item.get("_verification","unverified"))
-        if verification=="single-source" and single_count>=max_single:
-            continue
-        # Never let a single-source item displace corroborated evidence merely
-        # because its deterministic importance score is higher.
-        if verification=="single-source" and any(
-            str(x.get("_verification","")) in {"multi-source","official-source","multi-report"}
-            for x in selected
-        ):
-            # Single-source items are retained only when they add a genuinely
-            # new event; the regional cap above prevents them from dominating.
-            pass
-        source_key=_publisher_key(item)
-        if max_source and source_key and source_counts.get(source_key,0)>=max_source:
-            continue
-        same=[x for x in selected if _same_event_family(item,x)]
-        if same:
-            if len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same):
+    category_counts={}
+    # Adaptive greedy selection: preserve evidence-tier priority, then prefer
+    # underrepresented categories within the same tier. This prevents a large
+    # cluster of similar economy/politics/technology headlines from consuming
+    # every slot when other strong categories are available.
+    while remaining and len(selected)<max(0,int(limit)):
+        remaining.sort(key=lambda pair:(
+            verification_rank.get(str(pair[1][1].get("_verification","unverified")),3),
+            category_counts.get(str(pair[1][1].get("category","other") or "other").strip().lower(),0),
+            pair[0],
+        ))
+        accepted=False
+        for position,(original_index,(score,item)) in enumerate(remaining):
+            verification=str(item.get("_verification","unverified"))
+            if verification=="single-source" and single_count>=max_single:
                 continue
-        key=_event_family_key(item.get("headline",""))
-        if key:
-            count=family_counts.get(key,0)
-            if count>=max_family:
+            source_key=_publisher_key(item)
+            if max_source and source_key and source_counts.get(source_key,0)>=max_source:
                 continue
-            family_counts[key]=count+1
-        selected.append(item)
-        if verification=="single-source": single_count+=1
-        if source_key:
-            source_counts[source_key]=source_counts.get(source_key,0)+1
+            same=[x for x in selected if _same_event_family(item,x)]
+            if same and (len(same)>=max_family or not all(_genuinely_new_development(item,x) for x in same)):
+                continue
+            key=_event_family_key(item.get("headline",""))
+            if key and family_counts.get(key,0)>=max_family:
+                continue
+            remaining.pop(position)
+            selected.append(item)
+            if key:
+                family_counts[key]=family_counts.get(key,0)+1
+            if verification=="single-source": single_count+=1
+            if source_key:
+                source_counts[source_key]=source_counts.get(source_key,0)+1
+            category=str(item.get("category","other") or "other").strip().lower() or "other"
+            category_counts[category]=category_counts.get(category,0)+1
+            accepted=True
+            break
+        if not accepted:
+            break
     return selected
 
 def _single_source_quality_ok(item):
