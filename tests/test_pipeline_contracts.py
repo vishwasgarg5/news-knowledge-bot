@@ -1825,3 +1825,20 @@ def test_prepare_candidates_handles_none_and_non_mapping_rows():
     assert prepare_candidates(None) == []
     assert prepare_candidates([None, "bad row", {"headline": "A valid story", "importance": 50}])
     assert len(prepare_candidates([None, "bad row", {"headline": "A valid story", "importance": 50}])) == 1
+
+
+def test_coverage_audit_surfaces_unknown_and_missing_regions():
+    from app.guardrails import coverage_audit
+
+    result = coverage_audit([
+        {"region": "india", "source": "Reuters"},
+        {"region": "world", "source": "BBC"},
+        {"region": "other", "source": "AP"},
+        {"source": "Unknown"},
+    ], india_target=1, world_target=1)
+    assert result["india"] == 1
+    assert result["world"] == 1
+    assert result["other_region"] == 1
+    assert result["missing_region"] == 1
+    assert result["india_shortfall"] == 0
+    assert result["world_shortfall"] == 0

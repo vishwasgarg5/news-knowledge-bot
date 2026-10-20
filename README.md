@@ -39,6 +39,10 @@ SCAN → DEDUP → CANDIDATES → OUTCOME LEARNING → IMPORTANCE
 ## AI
 Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
 
+## Evidence quality diagnostics
+
+The production audit canonicalizes known publisher aliases before measuring source diversity. It also reports evidence gaps, independent-source coverage, verification tiers, contradictions, and stories whose region is missing or outside the India/World taxonomy. Ranking ignores non-finite numeric inputs such as NaN and Infinity rather than allowing them to contaminate scores. These checks measure evidence availability and data quality; they do not establish that a story is true.
+
 ## Secrets
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`

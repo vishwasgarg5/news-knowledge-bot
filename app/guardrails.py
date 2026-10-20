@@ -40,14 +40,19 @@ def _publisher_key(row):
 
 def coverage_audit(stories,india_target=5,world_target=5):
     rows=[r for r in (stories or []) if isinstance(r,dict)]
-    india=[r for r in rows if str(r.get("region","")).lower()=="india"]
-    world=[r for r in rows if str(r.get("region","")).lower()=="world"]
+    regions=[str(r.get("region","") or "").strip().lower() for r in rows]
+    india=[r for r,region in zip(rows,regions) if region=="india"]
+    world=[r for r,region in zip(rows,regions) if region=="world"]
+    other_region=sum(1 for region in regions if region not in {"india","world"})
+    missing_region=sum(1 for region in regions if not region)
     requested_india=max(0,_safe_count(india_target))
     requested_world=max(0,_safe_count(world_target))
     return {
         "stories":len(rows),
         "india":len(india),
         "world":len(world),
+        "other_region":other_region,
+        "missing_region":missing_region,
         "india_target":requested_india,
         "world_target":requested_world,
         "india_shortfall":max(0,requested_india-len(india)),
