@@ -1856,3 +1856,19 @@ def test_confidence_snapshot_never_emits_non_finite_values():
     assert snapshot["avg_calibrated"] == 27.3
     assert snapshot["high_confidence"] == 1
     assert snapshot["low_confidence"] == 2
+
+
+def test_quality_ranking_has_stable_tiebreakers_independent_of_input_order():
+    from app.quality import prepare_candidates
+
+    rows = [
+        {"story_id": "b", "headline": "Beta policy development", "source": "Reuters",
+         "url": "https://www.reuters.com/b", "importance": 70},
+        {"story_id": "a", "headline": "Alpha policy development", "source": "BBC",
+         "url": "https://www.bbc.com/news/a", "importance": 70},
+        {"story_id": "c", "headline": "Gamma policy development", "source": "AP",
+         "url": "https://apnews.com/c", "importance": 70},
+    ]
+    first = [row["story_id"] for row in prepare_candidates(rows, [])]
+    second = [row["story_id"] for row in prepare_candidates(list(reversed(rows)), [])]
+    assert first == second == ["a", "b", "c"]

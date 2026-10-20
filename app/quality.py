@@ -46,7 +46,7 @@ def prepare_candidates(candidates, history=None):
         quality=max(0.0,min(100.0,_f(x.get("importance"))+gap+diversity+novelty*4.0+min(5.0,_f(x.get("breaking_score"))/20.0)+min(5.0,_f(x.get("trend_score"))/20.0)))
         x.update({"novelty_score":round(novelty*100,1),"event_momentum":round(momentum,1),"coverage_gap_score":round(gap,1),"source_diversity_score":round(diversity,1),"quality_score":round(quality,1)})
         out.append(x)
-    return sorted(out,key=lambda x:(-_f(x.get("quality_score")),-_f(x.get("personalized_score")),-_f(x.get("importance"))))
+    return sorted(out,key=lambda x:(-_f(x.get("quality_score")),-_f(x.get("personalized_score")),-_f(x.get("importance")),str(x.get("story_id","") or "").casefold(),str(x.get("headline","") or x.get("title","")).casefold(),str(x.get("url","") or "").casefold()))
 
 def source_health(candidates):
     grouped=defaultdict(lambda:{"articles":0,"high_value":0})
