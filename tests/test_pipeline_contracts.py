@@ -42,6 +42,47 @@ def test_pipeline_import_contracts():
     ))
 
 
+
+def test_category_research_is_bounded_and_only_targets_known_gaps():
+    from app.research import _CATEGORY_QUERY_MAP
+
+    assert set(_CATEGORY_QUERY_MAP) == {"economy", "defence"}
+    assert len(_CATEGORY_QUERY_MAP["economy"]) >= 2
+    assert len(_CATEGORY_QUERY_MAP["defence"]) >= 2
+
+
+def test_category_research_uses_fresh_results_and_deduplicates(monkeypatch):
+    from datetime import datetime, timezone
+    from email.utils import format_datetime
+    from types import SimpleNamespace
+    import app.research as research
+
+    now = datetime.now(timezone.utc)
+    fresh = SimpleNamespace(
+        title="RBI signals policy review as inflation eases - Example News",
+        link="https://example.com/economy-story",
+        published=format_datetime(now),
+        published_parsed=now.utctimetuple(),
+        summary="<p>Reserve Bank of India discusses inflation and policy.</p>",
+        source={"title": "Example News"},
+    )
+    monkeypatch.setattr(research.requests, "get", lambda *a, **k: SimpleNamespace(
+        content=b"feed", raise_for_status=lambda: None
+    ))
+    monkeypatch.setattr(research.feedparser, "parse", lambda _: SimpleNamespace(entries=[fresh]))
+    articles, metrics = research.discover_category_articles(
+        ["economy", "unknown"], max_queries=1, existing_articles=[]
+    )
+    assert metrics["queries"] == 1
+    assert metrics["failed_queries"] == 0
+    assert articles and articles[0]["category"] == "economy"
+    assert articles[0]["region"] == "india"
+    articles2, _ = research.discover_category_articles(
+        ["economy"], max_queries=1,
+        existing_articles=[{"url": "https://example.com/economy-story"}],
+    )
+    assert articles2 == []
+
 def test_research_quality_contract():
     from app.research import verify_article
 
