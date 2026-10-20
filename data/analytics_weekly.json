@@ -1,45 +1,45 @@
 {
-  "learning_samples": 6426,
-  "selected_samples": 963,
-  "mature_outcome_samples": 6163,
+  "learning_samples": 6461,
+  "selected_samples": 972,
+  "mature_outcome_samples": 6200,
   "avg_outcome": 0.136,
-  "daily_runs": 24,
-  "history_stories": 1317,
+  "daily_runs": 25,
+  "history_stories": 1323,
   "source_reliability": {
-    "BBC News": 0.286,
+    "BBC News": 0.283,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.028,
     "Times of India": 0.029,
     "Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times": 0.033,
-    "Business News Today – Finance, Industry & Economy | The Hindu": 0.312,
+    "Business News Today – Finance, Industry & Economy | The Hindu": 0.31,
     "India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times": 0.059,
     "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times": 0.025,
-    "Technology News Today, Latest Tech News | The Hindu": 0.414,
-    "TechCrunch": 0.116,
-    "World | Deutsche Welle": 0.242,
-    "World news | The Guardian": 0.1,
+    "Technology News Today, Latest Tech News | The Hindu": 0.413,
+    "TechCrunch": 0.114,
+    "World | Deutsche Welle": 0.24,
+    "World news | The Guardian": 0.09,
     "NPR Topics: World": 0.0,
     "Al Jazeera – Breaking News, World News and Video from Al Jazeera": 0.0
   },
   "category_reliability": {
     "india": 0.044,
-    "world": 0.149,
-    "business": 0.317,
-    "technology": 0.274,
-    "science": 0.291,
+    "world": 0.148,
+    "business": 0.314,
+    "technology": 0.271,
+    "science": 0.285,
     "defence": 0.338
   },
   "top_categories": [
     [
       "india",
-      646
+      648
     ],
     [
       "world",
-      287
+      289
     ],
     [
       "business",
-      212
+      214
     ],
     [
       "technology",
@@ -51,56 +51,56 @@
     ]
   ],
   "learning_data_audit": {
-    "total_rows": 6426,
-    "mature_rows": 6163,
-    "provisional_rows": 263,
-    "mature_label_coverage": 0.959,
-    "selected_mature_rows": 905
+    "total_rows": 6461,
+    "mature_rows": 6200,
+    "provisional_rows": 261,
+    "mature_label_coverage": 0.96,
+    "selected_mature_rows": 908
   },
   "chronological_ranking_evaluation": {
     "status": "OK",
-    "samples": 6163,
+    "samples": 6200,
     "train_samples": 5722,
-    "test_samples": 441,
+    "test_samples": 478,
     "train_dates": 14,
-    "test_dates": 6,
+    "test_dates": 7,
     "threshold": 75,
     "baseline_threshold": 50,
     "baseline": {
-      "precision": 0.032,
+      "precision": 0.029,
       "recall": 1.0,
-      "f1": 0.062,
-      "predicted_positive": 441,
+      "f1": 0.057,
+      "predicted_positive": 478,
       "actual_positive": 14,
-      "samples": 441
+      "samples": 478
     },
     "challenger": {
-      "precision": 0.047,
+      "precision": 0.043,
       "recall": 1.0,
-      "f1": 0.09,
-      "predicted_positive": 296,
+      "f1": 0.082,
+      "predicted_positive": 327,
       "actual_positive": 14,
-      "samples": 441
+      "samples": 478
     },
-    "delta_f1": 0.028,
+    "delta_f1": 0.025,
     "leakage_safe": true
   },
   "outcome_horizon_coverage": {
-    "24h": 6335,
-    "48h": 6300,
-    "7d": 6163
+    "24h": 6426,
+    "48h": 6335,
+    "7d": 6200
   },
   "outcome_maturity": {
-    "24h": 6335,
-    "48h": 6300,
-    "7d": 6163
+    "24h": 6426,
+    "48h": 6335,
+    "7d": 6200
   },
-  "false_positives": 608,
+  "false_positives": 611,
   "missed_stories": 366,
   "last_7_days": {
     "runs": 5,
-    "avg_success_rate": 0.327,
-    "avg_false_positive_rate": 0.658,
+    "avg_success_rate": 0.326,
+    "avg_false_positive_rate": 0.666,
     "avg_miss_rate": 0.066
   }
 }
