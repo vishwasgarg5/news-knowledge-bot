@@ -405,25 +405,55 @@ def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:lis
         sid=s.get("story_id","")
         if not sid: continue
         r=verify_article(s,pool,memory); output[sid]=r
-        # A multi-report result is current evidence: it has one fresh independent
-        # publisher corroborating the event. "Strong" remains reserved for
-        # multi-source/official evidence.
-        is_current=r["verification"] in {"multi-source","official-source","multi-report","single-source"}
+        # Current evidence means a fresh independent report, or a fresh primary
+        # source when no independent report exists. A stale single-source story
+        # must not inflate research coverage merely because it has a publisher.
+        has_fresh_independent=int(r.get("independent_sources",0) or 0)>0
+        is_current=has_fresh_independent or (
+            r.get("primary_fresh",False)
+            and r.get("verification") in {"official-source","single-source"}
+        )
         if r["verification"] in {"multi-source","official-source"}: strong+=1
         if is_current: current+=1
         if r["historical"]: historical+=1
         if r["historical"] and not is_current: historical_only+=1
     total=len(stories)
+    tier_counts={
+        tier:sum(1 for x in output.values() if isinstance(x,dict) and x.get("verification")==tier)
+        for tier in ("multi-source","multi-report","official-source","single-source","unverified")
+    }
+    contradiction_count=sum(1 for x in output.values() if isinstance(x,dict) and x.get("contradiction_flag"))
+    independent_total=sum(max(0,int(x.get("independent_sources",0) or 0)) for x in output.values() if isinstance(x,dict))
+    independent_stories=sum(1 for x in output.values() if isinstance(x,dict) and int(x.get("independent_sources",0) or 0)>0)
+    stale_primary=sum(1 for x in output.values() if isinstance(x,dict) and not x.get("primary_fresh",False))
     output["_stats"]={
         "strong":strong,
         "current":current,
         "historical":historical,
         "historical_only":historical_only,
-        "failed":sum(1 for x in output.values() if isinstance(x,dict) and x.get("verification")=="unverified"),
+        "failed":tier_counts["unverified"],
         "total":total,
-        "coverage":current/total if total else 0,
-        "strong_coverage":strong/total if total else 0,
+        "coverage":round(current/total,3) if total else 0,
+        "strong_coverage":round(strong/total,3) if total else 0,
+        "single_source":tier_counts["single-source"],
+        "multi_report":tier_counts["multi-report"],
+        "official":tier_counts["official-source"],
+        "unverified":tier_counts["unverified"],
+        "independent_source_stories":independent_stories,
+        "independent_sources_total":independent_total,
+        "independent_source_coverage":round(independent_stories/total,3) if total else 0,
+        "mean_independent_sources":round(independent_total/total,2) if total else 0,
+        "single_source_rate":round(tier_counts["single-source"]/total,3) if total else 0,
+        "contradictions":contradiction_count,
+        "contradiction_rate":round(contradiction_count/total,3) if total else 0,
+        "stale_primary":stale_primary,
         "status":"PASS" if total and current>=max(1,int(total*.50)) else ("WARN" if current else "FAIL"),
     }
-    print(f"[INFO] verification current={current}/{total}; strong={strong}/{total}; historical_matches={historical}; historical_only={historical_only}; coverage={current/max(1,total):.0%}",flush=True)
+    print(
+        f"[INFO] verification current={current}/{total}; strong={strong}/{total}; "
+        f"independent_source_coverage={independent_stories/max(1,total):.0%}; "
+        f"single_source={tier_counts['single-source']}; contradictions={contradiction_count}; "
+        f"historical_matches={historical}; historical_only={historical_only}",
+        flush=True,
+    )
     return output

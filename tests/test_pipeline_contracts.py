@@ -1648,3 +1648,54 @@ def test_story_and_vocabulary_renderers_have_one_authoritative_definition():
 def test_main_anchors_historical_trend_to_ist_run_date():
     source = read("app/main.py")
     assert 'historical_trend(read_rows(DATA/"news_history.csv"),7,as_of=today)' in source
+
+
+def test_research_stats_do_not_count_stale_single_source_as_current(monkeypatch):
+    import app.research as research
+
+    fixtures = {
+        "stale": {
+            "verification": "single-source", "primary_fresh": False,
+            "independent_sources": 0, "historical": [], "contradiction_flag": False,
+        },
+        "corroborated": {
+            "verification": "multi-report", "primary_fresh": False,
+            "independent_sources": 1, "historical": [], "contradiction_flag": False,
+        },
+    }
+    monkeypatch.setattr(research, "verify_article", lambda story, pool, memory: fixtures[story["story_id"]])
+    result = research.research_stories([
+        {"story_id": "stale"}, {"story_id": "corroborated"},
+    ])
+    stats = result["_stats"]
+    assert stats["current"] == 1
+    assert stats["coverage"] == 0.5
+    assert stats["single_source"] == 1
+    assert stats["multi_report"] == 1
+    assert stats["independent_source_coverage"] == 0.5
+    assert stats["single_source_rate"] == 0.5
+    assert stats["stale_primary"] == 2
+
+
+def test_research_stats_expose_contradiction_and_source_counts(monkeypatch):
+    import app.research as research
+
+    monkeypatch.setattr(research, "verify_article", lambda story, pool, memory: {
+        "verification": "multi-source", "primary_fresh": True,
+        "independent_sources": 2, "historical": [], "contradiction_flag": True,
+    })
+    result = research.research_stories([{"story_id": "event"}])
+    stats = result["_stats"]
+    assert stats["strong"] == 1
+    assert stats["independent_sources_total"] == 2
+    assert stats["mean_independent_sources"] == 2.0
+    assert stats["contradictions"] == 1
+    assert stats["contradiction_rate"] == 1.0
+
+
+def test_source_identity_rejects_lookalike_domains():
+    from app.research import _source_key
+
+    assert _source_key("Reuters", "https://www.reuters.com/world/story") == "reuters"
+    assert _source_key("Reuters", "https://reuters.com.example.org/story") == "reuters.com.example.org"
+    assert _source_key("BBC News", "https://news.google.com/rss/articles/example") == "bbc"

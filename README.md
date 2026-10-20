@@ -62,6 +62,10 @@ Personalization is bounded and additive: it does not bypass verification or the 
 Each run produces machine-readable analytics covering learning samples, outcome calibration, source/category reliability and topic/category frequency. The analytics summary is included in the final audit artifact and uses the same persisted memory as the learning pipeline.
 
 
+## Evidence and corroboration audit
+
+Research audit statistics distinguish fresh independent corroboration from a publisher label alone. The audit records verification-tier counts, independent-source coverage, mean independent publishers per story, single-source rate, stale primary-source count, and contradiction rate. A stale single-source item no longer inflates the research-current coverage metric. These metrics describe evidence availability, not the truth of a claim.
+
 ## Production hardening
 
 The final ranking incorporates personalization, breaking-news and trend signals while retaining verification gates. Event memory now supports NEW, DEVELOPING, ESCALATING, CONFIRMED and RESOLVED states. CSV writes use atomic replacement to reduce partial-write corruption, and the workflow compiles the complete application and runs cross-module smoke validation before delivery.
