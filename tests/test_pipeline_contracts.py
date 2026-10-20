@@ -1795,3 +1795,33 @@ def test_evidence_audit_reports_source_metrics_and_handles_malformed_counts():
     assert result["contradiction_rate"] == 0.5
     assert result["verification_tiers"] == {"multi-report": 1, "single-source": 1}
     assert len(result["evidence_gaps"]) == 1
+
+
+def test_quality_scores_ignore_nan_infinite_and_malformed_numeric_values():
+    from app.quality import prepare_candidates, source_health
+
+    rows = [
+        {"headline": "Valid headline about central bank policy", "source": "Reuters",
+         "url": "https://www.reuters.com/a", "importance": 70, "trend_score": 20},
+        {"headline": "Invalid numeric headline about market policy", "source": "BBC",
+         "url": "https://www.bbc.com/news/b", "importance": float("nan"),
+         "trend_score": float("inf"), "breaking_score": "not-a-number"},
+        {"headline": "Overflow numeric headline about science policy", "source": "AP",
+         "url": "https://apnews.com/c", "importance": "-inf", "trend_score": None},
+    ]
+    prepared = prepare_candidates(rows, history=None)
+    assert len(prepared) == 3
+    assert all(row["quality_score"] == row["quality_score"] for row in prepared)
+    assert all(abs(row["quality_score"]) != float("inf") for row in prepared)
+    health = source_health(rows)
+    assert health["reuters"]["high_value"] == 0
+    assert health["bbc"]["high_value"] == 0
+    assert health["associated press"]["high_value"] == 0
+
+
+def test_prepare_candidates_handles_none_and_non_mapping_rows():
+    from app.quality import prepare_candidates
+
+    assert prepare_candidates(None) == []
+    assert prepare_candidates([None, "bad row", {"headline": "A valid story", "importance": 50}])
+    assert len(prepare_candidates([None, "bad row", {"headline": "A valid story", "importance": 50}])) == 1

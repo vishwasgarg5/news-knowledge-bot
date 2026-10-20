@@ -2,8 +2,13 @@ from __future__ import annotations
 from collections import Counter,defaultdict
 
 def _f(v, default=0.0):
-    try: return float(v)
-    except (TypeError,ValueError): return default
+    """Parse finite numeric signals only; NaN/Infinity must never affect ranking."""
+    import math
+    try:
+        value=float(v)
+    except (TypeError,ValueError,OverflowError):
+        return default
+    return value if math.isfinite(value) else default
 
 def _tokens(text):
     import re
@@ -24,13 +29,14 @@ def _publisher_key(candidate):
 
 def prepare_candidates(candidates, history=None):
     """Add novelty, momentum, source diversity and coverage-gap signals."""
-    history=list(history or [])
+    rows=[x for x in (candidates or []) if isinstance(x,dict)]
+    history=[x for x in (history or []) if isinstance(x,dict)]
     old_titles=[str(x.get("headline","")) for x in history]
     seen_categories=Counter(str(x.get("category","other")).lower() for x in history[-500:])
-    source_counts=Counter(_publisher_key(x) for x in candidates)
+    source_counts=Counter(_publisher_key(x) for x in rows)
     priority=("india","economy","business","technology","science","defence")
     out=[]
-    for c in candidates:
+    for c in rows:
         x=dict(c); title=str(x.get("headline","") or x.get("title","")); cat=str(x.get("category","other")).lower()
         repeated=max((_similar(title,h) for h in old_titles[-1000:]),default=0.0)
         novelty=max(0.0,1.0-repeated)
