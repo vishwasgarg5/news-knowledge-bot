@@ -43,6 +43,18 @@ Ollama + Qwen 2.5 3B (configurable via `AI_MODEL`).
 
 Final regional selection now balances three goals in order: verification strength first, category diversity second, and the existing quality ranking third. Within the same verification tier, categories already represented in the briefing are deprioritized so strong stories from economy, science, technology, defence, and other available categories have a better chance to appear. Publisher caps, event-family deduplication, single-source limits, freshness checks, and evidence gates remain in force. Diversity never promotes a lower verification tier over a higher one, and it never invents a missing category: regional/category shortfalls remain visible in the audit.
 
+## Research coverage and model evaluation
+
+The default corroboration search budget is 20 Google News RSS queries, balanced up to 10 candidates per region. Override with `NEWS_RESEARCH_SEARCH_QUERIES` and `NEWS_RESEARCH_QUERIES_PER_REGION` if runtime budgets require it. An official Reserve Bank of India RSS source is also configured under `economy`; feed availability and category coverage are measured at run time, so an unavailable feed is reported rather than silently treated as evidence.
+
+Compare installed local Ollama models before changing production configuration:
+
+```bash
+python scripts/benchmark_ollama_models.py --models qwen2.5:3b,qwen3:4b
+```
+
+Only pass model tags that are already installed. The benchmark checks evidence extraction, unsupported-claim restraint, procedural-status precision, and preservation of allegations; it reports latency and contract scores but never switches `AI_MODEL`. Treat this as a screening test, not a substitute for a representative historical evaluation and production shadow run.
+
 ## Evidence quality diagnostics
 
 The production audit canonicalizes known publisher aliases before measuring source diversity. It also reports evidence gaps, independent-source coverage, verification tiers, contradictions, and stories whose region is missing or outside the India/World taxonomy. Ranking ignores non-finite numeric inputs such as NaN and Infinity rather than allowing them to contaminate scores. These checks measure evidence availability and data quality; they do not establish that a story is true.
