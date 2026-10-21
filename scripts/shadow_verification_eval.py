@@ -123,7 +123,7 @@ def labelled_cases() -> list[dict[str, Any]]:
             "articles": [
                 _article("City council approves new bridge funding after flood damage", "Reuters", "https://www.reuters.com/world/bridge-alias-a", summary="The council approved funding after flood damage."),
                 _article("City council approves new bridge funding after flood damage", "Reuters.com", "https://www.reuters.com/world/bridge-alias-b", summary="The council approved funding after flood damage."),
-                _article("City council approves new bridge funding after flood damage", "Associated Press", "https://apnews.com/article/bridge-alias-noise", summary="The council approved funding after flood damage."),
+                _article("Technology company raises quarterly revenue forecast", "Associated Press", "https://apnews.com/article/bridge-alias-noise", summary="The company raised its revenue forecast following stronger demand."),
             ],
         },
     ]
