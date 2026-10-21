@@ -66,6 +66,7 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
         "candidate_count": len(candidates),
         "candidate_dispositions": dispositions,
         "candidate_reviews": len(labels_by_id),
+        "evaluation_sampling": record.get("evaluation_sampling"),
         "candidate_review_coverage": {
             "reviewed": sum(reviewed_by_disposition.values()),
             "total_candidates": len(candidates),
@@ -127,6 +128,14 @@ def evaluate_paths(paths: list[Path]) -> dict[str, Any]:
         "invalid_records": len(errors),
         "candidate_count": total_candidates,
         "candidate_reviews": total_reviews,
+        "evaluation_sampling": {
+            "note": "Sampling metadata is retained per record below; pooled metrics may combine different sampling designs.",
+            "per_record": [
+                {"run_id": row.get("run_id", ""), "path": row.get("path", ""),
+                 "sampling": row.get("evaluation_sampling")}
+                for row in valid_results if row.get("evaluation_sampling") is not None
+            ],
+        },
         "candidate_review_coverage": {
             "reviewed": total_reviews,
             "total_candidates": total_candidates,
