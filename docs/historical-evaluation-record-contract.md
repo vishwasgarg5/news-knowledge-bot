@@ -111,3 +111,21 @@ queue's `sampling_method`, `sampling_seed`, `per_disposition_cap`, and `strata`.
 that metadata with the record; the offline evaluator carries it into its report so readers
 can assess the review design. Do not use sampling-adjusted population estimates unless a
 statistically justified sampling design and weighting method have been specified.
+
+
+## Audit completed human-review queues
+
+Save each reviewer's completed queue separately, preserving candidate IDs and the sampling
+metadata. Compare two or more reviewer files without overwriting the source record:
+
+```bash
+python scripts/audit_human_review_results.py review-a.json review-b.json --min-reviews-per-disposition 3 --output review-audit.json
+```
+
+The report flags different labels for the same candidate, any candidate marked uncertain,
+missing reviewer/timestamp/rationale fields, missing source evidence metadata, and
+under-reviewed disposition groups. It carries sampling metadata through for inspection.
+A disagreement is a prompt for adjudication, not a declaration that either reviewer is
+wrong. Use distinct, independent reviewer files; repeated copies from the same reviewer
+must not be treated as independent opinions. The default minimum of three candidates per
+stratum is an operational warning threshold, not a statistical guarantee.
