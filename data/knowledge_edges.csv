@@ -8,3 +8,5 @@ date,from_node,to_node,edge_type
 2026-10-19,20c84249fced3950,entity:west bank,mentions
 2026-10-19,20c84249fced3950,entity:west bank the,mentions
 2026-10-21,855ec4205771824c,entity:renewable energy secretary,mentions
+2026-10-21,642d5ed331fdbd9d,entity:reserve bank,mentions
+2026-10-21,855ec4205771824c,entity:renewable energy secretary,mentions
