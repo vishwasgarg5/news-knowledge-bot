@@ -183,3 +183,34 @@ exclusion reasons. Unadjudicated candidates, uncertain labels, duplicate/out-of-
 dispositions, and evidence-incomplete candidates are not silently treated as negatives.
 A missing denominator yields `null`, not a guessed zero. The report retains sampling
 metadata and does not apply sampling weights or claim population-level accuracy.
+
+
+## Versioned evaluation baseline and sample-size gates
+
+Start from `config/evaluation_baseline.example.json`. Before using it, replace
+`REPLACE_WITH_IMMUTABLE_POLICY_ID` with the exact policy identifier recorded in every
+review queue. Do not treat a code commit SHA as a policy version unless your team has
+explicitly chosen and documented that convention.
+
+After producing the adjudicated metrics report, audit it against the baseline:
+
+```bash
+python scripts/evaluate_adjudicated_reviews.py review-a.json review-b.json \\
+  --adjudications adjudications.json --output adjudicated-metrics.json
+python scripts/audit_evaluation_baseline.py adjudicated-metrics.json \\
+  --baseline config/evaluation-baseline.json --output baseline-audit.json
+pytest -q tests/test_evaluation_baseline.py
+```
+
+The example thresholds require at least 30 eligible candidates, at least five eligible
+included and excluded candidates each, and at least 50% eligible adjudication/evidence
+coverage across candidates in the supplied queues. These are starting operational gates,
+not statistical guarantees; calibrate them before drawing conclusions. The audit blocks
+an unpinned placeholder policy, missing queue policy versions, mixed policy versions,
+invalid thresholds, or sample/coverage shortfalls. Copy the example to your chosen
+baseline path and set the immutable policy identifier and thresholds before use.
+
+Review queues should include `policy_version` alongside their run and sampling metadata.
+The evaluator preserves that field for the baseline audit. A passing audit means only
+that configured process thresholds were met; it does not establish label correctness,
+causal improvement, or representative sampling.
