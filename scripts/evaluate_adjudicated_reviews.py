@@ -8,6 +8,7 @@ specific exclusion reason. No production pipeline or network calls are made.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from datetime import datetime
 from pathlib import Path
@@ -120,8 +121,14 @@ def evaluate_adjudicated_reviews(
                 fn += 1
         for reason in reasons:
             exclusions[reason] = exclusions.get(reason, 0) + 1
+        evidence_payload = json.dumps(
+            {field: candidate.get(field, "") for field in EVIDENCE_FIELDS},
+            sort_keys=True, ensure_ascii=False, separators=(",", ":"),
+        )
+        evidence_fingerprint = hashlib.sha256(evidence_payload.encode("utf-8")).hexdigest()
         candidate_results.append({
             "candidate_id": cid,
+            "evidence_fingerprint": evidence_fingerprint,
             "disposition": disposition,
             "adjudicated_label": label,
             "adjudication": adjudication,
