@@ -82,3 +82,33 @@ def test_directory_evaluation_reports_invalid_records(tmp_path):
     assert result["records_seen"] == 2
     assert result["schema_valid_records"] == 1
     assert result["invalid_records"] == 1
+
+
+def test_metrics_report_overall_and_per_disposition_review_coverage():
+    record = record_with_reviews()
+    record["candidate_reviews"] = record["candidate_reviews"][:2]
+
+    result = evaluate_record(record)
+
+    coverage = result["candidate_review_coverage"]
+    assert coverage["reviewed"] == 2
+    assert coverage["total_candidates"] == 4
+    assert coverage["rate"] == 0.5
+    assert coverage["by_disposition"]["included"]["reviewed"] == 2
+    assert coverage["by_disposition"]["included"]["total"] == 2
+    assert coverage["by_disposition"]["excluded"]["reviewed"] == 0
+    assert coverage["by_disposition"]["excluded"]["rate"] == 0.0
+    assert "may bias" in coverage["warning"]
+
+
+def test_aggregate_metrics_report_review_coverage_for_valid_records(tmp_path):
+    record = record_with_reviews()
+    record["candidate_reviews"] = record["candidate_reviews"][:1]
+    (tmp_path / "partial.json").write_text(json.dumps(record), encoding="utf-8")
+
+    result = evaluate_paths([tmp_path / "partial.json"])
+
+    assert result["candidate_review_coverage"]["reviewed"] == 1
+    assert result["candidate_review_coverage"]["total_candidates"] == 4
+    assert result["candidate_review_coverage"]["rate"] == 0.25
+    assert "representative" in result["candidate_review_coverage"]["warning"]
