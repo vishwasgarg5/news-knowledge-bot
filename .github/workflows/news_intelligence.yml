@@ -18,7 +18,7 @@ on:
         options:
           - production
           - validate
-        default: production
+        default: validate
   schedule:
     # 04:07 Asia/Kolkata = 22:37 UTC on the previous day.
     - cron: '37 22 * * *'
@@ -67,6 +67,10 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/shadow_verification_eval.py
+      - name: Audit historical evaluation readiness
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/audit_historical_eval_readiness.py --json
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
