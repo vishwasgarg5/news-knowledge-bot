@@ -2023,3 +2023,77 @@ def test_official_rbi_economy_feed_is_configured():
     sources = yaml.safe_load(read("config/sources.yaml"))
     assert "economy" in sources["sources"]
     assert any("rbi.org.in/pressreleases_rss.xml" in url for url in sources["sources"]["economy"])
+
+
+def test_category_research_second_pass_uses_distinct_query_variants(monkeypatch):
+    from types import SimpleNamespace
+    from urllib.parse import parse_qs, urlparse
+    import app.research as research
+
+    requested = []
+    monkeypatch.setattr(research.requests, "get", lambda url, **kwargs: (
+        requested.append(url) or SimpleNamespace(content=b"feed", raise_for_status=lambda: None)
+    ))
+    monkeypatch.setattr(research.feedparser, "parse", lambda _: SimpleNamespace(entries=[]))
+    _, first = research.discover_category_articles(["defence"], max_queries=2, pass_index=0)
+    first_queries = [parse_qs(urlparse(url).query)["q"][0] for url in requested]
+    requested.clear()
+    _, second = research.discover_category_articles(["defence"], max_queries=2, pass_index=1)
+    second_queries = [parse_qs(urlparse(url).query)["q"][0] for url in requested]
+
+    assert first["queries"] == second["queries"] == 2
+    assert len(set(first_queries + second_queries)) == 4
+    assert not (set(first_queries) & set(second_queries))
+
+
+def test_category_research_parses_rfc2822_dates_without_parsed_time(monkeypatch):
+    from datetime import datetime, timezone
+    from email.utils import format_datetime
+    from types import SimpleNamespace
+    import app.research as research
+
+    entry = {
+        "title": "India defence procurement update - Example News",
+        "link": "https://example.com/defence-rfc2822",
+        "published": format_datetime(datetime.now(timezone.utc)),
+        "summary": "A fresh defence procurement update.",
+        "source": {"title": "Example News"},
+    }
+    monkeypatch.setattr(research.requests, "get", lambda *a, **k: SimpleNamespace(
+        content=b"feed", raise_for_status=lambda: None
+    ))
+    monkeypatch.setattr(research.feedparser, "parse", lambda _: SimpleNamespace(entries=[entry]))
+    articles, metrics = research.discover_category_articles(
+        ["defence"], max_queries=1, existing_articles=[]
+    )
+    assert metrics["articles_found"] == 1
+    assert articles[0]["url"] == entry["link"]
+
+
+def test_verification_does_not_count_publisher_aliases_as_independent_sources():
+    from datetime import datetime, timezone
+    from app.research import verify_article
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "headline": "Company X launches emergency plant after factory fire",
+        "summary": "Company X launched an emergency plant after a factory fire.",
+        "source": "Reuters", "url": "https://reuters.com/example-primary", "published": now,
+    }
+    evidence = [
+        {
+            "title": "Company X opens emergency plant following factory fire",
+            "summary": "Company X opened an emergency plant after the factory fire.",
+            "source": "DW", "url": "https://news.google.com/rss/articles/dw-report",
+            "published": now,
+        },
+        {
+            "title": "Company X opens emergency plant following factory fire",
+            "summary": "Company X opened an emergency plant after the factory fire.",
+            "source": "Deutsche Welle", "url": "https://news.google.com/rss/articles/deutsche-welle-report",
+            "published": now,
+        },
+    ]
+    result = verify_article(story, evidence)
+    assert result["independent_sources"] == 1
+    assert result["verification"] == "multi-report"
