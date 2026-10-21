@@ -14,9 +14,9 @@ def test_metrics_calculate_confusion_matrix_and_f1():
 def test_shadow_evaluation_is_deterministic_in_shape_and_discloses_limits():
     result = evaluate()
     assert result["evaluation_type"] == "synthetic_fixture_shadow_only"
-    assert result["cases"] == 6
-    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 3
-    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 3
+    assert result["cases"] == 10
+    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 5
+    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 5
     assert "Synthetic fixtures do not estimate real-world precision, recall, or F1." in result["limitations"]
     assert all("candidate_accept" in row for row in result["cases_detail"])
 
@@ -27,3 +27,18 @@ def test_candidate_gate_does_not_accept_single_independent_report_unless_officia
     assert row["independent_sources"] == 1
     assert row["baseline_accept"] is True
     assert row["candidate_accept"] is False
+
+
+def test_alias_conflict_and_derivative_fixtures_expose_expected_signals():
+    result = evaluate()
+    rows = {row["case"]: row for row in result["cases_detail"]}
+    assert rows["publisher-aliases-same-identity"]["independent_sources"] == 1
+    assert rows["conflicting-reporting-flags-contradiction"]["contradiction"] is True
+    assert rows["derivative-primary-roundup"]["primary_derivative"] is True
+
+
+def test_distinct_summaries_are_not_collapsed_only_for_shared_headline():
+    result = evaluate()
+    row = next(x for x in result["cases_detail"] if x["case"] == "same-headline-distinct-independent-reporting")
+    assert row["independent_sources"] == 2
+    assert row["baseline_accept"] is True
