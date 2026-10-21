@@ -19,6 +19,43 @@ def test_shadow_evaluation_is_deterministic_in_shape_and_discloses_limits():
     assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 5
     assert "Synthetic fixtures do not estimate real-world precision, recall, or F1." in result["limitations"]
     assert all("candidate_accept" in row for row in result["cases_detail"])
+    assert all("baseline_error" in row and "candidate_error" in row for row in result["cases_detail"])
+    assert all("baseline_correct" in row and "candidate_correct" in row for row in result["cases_detail"])
+    assert result["error_cases"]["baseline"] == [
+        row for row in result["cases_detail"] if row["baseline_error"]
+    ]
+    assert result["error_cases"]["candidate"] == [
+        row for row in result["cases_detail"] if row["candidate_error"]
+    ]
+    assert result["comparison_summary"]["decisions_changed"] == len(result["decision_changes"])
+    assert result["comparison_summary"]["baseline_errors"] == (
+        result["baseline_metrics"]["fp"] + result["baseline_metrics"]["fn"]
+    )
+    assert result["comparison_summary"]["candidate_errors"] == (
+        result["candidate_metrics"]["fp"] + result["candidate_metrics"]["fn"]
+    )
+
+
+def test_shadow_report_classifies_false_positives_and_false_negatives():
+    result = evaluate()
+    rows = result["cases_detail"]
+    for row in rows:
+        if row["baseline_accept"] and not row["label"]:
+            assert row["baseline_error"] == "false_positive"
+        elif row["label"] and not row["baseline_accept"]:
+            assert row["baseline_error"] == "false_negative"
+        else:
+            assert row["baseline_error"] is None
+        if row["candidate_accept"] and not row["label"]:
+            assert row["candidate_error"] == "false_positive"
+        elif row["label"] and not row["candidate_accept"]:
+            assert row["candidate_error"] == "false_negative"
+        else:
+            assert row["candidate_error"] is None
+
+    changed = {row["case"] for row in rows if row["decision_changed"]}
+    reported = {row["case"] for row in result["decision_changes"]}
+    assert reported == changed
 
 
 def test_candidate_gate_does_not_accept_single_independent_report_unless_official():
