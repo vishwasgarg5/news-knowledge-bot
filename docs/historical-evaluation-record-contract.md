@@ -214,3 +214,35 @@ Review queues should include `policy_version` alongside their run and sampling m
 The evaluator preserves that field for the baseline audit. A passing audit means only
 that configured process thresholds were met; it does not establish label correctness,
 causal improvement, or representative sampling.
+
+
+## Compare policy versions on the same reviewed set
+
+First generate an adjudicated metrics report for each policy from the same queue files and
+same adjudication artifact, then audit each report against its own pinned policy baseline.
+The evaluator now includes a SHA-256 fingerprint of each candidate's source evidence so the
+comparison can verify the evidence snapshot is identical even when policy disposition changes.
+
+```bash
+python scripts/evaluate_adjudicated_reviews.py shared-review-queue.json \\
+  --adjudications shared-adjudications.json --output policy-v1-report.json
+python scripts/evaluate_adjudicated_reviews.py shared-review-queue.json \\
+  --adjudications shared-adjudications.json --output policy-v2-report.json
+python scripts/audit_evaluation_baseline.py policy-v1-report.json \\
+  --baseline baseline-v1.json --output policy-v1-gate.json
+python scripts/audit_evaluation_baseline.py policy-v2-report.json \\
+  --baseline baseline-v2.json --output policy-v2-gate.json
+python scripts/compare_policy_evaluations.py policy-v1-report.json policy-v2-report.json \\
+  --baseline-gate policy-v1-gate.json --candidate-gate policy-v2-gate.json \\
+  --output policy-comparison.json
+pytest -q tests/test_compare_policy_evaluations.py
+```
+
+The comparison blocks unless both policy-specific baseline audits pass, candidate IDs and
+adjudicated labels match, evidence fingerprints match, and the sampling method and seed
+match. It reports precision/recall deltas and per-disposition counts for included, excluded,
+duplicate, and out-of-scope candidates. Each report's own baseline must pin its policy version.
+A comparable result is descriptive only: it does not prove causality or statistical
+significance, and it cannot correct a non-representative sample. Use the exact same
+reviewed candidate/evidence set and adjudication file; do not re-adjudicate between policy
+runs when measuring the policy effect.
