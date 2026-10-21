@@ -112,3 +112,17 @@ def test_aggregate_metrics_report_review_coverage_for_valid_records(tmp_path):
     assert result["candidate_review_coverage"]["total_candidates"] == 4
     assert result["candidate_review_coverage"]["rate"] == 0.25
     assert "representative" in result["candidate_review_coverage"]["warning"]
+
+
+def test_evaluation_report_preserves_sampling_metadata():
+    record = record_with_reviews()
+    record["evaluation_sampling"] = {
+        "method": "deterministic_stratified_by_disposition",
+        "seed": "fixed-seed",
+        "per_disposition_cap": 2,
+    }
+
+    result = evaluate_record(record)
+
+    assert result["evaluation_sampling"]["method"] == "deterministic_stratified_by_disposition"
+    assert result["evaluation_sampling"]["seed"] == "fixed-seed"
