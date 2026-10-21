@@ -103,3 +103,14 @@ pytest -q tests/test_shadow_verification_eval.py
 The harness feeds the exact same synthetic article pools to the current `verify_article` function and to a candidate policy requiring either an official primary source or at least two independent current reports, a fresh primary, and no recorded contradiction or derivative primary. It prints confusion matrices and precision/recall/F1 for both policies.
 
 **Interpretation boundary:** fixture labels are hand-authored and synthetic. These scores test that policy behavior matches the fixtures; they are not estimates of real-world accuracy. Current saved snapshots omit most original candidate articles and reliable story-level truth labels, so they cannot support a trustworthy historical precision/F1 estimate. This candidate policy is shadow-only: it does not alter production scoring, ranking, workflow dispatch, or notifications.
+
+
+## Verification regression coverage (Step 4)
+
+The regression suite `tests/test_verification_policy_regressions.py` exercises the existing production verifier on six focused cases: independent publishers, same-publisher URL aliases, near-identical syndicated copies, stale and roundup evidence, an official primary source, and unrelated reports sharing broad topic words. These tests protect existing intended behavior; they do not imply the production policy has changed or that the synthetic cases represent real-world prevalence.
+
+Run locally with:
+
+```bash
+pytest -q tests/test_verification_policy_regressions.py tests/test_shadow_verification_eval.py
+```
