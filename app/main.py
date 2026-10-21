@@ -254,6 +254,8 @@ def build_messages(result,today,stats,timeline=None):
     comparison=_daily_comparison(stories,timeline,today)
     analytics=stats.get("analytics") or {}
     weekly=analytics.get("last_7_days") or {}
+    research_verification=stats.get("research_verification") or {}
+    research_target_selection=stats.get("research_target_selection") or {}
     learning_total=max(1,int(stats.get("learning_labeled",0) or 0))
     miss_rate=float(stats.get("learning_miss_rate",0) or 0)
     fp_rate=float(stats.get("learning_fp_rate",0) or 0)
@@ -271,6 +273,7 @@ def build_messages(result,today,stats,timeline=None):
         "",
         "🧪 <b>QUALITY & VERIFICATION</b>",
         f"Coverage {stats.get('current_evidence',0)}/{stats.get('total',0)} · Strong {stats.get('strong_verified',0)}/{stats.get('total',0)} · Contradictions {stats.get('contradictions',0)}",
+        f"Independent-source coverage {float(research_verification.get('independent_source_coverage',0) or 0):.0%} · research targets {int(research_target_selection.get('selected',0) or 0)} · zero-independent candidates {int(research_target_selection.get('zero_independent_candidates',0) or 0)}",
         f"Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} healthy · warnings {stats.get('source_warnings',0)} · failures {stats.get('source_failures',0)}",
         f"Candidates {stats.get('candidates',0)} · filtered duplicates {stats.get('exact_duplicates',0)} · semantic {stats.get('semantic_filtered',0)}",
         "",

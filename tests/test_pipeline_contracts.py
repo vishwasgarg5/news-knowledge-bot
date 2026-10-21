@@ -350,7 +350,9 @@ def test_telegram_output_v2_contract():
            "candidates":10,"exact_duplicates":1,"semantic_filtered":2,
            "learning_labeled":100,"learning_success_rate":0.8,"learning_miss_rate":0.1,
            "learning_fp_rate":0.1,"ai_generated":1,"ai_fallback":1,"health":"PASS",
-           "runtime":"1.2s","analytics":{"last_7_days":{"runs":5,"avg_success_rate":0.75,"avg_miss_rate":0.12}}}
+           "runtime":"1.2s","research_verification":{"independent_source_coverage":0.25},
+           "research_target_selection":{"selected":12,"zero_independent_candidates":18},
+           "analytics":{"last_7_days":{"runs":5,"avg_success_rate":0.75,"avg_miss_rate":0.12}}}
     messages=build_messages(result,"2026-10-07",stats,[])
     payload="\n".join(messages)
     assert "EXECUTIVE SUMMARY" in payload
@@ -359,6 +361,8 @@ def test_telegram_output_v2_contract():
     assert "INDIA" in payload and "WORLD" in payload
     assert "DETAILED STORIES" in payload
     assert "STRONG" in payload and "SINGLE SOURCE" in payload
+    assert "Independent-source coverage 25%" in payload
+    assert "research targets 12" in payload and "zero-independent candidates 18" in payload
 
 
 def test_quality_intelligence_v2_contract(tmp_path):
