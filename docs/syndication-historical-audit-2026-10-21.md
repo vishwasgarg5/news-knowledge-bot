@@ -68,3 +68,24 @@ pytest -q tests/test_syndication_replay.py
 ```
 
 The report is deterministic for a given snapshot and detector version. It counts only evidence rows saved in each snapshot, so results remain retrospective estimates and cannot establish how many duplicates were present in the full candidate pool.
+
+
+## Offline verification-gap analyzer
+
+Use the new diagnostic script against the current local snapshot or any historical snapshot commit:
+
+```bash
+python scripts/analyze_verification_gaps.py
+python scripts/analyze_verification_gaps.py --json
+python scripts/analyze_verification_gaps.py --revision 2026-10-19=14f385a048bbb6a2f28a32a528c1dbd36881dbb5
+```
+
+To compare multiple saved snapshots in one report, repeat `--revision DATE=GIT_SHA`. The analyzer uses the existing production publisher-normalization, roundup, copy-similarity, and event-match helpers, but only against evidence already present in the snapshot. It reports missing corroboration, thin independent-source coverage, stale or unknown freshness, repeated publisher identity, near-identical copies, derivative/roundup evidence, weak headline matches, missing timestamps, and recorded contradiction flags.
+
+Evidence is marked definitely stale only if it was already more than 72 hours old at the **start** of the snapshot date. That conservative rule avoids inventing an exact snapshot time. All findings are heuristic diagnostic flags—not factual accuracy labels, not a replacement verification score, and not evidence that a missing candidate existed. The script reads local Git objects only; it does not fetch news, change production scoring, mutate snapshots, run the pipeline, or send Telegram messages.
+
+Run focused tests with:
+
+```bash
+pytest -q tests/test_verification_gap_analyzer.py
+```
