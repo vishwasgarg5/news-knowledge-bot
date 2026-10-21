@@ -42,3 +42,19 @@ For repeatable policy naming, configure `NEWS_POLICY_VERSION` in the runtime
 environment to an immutable policy identifier. The default commit reference is
 a code revision marker, not a claim that the verification policy itself is
 independently versioned.
+
+
+## Review queue audit
+
+Inspect captured records without modifying them:
+
+```bash
+python scripts/audit_evaluation_captures.py --json
+```
+
+The audit reports run IDs, candidate-pool size, included/excluded counts, label counts,
+and missing candidate metadata. It never creates labels. Missing metadata is reported
+for reviewer follow-up without failing routine validation CI; unreadable or malformed
+JSON records are still reported as invalid. No accuracy metric should be computed until
+the candidate records have been independently reviewed and the evaluation record
+passes `scripts/validate_evaluation_record.py`.
