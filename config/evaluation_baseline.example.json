@@ -1,0 +1,13 @@
+{
+  "baseline_version": "1.0",
+  "policy_version": "REPLACE_WITH_IMMUTABLE_POLICY_ID",
+  "thresholds": {
+    "minimum_eligible_candidates": 30,
+    "minimum_eligible_per_disposition": 5,
+    "minimum_review_coverage": 0.5
+  },
+  "notes": [
+    "Replace the policy placeholder with the exact immutable policy identifier used by the evaluated run.",
+    "Thresholds are starting operational safeguards; calibrate them to the evaluation design before relying on results."
+  ]
+}
