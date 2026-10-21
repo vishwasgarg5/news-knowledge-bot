@@ -95,6 +95,32 @@ def _select_research_targets(candidates, preflight_research, query_limit, per_re
     return targets, region_counts, priority_counts
 
 
+def _discovery_match_metrics(discovered_articles, research):
+    """Measure how many fresh external search results become matched evidence."""
+    discovered_urls = {
+        str(row.get("url", "")).strip()
+        for row in (discovered_articles or [])
+        if isinstance(row, dict) and str(row.get("url", "")).strip()
+    }
+    matched_urls = set()
+    for value in (research or {}).values():
+        if not isinstance(value, dict):
+            continue
+        for evidence in value.get("evidence") or []:
+            if not isinstance(evidence, dict):
+                continue
+            url = str(evidence.get("url", "")).strip()
+            if url in discovered_urls:
+                matched_urls.add(url)
+    total = len(discovered_urls)
+    matched = len(matched_urls)
+    return {
+        "articles_found": total,
+        "matched_articles": matched,
+        "match_rate": round(matched / total, 3) if total else 0.0,
+    }
+
+
 
 
 def _verification_counts(research_rows):
@@ -328,6 +354,7 @@ def build_messages(result,today,stats,timeline=None):
         f"📡 <b>SYSTEM</b> · health {stats.get('health','UNKNOWN')} · runtime {stats.get('runtime')} · model {configured_model()}",
         f"Coverage gaps: {', '.join(stats.get('coverage_gaps') or []) or 'none'}",
         f"Category research {int((stats.get('category_research') or {}).get('queries',0))} queries · {int((stats.get('category_research') or {}).get('articles_found',0))} fresh candidates",
+        f"Research corroboration yield {int((stats.get('research_discovery') or {}).get('matched_articles',0))}/{int((stats.get('research_discovery') or {}).get('articles_found',0))} ({float((stats.get('research_discovery') or {}).get('match_rate',0) or 0):.0%}) · distinct publishers {int((stats.get('research_discovery') or {}).get('unique_publishers',0) or 0)}",
         f"Fallback sources: {len((stats.get('source_fallback') or {}).get('weak_sources',[]))}",
         f"Final audit: {(stats.get('final_audit') or {}).get('health','UNKNOWN')}",
     ]
@@ -452,6 +479,7 @@ def main():
         all_articles.extend(discovered_articles)
 
     research=research_stories(candidates,timeline,all_articles); research_stats=research.get("_stats",{}); research.pop("_stats",None)
+    research_discovery_stats.update(_discovery_match_metrics(discovered_articles,research))
     # rerank_stories already enforces verification, event-family, source and
     # regional quotas. A second destructive filter here removed eligible stories
     # without backfilling, causing avoidable India/World coverage shortfalls.

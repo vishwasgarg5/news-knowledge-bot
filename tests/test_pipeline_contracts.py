@@ -158,6 +158,29 @@ def test_related_discovery_filters_stale_results_and_reports_supply_metrics(monk
     assert metrics["missing_timestamp"] == 0
 
 
+def test_discovery_match_metrics_counts_unique_matched_urls():
+    from app.main import _discovery_match_metrics
+
+    discovered = [
+        {"url": "https://reuters.com/story-a"},
+        {"url": "https://bbc.com/story-b"},
+        {"url": "https://bbc.com/story-b"},
+    ]
+    research = {
+        "story-1": {"evidence": [{"url": "https://reuters.com/story-a"}]},
+        "story-2": {"evidence": [
+            {"url": "https://bbc.com/story-b"},
+            {"url": "https://unrelated.com/story-c"},
+        ]},
+    }
+    assert _discovery_match_metrics(discovered, research) == {
+        "articles_found": 2, "matched_articles": 2, "match_rate": 1.0
+    }
+    assert _discovery_match_metrics([], research) == {
+        "articles_found": 0, "matched_articles": 0, "match_rate": 0.0
+    }
+
+
 def test_research_target_selection_respects_budget_and_region_caps():
     from app.main import _select_research_targets
 

@@ -253,6 +253,8 @@ jobs:
           assert 0 <= int(target_selection.get("zero_independent_candidates",0) or 0) <= int(target_selection.get("preflight_candidates",0) or 0)
           assert int(discovery.get("articles_found",0) or 0) >= 0
           assert int(discovery.get("unique_publishers",0) or 0) <= int(discovery.get("articles_found",0) or 0)
+          assert 0 <= int(discovery.get("matched_articles",0) or 0) <= int(discovery.get("articles_found",0) or 0)
+          assert 0.0 <= float(discovery.get("match_rate",0) or 0) <= 1.0
           assert 0.0 <= float(verification.get("independent_source_coverage",0) or 0) <= 1.0
           # A held research/coverage gate must not be reported as a clean final audit.
           gate=stats.get("v5_quality_gate") or {}
