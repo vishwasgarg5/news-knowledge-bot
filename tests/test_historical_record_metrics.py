@@ -20,7 +20,10 @@ def record_with_reviews():
             {"candidate_id": "c4", "title": "Uncertain excluded", "source": "D", "url": "https://d.example/4",
              "published_at": "2026-10-21T09:03:00+05:30", "summary": "Summary", "disposition": "excluded"},
         ],
-        "story_labels": [],
+        "story_labels": [
+            {"story_id": "claim-1", "label": "supported", "reviewer_id": "reviewer-1",
+             "reviewed_at": "2026-10-21T10:30:00+05:30", "rationale": "Independently checked claim."}
+        ],
         "candidate_reviews": [
             {"candidate_id": "c1", "relevance_label": "relevant", "reviewer_id": "reviewer-1",
              "reviewed_at": "2026-10-21T11:00:00+05:30", "rationale": "Matches evaluation scope."},
