@@ -140,23 +140,61 @@ def evaluate() -> dict[str, Any]:
         candidate_accept = official or (
             independent >= 2 and primary_fresh and not contradiction and not derivative
         )
-        labels.append(bool(case["label"]))
+        label = bool(case["label"])
+        baseline_error = (
+            "false_positive" if baseline_accept and not label else
+            "false_negative" if label and not baseline_accept else None
+        )
+        candidate_error = (
+            "false_positive" if candidate_accept and not label else
+            "false_negative" if label and not candidate_accept else None
+        )
+        labels.append(label)
         baseline.append(baseline_accept)
         candidate.append(candidate_accept)
         rows.append({
-            "case": case["id"], "label": bool(case["label"]),
+            "case": case["id"], "label": label,
             "baseline_accept": baseline_accept, "candidate_accept": candidate_accept,
+            "baseline_correct": baseline_accept == label,
+            "candidate_correct": candidate_accept == label,
+            "baseline_error": baseline_error, "candidate_error": candidate_error,
+            "decision_changed": baseline_accept != candidate_accept,
             "independent_sources": independent, "tier": result.get("verification"),
             "primary_fresh": primary_fresh, "contradiction": contradiction,
             "primary_derivative": derivative,
         })
+    baseline_metrics = _metrics(labels, baseline)
+    candidate_metrics = _metrics(labels, candidate)
     return {
         "evaluation_type": "synthetic_fixture_shadow_only",
         "cases": len(cases),
         "label_source": "hand-authored test fixtures; not historical ground truth",
-        "baseline_metrics": _metrics(labels, baseline),
-        "candidate_metrics": _metrics(labels, candidate),
+        "baseline_metrics": baseline_metrics,
+        "candidate_metrics": candidate_metrics,
         "cases_detail": rows,
+        "error_cases": {
+            "baseline": [row for row in rows if row["baseline_error"]],
+            "candidate": [row for row in rows if row["candidate_error"]],
+        },
+        "decision_changes": [
+            {
+                "case": row["case"], "label": row["label"],
+                "baseline_accept": row["baseline_accept"],
+                "candidate_accept": row["candidate_accept"],
+                "baseline_error": row["baseline_error"],
+                "candidate_error": row["candidate_error"],
+            }
+            for row in rows if row["decision_changed"]
+        ],
+        "comparison_summary": {
+            "baseline_errors": baseline_metrics["fp"] + baseline_metrics["fn"],
+            "candidate_errors": candidate_metrics["fp"] + candidate_metrics["fn"],
+            "candidate_error_delta": (
+                candidate_metrics["fp"] + candidate_metrics["fn"]
+                - baseline_metrics["fp"] - baseline_metrics["fn"]
+            ),
+            "decisions_changed": sum(row["decision_changed"] for row in rows),
+        },
         "limitations": [
             "Synthetic fixtures do not estimate real-world precision, recall, or F1.",
             "The baseline and candidate run against the same fixture article pools.",
