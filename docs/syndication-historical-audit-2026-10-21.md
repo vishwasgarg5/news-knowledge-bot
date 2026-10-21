@@ -42,3 +42,29 @@ Examples of sources in likely-copy groups included TelegraphHerald.com, Nonstop 
 - October 19 snapshot: https://github.com/vishwasgarg5/news-knowledge-bot/blob/14f385a048bbb6a2f28a32a528c1dbd36881dbb5/data/operational_snapshot.json
 - October 20 snapshot: https://github.com/vishwasgarg5/news-knowledge-bot/blob/57e7c97c17fe39baf829ef4f5d9be521bfaed2d0/data/operational_snapshot.json
 - October 21 snapshot: https://github.com/vishwasgarg5/news-knowledge-bot/blob/8626e62e354567f7dbaf02afb74791bdbb10074f/data/operational_snapshot.json
+
+
+## Reproduce the historical replay
+
+From a local clone that contains the three snapshot commits, run:
+
+```bash
+python scripts/replay_syndication_audit.py
+python scripts/replay_syndication_audit.py --json
+```
+
+To replay a specific revision, pass one or more explicit `DATE=GIT_SHA` values:
+
+```bash
+python scripts/replay_syndication_audit.py --revision 2026-10-19=14f385a048bbb6a2f28a32a528c1dbd36881dbb5
+```
+
+The script uses `git show` against local Git objects and the exact current detector in `app.research._same_reporting_copy`; it does not make network requests. If a historical object is not in the local clone, make that commit available through your normal Git workflow before replaying it. Unit tests use synthetic fixtures and do not require historical objects.
+
+Regression tests:
+
+```bash
+pytest -q tests/test_syndication_replay.py
+```
+
+The report is deterministic for a given snapshot and detector version. It counts only evidence rows saved in each snapshot, so results remain retrospective estimates and cannot establish how many duplicates were present in the full candidate pool.
