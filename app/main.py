@@ -333,6 +333,7 @@ def build_messages(result,today,stats,timeline=None):
         "🧪 <b>QUALITY & VERIFICATION</b>",
         f"Coverage {stats.get('current_evidence',0)}/{stats.get('total',0)} · Strong {stats.get('strong_verified',0)}/{stats.get('total',0)} · Contradictions {stats.get('contradictions',0)}",
         f"Independent-source coverage {float(research_verification.get('independent_source_coverage',0) or 0):.0%} · research targets {int(research_target_selection.get('selected',0) or 0)} · zero-independent candidates {int(research_target_selection.get('zero_independent_candidates',0) or 0)}",
+        f"Near-identical syndicated copies excluded {int(research_verification.get('duplicate_reporting_copies_excluded',0) or 0)}",
         f"Sources {stats.get('source_ok',0)}/{stats.get('source_total',0)} healthy · warnings {stats.get('source_warnings',0)} · failures {stats.get('source_failures',0)}",
         f"Candidates {stats.get('candidates',0)} · filtered duplicates {stats.get('exact_duplicates',0)} · semantic {stats.get('semantic_filtered',0)}",
         "",
