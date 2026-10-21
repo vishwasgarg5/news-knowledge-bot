@@ -21,6 +21,7 @@ from .intelligence_v5_plus import run_v5_plus,answer_news_question,research_repo
 from .production_v5 import walk_forward_v5,shadow_ab_test,calibration_monitor,drift_monitor,autonomous_research_agent,generate_research_reports,contradiction_and_evidence,followup_research_plan,production_evaluation
 from .guardrails import temporal_drift_windows,coverage_audit
 from .intelligence_v4 import diagnose_learning,time_bucket_metrics,event_level_metrics,calibration_v2,source_category_profile,apply_intelligence_v4,feedback_learning,walk_forward_optimization,compare_strategies,production_decision,calibrated_score
+from scripts.evaluation_capture import write_capture_record
 
 IST=ZoneInfo("Asia/Kolkata"); RUN_SLOT=os.getenv("RUN_SLOT","manual").lower()
 
@@ -440,6 +441,23 @@ def main():
         x['personalized_score']=max(0.0,float(x.get('personalized_score',x.get('importance',0)) or 0)+x['feedback_adjustment'])
     candidates=prepare_candidates(candidates,read_rows(DATA/"news_history.csv"))
     candidates=apply_intelligence_v4(candidates,v4_profile,v4_calibration)
+    # Capture the original collected pool for later human-labelled evaluation.
+    # This is intentionally observational: it does not change candidate ranking,
+    # verification, briefing contents, or delivery.
+    try:
+        capture_timestamp=datetime.now(IST).isoformat()
+        included_urls={str(row.get("url","")).strip() for row in candidates if str(row.get("url","")).strip()}
+        capture_path=write_capture_record(
+            all_articles,
+            included_urls,
+            DATA/"historical_evaluation_records",
+            capture_timestamp,
+            run_slot=RUN_SLOT,
+            policy_version=os.getenv("NEWS_POLICY_VERSION",f"git:{os.getenv('GITHUB_SHA','unversioned')}"),
+        )
+        print(f"[EVALUATION_CAPTURE] saved candidate pool: {capture_path} ({len(all_articles)} articles; labels pending)",flush=True)
+    except Exception as exc:
+        print(f"[WARN] evaluation candidate capture failed: {exc}",flush=True)
     plan=coverage_plan(candidates,world_target=int(os.getenv("NEWS_WORLD_TOP","5")),india_target=int(os.getenv("NEWS_INDIA_TOP","5")))
     print(f"[INTELLIGENCE] coverage_gaps={coverage_gaps(candidates)} plan={plan}",flush=True)
 
