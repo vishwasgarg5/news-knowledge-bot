@@ -17,6 +17,8 @@ SCHEMA_VERSION = "1.0"
 LABELS = {"supported", "not_supported", "uncertain"}
 CANDIDATE_REQUIRED = ("candidate_id", "title", "source", "url", "published_at", "summary", "disposition")
 LABEL_REQUIRED = ("story_id", "label", "reviewer_id", "reviewed_at", "rationale")
+CANDIDATE_REVIEW_REQUIRED = ("candidate_id", "relevance_label", "reviewer_id", "reviewed_at", "rationale")
+RELEVANCE_LABELS = {"relevant", "not_relevant", "uncertain"}
 DISPOSITIONS = {"included", "excluded", "duplicate", "out_of_scope"}
 
 
@@ -94,6 +96,34 @@ def validate_record(record: Any) -> list[str]:
         if not _valid_timestamp(label.get("reviewed_at")):
             errors.append(f"{prefix}_reviewed_at_must_be_timezone_aware_iso8601")
         if label.get("label") == "uncertain" and not _nonempty(label.get("rationale")):
+            errors.append(f"{prefix}_uncertain_label_requires_rationale")
+
+    candidate_reviews = record.get("candidate_reviews", [])
+    if not isinstance(candidate_reviews, list):
+        errors.append("candidate_reviews_must_be_list")
+        candidate_reviews = []
+    seen_review_ids: set[str] = set()
+    known_candidate_ids = seen_candidates
+    for index, review in enumerate(candidate_reviews):
+        prefix = f"candidate_reviews[{index}]"
+        if not isinstance(review, dict):
+            errors.append(f"{prefix}_must_be_object")
+            continue
+        for field in CANDIDATE_REVIEW_REQUIRED:
+            if not _nonempty(review.get(field)):
+                errors.append(f"{prefix}_{field}_required")
+        candidate_id = review.get("candidate_id")
+        if _nonempty(candidate_id):
+            if candidate_id in seen_review_ids:
+                errors.append(f"{prefix}_candidate_id_duplicate")
+            seen_review_ids.add(candidate_id)
+            if known_candidate_ids and candidate_id not in known_candidate_ids:
+                errors.append(f"{prefix}_candidate_id_unknown")
+        if review.get("relevance_label") not in RELEVANCE_LABELS:
+            errors.append(f"{prefix}_relevance_label_invalid")
+        if not _valid_timestamp(review.get("reviewed_at")):
+            errors.append(f"{prefix}_reviewed_at_must_be_timezone_aware_iso8601")
+        if review.get("relevance_label") == "uncertain" and not _nonempty(review.get("rationale")):
             errors.append(f"{prefix}_uncertain_label_requires_rationale")
 
     return errors
