@@ -114,3 +114,10 @@ Run locally with:
 ```bash
 pytest -q tests/test_verification_policy_regressions.py tests/test_shadow_verification_eval.py
 ```
+
+
+## Expanded shadow fixture coverage (Step 5)
+
+The shadow evaluation now includes four additional labelled synthetic scenarios: duplicate URLs/aliases for one publisher, two independent reports sharing a headline but using distinct summaries, conflicting reporting that should surface a contradiction flag, and a derivative roundup as the primary item. The total fixture count is ten, with five positive and five negative labels. Tests assert the expected source count and diagnostic signals.
+
+These are controlled behavior checks, not independently adjudicated news examples. Contradiction markers are lexical heuristics and do not determine which claim is true. Production policy, ranking, and delivery remain unchanged.
