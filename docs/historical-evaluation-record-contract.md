@@ -20,3 +20,25 @@ pytest -q tests/test_evaluation_record_contract.py
 ## Operational boundary
 
 This is an offline data-contract addition only. It does not create labels, fetch articles, change production decisions, modify the scheduled run, or send notifications. The existing readiness audit remains a separate snapshot-shape check; a schema-valid record is not proof that its labels are correct.
+
+
+## Automatic candidate-pool capture
+
+The production pipeline now writes a run-specific record to
+`data/historical_evaluation_records/` after its candidate list has been prepared.
+The capture includes collected articles, a deterministic candidate ID, source
+metadata, whether the candidate entered the prepared candidate set, the run
+timestamp, and a policy-version identifier (the `NEWS_POLICY_VERSION` setting
+if supplied, otherwise the GitHub commit SHA when available).
+
+Capture deliberately writes `story_labels: []` and
+`labeling_status: "pending_review"`. It never converts the production
+verification decision into a truth label. A reviewer must add independent
+labels and complete missing source fields before the record is suitable for
+evaluation. Capture errors are logged as warnings and do not alter ranking or
+briefing delivery.
+
+For repeatable policy naming, configure `NEWS_POLICY_VERSION` in the runtime
+environment to an immutable policy identifier. The default commit reference is
+a code revision marker, not a claim that the verification policy itself is
+independently versioned.
