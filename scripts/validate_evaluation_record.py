@@ -74,8 +74,14 @@ def validate_record(record: Any) -> list[str]:
             errors.append(f"{prefix}_published_at_must_be_timezone_aware_iso8601")
 
     labels = record.get("story_labels")
-    if not isinstance(labels, list) or not labels:
+    # Candidate-relevance evaluation is valid independently of claim-truth
+    # review. Require story_labels when no candidate reviews are supplied, but
+    # never substitute one label type for the other.
+    has_candidate_reviews = isinstance(record.get("candidate_reviews"), list) and bool(record.get("candidate_reviews"))
+    if not isinstance(labels, list) or (not labels and not has_candidate_reviews):
         errors.append("story_labels_must_be_nonempty_list")
+        labels = []
+    elif not isinstance(labels, list):
         labels = []
     seen_stories: set[str] = set()
     for index, label in enumerate(labels):
