@@ -66,6 +66,42 @@ def labelled_cases() -> list[dict[str, Any]]:
             ],
         },
         {
+            "id": "publisher-aliases-same-identity",
+            "label": True,
+            "story": {"headline": "City council approves new bridge funding after flood damage", "source": "Local News", "url": "https://local.example/bridge-funding", "published": _published(3), "summary": ""},
+            "articles": [
+                _article("City council approves new bridge funding after flood damage", "Reuters", "https://www.reuters.com/world/bridge-a"),
+                _article("City council approves new bridge funding after flood damage", "Reuters.com", "https://www.reuters.com/world/bridge-b"),
+            ],
+        },
+        {
+            "id": "same-headline-distinct-independent-reporting",
+            "label": True,
+            "story": {"headline": "Government approves new flood barrier after severe river flooding", "source": "Local News", "url": "https://local.example/flood-independent", "published": _published(3), "summary": ""},
+            "articles": [
+                _article("Government approves new flood barrier after severe river flooding", "Reuters", "https://www.reuters.com/world/flood-a", summary="Officials said the barrier followed a new hydrology review and budget approval."),
+                _article("Government approves new flood barrier after severe river flooding", "Associated Press", "https://apnews.com/article/flood-b", summary="Local authorities said construction will begin after a public procurement process."),
+            ],
+        },
+        {
+            "id": "conflicting-reporting-flags-contradiction",
+            "label": False,
+            "story": {"headline": "Regulator confirms regional bank licence remains active after audit", "source": "Local News", "url": "https://local.example/licence", "published": _published(3), "summary": "The regulator confirmed the licence remains active."},
+            "articles": [
+                _article("Regulator confirms regional bank licence remains active after audit", "Reuters", "https://www.reuters.com/business/licence", summary="The regulator denies reports that it suspended the bank licence and says the licence remains active."),
+                _article("Regulator confirms regional bank licence remains active after audit", "Associated Press", "https://apnews.com/article/licence", summary="Officials say the bank's licence remains active following the audit."),
+            ],
+        },
+        {
+            "id": "derivative-primary-roundup",
+            "label": False,
+            "story": {"headline": "Daily news roundup: regulator suspends regional bank licence after audit", "source": "Daily News Roundup", "url": "https://digest.example/bank", "published": _published(3), "summary": ""},
+            "articles": [
+                _article("Regulator suspends regional bank licence after audit", "Reuters", "https://www.reuters.com/business/bank-roundup"),
+                _article("Regulator suspends regional bank licence after audit", "Associated Press", "https://apnews.com/article/bank-roundup"),
+            ],
+        },
+        {
             "id": "official-primary-source",
             "label": True,
             "story": {"headline": "Ministry announces revised national flood warning system", "source": "pib.gov.in", "url": "https://pib.gov.in/example", "published": _published(2), "summary": ""},
