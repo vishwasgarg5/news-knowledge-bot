@@ -204,8 +204,17 @@ def _same_reporting_copy(left, right):
     right_summary = str(right.get("summary", "") or "").strip()
     title_tokens = _tokens(left_title) & _tokens(right_title)
     summary_tokens = _tokens(left_summary) & _tokens(right_summary)
-    # Require substantial lexical overlap, not just a shared subject or event.
-    title_copy = len(title_tokens) >= 6 and _similar(left_title, right_title) >= 0.78
+    # Headline similarity alone can falsely collapse independent reporting that
+    # uses the same short wire-style headline. When both summaries are present,
+    # require them to overlap too; if a summary is absent, title-only detection
+    # remains a cautious fallback for likely syndicated copies.
+    title_similar = len(title_tokens) >= 6 and _similar(left_title, right_title) >= 0.78
+    summaries_support_copy = (
+        not left_summary
+        or not right_summary
+        or (len(summary_tokens) >= 10 and _similar(left_summary, right_summary) >= 0.82)
+    )
+    title_copy = title_similar and summaries_support_copy
     summary_copy = len(summary_tokens) >= 10 and _similar(left_summary, right_summary) >= 0.82
     return bool(title_copy or summary_copy)
 def _is_official(source): return _source_key(source) in OFFICIAL

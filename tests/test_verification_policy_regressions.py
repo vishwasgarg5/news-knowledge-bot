@@ -17,11 +17,11 @@ def article(title: str, source: str, url: str, hours_ago: float = 2, summary: st
     return {"title": title, "source": source, "url": url, "published": published(hours_ago), "summary": summary}
 
 
-def test_two_independent_publishers_support_multi_source_tier():
+def test_same_headline_with_distinct_reporting_summaries_counts_independent_publishers():
     headline = "Government approves new flood barrier after severe river flooding"
     result = verify_article(story(headline), [
-        article(headline, "Reuters", "https://www.reuters.com/world/flood"),
-        article("Government approves flood barrier after severe river flooding", "Associated Press", "https://apnews.com/article/flood"),
+        article(headline, "Reuters", "https://www.reuters.com/world/flood", summary="Officials said the barrier was approved after an extensive flood risk review."),
+        article(headline, "Associated Press", "https://apnews.com/article/flood", summary="Local authorities announced construction funding and a revised engineering schedule."),
     ])
     assert result["independent_sources"] == 2
     assert result["verification"] == "multi-source"
