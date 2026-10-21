@@ -49,6 +49,19 @@ def _research_target_priority(candidate, evidence=None):
     return 4
 
 
+def _underfilled_research_categories(initial_gaps, candidates, min_candidates=2):
+    """Keep a second discovery pass active for categories with thin coverage."""
+    minimum = max(1, int(min_candidates))
+    requested = list(dict.fromkeys(str(x).strip().lower() for x in (initial_gaps or []) if str(x).strip()))
+    counts = {}
+    for row in candidates or []:
+        if not isinstance(row, dict):
+            continue
+        category = str(row.get("category", "other") or "other").strip().lower()
+        counts[category] = counts.get(category, 0) + 1
+    return [category for category in requested if counts.get(category, 0) < minimum]
+
+
 
 
 def _verification_counts(research_rows):
@@ -319,7 +332,7 @@ def main():
     # If selection still exposes an economy/defence gap, use a second set of
     # query variants within the same explicit total budget. Discovery results
     # remain candidates and do not bypass ranking or verification gates.
-    remaining_gaps=[gap for gap in coverage_gaps(candidates) if gap in {"economy","defence"}]
+    remaining_gaps=_underfilled_research_categories(initial_gaps,candidates,min_candidates=2)
     remaining_budget=max(0,category_budget-int(category_research_stats.get("queries",0) or 0))
     if remaining_gaps and remaining_budget:
         extra_articles,extra_stats=discover_category_articles(
@@ -337,12 +350,14 @@ def main():
             "articles_found":int(category_research_stats.get("articles_found",0) or 0)+int(extra_stats.get("articles_found",0) or 0),
             "initial_gaps":initial_gaps,
             "remaining_gaps_before_second_pass":remaining_gaps,
+            "minimum_candidates_per_category":2,
             "second_pass":True,
         }
         candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
     else:
         category_research_stats["initial_gaps"]=initial_gaps
         category_research_stats["remaining_gaps_before_second_pass"]=remaining_gaps
+        category_research_stats["minimum_candidates_per_category"]=2
         category_research_stats["second_pass"]=False
     print(f"[CATEGORY_RESEARCH] preflight_gaps={initial_gaps} remaining_gaps={remaining_gaps} queries={category_research_stats.get('queries',0)} added={len(category_articles)}",flush=True)
 

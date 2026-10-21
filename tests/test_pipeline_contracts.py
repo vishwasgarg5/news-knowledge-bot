@@ -83,6 +83,21 @@ def test_category_research_uses_fresh_results_and_deduplicates(monkeypatch):
     )
     assert articles2 == []
 
+def test_category_second_pass_targets_underfilled_categories():
+    from app.main import _underfilled_research_categories
+
+    initial = ["economy", "defence"]
+    candidates = [
+        {"category": "economy"},
+        {"category": "economy"},
+        {"category": "defence"},
+        {"category": "business"},
+    ]
+    assert _underfilled_research_categories(initial, candidates, min_candidates=2) == ["defence"]
+    assert _underfilled_research_categories(initial, [], min_candidates=2) == initial
+    assert _underfilled_research_categories(initial, candidates, min_candidates=1) == []
+
+
 def test_research_target_priority_favors_evidence_gaps():
     from app.main import _research_target_priority
 
@@ -279,6 +294,7 @@ def test_single_main_workflow_separates_validation_from_production():
     assert "python -m app.main" in text
     assert "actions/upload-artifact@v7" in text
     assert "NEWS_WORLD_TOP: '5'" in text
+    assert "NEWS_CATEGORY_RESEARCH_QUERIES: '8'" in text
     assert "NEWS_INDIA_TOP: '5'" in text
     assert "git add data/" in text
 
