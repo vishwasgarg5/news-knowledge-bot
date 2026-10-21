@@ -1757,7 +1757,11 @@ def test_research_discovery_parses_google_news_publisher_and_freshness(monkeypat
     assert len(found) == 1
     assert found[0]["source"] == "BBC News"
     assert found[0]["published"].startswith("2026-10-19T08:00:00")
-    assert metrics == {"queries": 1, "failed_queries": 0, "articles_found": 1}
+    assert metrics["queries"] == 1
+    assert metrics["failed_queries"] == 0
+    assert metrics["articles_found"] == 1
+    assert metrics["stale_skipped"] == 0
+    assert metrics["unique_publishers"] == 1
     assert research._source_key(found[0]["source"], found[0]["url"]) == "bbc"
 
 
@@ -1773,7 +1777,10 @@ def test_research_discovery_is_bounded_and_tolerates_network_failures(monkeypatc
         max_queries=2,
     )
     assert found == []
-    assert metrics == {"queries": 2, "failed_queries": 2, "articles_found": 0}
+    assert metrics["queries"] == 2
+    assert metrics["failed_queries"] == 2
+    assert metrics["articles_found"] == 0
+    assert metrics["unique_publishers"] == 0
 
 
 def test_research_completion_rate_treats_empty_queue_as_complete():
