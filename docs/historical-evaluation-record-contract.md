@@ -77,3 +77,16 @@ pytest -q tests/test_historical_record_metrics.py
 ```
 
 The evaluator reports inclusion precision, recall, false positives (included but independently labelled not relevant), missed relevant candidates (excluded but labelled relevant), and candidate metadata field coverage. Uncertain reviews and duplicate/out-of-scope dispositions do not enter the precision/recall denominators. Unreviewed candidates are not treated as negatives. With no explicit candidate relevance labels, precision and recall are reported as null rather than guessed. Results are offline descriptive metrics, not proof of real-world performance or label quality.
+
+
+## Review coverage is part of every result
+
+The offline evaluator reports the number and share of candidates with explicit relevance
+reviews, both overall and by disposition (included, excluded, duplicate, and
+out_of_scope). Aggregate coverage is pooled across schema-valid records only.
+
+Do not interpret precision/recall from a small or convenience-selected review sample as
+unbiased system accuracy. Review included and excluded candidates, record the sampling
+method outside the metric result, and expand review coverage when a disposition group
+has few or no reviewed candidates. Coverage describes what was reviewed; it does not
+prove the reviewed subset is representative.
