@@ -42,10 +42,10 @@ def _research_target_priority(candidate, evidence=None):
     verification = str(evidence.get("verification", "") or "")
     if independent == 0 and verification != "official-source":
         return 1
-    if independent <= 1:
-        return 2
     if verification == "official-source":
         return 3
+    if independent <= 1:
+        return 2
     return 4
 
 
