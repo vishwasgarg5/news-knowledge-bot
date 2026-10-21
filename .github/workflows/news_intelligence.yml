@@ -59,6 +59,10 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: pytest -q
+      - name: Print offline verification-gap report
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/analyze_verification_gaps.py
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
