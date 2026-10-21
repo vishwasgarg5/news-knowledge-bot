@@ -19,8 +19,8 @@
       "quality_rate": 1.0
     },
     "the guardian": {
-      "articles": 2,
-      "high_value": 2,
+      "articles": 3,
+      "high_value": 3,
       "quality_rate": 1.0
     },
     "times of india": {
@@ -33,11 +33,6 @@
       "high_value": 1,
       "quality_rate": 1.0
     },
-    "hindustan times": {
-      "articles": 4,
-      "high_value": 4,
-      "quality_rate": 1.0
-    },
     "et government": {
       "articles": 1,
       "high_value": 1,
@@ -46,6 +41,11 @@
     "bbc": {
       "articles": 6,
       "high_value": 6,
+      "quality_rate": 1.0
+    },
+    "hindustan times": {
+      "articles": 3,
+      "high_value": 3,
       "quality_rate": 1.0
     },
     "techcrunch": {
@@ -63,8 +63,8 @@
     "the hindu",
     "bbc",
     "times of india",
-    "hindustan times",
     "the guardian",
+    "hindustan times",
     "india today",
     "et government",
     "indian express",
@@ -861,11 +861,11 @@
         "event_id": "642d5ed331fdbd9d",
         "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
         "importance": 98.9,
-        "ranking_score": 104.2,
+        "ranking_score": 103.9,
         "personalized_score": 99.3,
         "personalization_applied": 99.3,
         "breaking_score": 90,
-        "trend_score": 93,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "preferred region + breaking",
         "learning_adjustment": -1.1,
@@ -892,6 +892,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "cedarnews.net"
           ],
@@ -902,7 +903,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 2.0,
+          "freshness_hours": 2.4,
           "calibrated_confidence": 70.0
         },
         "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -912,12 +913,12 @@
         "where": "Sydney",
         "why": "",
         "how": "",
-        "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+        "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
         "key_data": "",
-        "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-        "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+        "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+        "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
         "next": "",
-        "connection": "The RBA's decision-making process is now more closely",
+        "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -983,7 +984,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 94.0,
+        "momentum_score": 91.2,
         "early_signal": true
       },
       {
@@ -991,11 +992,11 @@
         "event_id": "1512b970b6b4f97c",
         "headline": "Can India turn retrofitment into the next mobility revolution?",
         "importance": 93.2,
-        "ranking_score": 76.2,
+        "ranking_score": 76.3,
         "personalized_score": 95.6,
         "personalization_applied": 95.6,
         "breaking_score": 65,
-        "trend_score": 82,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -1014,6 +1015,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -1022,7 +1024,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.5,
+          "freshness_hours": 0.8,
           "calibrated_confidence": 55.0
         },
         "what": "Can India turn retrofitment into the next mobility revolution?",
@@ -1034,10 +1036,10 @@
         "how": "",
         "why_important": "The shift towards retrofitment could create a new wave of entrepreneurship and employment opportunities in India's automotive sector.",
         "key_data": "",
-        "background": "India's automotive industry is facing challenges with traditional manufacturing, and there is a growing interest in sustainable mobility solutions.",
-        "change_since_yesterday": "Retrofitment could decentralize the automotive value chain, shifting from centralized manufacturing to a more distributed and localized model.",
-        "next": "The government may launch pilot programs to train local mechanics and workshops in retrofitting technologies.",
-        "connection": "India's efforts to reduce carbon emissions and its push towards electric mobility.",
+        "background": "India's automotive industry is facing challenges with the shift from traditional to electric vehicles, and retrofitment could be a viable solution to integrate existing vehicles into the green mobility revolution.",
+        "change_since_yesterday": "Retrofitment could democratize access to electric mobility by leveraging existing infrastructure and workforce, potentially bypassing the scale and centralization requirements of new EV manufacturing.",
+        "next": "",
+        "connection": "The article connects to previous news about India's push towards electric vehicles and the challenges of integrating them into the",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1103,7 +1105,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 81.5,
+        "momentum_score": 82.5,
         "early_signal": true
       },
       {
@@ -1111,11 +1113,11 @@
         "event_id": "ce5f3525c6acdc45",
         "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
         "importance": 84.9,
-        "ranking_score": 69.5,
+        "ranking_score": 69.3,
         "personalized_score": 90.2,
         "personalization_applied": 90.2,
         "breaking_score": 65,
-        "trend_score": 74,
+        "trend_score": 78,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -1134,6 +1136,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -1142,7 +1145,7 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 1.3,
+          "freshness_hours": 1.6,
           "calibrated_confidence": 55.0
         },
         "what": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
@@ -1152,10 +1155,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Shami's frustration over selectors overlooking him could lead to a potential rift within the team and affect team cohesion.",
+        "why_important": "Shami's frustration highlights the communication issues within the Indian selectors, potentially impacting team cohesion and performance.",
         "key_data": "",
-        "background": "Shami has had a successful career with Bengal and has been a key player for the team. He has previously been overlooked for selection in the national team.",
-        "change_since_yesterday": "Shami's vocalization of his concerns could lead to a more transparent communication process within the selectors and the team, potentially improving team dynamics.",
+        "background": "Shami has been a consistent performer for Bengal and has previously been a part of the Indian team. He has expressed concerns about selectors' communication, which has led to his current situation.",
+        "change_since_yesterday": "Shami's situation underscores the need for improved communication between selectors and players, as his voice is not being heard, potentially affecting his chances of being selected for future",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -1223,7 +1226,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 78.7,
+        "momentum_score": 80.0,
         "early_signal": true
       },
       {
@@ -1231,11 +1234,11 @@
         "event_id": "f4c006855c7b7a9d",
         "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "importance": 88.6,
-        "ranking_score": 71.1,
+        "ranking_score": 70.6,
         "personalized_score": 92.6,
         "personalization_applied": 92.6,
         "breaking_score": 45,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.4,
@@ -1254,6 +1257,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -1262,22 +1266,22 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.6,
+          "freshness_hours": 8.9,
           "calibrated_confidence": 55.0
         },
         "what": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "who": "Kiren Rijiju",
-        "who_detail": "Kiren Rijiju, Union Parliamentary Affairs Minister, with experience in parliamentary affairs.",
+        "who_detail": "Kiren Rijiju is the Union Parliamentary Affairs Minister, currently serving in the government.",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "His statement highlights the lack of cooperation from opposition parties in discussing delimitation with the government.",
+        "why_important": "Rijiju's statement suggests a lack of cooperation from opposition parties in the delimitation process, potentially impacting the government's plans for electoral reforms.",
         "key_data": "",
-        "background": "Delimitation is the process of dividing constituencies for electoral purposes, often contentious due to population changes and political interests.",
-        "change_since_yesterday": "Opposition parties have not engaged in dialogue on delimitation, unlike the government's expectation.",
-        "next": "The government",
-        "connection": "Rijiju's comments follow a pattern of opposition parties not participating in delimitation discussions, as evidenced in previous news.",
+        "background": "Delimitation is the process of redrawing electoral boundaries, which is crucial for upcoming elections. The government has been pushing for a resolution in this matter.",
+        "change_since_yesterday": "Opposition parties are not engaging in the delimitation process, which contrasts with their previous discussions with the government.",
+        "next": "",
+        "connection": "Other opposition parties have also been",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1343,7 +1347,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 76.9,
+        "momentum_score": 75.5,
         "early_signal": true
       },
       {
@@ -1351,7 +1355,7 @@
         "event_id": "3540370efe3eafa5",
         "headline": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
         "importance": 89.5,
-        "ranking_score": 96.6,
+        "ranking_score": 96.4,
         "personalized_score": 93.2,
         "personalization_applied": 93.2,
         "breaking_score": 40,
@@ -1382,6 +1386,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NPR Topics: World"
           ],
@@ -1392,7 +1397,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 11.4,
+          "freshness_hours": 11.8,
           "calibrated_confidence": 70.0
         },
         "what": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
@@ -1402,12 +1407,12 @@
         "where": "Canada",
         "why": "",
         "how": "",
-        "why_important": "The victory solidifies the Canadian government's stance on unity, potentially weakening separatist movements and altering political strategies in Canada.",
+        "why_important": "The result solidifies Carney's position as a key figure in Canadian governance and potentially strengthens his influence in Canadian unity efforts.",
         "key_data": "",
-        "background": "Alberta has been a stronghold for the separatist movement, with tensions over resource wealth distribution and federal funding.",
-        "change_since_yesterday": "The referendum result significantly reduces the separatist movement's momentum and may lead to a reassessment of federal policies towards Alberta.",
+        "background": "Alberta has been a stronghold for the separatist movement, and the referendum result deepens divisions within the province.",
+        "change_since_yesterday": "The result represents a significant setback for the separatist movement in Alberta, potentially altering the political landscape and future negotiations.",
         "next": "",
-        "connection": "The result aligns with a similar referendum in Quebec in 2025,",
+        "connection": "The referendum result aligns with previous polls showing strong support for Canadian unity in Alberta",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -1504,6 +1509,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -1512,7 +1518,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 36.2,
+          "freshness_hours": 36.5,
           "calibrated_confidence": 55.0
         },
         "what": "India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary",
@@ -1654,6 +1660,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NewsCord"
           ],
@@ -1664,7 +1671,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.1,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 70.0
         },
         "what": "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -1749,136 +1756,6 @@
         "early_signal": true
       },
       {
-        "story_id": "249136afadfb10e0",
-        "event_id": "8d88903d1b828a97",
-        "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "importance": 92.3,
-        "ranking_score": 95.4,
-        "personalized_score": 95.0,
-        "personalization_applied": 95.0,
-        "breaking_score": 25,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": -3.0,
-        "category": "world",
-        "region": "world",
-        "source": "Times of India",
-        "url": "https://timesofindia.indiatimes.com/world/europe/musk-ordered-slowdown-of-ukraines-starlink-network-leaving-kyiv-in-the-dark-report/articleshow/135078377.cms",
-        "summary": "US officials, however, have denied ordering any slowdown. Defence secretary Pete Hegseth said Washington had not directed any reduction in the satellite services, while secretary of state Marco Rubio maintained that the White House was not responsible for the reported disruption. Speaking to reporters, Hegseth said the US military had not instructed any changes to the satellite service used by Ukraine.",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "Elon Musk behind Starlink slowdown order that disrupted Ukraine's drones: Report",
-              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/world-news/elon-musk-ordered-starlink-slowdown-ukraine-drones-disruption-zelensky-trump-administration-russia-war-report-101792544687121.html",
-              "published": "2026-10-21T01:21:31+00:00",
-              "summary": "Elon Musk reportedly spoke to some Trump administration officials, including with the POTUS, before imposing the new speed cap order.&nbsp;"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
-          "fresh_sources": [
-            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 2,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.82,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 4.0,
-          "calibrated_confidence": 70.0
-        },
-        "what": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The US military's denial of ordering a slowdown in Starlink services could undermine trust in US leadership.",
-        "key_data": "",
-        "background": "SpaceX's Starlink satellite internet service is used by Ukraine for military communications.",
-        "change_since_yesterday": "The US military's denial shifts the blame from the US to Ukraine, potentially complicating diplomatic relations.",
-        "next": "Further investigation into the incident and potential changes to Starlink's operations in Ukraine.",
-        "connection": "SpaceX has been criticized for not adequately informing the US government about potential risks of its satellite internet service.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "published": "2026-10-20T23:51:55+00:00",
-        "calibrated_confidence": 70.0,
-        "impact": {
-          "level": "LOW",
-          "direction": "neutral",
-          "score": 40,
-          "confidence": 0.45,
-          "learned_rate": 0.45
-        },
-        "consequences": {
-          "event": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-          "impact": {
-            "level": "LOW",
-            "direction": "neutral",
-            "score": 40,
-            "confidence": 0.45
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.196,
-            "date": "2026-10-21",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.073,
-            "date": "2026-10-05",
-            "headline": "It’s not AI anymore, it’s ‘super intelligence’ (according to the White House)",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "Trump hosts Xi at White House state dinner with tech, finance heavy guest list",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-10-01",
-            "headline": "Elon Musk to co-lead US effort to study future of warfare, War Secretary Pete Hegseth announces",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 68.5,
-        "early_signal": false
-      },
-      {
         "story_id": "70dbf232135248d3",
         "event_id": "a98875445885925a",
         "headline": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -1913,6 +1790,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -1921,7 +1799,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.2,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 55.0
         },
         "what": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -2006,6 +1884,137 @@
         "early_signal": false
       },
       {
+        "story_id": "30e0969093732bb1",
+        "event_id": "fdf0ee4b4ca2c924",
+        "headline": "How is the US economy really doing under President Trump?",
+        "importance": 88.1,
+        "ranking_score": 94.9,
+        "personalized_score": 92.3,
+        "personalization_applied": 92.3,
+        "breaking_score": 5,
+        "trend_score": 85,
+        "emerging_topic": true,
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": -1.1,
+        "category": "business",
+        "region": "world",
+        "source": "BBC News",
+        "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+        "summary": "Ahead of the midterms Trump has boasted about the performance of the US economy. BBC Verify looks at inflation, jobs and economic growth in the country.",
+        "related_articles": [],
+        "verification": {
+          "evidence": [
+            {
+              "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+              "source": "Institute on Taxation and Economic Policy",
+              "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+              "published": "2026-10-20T17:20:24+00:00",
+              "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
+            }
+          ],
+          "historical": [],
+          "verification": "multi-report",
+          "confidence": 70,
+          "evidence_strength": 65,
+          "verification_reason": "one independent current publisher",
+          "source_count": 2,
+          "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
+          "fresh_sources": [
+            "Institute on Taxation and Economic Policy"
+          ],
+          "current_sources": 2,
+          "official_source": false,
+          "primary_derivative": false,
+          "primary_fresh": true,
+          "primary_trust": 0.95,
+          "contradiction_flag": false,
+          "contradiction_evidence": [],
+          "freshness_hours": 23.1,
+          "calibrated_confidence": 70.0
+        },
+        "what": "How is the US economy really doing under President Trump?",
+        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+        "who_detail": "",
+        "when": "",
+        "where": "",
+        "why": "",
+        "how": "",
+        "why_important": "",
+        "key_data": "",
+        "background": "The US economy has seen mixed performance under Trump, with inflation and unemployment rates fluctuating.",
+        "change_since_yesterday": "A more positive economic narrative could sway public opinion and voter behavior.",
+        "next": "Trump administration may release updated economic data to support his claims.",
+        "connection": "Trump's economic policies have been a key issue in the upcoming midterm elections.",
+        "memory_hook": "",
+        "vocabulary": "",
+        "ai_generated": true,
+        "published": "2026-10-20T05:00:45+00:00",
+        "calibrated_confidence": 70.0,
+        "impact": {
+          "level": "MEDIUM",
+          "direction": "positive",
+          "score": 56,
+          "confidence": 0.61,
+          "learned_rate": 0.6
+        },
+        "consequences": {
+          "event": "How is the US economy really doing under President Trump?",
+          "impact": {
+            "level": "MEDIUM",
+            "direction": "positive",
+            "score": 56,
+            "confidence": 0.61
+          },
+          "immediate": [
+            "Monitor official confirmation and affected entities"
+          ],
+          "second_order": [
+            "Monitor related sectors, suppliers, competitors and policy response"
+          ],
+          "watch_next": [
+            "New official statements",
+            "Independent confirmation",
+            "Price/economic data if relevant"
+          ]
+        },
+        "lifecycle_v2": "NEW",
+        "similar_events": [
+          {
+            "similarity": 0.333,
+            "date": "2026-10-21",
+            "headline": "How is the US economy really doing under President Trump?",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.129,
+            "date": "2026-10-01",
+            "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.107,
+            "date": "2026-09-25",
+            "headline": "When and how to see the Harvest Moon in 2026",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.103,
+            "date": "2026-09-23",
+            "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.103,
+            "date": "2026-09-24",
+            "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+            "outcome_score": null
+          }
+        ],
+        "momentum_score": 61.5,
+        "early_signal": false
+      },
+      {
         "story_id": "5f3291c0450e8cd0",
         "event_id": "5b473d94da85ab18",
         "headline": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -2048,6 +2057,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "BBC News"
           ],
@@ -2058,7 +2068,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 22.1,
+          "freshness_hours": 22.4,
           "calibrated_confidence": 70.0
         },
         "what": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -2159,8 +2169,7 @@
         "canadian": 2,
         "secretary": 2,
         "austen": 2,
-        "ukraine": 2,
-        "hegseth": 2,
+        "trump": 2,
         "deepseek": 2,
         "odds": 1,
         "get": 1,
@@ -2177,7 +2186,8 @@
         "mohammed": 1,
         "indian": 1,
         "while": 1,
-        "bhuvneshwar": 1
+        "bhuvneshwar": 1,
+        "kumar": 1
       }
     },
     "source_event_matrix": {
@@ -2192,7 +2202,7 @@
         "verified": 0
       },
       "times of india": {
-        "stories": 2,
+        "stories": 1,
         "high_impact": 1,
         "verified": 0
       },
@@ -2207,7 +2217,7 @@
         "verified": 0
       },
       "bbc news": {
-        "stories": 2,
+        "stories": 3,
         "high_impact": 1,
         "verified": 0
       },
@@ -2282,11 +2292,11 @@
         "event_id": "642d5ed331fdbd9d",
         "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
         "importance": 98.9,
-        "ranking_score": 104.2,
+        "ranking_score": 103.9,
         "personalized_score": 99.3,
         "personalization_applied": 99.3,
         "breaking_score": 90,
-        "trend_score": 93,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "preferred region + breaking",
         "learning_adjustment": -1.1,
@@ -2313,6 +2323,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "cedarnews.net"
           ],
@@ -2323,7 +2334,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 2.0,
+          "freshness_hours": 2.4,
           "calibrated_confidence": 70.0
         },
         "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -2333,12 +2344,12 @@
         "where": "Sydney",
         "why": "",
         "how": "",
-        "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+        "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
         "key_data": "",
-        "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-        "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+        "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+        "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
         "next": "",
-        "connection": "The RBA's decision-making process is now more closely",
+        "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2404,7 +2415,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 94.0,
+        "momentum_score": 91.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2444,11 +2455,11 @@
         "event_id": "1512b970b6b4f97c",
         "headline": "Can India turn retrofitment into the next mobility revolution?",
         "importance": 93.2,
-        "ranking_score": 76.2,
+        "ranking_score": 76.3,
         "personalized_score": 95.6,
         "personalization_applied": 95.6,
         "breaking_score": 65,
-        "trend_score": 82,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -2467,6 +2478,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -2475,7 +2487,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.5,
+          "freshness_hours": 0.8,
           "calibrated_confidence": 55.0
         },
         "what": "Can India turn retrofitment into the next mobility revolution?",
@@ -2487,10 +2499,10 @@
         "how": "",
         "why_important": "The shift towards retrofitment could create a new wave of entrepreneurship and employment opportunities in India's automotive sector.",
         "key_data": "",
-        "background": "India's automotive industry is facing challenges with traditional manufacturing, and there is a growing interest in sustainable mobility solutions.",
-        "change_since_yesterday": "Retrofitment could decentralize the automotive value chain, shifting from centralized manufacturing to a more distributed and localized model.",
-        "next": "The government may launch pilot programs to train local mechanics and workshops in retrofitting technologies.",
-        "connection": "India's efforts to reduce carbon emissions and its push towards electric mobility.",
+        "background": "India's automotive industry is facing challenges with the shift from traditional to electric vehicles, and retrofitment could be a viable solution to integrate existing vehicles into the green mobility revolution.",
+        "change_since_yesterday": "Retrofitment could democratize access to electric mobility by leveraging existing infrastructure and workforce, potentially bypassing the scale and centralization requirements of new EV manufacturing.",
+        "next": "",
+        "connection": "The article connects to previous news about India's push towards electric vehicles and the challenges of integrating them into the",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2556,7 +2568,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 81.5,
+        "momentum_score": 82.5,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2608,11 +2620,11 @@
         "event_id": "ce5f3525c6acdc45",
         "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
         "importance": 84.9,
-        "ranking_score": 69.5,
+        "ranking_score": 69.3,
         "personalized_score": 90.2,
         "personalization_applied": 90.2,
         "breaking_score": 65,
-        "trend_score": 74,
+        "trend_score": 78,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -2631,6 +2643,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -2639,7 +2652,7 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 1.3,
+          "freshness_hours": 1.6,
           "calibrated_confidence": 55.0
         },
         "what": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
@@ -2649,10 +2662,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Shami's frustration over selectors overlooking him could lead to a potential rift within the team and affect team cohesion.",
+        "why_important": "Shami's frustration highlights the communication issues within the Indian selectors, potentially impacting team cohesion and performance.",
         "key_data": "",
-        "background": "Shami has had a successful career with Bengal and has been a key player for the team. He has previously been overlooked for selection in the national team.",
-        "change_since_yesterday": "Shami's vocalization of his concerns could lead to a more transparent communication process within the selectors and the team, potentially improving team dynamics.",
+        "background": "Shami has been a consistent performer for Bengal and has previously been a part of the Indian team. He has expressed concerns about selectors' communication, which has led to his current situation.",
+        "change_since_yesterday": "Shami's situation underscores the need for improved communication between selectors and players, as his voice is not being heard, potentially affecting his chances of being selected for future",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -2720,7 +2733,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 78.7,
+        "momentum_score": 80.0,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2748,11 +2761,11 @@
         "event_id": "f4c006855c7b7a9d",
         "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "importance": 88.6,
-        "ranking_score": 71.1,
+        "ranking_score": 70.6,
         "personalized_score": 92.6,
         "personalization_applied": 92.6,
         "breaking_score": 45,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.4,
@@ -2771,6 +2784,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -2779,22 +2793,22 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.6,
+          "freshness_hours": 8.9,
           "calibrated_confidence": 55.0
         },
         "what": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "who": "Kiren Rijiju",
-        "who_detail": "Kiren Rijiju, Union Parliamentary Affairs Minister, with experience in parliamentary affairs.",
+        "who_detail": "Kiren Rijiju is the Union Parliamentary Affairs Minister, currently serving in the government.",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "His statement highlights the lack of cooperation from opposition parties in discussing delimitation with the government.",
+        "why_important": "Rijiju's statement suggests a lack of cooperation from opposition parties in the delimitation process, potentially impacting the government's plans for electoral reforms.",
         "key_data": "",
-        "background": "Delimitation is the process of dividing constituencies for electoral purposes, often contentious due to population changes and political interests.",
-        "change_since_yesterday": "Opposition parties have not engaged in dialogue on delimitation, unlike the government's expectation.",
-        "next": "The government",
-        "connection": "Rijiju's comments follow a pattern of opposition parties not participating in delimitation discussions, as evidenced in previous news.",
+        "background": "Delimitation is the process of redrawing electoral boundaries, which is crucial for upcoming elections. The government has been pushing for a resolution in this matter.",
+        "change_since_yesterday": "Opposition parties are not engaging in the delimitation process, which contrasts with their previous discussions with the government.",
+        "next": "",
+        "connection": "Other opposition parties have also been",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -2860,7 +2874,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 76.9,
+        "momentum_score": 75.5,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -2888,7 +2902,7 @@
         "event_id": "3540370efe3eafa5",
         "headline": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
         "importance": 89.5,
-        "ranking_score": 96.6,
+        "ranking_score": 96.4,
         "personalized_score": 93.2,
         "personalization_applied": 93.2,
         "breaking_score": 40,
@@ -2919,6 +2933,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NPR Topics: World"
           ],
@@ -2929,7 +2944,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 11.4,
+          "freshness_hours": 11.8,
           "calibrated_confidence": 70.0
         },
         "what": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
@@ -2939,12 +2954,12 @@
         "where": "Canada",
         "why": "",
         "how": "",
-        "why_important": "The victory solidifies the Canadian government's stance on unity, potentially weakening separatist movements and altering political strategies in Canada.",
+        "why_important": "The result solidifies Carney's position as a key figure in Canadian governance and potentially strengthens his influence in Canadian unity efforts.",
         "key_data": "",
-        "background": "Alberta has been a stronghold for the separatist movement, with tensions over resource wealth distribution and federal funding.",
-        "change_since_yesterday": "The referendum result significantly reduces the separatist movement's momentum and may lead to a reassessment of federal policies towards Alberta.",
+        "background": "Alberta has been a stronghold for the separatist movement, and the referendum result deepens divisions within the province.",
+        "change_since_yesterday": "The result represents a significant setback for the separatist movement in Alberta, potentially altering the political landscape and future negotiations.",
         "next": "",
-        "connection": "The result aligns with a similar referendum in Quebec in 2025,",
+        "connection": "The referendum result aligns with previous polls showing strong support for Canadian unity in Alberta",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -3049,6 +3064,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -3057,7 +3073,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 36.2,
+          "freshness_hours": 36.5,
           "calibrated_confidence": 55.0
         },
         "what": "India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary",
@@ -3213,6 +3229,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NewsCord"
           ],
@@ -3223,7 +3240,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.1,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 70.0
         },
         "what": "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -3316,174 +3333,6 @@
         ]
       },
       {
-        "story_id": "249136afadfb10e0",
-        "event_id": "8d88903d1b828a97",
-        "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "importance": 92.3,
-        "ranking_score": 95.4,
-        "personalized_score": 95.0,
-        "personalization_applied": 95.0,
-        "breaking_score": 25,
-        "trend_score": 85,
-        "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": -3.0,
-        "category": "world",
-        "region": "world",
-        "source": "Times of India",
-        "url": "https://timesofindia.indiatimes.com/world/europe/musk-ordered-slowdown-of-ukraines-starlink-network-leaving-kyiv-in-the-dark-report/articleshow/135078377.cms",
-        "summary": "US officials, however, have denied ordering any slowdown. Defence secretary Pete Hegseth said Washington had not directed any reduction in the satellite services, while secretary of state Marco Rubio maintained that the White House was not responsible for the reported disruption. Speaking to reporters, Hegseth said the US military had not instructed any changes to the satellite service used by Ukraine.",
-        "related_articles": [],
-        "verification": {
-          "evidence": [
-            {
-              "title": "Elon Musk behind Starlink slowdown order that disrupted Ukraine's drones: Report",
-              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/world-news/elon-musk-ordered-starlink-slowdown-ukraine-drones-disruption-zelensky-trump-administration-russia-war-report-101792544687121.html",
-              "published": "2026-10-21T01:21:31+00:00",
-              "summary": "Elon Musk reportedly spoke to some Trump administration officials, including with the POTUS, before imposing the new speed cap order.&nbsp;"
-            }
-          ],
-          "historical": [],
-          "verification": "multi-report",
-          "confidence": 70,
-          "evidence_strength": 65,
-          "verification_reason": "one independent current publisher",
-          "source_count": 2,
-          "independent_sources": 1,
-          "fresh_sources": [
-            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times"
-          ],
-          "current_sources": 2,
-          "official_source": false,
-          "primary_derivative": false,
-          "primary_fresh": true,
-          "primary_trust": 0.82,
-          "contradiction_flag": false,
-          "contradiction_evidence": [],
-          "freshness_hours": 4.0,
-          "calibrated_confidence": 70.0
-        },
-        "what": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-        "who_detail": "",
-        "when": "",
-        "where": "",
-        "why": "",
-        "how": "",
-        "why_important": "The US military's denial of ordering a slowdown in Starlink services could undermine trust in US leadership.",
-        "key_data": "",
-        "background": "SpaceX's Starlink satellite internet service is used by Ukraine for military communications.",
-        "change_since_yesterday": "The US military's denial shifts the blame from the US to Ukraine, potentially complicating diplomatic relations.",
-        "next": "Further investigation into the incident and potential changes to Starlink's operations in Ukraine.",
-        "connection": "SpaceX has been criticized for not adequately informing the US government about potential risks of its satellite internet service.",
-        "memory_hook": "",
-        "vocabulary": "",
-        "ai_generated": true,
-        "published": "2026-10-20T23:51:55+00:00",
-        "calibrated_confidence": 70.0,
-        "impact": {
-          "level": "LOW",
-          "direction": "neutral",
-          "score": 40,
-          "confidence": 0.45,
-          "learned_rate": 0.45
-        },
-        "consequences": {
-          "event": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-          "impact": {
-            "level": "LOW",
-            "direction": "neutral",
-            "score": 40,
-            "confidence": 0.45
-          },
-          "immediate": [
-            "Monitor official confirmation and affected entities"
-          ],
-          "second_order": [
-            "Monitor related sectors, suppliers, competitors and policy response"
-          ],
-          "watch_next": [
-            "New official statements",
-            "Independent confirmation",
-            "Price/economic data if relevant"
-          ]
-        },
-        "lifecycle_v2": "NEW",
-        "similar_events": [
-          {
-            "similarity": 0.196,
-            "date": "2026-10-21",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.073,
-            "date": "2026-10-05",
-            "headline": "It’s not AI anymore, it’s ‘super intelligence’ (according to the White House)",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "Trump hosts Xi at White House state dinner with tech, finance heavy guest list",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-10-01",
-            "headline": "Elon Musk to co-lead US effort to study future of warfare, War Secretary Pete Hegseth announces",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 68.5,
-        "early_signal": false,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-21",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.143,
-            "date": "2026-09-24",
-            "headline": "Russia's Lavrov challenges Trump & Zelensky, Then takes aim at Europe over Ukraine, Minsk and NATO?",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.133,
-            "date": "2026-09-28",
-            "headline": "No public mentions of Taiwan at official Xi and Trump meeting",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-09-23",
-            "headline": "Watch: Trump and Xi are meeting on US soil - what's at stake?",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-09-24",
-            "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
-            "date": "2026-09-24",
-            "headline": "A red carpet and military flyover - How Trump welcomed Xi",
-            "outcome_score": null
-          }
-        ]
-      },
-      {
         "story_id": "70dbf232135248d3",
         "event_id": "a98875445885925a",
         "headline": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -3518,6 +3367,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -3526,7 +3376,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.2,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 55.0
         },
         "what": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -3619,6 +3469,187 @@
         ]
       },
       {
+        "story_id": "30e0969093732bb1",
+        "event_id": "fdf0ee4b4ca2c924",
+        "headline": "How is the US economy really doing under President Trump?",
+        "importance": 88.1,
+        "ranking_score": 94.9,
+        "personalized_score": 92.3,
+        "personalization_applied": 92.3,
+        "breaking_score": 5,
+        "trend_score": 85,
+        "emerging_topic": true,
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": -1.1,
+        "category": "business",
+        "region": "world",
+        "source": "BBC News",
+        "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+        "summary": "Ahead of the midterms Trump has boasted about the performance of the US economy. BBC Verify looks at inflation, jobs and economic growth in the country.",
+        "related_articles": [],
+        "verification": {
+          "evidence": [
+            {
+              "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+              "source": "Institute on Taxation and Economic Policy",
+              "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+              "published": "2026-10-20T17:20:24+00:00",
+              "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
+            }
+          ],
+          "historical": [],
+          "verification": "multi-report",
+          "confidence": 70,
+          "evidence_strength": 65,
+          "verification_reason": "one independent current publisher",
+          "source_count": 2,
+          "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
+          "fresh_sources": [
+            "Institute on Taxation and Economic Policy"
+          ],
+          "current_sources": 2,
+          "official_source": false,
+          "primary_derivative": false,
+          "primary_fresh": true,
+          "primary_trust": 0.95,
+          "contradiction_flag": false,
+          "contradiction_evidence": [],
+          "freshness_hours": 23.1,
+          "calibrated_confidence": 70.0
+        },
+        "what": "How is the US economy really doing under President Trump?",
+        "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+        "who_detail": "",
+        "when": "",
+        "where": "",
+        "why": "",
+        "how": "",
+        "why_important": "",
+        "key_data": "",
+        "background": "The US economy has seen mixed performance under Trump, with inflation and unemployment rates fluctuating.",
+        "change_since_yesterday": "A more positive economic narrative could sway public opinion and voter behavior.",
+        "next": "Trump administration may release updated economic data to support his claims.",
+        "connection": "Trump's economic policies have been a key issue in the upcoming midterm elections.",
+        "memory_hook": "",
+        "vocabulary": "",
+        "ai_generated": true,
+        "published": "2026-10-20T05:00:45+00:00",
+        "calibrated_confidence": 70.0,
+        "impact": {
+          "level": "MEDIUM",
+          "direction": "positive",
+          "score": 56,
+          "confidence": 0.61,
+          "learned_rate": 0.6
+        },
+        "consequences": {
+          "event": "How is the US economy really doing under President Trump?",
+          "impact": {
+            "level": "MEDIUM",
+            "direction": "positive",
+            "score": 56,
+            "confidence": 0.61
+          },
+          "immediate": [
+            "Monitor official confirmation and affected entities"
+          ],
+          "second_order": [
+            "Monitor related sectors, suppliers, competitors and policy response"
+          ],
+          "watch_next": [
+            "New official statements",
+            "Independent confirmation",
+            "Price/economic data if relevant"
+          ]
+        },
+        "lifecycle_v2": "NEW",
+        "similar_events": [
+          {
+            "similarity": 0.333,
+            "date": "2026-10-21",
+            "headline": "How is the US economy really doing under President Trump?",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.129,
+            "date": "2026-10-01",
+            "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.107,
+            "date": "2026-09-25",
+            "headline": "When and how to see the Harvest Moon in 2026",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.103,
+            "date": "2026-09-23",
+            "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.103,
+            "date": "2026-09-24",
+            "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+            "outcome_score": null
+          }
+        ],
+        "momentum_score": 61.5,
+        "early_signal": false,
+        "similar_historical_events": [
+          {
+            "similarity": 1.0,
+            "date": "2026-10-21",
+            "headline": "How is the US economy really doing under President Trump?",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.214,
+            "date": "2026-09-23",
+            "headline": "Iran's president tells Trump it will never 'bend the knee'",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.188,
+            "date": "2026-10-01",
+            "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.167,
+            "date": "2026-09-17",
+            "headline": "Why Trump is all-in on AI despite the warnings",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.167,
+            "date": "2026-09-24",
+            "headline": "How China helped arm Iran before Trump rolled out the red carpet for Xi",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.154,
+            "date": "2026-09-25",
+            "headline": "When and how to see the Harvest Moon in 2026",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.143,
+            "date": "2026-09-23",
+            "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.143,
+            "date": "2026-09-24",
+            "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+            "outcome_score": null
+          }
+        ]
+      },
+      {
         "story_id": "5f3291c0450e8cd0",
         "event_id": "5b473d94da85ab18",
         "headline": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -3661,6 +3692,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "BBC News"
           ],
@@ -3671,7 +3703,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 22.1,
+          "freshness_hours": 22.4,
           "calibrated_confidence": 70.0
         },
         "what": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -3796,11 +3828,11 @@
             "event_id": "642d5ed331fdbd9d",
             "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
             "importance": 98.9,
-            "ranking_score": 104.2,
+            "ranking_score": 103.9,
             "personalized_score": 99.3,
             "personalization_applied": 99.3,
             "breaking_score": 90,
-            "trend_score": 93,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "preferred region + breaking",
             "learning_adjustment": -1.1,
@@ -3827,6 +3859,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "cedarnews.net"
               ],
@@ -3837,7 +3870,7 @@
               "primary_trust": 0.9,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 2.0,
+              "freshness_hours": 2.4,
               "calibrated_confidence": 70.0
             },
             "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -3847,12 +3880,12 @@
             "where": "Sydney",
             "why": "",
             "how": "",
-            "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+            "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
             "key_data": "",
-            "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-            "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+            "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+            "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
             "next": "",
-            "connection": "The RBA's decision-making process is now more closely",
+            "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -3918,7 +3951,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 94.0,
+            "momentum_score": 91.2,
             "early_signal": true
           }
         ]
@@ -3936,11 +3969,11 @@
             "event_id": "1512b970b6b4f97c",
             "headline": "Can India turn retrofitment into the next mobility revolution?",
             "importance": 93.2,
-            "ranking_score": 76.2,
+            "ranking_score": 76.3,
             "personalized_score": 95.6,
             "personalization_applied": 95.6,
             "breaking_score": 65,
-            "trend_score": 82,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.7,
@@ -3959,6 +3992,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -3967,7 +4001,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 0.5,
+              "freshness_hours": 0.8,
               "calibrated_confidence": 55.0
             },
             "what": "Can India turn retrofitment into the next mobility revolution?",
@@ -3979,10 +4013,10 @@
             "how": "",
             "why_important": "The shift towards retrofitment could create a new wave of entrepreneurship and employment opportunities in India's automotive sector.",
             "key_data": "",
-            "background": "India's automotive industry is facing challenges with traditional manufacturing, and there is a growing interest in sustainable mobility solutions.",
-            "change_since_yesterday": "Retrofitment could decentralize the automotive value chain, shifting from centralized manufacturing to a more distributed and localized model.",
-            "next": "The government may launch pilot programs to train local mechanics and workshops in retrofitting technologies.",
-            "connection": "India's efforts to reduce carbon emissions and its push towards electric mobility.",
+            "background": "India's automotive industry is facing challenges with the shift from traditional to electric vehicles, and retrofitment could be a viable solution to integrate existing vehicles into the green mobility revolution.",
+            "change_since_yesterday": "Retrofitment could democratize access to electric mobility by leveraging existing infrastructure and workforce, potentially bypassing the scale and centralization requirements of new EV manufacturing.",
+            "next": "",
+            "connection": "The article connects to previous news about India's push towards electric vehicles and the challenges of integrating them into the",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -4048,7 +4082,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 81.5,
+            "momentum_score": 82.5,
             "early_signal": true
           }
         ]
@@ -4066,11 +4100,11 @@
             "event_id": "ce5f3525c6acdc45",
             "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
             "importance": 84.9,
-            "ranking_score": 69.5,
+            "ranking_score": 69.3,
             "personalized_score": 90.2,
             "personalization_applied": 90.2,
             "breaking_score": 65,
-            "trend_score": 74,
+            "trend_score": 78,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.7,
@@ -4089,6 +4123,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -4097,7 +4132,7 @@
               "primary_trust": 0.82,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 1.3,
+              "freshness_hours": 1.6,
               "calibrated_confidence": 55.0
             },
             "what": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
@@ -4107,10 +4142,10 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "Shami's frustration over selectors overlooking him could lead to a potential rift within the team and affect team cohesion.",
+            "why_important": "Shami's frustration highlights the communication issues within the Indian selectors, potentially impacting team cohesion and performance.",
             "key_data": "",
-            "background": "Shami has had a successful career with Bengal and has been a key player for the team. He has previously been overlooked for selection in the national team.",
-            "change_since_yesterday": "Shami's vocalization of his concerns could lead to a more transparent communication process within the selectors and the team, potentially improving team dynamics.",
+            "background": "Shami has been a consistent performer for Bengal and has previously been a part of the Indian team. He has expressed concerns about selectors' communication, which has led to his current situation.",
+            "change_since_yesterday": "Shami's situation underscores the need for improved communication between selectors and players, as his voice is not being heard, potentially affecting his chances of being selected for future",
             "next": "",
             "connection": "",
             "memory_hook": "",
@@ -4178,7 +4213,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 78.7,
+            "momentum_score": 80.0,
             "early_signal": true
           }
         ]
@@ -4196,11 +4231,11 @@
             "event_id": "f4c006855c7b7a9d",
             "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
             "importance": 88.6,
-            "ranking_score": 71.1,
+            "ranking_score": 70.6,
             "personalized_score": 92.6,
             "personalization_applied": 92.6,
             "breaking_score": 45,
-            "trend_score": 89,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.4,
@@ -4219,6 +4254,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -4227,22 +4263,22 @@
               "primary_trust": 0.82,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.6,
+              "freshness_hours": 8.9,
               "calibrated_confidence": 55.0
             },
             "what": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
             "who": "Kiren Rijiju",
-            "who_detail": "Kiren Rijiju, Union Parliamentary Affairs Minister, with experience in parliamentary affairs.",
+            "who_detail": "Kiren Rijiju is the Union Parliamentary Affairs Minister, currently serving in the government.",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "His statement highlights the lack of cooperation from opposition parties in discussing delimitation with the government.",
+            "why_important": "Rijiju's statement suggests a lack of cooperation from opposition parties in the delimitation process, potentially impacting the government's plans for electoral reforms.",
             "key_data": "",
-            "background": "Delimitation is the process of dividing constituencies for electoral purposes, often contentious due to population changes and political interests.",
-            "change_since_yesterday": "Opposition parties have not engaged in dialogue on delimitation, unlike the government's expectation.",
-            "next": "The government",
-            "connection": "Rijiju's comments follow a pattern of opposition parties not participating in delimitation discussions, as evidenced in previous news.",
+            "background": "Delimitation is the process of redrawing electoral boundaries, which is crucial for upcoming elections. The government has been pushing for a resolution in this matter.",
+            "change_since_yesterday": "Opposition parties are not engaging in the delimitation process, which contrasts with their previous discussions with the government.",
+            "next": "",
+            "connection": "Other opposition parties have also been",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -4308,7 +4344,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 76.9,
+            "momentum_score": 75.5,
             "early_signal": true
           }
         ]
@@ -4326,7 +4362,7 @@
             "event_id": "3540370efe3eafa5",
             "headline": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
             "importance": 89.5,
-            "ranking_score": 96.6,
+            "ranking_score": 96.4,
             "personalized_score": 93.2,
             "personalization_applied": 93.2,
             "breaking_score": 40,
@@ -4357,6 +4393,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "NPR Topics: World"
               ],
@@ -4367,7 +4404,7 @@
               "primary_trust": 0.9,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 11.4,
+              "freshness_hours": 11.8,
               "calibrated_confidence": 70.0
             },
             "what": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
@@ -4377,12 +4414,12 @@
             "where": "Canada",
             "why": "",
             "how": "",
-            "why_important": "The victory solidifies the Canadian government's stance on unity, potentially weakening separatist movements and altering political strategies in Canada.",
+            "why_important": "The result solidifies Carney's position as a key figure in Canadian governance and potentially strengthens his influence in Canadian unity efforts.",
             "key_data": "",
-            "background": "Alberta has been a stronghold for the separatist movement, with tensions over resource wealth distribution and federal funding.",
-            "change_since_yesterday": "The referendum result significantly reduces the separatist movement's momentum and may lead to a reassessment of federal policies towards Alberta.",
+            "background": "Alberta has been a stronghold for the separatist movement, and the referendum result deepens divisions within the province.",
+            "change_since_yesterday": "The result represents a significant setback for the separatist movement in Alberta, potentially altering the political landscape and future negotiations.",
             "next": "",
-            "connection": "The result aligns with a similar referendum in Quebec in 2025,",
+            "connection": "The referendum result aligns with previous polls showing strong support for Canadian unity in Alberta",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -4489,6 +4526,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -4497,7 +4535,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 36.2,
+              "freshness_hours": 36.5,
               "calibrated_confidence": 55.0
             },
             "what": "India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary",
@@ -4649,6 +4687,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "NewsCord"
               ],
@@ -4659,7 +4698,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 18.1,
+              "freshness_hours": 18.4,
               "calibrated_confidence": 70.0
             },
             "what": "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -4746,146 +4785,6 @@
         ]
       },
       {
-        "event_id": "administration|and|dark|kept|musk|ordered|slowdown|starlink|trump|ukraine",
-        "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "story_count": 1,
-        "sources": [
-          "Times of India"
-        ],
-        "stories": [
-          {
-            "story_id": "249136afadfb10e0",
-            "event_id": "8d88903d1b828a97",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "importance": 92.3,
-            "ranking_score": 95.4,
-            "personalized_score": 95.0,
-            "personalization_applied": 95.0,
-            "breaking_score": 25,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "preferred region + emerging topic",
-            "learning_adjustment": -3.0,
-            "category": "world",
-            "region": "world",
-            "source": "Times of India",
-            "url": "https://timesofindia.indiatimes.com/world/europe/musk-ordered-slowdown-of-ukraines-starlink-network-leaving-kyiv-in-the-dark-report/articleshow/135078377.cms",
-            "summary": "US officials, however, have denied ordering any slowdown. Defence secretary Pete Hegseth said Washington had not directed any reduction in the satellite services, while secretary of state Marco Rubio maintained that the White House was not responsible for the reported disruption. Speaking to reporters, Hegseth said the US military had not instructed any changes to the satellite service used by Ukraine.",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "Elon Musk behind Starlink slowdown order that disrupted Ukraine's drones: Report",
-                  "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/world-news/elon-musk-ordered-starlink-slowdown-ukraine-drones-disruption-zelensky-trump-administration-russia-war-report-101792544687121.html",
-                  "published": "2026-10-21T01:21:31+00:00",
-                  "summary": "Elon Musk reportedly spoke to some Trump administration officials, including with the POTUS, before imposing the new speed cap order.&nbsp;"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
-              "fresh_sources": [
-                "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 2,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.82,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 4.0,
-              "calibrated_confidence": 70.0
-            },
-            "what": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The US military's denial of ordering a slowdown in Starlink services could undermine trust in US leadership.",
-            "key_data": "",
-            "background": "SpaceX's Starlink satellite internet service is used by Ukraine for military communications.",
-            "change_since_yesterday": "The US military's denial shifts the blame from the US to Ukraine, potentially complicating diplomatic relations.",
-            "next": "Further investigation into the incident and potential changes to Starlink's operations in Ukraine.",
-            "connection": "SpaceX has been criticized for not adequately informing the US government about potential risks of its satellite internet service.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "published": "2026-10-20T23:51:55+00:00",
-            "calibrated_confidence": 70.0,
-            "impact": {
-              "level": "LOW",
-              "direction": "neutral",
-              "score": 40,
-              "confidence": 0.45,
-              "learned_rate": 0.45
-            },
-            "consequences": {
-              "event": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-              "impact": {
-                "level": "LOW",
-                "direction": "neutral",
-                "score": 40,
-                "confidence": 0.45
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.196,
-                "date": "2026-10-21",
-                "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.073,
-                "date": "2026-10-05",
-                "headline": "It’s not AI anymore, it’s ‘super intelligence’ (according to the White House)",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-09-25",
-                "headline": "Trump hosts Xi at White House state dinner with tech, finance heavy guest list",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-09-25",
-                "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-10-01",
-                "headline": "Elon Musk to co-lead US effort to study future of warfare, War Secretary Pete Hegseth announces",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 68.5,
-            "early_signal": false
-          }
-        ]
-      },
-      {
         "event_id": "after|bereaved|bill|civil|could|delays|face|families|pension|service|tax|unjust",
         "headline": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
         "story_count": 1,
@@ -4928,6 +4827,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -4936,7 +4836,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 15.2,
+              "freshness_hours": 15.5,
               "calibrated_confidence": 55.0
             },
             "what": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -5023,6 +4923,147 @@
         ]
       },
       {
+        "event_id": "doing|economy|how|president|really|the|trump|under",
+        "headline": "How is the US economy really doing under President Trump?",
+        "story_count": 1,
+        "sources": [
+          "BBC News"
+        ],
+        "stories": [
+          {
+            "story_id": "30e0969093732bb1",
+            "event_id": "fdf0ee4b4ca2c924",
+            "headline": "How is the US economy really doing under President Trump?",
+            "importance": 88.1,
+            "ranking_score": 94.9,
+            "personalized_score": 92.3,
+            "personalization_applied": 92.3,
+            "breaking_score": 5,
+            "trend_score": 85,
+            "emerging_topic": true,
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": -1.1,
+            "category": "business",
+            "region": "world",
+            "source": "BBC News",
+            "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+            "summary": "Ahead of the midterms Trump has boasted about the performance of the US economy. BBC Verify looks at inflation, jobs and economic growth in the country.",
+            "related_articles": [],
+            "verification": {
+              "evidence": [
+                {
+                  "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+                  "source": "Institute on Taxation and Economic Policy",
+                  "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+                  "published": "2026-10-20T17:20:24+00:00",
+                  "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
+                }
+              ],
+              "historical": [],
+              "verification": "multi-report",
+              "confidence": 70,
+              "evidence_strength": 65,
+              "verification_reason": "one independent current publisher",
+              "source_count": 2,
+              "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
+              "fresh_sources": [
+                "Institute on Taxation and Economic Policy"
+              ],
+              "current_sources": 2,
+              "official_source": false,
+              "primary_derivative": false,
+              "primary_fresh": true,
+              "primary_trust": 0.95,
+              "contradiction_flag": false,
+              "contradiction_evidence": [],
+              "freshness_hours": 23.1,
+              "calibrated_confidence": 70.0
+            },
+            "what": "How is the US economy really doing under President Trump?",
+            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+            "who_detail": "",
+            "when": "",
+            "where": "",
+            "why": "",
+            "how": "",
+            "why_important": "",
+            "key_data": "",
+            "background": "The US economy has seen mixed performance under Trump, with inflation and unemployment rates fluctuating.",
+            "change_since_yesterday": "A more positive economic narrative could sway public opinion and voter behavior.",
+            "next": "Trump administration may release updated economic data to support his claims.",
+            "connection": "Trump's economic policies have been a key issue in the upcoming midterm elections.",
+            "memory_hook": "",
+            "vocabulary": "",
+            "ai_generated": true,
+            "published": "2026-10-20T05:00:45+00:00",
+            "calibrated_confidence": 70.0,
+            "impact": {
+              "level": "MEDIUM",
+              "direction": "positive",
+              "score": 56,
+              "confidence": 0.61,
+              "learned_rate": 0.6
+            },
+            "consequences": {
+              "event": "How is the US economy really doing under President Trump?",
+              "impact": {
+                "level": "MEDIUM",
+                "direction": "positive",
+                "score": 56,
+                "confidence": 0.61
+              },
+              "immediate": [
+                "Monitor official confirmation and affected entities"
+              ],
+              "second_order": [
+                "Monitor related sectors, suppliers, competitors and policy response"
+              ],
+              "watch_next": [
+                "New official statements",
+                "Independent confirmation",
+                "Price/economic data if relevant"
+              ]
+            },
+            "lifecycle_v2": "NEW",
+            "similar_events": [
+              {
+                "similarity": 0.333,
+                "date": "2026-10-21",
+                "headline": "How is the US economy really doing under President Trump?",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.129,
+                "date": "2026-10-01",
+                "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.107,
+                "date": "2026-09-25",
+                "headline": "When and how to see the Harvest Moon in 2026",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.103,
+                "date": "2026-09-23",
+                "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.103,
+                "date": "2026-09-24",
+                "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+                "outcome_score": null
+              }
+            ],
+            "momentum_score": 61.5,
+            "early_signal": false
+          }
+        ]
+      },
+      {
         "event_id": "agency|banning|chinese|deepseek|from|government|systems",
         "headline": "US banning Chinese AI DeepSeek from government agency IT systems",
         "story_count": 1,
@@ -5073,6 +5114,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "BBC News"
               ],
@@ -5083,7 +5125,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 22.1,
+              "freshness_hours": 22.4,
               "calibrated_confidence": 70.0
             },
             "what": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -5178,7 +5220,7 @@
       ],
       "places": [],
       "topics": {
-        "the": 3,
+        "the": 5,
         "shami": 3,
         "alberta": 3,
         "canada": 3,
@@ -5186,9 +5228,9 @@
         "andrew hauser": 2,
         "cmp": 2,
         "india": 2,
+        "indian": 2,
         "canadian": 2,
-        "starlink": 2,
-        "ukraine": 2,
+        "trump": 2,
         "deepseek": 2,
         "odds": 1,
         "get": 1,
@@ -5198,14 +5240,10 @@
         "wednesday": 1,
         "australians": 1,
         "the rba": 1,
-        "march": 1,
-        "june": 1,
-        "september.": 1,
         "can india": 1,
         "unlike": 1,
         "who": 1,
         "mohammed shami": 1,
-        "indian": 1,
         "while": 1,
         "bhuvneshwar kumar": 1,
         "bengal. shami": 1,
@@ -5227,7 +5265,11 @@
         "santosh sarangi": 1,
         "storm austen": 1,
         "austen": 1,
-        "friday.": 1
+        "friday.": 1,
+        "bereaved": 1,
+        "parliament": 1,
+        "public accounts committee": 1,
+        "how": 1
       }
     },
     "entity_profiles": [
@@ -5292,22 +5334,22 @@
         "historical_mentions": 92
       },
       {
+        "entity": "indian",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 33
+      },
+      {
         "entity": "canadian",
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 8
       },
       {
-        "entity": "starlink",
+        "entity": "trump",
         "type": "topic",
         "current_mentions": 1,
-        "historical_mentions": 6
-      },
-      {
-        "entity": "ukraine",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 18
+        "historical_mentions": 97
       },
       {
         "entity": "deepseek",
@@ -5364,24 +5406,6 @@
         "historical_mentions": 0
       },
       {
-        "entity": "march",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 5
-      },
-      {
-        "entity": "june",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 3
-      },
-      {
-        "entity": "september.",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 0
-      },
-      {
         "entity": "can india",
         "type": "topic",
         "current_mentions": 1,
@@ -5404,12 +5428,6 @@
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
-      },
-      {
-        "entity": "indian",
-        "type": "topic",
-        "current_mentions": 1,
-        "historical_mentions": 33
       },
       {
         "entity": "while",
@@ -5542,6 +5560,30 @@
         "type": "topic",
         "current_mentions": 1,
         "historical_mentions": 0
+      },
+      {
+        "entity": "bereaved",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 1
+      },
+      {
+        "entity": "parliament",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 6
+      },
+      {
+        "entity": "public accounts committee",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 0
+      },
+      {
+        "entity": "how",
+        "type": "topic",
+        "current_mentions": 1,
+        "historical_mentions": 42
       }
     ],
     "event_evolution": [
@@ -5558,11 +5600,11 @@
             "event_id": "642d5ed331fdbd9d",
             "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
             "importance": 98.9,
-            "ranking_score": 104.2,
+            "ranking_score": 103.9,
             "personalized_score": 99.3,
             "personalization_applied": 99.3,
             "breaking_score": 90,
-            "trend_score": 93,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "preferred region + breaking",
             "learning_adjustment": -1.1,
@@ -5589,6 +5631,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "cedarnews.net"
               ],
@@ -5599,7 +5642,7 @@
               "primary_trust": 0.9,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 2.0,
+              "freshness_hours": 2.4,
               "calibrated_confidence": 70.0
             },
             "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -5609,12 +5652,12 @@
             "where": "Sydney",
             "why": "",
             "how": "",
-            "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+            "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
             "key_data": "",
-            "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-            "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+            "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+            "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
             "next": "",
-            "connection": "The RBA's decision-making process is now more closely",
+            "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -5680,7 +5723,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 94.0,
+            "momentum_score": 91.2,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -5732,11 +5775,11 @@
             "event_id": "1512b970b6b4f97c",
             "headline": "Can India turn retrofitment into the next mobility revolution?",
             "importance": 93.2,
-            "ranking_score": 76.2,
+            "ranking_score": 76.3,
             "personalized_score": 95.6,
             "personalization_applied": 95.6,
             "breaking_score": 65,
-            "trend_score": 82,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.7,
@@ -5755,6 +5798,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -5763,7 +5807,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 0.5,
+              "freshness_hours": 0.8,
               "calibrated_confidence": 55.0
             },
             "what": "Can India turn retrofitment into the next mobility revolution?",
@@ -5775,10 +5819,10 @@
             "how": "",
             "why_important": "The shift towards retrofitment could create a new wave of entrepreneurship and employment opportunities in India's automotive sector.",
             "key_data": "",
-            "background": "India's automotive industry is facing challenges with traditional manufacturing, and there is a growing interest in sustainable mobility solutions.",
-            "change_since_yesterday": "Retrofitment could decentralize the automotive value chain, shifting from centralized manufacturing to a more distributed and localized model.",
-            "next": "The government may launch pilot programs to train local mechanics and workshops in retrofitting technologies.",
-            "connection": "India's efforts to reduce carbon emissions and its push towards electric mobility.",
+            "background": "India's automotive industry is facing challenges with the shift from traditional to electric vehicles, and retrofitment could be a viable solution to integrate existing vehicles into the green mobility revolution.",
+            "change_since_yesterday": "Retrofitment could democratize access to electric mobility by leveraging existing infrastructure and workforce, potentially bypassing the scale and centralization requirements of new EV manufacturing.",
+            "next": "",
+            "connection": "The article connects to previous news about India's push towards electric vehicles and the challenges of integrating them into the",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -5844,7 +5888,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 81.5,
+            "momentum_score": 82.5,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -5908,11 +5952,11 @@
             "event_id": "ce5f3525c6acdc45",
             "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
             "importance": 84.9,
-            "ranking_score": 69.5,
+            "ranking_score": 69.3,
             "personalized_score": 90.2,
             "personalization_applied": 90.2,
             "breaking_score": 65,
-            "trend_score": 74,
+            "trend_score": 78,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.7,
@@ -5931,6 +5975,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -5939,7 +5984,7 @@
               "primary_trust": 0.82,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 1.3,
+              "freshness_hours": 1.6,
               "calibrated_confidence": 55.0
             },
             "what": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
@@ -5949,10 +5994,10 @@
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "Shami's frustration over selectors overlooking him could lead to a potential rift within the team and affect team cohesion.",
+            "why_important": "Shami's frustration highlights the communication issues within the Indian selectors, potentially impacting team cohesion and performance.",
             "key_data": "",
-            "background": "Shami has had a successful career with Bengal and has been a key player for the team. He has previously been overlooked for selection in the national team.",
-            "change_since_yesterday": "Shami's vocalization of his concerns could lead to a more transparent communication process within the selectors and the team, potentially improving team dynamics.",
+            "background": "Shami has been a consistent performer for Bengal and has previously been a part of the Indian team. He has expressed concerns about selectors' communication, which has led to his current situation.",
+            "change_since_yesterday": "Shami's situation underscores the need for improved communication between selectors and players, as his voice is not being heard, potentially affecting his chances of being selected for future",
             "next": "",
             "connection": "",
             "memory_hook": "",
@@ -6020,7 +6065,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 78.7,
+            "momentum_score": 80.0,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -6060,11 +6105,11 @@
             "event_id": "f4c006855c7b7a9d",
             "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
             "importance": 88.6,
-            "ranking_score": 71.1,
+            "ranking_score": 70.6,
             "personalized_score": 92.6,
             "personalization_applied": 92.6,
             "breaking_score": 45,
-            "trend_score": 89,
+            "trend_score": 85,
             "emerging_topic": true,
             "why_for_you": "priority category + preferred region",
             "learning_adjustment": -3.4,
@@ -6083,6 +6128,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -6091,22 +6137,22 @@
               "primary_trust": 0.82,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 8.6,
+              "freshness_hours": 8.9,
               "calibrated_confidence": 55.0
             },
             "what": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
             "who": "Kiren Rijiju",
-            "who_detail": "Kiren Rijiju, Union Parliamentary Affairs Minister, with experience in parliamentary affairs.",
+            "who_detail": "Kiren Rijiju is the Union Parliamentary Affairs Minister, currently serving in the government.",
             "when": "",
             "where": "",
             "why": "",
             "how": "",
-            "why_important": "His statement highlights the lack of cooperation from opposition parties in discussing delimitation with the government.",
+            "why_important": "Rijiju's statement suggests a lack of cooperation from opposition parties in the delimitation process, potentially impacting the government's plans for electoral reforms.",
             "key_data": "",
-            "background": "Delimitation is the process of dividing constituencies for electoral purposes, often contentious due to population changes and political interests.",
-            "change_since_yesterday": "Opposition parties have not engaged in dialogue on delimitation, unlike the government's expectation.",
-            "next": "The government",
-            "connection": "Rijiju's comments follow a pattern of opposition parties not participating in delimitation discussions, as evidenced in previous news.",
+            "background": "Delimitation is the process of redrawing electoral boundaries, which is crucial for upcoming elections. The government has been pushing for a resolution in this matter.",
+            "change_since_yesterday": "Opposition parties are not engaging in the delimitation process, which contrasts with their previous discussions with the government.",
+            "next": "",
+            "connection": "Other opposition parties have also been",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -6172,7 +6218,7 @@
                 "outcome_score": null
               }
             ],
-            "momentum_score": 76.9,
+            "momentum_score": 75.5,
             "early_signal": true,
             "similar_historical_events": [
               {
@@ -6212,7 +6258,7 @@
             "event_id": "3540370efe3eafa5",
             "headline": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
             "importance": 89.5,
-            "ranking_score": 96.6,
+            "ranking_score": 96.4,
             "personalized_score": 93.2,
             "personalization_applied": 93.2,
             "breaking_score": 40,
@@ -6243,6 +6289,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "NPR Topics: World"
               ],
@@ -6253,7 +6300,7 @@
               "primary_trust": 0.9,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 11.4,
+              "freshness_hours": 11.8,
               "calibrated_confidence": 70.0
             },
             "what": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
@@ -6263,12 +6310,12 @@
             "where": "Canada",
             "why": "",
             "how": "",
-            "why_important": "The victory solidifies the Canadian government's stance on unity, potentially weakening separatist movements and altering political strategies in Canada.",
+            "why_important": "The result solidifies Carney's position as a key figure in Canadian governance and potentially strengthens his influence in Canadian unity efforts.",
             "key_data": "",
-            "background": "Alberta has been a stronghold for the separatist movement, with tensions over resource wealth distribution and federal funding.",
-            "change_since_yesterday": "The referendum result significantly reduces the separatist movement's momentum and may lead to a reassessment of federal policies towards Alberta.",
+            "background": "Alberta has been a stronghold for the separatist movement, and the referendum result deepens divisions within the province.",
+            "change_since_yesterday": "The result represents a significant setback for the separatist movement in Alberta, potentially altering the political landscape and future negotiations.",
             "next": "",
-            "connection": "The result aligns with a similar referendum in Quebec in 2025,",
+            "connection": "The referendum result aligns with previous polls showing strong support for Canadian unity in Alberta",
             "memory_hook": "",
             "vocabulary": "",
             "ai_generated": true,
@@ -6385,6 +6432,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -6393,7 +6441,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 36.2,
+              "freshness_hours": 36.5,
               "calibrated_confidence": 55.0
             },
             "what": "India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary",
@@ -6561,6 +6609,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "NewsCord"
               ],
@@ -6571,7 +6620,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 18.1,
+              "freshness_hours": 18.4,
               "calibrated_confidence": 70.0
             },
             "what": "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -6668,186 +6717,6 @@
         "history_count": 1
       },
       {
-        "event_id": "administration|and|dark|kept|musk|ordered|slowdown|starlink|trump|ukraine",
-        "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "story_count": 1,
-        "sources": [
-          "Times of India"
-        ],
-        "stories": [
-          {
-            "story_id": "249136afadfb10e0",
-            "event_id": "8d88903d1b828a97",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "importance": 92.3,
-            "ranking_score": 95.4,
-            "personalized_score": 95.0,
-            "personalization_applied": 95.0,
-            "breaking_score": 25,
-            "trend_score": 85,
-            "emerging_topic": true,
-            "why_for_you": "preferred region + emerging topic",
-            "learning_adjustment": -3.0,
-            "category": "world",
-            "region": "world",
-            "source": "Times of India",
-            "url": "https://timesofindia.indiatimes.com/world/europe/musk-ordered-slowdown-of-ukraines-starlink-network-leaving-kyiv-in-the-dark-report/articleshow/135078377.cms",
-            "summary": "US officials, however, have denied ordering any slowdown. Defence secretary Pete Hegseth said Washington had not directed any reduction in the satellite services, while secretary of state Marco Rubio maintained that the White House was not responsible for the reported disruption. Speaking to reporters, Hegseth said the US military had not instructed any changes to the satellite service used by Ukraine.",
-            "related_articles": [],
-            "verification": {
-              "evidence": [
-                {
-                  "title": "Elon Musk behind Starlink slowdown order that disrupted Ukraine's drones: Report",
-                  "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-                  "url": "https://www.hindustantimes.com/world-news/elon-musk-ordered-starlink-slowdown-ukraine-drones-disruption-zelensky-trump-administration-russia-war-report-101792544687121.html",
-                  "published": "2026-10-21T01:21:31+00:00",
-                  "summary": "Elon Musk reportedly spoke to some Trump administration officials, including with the POTUS, before imposing the new speed cap order.&nbsp;"
-                }
-              ],
-              "historical": [],
-              "verification": "multi-report",
-              "confidence": 70,
-              "evidence_strength": 65,
-              "verification_reason": "one independent current publisher",
-              "source_count": 2,
-              "independent_sources": 1,
-              "fresh_sources": [
-                "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times"
-              ],
-              "current_sources": 2,
-              "official_source": false,
-              "primary_derivative": false,
-              "primary_fresh": true,
-              "primary_trust": 0.82,
-              "contradiction_flag": false,
-              "contradiction_evidence": [],
-              "freshness_hours": 4.0,
-              "calibrated_confidence": 70.0
-            },
-            "what": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
-            "who_detail": "",
-            "when": "",
-            "where": "",
-            "why": "",
-            "how": "",
-            "why_important": "The US military's denial of ordering a slowdown in Starlink services could undermine trust in US leadership.",
-            "key_data": "",
-            "background": "SpaceX's Starlink satellite internet service is used by Ukraine for military communications.",
-            "change_since_yesterday": "The US military's denial shifts the blame from the US to Ukraine, potentially complicating diplomatic relations.",
-            "next": "Further investigation into the incident and potential changes to Starlink's operations in Ukraine.",
-            "connection": "SpaceX has been criticized for not adequately informing the US government about potential risks of its satellite internet service.",
-            "memory_hook": "",
-            "vocabulary": "",
-            "ai_generated": true,
-            "published": "2026-10-20T23:51:55+00:00",
-            "calibrated_confidence": 70.0,
-            "impact": {
-              "level": "LOW",
-              "direction": "neutral",
-              "score": 40,
-              "confidence": 0.45,
-              "learned_rate": 0.45
-            },
-            "consequences": {
-              "event": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-              "impact": {
-                "level": "LOW",
-                "direction": "neutral",
-                "score": 40,
-                "confidence": 0.45
-              },
-              "immediate": [
-                "Monitor official confirmation and affected entities"
-              ],
-              "second_order": [
-                "Monitor related sectors, suppliers, competitors and policy response"
-              ],
-              "watch_next": [
-                "New official statements",
-                "Independent confirmation",
-                "Price/economic data if relevant"
-              ]
-            },
-            "lifecycle_v2": "NEW",
-            "similar_events": [
-              {
-                "similarity": 0.196,
-                "date": "2026-10-21",
-                "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.073,
-                "date": "2026-10-05",
-                "headline": "It’s not AI anymore, it’s ‘super intelligence’ (according to the White House)",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-09-25",
-                "headline": "Trump hosts Xi at White House state dinner with tech, finance heavy guest list",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-09-25",
-                "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.068,
-                "date": "2026-10-01",
-                "headline": "Elon Musk to co-lead US effort to study future of warfare, War Secretary Pete Hegseth announces",
-                "outcome_score": null
-              }
-            ],
-            "momentum_score": 68.5,
-            "early_signal": false,
-            "similar_historical_events": [
-              {
-                "similarity": 1.0,
-                "date": "2026-10-21",
-                "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.143,
-                "date": "2026-09-24",
-                "headline": "Russia's Lavrov challenges Trump & Zelensky, Then takes aim at Europe over Ukraine, Minsk and NATO?",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.133,
-                "date": "2026-09-28",
-                "headline": "No public mentions of Taiwan at official Xi and Trump meeting",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-09-23",
-                "headline": "Watch: Trump and Xi are meeting on US soil - what's at stake?",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-09-24",
-                "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
-                "outcome_score": null
-              },
-              {
-                "similarity": 0.125,
-                "date": "2026-09-24",
-                "headline": "A red carpet and military flyover - How Trump welcomed Xi",
-                "outcome_score": null
-              }
-            ]
-          }
-        ],
-        "status": "DEVELOPING",
-        "history_count": 1
-      },
-      {
         "event_id": "after|bereaved|bill|civil|could|delays|face|families|pension|service|tax|unjust",
         "headline": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
         "story_count": 1,
@@ -6890,6 +6759,7 @@
               "verification_reason": "no independent current corroboration",
               "source_count": 1,
               "independent_sources": 0,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [],
               "current_sources": 1,
               "official_source": false,
@@ -6898,7 +6768,7 @@
               "primary_trust": 0.95,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 15.2,
+              "freshness_hours": 15.5,
               "calibrated_confidence": 55.0
             },
             "what": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -6995,6 +6865,199 @@
         "history_count": 1
       },
       {
+        "event_id": "doing|economy|how|president|really|the|trump|under",
+        "headline": "How is the US economy really doing under President Trump?",
+        "story_count": 1,
+        "sources": [
+          "BBC News"
+        ],
+        "stories": [
+          {
+            "story_id": "30e0969093732bb1",
+            "event_id": "fdf0ee4b4ca2c924",
+            "headline": "How is the US economy really doing under President Trump?",
+            "importance": 88.1,
+            "ranking_score": 94.9,
+            "personalized_score": 92.3,
+            "personalization_applied": 92.3,
+            "breaking_score": 5,
+            "trend_score": 85,
+            "emerging_topic": true,
+            "why_for_you": "priority category + preferred region",
+            "learning_adjustment": -1.1,
+            "category": "business",
+            "region": "world",
+            "source": "BBC News",
+            "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+            "summary": "Ahead of the midterms Trump has boasted about the performance of the US economy. BBC Verify looks at inflation, jobs and economic growth in the country.",
+            "related_articles": [],
+            "verification": {
+              "evidence": [
+                {
+                  "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+                  "source": "Institute on Taxation and Economic Policy",
+                  "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+                  "published": "2026-10-20T17:20:24+00:00",
+                  "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
+                }
+              ],
+              "historical": [],
+              "verification": "multi-report",
+              "confidence": 70,
+              "evidence_strength": 65,
+              "verification_reason": "one independent current publisher",
+              "source_count": 2,
+              "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
+              "fresh_sources": [
+                "Institute on Taxation and Economic Policy"
+              ],
+              "current_sources": 2,
+              "official_source": false,
+              "primary_derivative": false,
+              "primary_fresh": true,
+              "primary_trust": 0.95,
+              "contradiction_flag": false,
+              "contradiction_evidence": [],
+              "freshness_hours": 23.1,
+              "calibrated_confidence": 70.0
+            },
+            "what": "How is the US economy really doing under President Trump?",
+            "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
+            "who_detail": "",
+            "when": "",
+            "where": "",
+            "why": "",
+            "how": "",
+            "why_important": "",
+            "key_data": "",
+            "background": "The US economy has seen mixed performance under Trump, with inflation and unemployment rates fluctuating.",
+            "change_since_yesterday": "A more positive economic narrative could sway public opinion and voter behavior.",
+            "next": "Trump administration may release updated economic data to support his claims.",
+            "connection": "Trump's economic policies have been a key issue in the upcoming midterm elections.",
+            "memory_hook": "",
+            "vocabulary": "",
+            "ai_generated": true,
+            "published": "2026-10-20T05:00:45+00:00",
+            "calibrated_confidence": 70.0,
+            "impact": {
+              "level": "MEDIUM",
+              "direction": "positive",
+              "score": 56,
+              "confidence": 0.61,
+              "learned_rate": 0.6
+            },
+            "consequences": {
+              "event": "How is the US economy really doing under President Trump?",
+              "impact": {
+                "level": "MEDIUM",
+                "direction": "positive",
+                "score": 56,
+                "confidence": 0.61
+              },
+              "immediate": [
+                "Monitor official confirmation and affected entities"
+              ],
+              "second_order": [
+                "Monitor related sectors, suppliers, competitors and policy response"
+              ],
+              "watch_next": [
+                "New official statements",
+                "Independent confirmation",
+                "Price/economic data if relevant"
+              ]
+            },
+            "lifecycle_v2": "NEW",
+            "similar_events": [
+              {
+                "similarity": 0.333,
+                "date": "2026-10-21",
+                "headline": "How is the US economy really doing under President Trump?",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.129,
+                "date": "2026-10-01",
+                "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.107,
+                "date": "2026-09-25",
+                "headline": "When and how to see the Harvest Moon in 2026",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.103,
+                "date": "2026-09-23",
+                "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.103,
+                "date": "2026-09-24",
+                "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+                "outcome_score": null
+              }
+            ],
+            "momentum_score": 61.5,
+            "early_signal": false,
+            "similar_historical_events": [
+              {
+                "similarity": 1.0,
+                "date": "2026-10-21",
+                "headline": "How is the US economy really doing under President Trump?",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.214,
+                "date": "2026-09-23",
+                "headline": "Iran's president tells Trump it will never 'bend the knee'",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.188,
+                "date": "2026-10-01",
+                "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.167,
+                "date": "2026-09-17",
+                "headline": "Why Trump is all-in on AI despite the warnings",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.167,
+                "date": "2026-09-24",
+                "headline": "How China helped arm Iran before Trump rolled out the red carpet for Xi",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.154,
+                "date": "2026-09-25",
+                "headline": "When and how to see the Harvest Moon in 2026",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.143,
+                "date": "2026-09-23",
+                "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+                "outcome_score": null
+              },
+              {
+                "similarity": 0.143,
+                "date": "2026-09-24",
+                "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+                "outcome_score": null
+              }
+            ]
+          }
+        ],
+        "status": "DEVELOPING",
+        "history_count": 1
+      },
+      {
         "event_id": "agency|banning|chinese|deepseek|from|government|systems",
         "headline": "US banning Chinese AI DeepSeek from government agency IT systems",
         "story_count": 1,
@@ -7045,6 +7108,7 @@
               "verification_reason": "one independent current publisher",
               "source_count": 2,
               "independent_sources": 1,
+              "duplicate_reporting_copies_excluded": 0,
               "fresh_sources": [
                 "BBC News"
               ],
@@ -7055,7 +7119,7 @@
               "primary_trust": 0.92,
               "contradiction_flag": false,
               "contradiction_evidence": [],
-              "freshness_hours": 22.1,
+              "freshness_hours": 22.4,
               "calibrated_confidence": 70.0
             },
             "what": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -7182,7 +7246,7 @@
     "market_context": [
       {
         "symbol": "NIFTY 50",
-        "price": 23075.15,
+        "price": 23113.5,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -7190,7 +7254,7 @@
       },
       {
         "symbol": "SENSEX",
-        "price": 73852.9,
+        "price": 74522.17,
         "previous_close": 0.0,
         "change": 0.0,
         "change_pct": 0.0,
@@ -7255,7 +7319,7 @@
         "directional_alignment": "UNKNOWN"
       },
       {
-        "event_id": "8d88903d1b828a97",
+        "event_id": "a98875445885925a",
         "direction": "neutral",
         "market_samples": 0,
         "avg_move": null,
@@ -7263,8 +7327,8 @@
         "directional_alignment": "UNKNOWN"
       },
       {
-        "event_id": "a98875445885925a",
-        "direction": "neutral",
+        "event_id": "fdf0ee4b4ca2c924",
+        "direction": "positive",
         "market_samples": 0,
         "avg_move": null,
         "market_context_pct": 0.0,
@@ -7293,7 +7357,7 @@
         "verification_rate": 0.0
       },
       "Times of India": {
-        "n": 2,
+        "n": 1,
         "verified": 0,
         "high_impact": 1,
         "verification_rate": 0.0
@@ -7311,7 +7375,7 @@
         "verification_rate": 0.0
       },
       "BBC News": {
-        "n": 2,
+        "n": 3,
         "verified": 0,
         "high_impact": 1,
         "verification_rate": 0.0
@@ -7332,8 +7396,8 @@
     "scorecard": {
       "stories": 10,
       "high_impact": 8,
-      "medium_impact": 0,
-      "low_impact": 2,
+      "medium_impact": 1,
+      "low_impact": 1,
       "verified": 5,
       "early_signals": 7,
       "health": "WARN"
@@ -7344,11 +7408,11 @@
         "event_id": "642d5ed331fdbd9d",
         "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
         "importance": 98.9,
-        "ranking_score": 104.2,
+        "ranking_score": 103.9,
         "personalized_score": 99.3,
         "personalization_applied": 99.3,
         "breaking_score": 90,
-        "trend_score": 93,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "preferred region + breaking",
         "learning_adjustment": -1.1,
@@ -7375,6 +7439,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "cedarnews.net"
           ],
@@ -7385,7 +7450,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 2.0,
+          "freshness_hours": 2.4,
           "calibrated_confidence": 70.0
         },
         "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -7395,12 +7460,12 @@
         "where": "Sydney",
         "why": "",
         "how": "",
-        "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+        "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
         "key_data": "",
-        "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-        "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+        "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+        "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
         "next": "",
-        "connection": "The RBA's decision-making process is now more closely",
+        "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -7466,7 +7531,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 94.0,
+        "momentum_score": 91.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -7504,32 +7569,32 @@
         "preference_matches": 2
       },
       {
-        "story_id": "249136afadfb10e0",
-        "event_id": "8d88903d1b828a97",
-        "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
-        "importance": 92.3,
-        "ranking_score": 95.4,
-        "personalized_score": 95.0,
-        "personalization_applied": 95.0,
-        "breaking_score": 25,
+        "story_id": "30e0969093732bb1",
+        "event_id": "fdf0ee4b4ca2c924",
+        "headline": "How is the US economy really doing under President Trump?",
+        "importance": 88.1,
+        "ranking_score": 94.9,
+        "personalized_score": 92.3,
+        "personalization_applied": 92.3,
+        "breaking_score": 5,
         "trend_score": 85,
         "emerging_topic": true,
-        "why_for_you": "preferred region + emerging topic",
-        "learning_adjustment": -3.0,
-        "category": "world",
+        "why_for_you": "priority category + preferred region",
+        "learning_adjustment": -1.1,
+        "category": "business",
         "region": "world",
-        "source": "Times of India",
-        "url": "https://timesofindia.indiatimes.com/world/europe/musk-ordered-slowdown-of-ukraines-starlink-network-leaving-kyiv-in-the-dark-report/articleshow/135078377.cms",
-        "summary": "US officials, however, have denied ordering any slowdown. Defence secretary Pete Hegseth said Washington had not directed any reduction in the satellite services, while secretary of state Marco Rubio maintained that the White House was not responsible for the reported disruption. Speaking to reporters, Hegseth said the US military had not instructed any changes to the satellite service used by Ukraine.",
+        "source": "BBC News",
+        "url": "https://www.bbc.co.uk/news/articles/cv98ze40jz18o?at_medium=RSS&at_campaign=rss",
+        "summary": "Ahead of the midterms Trump has boasted about the performance of the US economy. BBC Verify looks at inflation, jobs and economic growth in the country.",
         "related_articles": [],
         "verification": {
           "evidence": [
             {
-              "title": "Elon Musk behind Starlink slowdown order that disrupted Ukraine's drones: Report",
-              "source": "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",
-              "url": "https://www.hindustantimes.com/world-news/elon-musk-ordered-starlink-slowdown-ukraine-drones-disruption-zelensky-trump-administration-russia-war-report-101792544687121.html",
-              "published": "2026-10-21T01:21:31+00:00",
-              "summary": "Elon Musk reportedly spoke to some Trump administration officials, including with the POTUS, before imposing the new speed cap order.&nbsp;"
+              "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+              "source": "Institute on Taxation and Economic Policy",
+              "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+              "published": "2026-10-20T17:20:24+00:00",
+              "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
             }
           ],
           "historical": [],
@@ -7539,51 +7604,52 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
-            "World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times"
+            "Institute on Taxation and Economic Policy"
           ],
           "current_sources": 2,
           "official_source": false,
           "primary_derivative": false,
           "primary_fresh": true,
-          "primary_trust": 0.82,
+          "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 4.0,
+          "freshness_hours": 23.1,
           "calibrated_confidence": 70.0
         },
-        "what": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
+        "what": "How is the US economy really doing under President Trump?",
         "who": "Donald Trump — President of the United States (45th and 47th); head of the U.S. executive branch and commander-in-chief.",
         "who_detail": "",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "The US military's denial of ordering a slowdown in Starlink services could undermine trust in US leadership.",
+        "why_important": "",
         "key_data": "",
-        "background": "SpaceX's Starlink satellite internet service is used by Ukraine for military communications.",
-        "change_since_yesterday": "The US military's denial shifts the blame from the US to Ukraine, potentially complicating diplomatic relations.",
-        "next": "Further investigation into the incident and potential changes to Starlink's operations in Ukraine.",
-        "connection": "SpaceX has been criticized for not adequately informing the US government about potential risks of its satellite internet service.",
+        "background": "The US economy has seen mixed performance under Trump, with inflation and unemployment rates fluctuating.",
+        "change_since_yesterday": "A more positive economic narrative could sway public opinion and voter behavior.",
+        "next": "Trump administration may release updated economic data to support his claims.",
+        "connection": "Trump's economic policies have been a key issue in the upcoming midterm elections.",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
-        "published": "2026-10-20T23:51:55+00:00",
+        "published": "2026-10-20T05:00:45+00:00",
         "calibrated_confidence": 70.0,
         "impact": {
-          "level": "LOW",
-          "direction": "neutral",
-          "score": 40,
-          "confidence": 0.45,
-          "learned_rate": 0.45
+          "level": "MEDIUM",
+          "direction": "positive",
+          "score": 56,
+          "confidence": 0.61,
+          "learned_rate": 0.6
         },
         "consequences": {
-          "event": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
+          "event": "How is the US economy really doing under President Trump?",
           "impact": {
-            "level": "LOW",
-            "direction": "neutral",
-            "score": 40,
-            "confidence": 0.45
+            "level": "MEDIUM",
+            "direction": "positive",
+            "score": 56,
+            "confidence": 0.61
           },
           "immediate": [
             "Monitor official confirmation and affected entities"
@@ -7600,89 +7666,101 @@
         "lifecycle_v2": "NEW",
         "similar_events": [
           {
-            "similarity": 0.196,
+            "similarity": 0.333,
             "date": "2026-10-21",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
+            "headline": "How is the US economy really doing under President Trump?",
             "outcome_score": null
           },
           {
-            "similarity": 0.073,
-            "date": "2026-10-05",
-            "headline": "It’s not AI anymore, it’s ‘super intelligence’ (according to the White House)",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "Trump hosts Xi at White House state dinner with tech, finance heavy guest list",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
-            "date": "2026-09-25",
-            "headline": "CNN, MS NOW and Politico back at White House after court halts Trump ban",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.068,
+            "similarity": 0.129,
             "date": "2026-10-01",
-            "headline": "Elon Musk to co-lead US effort to study future of warfare, War Secretary Pete Hegseth announces",
-            "outcome_score": null
-          }
-        ],
-        "momentum_score": 68.5,
-        "early_signal": false,
-        "similar_historical_events": [
-          {
-            "similarity": 1.0,
-            "date": "2026-10-21",
-            "headline": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
+            "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
             "outcome_score": null
           },
           {
-            "similarity": 0.143,
-            "date": "2026-09-24",
-            "headline": "Russia's Lavrov challenges Trump & Zelensky, Then takes aim at Europe over Ukraine, Minsk and NATO?",
+            "similarity": 0.107,
+            "date": "2026-09-25",
+            "headline": "When and how to see the Harvest Moon in 2026",
             "outcome_score": null
           },
           {
-            "similarity": 0.133,
-            "date": "2026-09-28",
-            "headline": "No public mentions of Taiwan at official Xi and Trump meeting",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
+            "similarity": 0.103,
             "date": "2026-09-23",
-            "headline": "Watch: Trump and Xi are meeting on US soil - what's at stake?",
+            "headline": "How the UK's extreme heat is shifting the conversation about air-con",
             "outcome_score": null
           },
           {
-            "similarity": 0.125,
-            "date": "2026-09-24",
-            "headline": "AI superpower ambitions take centre stage as Trump and Xi meet",
-            "outcome_score": null
-          },
-          {
-            "similarity": 0.125,
+            "similarity": 0.103,
             "date": "2026-09-24",
             "headline": "A red carpet and military flyover - How Trump welcomed Xi",
             "outcome_score": null
           }
         ],
-        "personalization_score": 108.3,
-        "preference_matches": 2
+        "momentum_score": 61.5,
+        "early_signal": false,
+        "similar_historical_events": [
+          {
+            "similarity": 1.0,
+            "date": "2026-10-21",
+            "headline": "How is the US economy really doing under President Trump?",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.214,
+            "date": "2026-09-23",
+            "headline": "Iran's president tells Trump it will never 'bend the knee'",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.188,
+            "date": "2026-10-01",
+            "headline": "Pledge signed by President Trump and top AI leaders misspells the United States",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.167,
+            "date": "2026-09-17",
+            "headline": "Why Trump is all-in on AI despite the warnings",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.167,
+            "date": "2026-09-24",
+            "headline": "How China helped arm Iran before Trump rolled out the red carpet for Xi",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.154,
+            "date": "2026-09-25",
+            "headline": "When and how to see the Harvest Moon in 2026",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.143,
+            "date": "2026-09-23",
+            "headline": "How the UK's extreme heat is shifting the conversation about air-con",
+            "outcome_score": null
+          },
+          {
+            "similarity": 0.143,
+            "date": "2026-09-24",
+            "headline": "A red carpet and military flyover - How Trump welcomed Xi",
+            "outcome_score": null
+          }
+        ],
+        "personalization_score": 112.1,
+        "preference_matches": 3
       },
       {
         "story_id": "a6acdfdcf31c6cb1",
         "event_id": "1512b970b6b4f97c",
         "headline": "Can India turn retrofitment into the next mobility revolution?",
         "importance": 93.2,
-        "ranking_score": 76.2,
+        "ranking_score": 76.3,
         "personalized_score": 95.6,
         "personalization_applied": 95.6,
         "breaking_score": 65,
-        "trend_score": 82,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -7701,6 +7779,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -7709,7 +7788,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 0.5,
+          "freshness_hours": 0.8,
           "calibrated_confidence": 55.0
         },
         "what": "Can India turn retrofitment into the next mobility revolution?",
@@ -7721,10 +7800,10 @@
         "how": "",
         "why_important": "The shift towards retrofitment could create a new wave of entrepreneurship and employment opportunities in India's automotive sector.",
         "key_data": "",
-        "background": "India's automotive industry is facing challenges with traditional manufacturing, and there is a growing interest in sustainable mobility solutions.",
-        "change_since_yesterday": "Retrofitment could decentralize the automotive value chain, shifting from centralized manufacturing to a more distributed and localized model.",
-        "next": "The government may launch pilot programs to train local mechanics and workshops in retrofitting technologies.",
-        "connection": "India's efforts to reduce carbon emissions and its push towards electric mobility.",
+        "background": "India's automotive industry is facing challenges with the shift from traditional to electric vehicles, and retrofitment could be a viable solution to integrate existing vehicles into the green mobility revolution.",
+        "change_since_yesterday": "Retrofitment could democratize access to electric mobility by leveraging existing infrastructure and workforce, potentially bypassing the scale and centralization requirements of new EV manufacturing.",
+        "next": "",
+        "connection": "The article connects to previous news about India's push towards electric vehicles and the challenges of integrating them into the",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -7790,7 +7869,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 81.5,
+        "momentum_score": 82.5,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -7874,6 +7953,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -7882,7 +7962,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 15.2,
+          "freshness_hours": 15.5,
           "calibrated_confidence": 55.0
         },
         "what": "Bereaved families could face 'unjust' tax bill after civil service pension delays",
@@ -8034,6 +8114,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NewsCord"
           ],
@@ -8044,7 +8125,7 @@
           "primary_trust": 0.95,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 18.1,
+          "freshness_hours": 18.4,
           "calibrated_confidence": 70.0
         },
         "what": "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -8166,6 +8247,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -8174,7 +8256,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 36.2,
+          "freshness_hours": 36.5,
           "calibrated_confidence": 55.0
         },
         "what": "India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary",
@@ -8317,6 +8399,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "BBC News"
           ],
@@ -8327,7 +8410,7 @@
           "primary_trust": 0.92,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 22.1,
+          "freshness_hours": 22.4,
           "calibrated_confidence": 70.0
         },
         "what": "US banning Chinese AI DeepSeek from government agency IT systems",
@@ -8444,7 +8527,7 @@
         "event_id": "3540370efe3eafa5",
         "headline": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
         "importance": 89.5,
-        "ranking_score": 96.6,
+        "ranking_score": 96.4,
         "personalized_score": 93.2,
         "personalization_applied": 93.2,
         "breaking_score": 40,
@@ -8475,6 +8558,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "NPR Topics: World"
           ],
@@ -8485,7 +8569,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 11.4,
+          "freshness_hours": 11.8,
           "calibrated_confidence": 70.0
         },
         "what": "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
@@ -8495,12 +8579,12 @@
         "where": "Canada",
         "why": "",
         "how": "",
-        "why_important": "The victory solidifies the Canadian government's stance on unity, potentially weakening separatist movements and altering political strategies in Canada.",
+        "why_important": "The result solidifies Carney's position as a key figure in Canadian governance and potentially strengthens his influence in Canadian unity efforts.",
         "key_data": "",
-        "background": "Alberta has been a stronghold for the separatist movement, with tensions over resource wealth distribution and federal funding.",
-        "change_since_yesterday": "The referendum result significantly reduces the separatist movement's momentum and may lead to a reassessment of federal policies towards Alberta.",
+        "background": "Alberta has been a stronghold for the separatist movement, and the referendum result deepens divisions within the province.",
+        "change_since_yesterday": "The result represents a significant setback for the separatist movement in Alberta, potentially altering the political landscape and future negotiations.",
         "next": "",
-        "connection": "The result aligns with a similar referendum in Quebec in 2025,",
+        "connection": "The referendum result aligns with previous polls showing strong support for Canadian unity in Alberta",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -8584,11 +8668,11 @@
         "event_id": "f4c006855c7b7a9d",
         "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "importance": 88.6,
-        "ranking_score": 71.1,
+        "ranking_score": 70.6,
         "personalized_score": 92.6,
         "personalization_applied": 92.6,
         "breaking_score": 45,
-        "trend_score": 89,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.4,
@@ -8607,6 +8691,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -8615,22 +8700,22 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 8.6,
+          "freshness_hours": 8.9,
           "calibrated_confidence": 55.0
         },
         "what": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
         "who": "Kiren Rijiju",
-        "who_detail": "Kiren Rijiju, Union Parliamentary Affairs Minister, with experience in parliamentary affairs.",
+        "who_detail": "Kiren Rijiju is the Union Parliamentary Affairs Minister, currently serving in the government.",
         "when": "",
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "His statement highlights the lack of cooperation from opposition parties in discussing delimitation with the government.",
+        "why_important": "Rijiju's statement suggests a lack of cooperation from opposition parties in the delimitation process, potentially impacting the government's plans for electoral reforms.",
         "key_data": "",
-        "background": "Delimitation is the process of dividing constituencies for electoral purposes, often contentious due to population changes and political interests.",
-        "change_since_yesterday": "Opposition parties have not engaged in dialogue on delimitation, unlike the government's expectation.",
-        "next": "The government",
-        "connection": "Rijiju's comments follow a pattern of opposition parties not participating in delimitation discussions, as evidenced in previous news.",
+        "background": "Delimitation is the process of redrawing electoral boundaries, which is crucial for upcoming elections. The government has been pushing for a resolution in this matter.",
+        "change_since_yesterday": "Opposition parties are not engaging in the delimitation process, which contrasts with their previous discussions with the government.",
+        "next": "",
+        "connection": "Other opposition parties have also been",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -8696,7 +8781,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 76.9,
+        "momentum_score": 75.5,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -8726,11 +8811,11 @@
         "event_id": "ce5f3525c6acdc45",
         "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
         "importance": 84.9,
-        "ranking_score": 69.5,
+        "ranking_score": 69.3,
         "personalized_score": 90.2,
         "personalization_applied": 90.2,
         "breaking_score": 65,
-        "trend_score": 74,
+        "trend_score": 78,
         "emerging_topic": true,
         "why_for_you": "priority category + preferred region",
         "learning_adjustment": -3.7,
@@ -8749,6 +8834,7 @@
           "verification_reason": "no independent current corroboration",
           "source_count": 1,
           "independent_sources": 0,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [],
           "current_sources": 1,
           "official_source": false,
@@ -8757,7 +8843,7 @@
           "primary_trust": 0.82,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 1.3,
+          "freshness_hours": 1.6,
           "calibrated_confidence": 55.0
         },
         "what": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
@@ -8767,10 +8853,10 @@
         "where": "",
         "why": "",
         "how": "",
-        "why_important": "Shami's frustration over selectors overlooking him could lead to a potential rift within the team and affect team cohesion.",
+        "why_important": "Shami's frustration highlights the communication issues within the Indian selectors, potentially impacting team cohesion and performance.",
         "key_data": "",
-        "background": "Shami has had a successful career with Bengal and has been a key player for the team. He has previously been overlooked for selection in the national team.",
-        "change_since_yesterday": "Shami's vocalization of his concerns could lead to a more transparent communication process within the selectors and the team, potentially improving team dynamics.",
+        "background": "Shami has been a consistent performer for Bengal and has previously been a part of the Indian team. He has expressed concerns about selectors' communication, which has led to his current situation.",
+        "change_since_yesterday": "Shami's situation underscores the need for improved communication between selectors and players, as his voice is not being heard, potentially affecting his chances of being selected for future",
         "next": "",
         "connection": "",
         "memory_hook": "",
@@ -8838,7 +8924,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 78.7,
+        "momentum_score": 80.0,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -8870,11 +8956,11 @@
         "event_id": "642d5ed331fdbd9d",
         "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
         "importance": 98.9,
-        "ranking_score": 104.2,
+        "ranking_score": 103.9,
         "personalized_score": 99.3,
         "personalization_applied": 99.3,
         "breaking_score": 90,
-        "trend_score": 93,
+        "trend_score": 85,
         "emerging_topic": true,
         "why_for_you": "preferred region + breaking",
         "learning_adjustment": -1.1,
@@ -8901,6 +8987,7 @@
           "verification_reason": "one independent current publisher",
           "source_count": 2,
           "independent_sources": 1,
+          "duplicate_reporting_copies_excluded": 0,
           "fresh_sources": [
             "cedarnews.net"
           ],
@@ -8911,7 +8998,7 @@
           "primary_trust": 0.9,
           "contradiction_flag": false,
           "contradiction_evidence": [],
-          "freshness_hours": 2.0,
+          "freshness_hours": 2.4,
           "calibrated_confidence": 70.0
         },
         "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -8921,12 +9008,12 @@
         "where": "Sydney",
         "why": "",
         "how": "",
-        "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+        "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
         "key_data": "",
-        "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-        "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+        "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+        "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
         "next": "",
-        "connection": "The RBA's decision-making process is now more closely",
+        "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
         "memory_hook": "",
         "vocabulary": "",
         "ai_generated": true,
@@ -8992,7 +9079,7 @@
             "outcome_score": null
           }
         ],
-        "momentum_score": 94.0,
+        "momentum_score": 91.2,
         "early_signal": true,
         "similar_historical_events": [
           {
@@ -9030,12 +9117,6 @@
     ],
     "trend_report": [
       {
-        "category": "world",
-        "current": 3,
-        "previous": 297,
-        "delta": -294
-      },
-      {
         "category": "india",
         "current": 3,
         "previous": 657,
@@ -9043,9 +9124,15 @@
       },
       {
         "category": "business",
-        "current": 2,
+        "current": 3,
         "previous": 216,
-        "delta": -214
+        "delta": -213
+      },
+      {
+        "category": "world",
+        "current": 2,
+        "previous": 297,
+        "delta": -295
       },
       {
         "category": "science",
@@ -9100,11 +9187,11 @@
         },
         {
           "type": "event",
-          "label": "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark"
+          "label": "Bereaved families could face 'unjust' tax bill after civil service pension delays"
         },
         {
           "type": "event",
-          "label": "Bereaved families could face 'unjust' tax bill after civil service pension delays"
+          "label": "How is the US economy really doing under President Trump?"
         },
         {
           "type": "event",
@@ -9129,7 +9216,7 @@
     "research_queue": [
       {
         "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
-        "priority": 123.5,
+        "priority": 122.8,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -9203,7 +9290,7 @@
       },
       {
         "headline": "Can India turn retrofitment into the next mobility revolution?",
-        "priority": 78.4,
+        "priority": 78.6,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -9221,7 +9308,7 @@
       },
       {
         "headline": "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
-        "priority": 77.7,
+        "priority": 78.0,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -9239,7 +9326,7 @@
       },
       {
         "headline": "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
-        "priority": 77.2,
+        "priority": 76.9,
         "tasks": [
           "verify primary source",
           "find independent confirmation",
@@ -9310,15 +9397,43 @@
         "evidence_publishers": [
           "BBC News"
         ]
+      },
+      {
+        "headline": "How is the US economy really doing under President Trump?",
+        "priority": 71.4,
+        "tasks": [
+          "verify primary source",
+          "find independent confirmation",
+          "retrieve historical analogue"
+        ],
+        "retrieved_evidence": [
+          {
+            "title": "BBC News: How is the US Economy Really Doing Under President Trump",
+            "source": "Institute on Taxation and Economic Policy",
+            "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNZHBHSUhCaUhpZm1ObURFbmtmUHFhbzdaeFZuWUNKYXU4YmR4OEJVbXNJVDR5UHkydmNwREcyOElhZVQ1cGN1UkEyX3pBSXZ3dm9qTFlYTXlGZ0Z4YkJyUWFQWUlpQVd3UXpuc3BITWZaakFUVmY0MnA3OFBZTU9DX3JONkZ2NURpLVFJ?oc=5",
+            "published": "2026-10-20T17:20:24+00:00",
+            "summary": " BBC News: How is the US Economy Really Doing Under President Trump &nbsp;&nbsp; Institute on Taxation and Economic Policy "
+          }
+        ],
+        "evidence_count": 1,
+        "independent_source_count": 1,
+        "verification": "multi-report",
+        "verification_reason": "one independent current publisher",
+        "primary_fresh": true,
+        "research_status": "EVIDENCE_RETRIEVED",
+        "research_status_reason": "one_independent_current_publisher",
+        "evidence_publishers": [
+          "Institute on Taxation and Economic Policy"
+        ]
       }
     ],
     "weekly_report": {
       "top_events": [
         "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
         "Can India turn retrofitment into the next mobility revolution?",
-        "Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",
         "Alberta voters overwhelmingly reject plan to leave Canada in referendum",
         "‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview",
+        "How is the US economy really doing under President Trump?",
         "‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",
         "Bereaved families could face 'unjust' tax bill after civil service pension delays",
         "Storm Austen to bring severe gales to UK as weather warning issued",
@@ -9387,11 +9502,11 @@
       "event_id": "642d5ed331fdbd9d",
       "headline": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
       "importance": 98.9,
-      "ranking_score": 104.2,
+      "ranking_score": 103.9,
       "personalized_score": 99.3,
       "personalization_applied": 99.3,
       "breaking_score": 90,
-      "trend_score": 93,
+      "trend_score": 85,
       "emerging_topic": true,
       "why_for_you": "preferred region + breaking",
       "learning_adjustment": -1.1,
@@ -9418,6 +9533,7 @@
         "verification_reason": "one independent current publisher",
         "source_count": 2,
         "independent_sources": 1,
+        "duplicate_reporting_copies_excluded": 0,
         "fresh_sources": [
           "cedarnews.net"
         ],
@@ -9428,7 +9544,7 @@
         "primary_trust": 0.9,
         "contradiction_flag": false,
         "contradiction_evidence": [],
-        "freshness_hours": 2.0,
+        "freshness_hours": 2.4,
         "calibrated_confidence": 70.0
       },
       "what": "Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’",
@@ -9438,12 +9554,12 @@
       "where": "Sydney",
       "why": "",
       "how": "",
-      "why_important": "The RBA now faces a more challenging decision in determining the next interest rate move, potentially delaying or reducing the number of hikes.",
+      "why_important": "The RBA faces a dilemma between addressing entrenched inflation and protecting the labor market, potentially leading to a fifth interest rate hike by year-end.",
       "key_data": "",
-      "background": "The RBA has been raising interest rates to combat inflation, with the most recent hikes occurring in March, June, and September.",
-      "change_since_yesterday": "The RBA now faces a more uncertain timeline for interest rate decisions, with a potential fifth rate hike now less likely and possibly delayed.",
+      "background": "The RBA has been under pressure to address rising inflation, which has been a concern for several months.",
+      "change_since_yesterday": "The likelihood of a fifth interest rate hike has increased, reflecting a more severe outlook on inflation compared to earlier assessments.",
       "next": "",
-      "connection": "The RBA's decision-making process is now more closely",
+      "connection": "This news follows the RBA's previous statements on inflation and interest rates, indicating a worsening",
       "memory_hook": "",
       "vocabulary": "",
       "ai_generated": true,
@@ -9509,7 +9625,7 @@
           "outcome_score": null
         }
       ],
-      "momentum_score": 94.0,
+      "momentum_score": 91.2,
       "early_signal": true,
       "similar_historical_events": [
         {
@@ -14133,23 +14249,23 @@
     "drift": {
       "mean_distribution_shift": 0.1747,
       "status": "STABLE",
-      "current_samples": 1306,
-      "baseline_samples": 5223,
+      "current_samples": 1309,
+      "baseline_samples": 5233,
       "current_categories": {
-        "india": 490,
-        "world": 304,
-        "technology": 218,
-        "business": 222,
+        "world": 306,
+        "india": 491,
+        "business": 221,
+        "technology": 219,
         "science": 66,
         "defence": 2,
         "economy": 4
       },
       "baseline_categories": {
-        "technology": 539,
-        "world": 909,
+        "technology": 540,
+        "world": 912,
         "science": 195,
-        "india": 2872,
-        "business": 705,
+        "india": 2877,
+        "business": 706,
         "defence": 3
       },
       "method": "total_variation",
@@ -14223,7 +14339,7 @@
   "market_context": [
     {
       "symbol": "NIFTY 50",
-      "price": 23075.15,
+      "price": 23113.5,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -14231,7 +14347,7 @@
     },
     {
       "symbol": "SENSEX",
-      "price": 73852.9,
+      "price": 74522.17,
       "previous_close": 0.0,
       "change": 0.0,
       "change_pct": 0.0,
@@ -14246,7 +14362,7 @@
     "developing_events": 10,
     "confirmed_events": 0,
     "contradictions": 0,
-    "research_items": 8
+    "research_items": 9
   },
   "knowledge_weekly": {
     "week": "2026-W43",
@@ -14257,28 +14373,28 @@
     "developing_events": 10,
     "confirmed_events": 0,
     "anomalies": 0,
-    "research_items": 8
+    "research_items": 9
   },
   "v5_drift": {
     "mean_distribution_shift": 0.1747,
     "status": "STABLE",
-    "current_samples": 1306,
-    "baseline_samples": 5223,
+    "current_samples": 1309,
+    "baseline_samples": 5233,
     "current_categories": {
-      "india": 490,
-      "world": 304,
-      "technology": 218,
-      "business": 222,
+      "world": 306,
+      "india": 491,
+      "business": 221,
+      "technology": 219,
       "science": 66,
       "defence": 2,
       "economy": 4
     },
     "baseline_categories": {
-      "technology": 539,
-      "world": 909,
+      "technology": 540,
+      "world": 912,
       "science": 195,
-      "india": 2872,
-      "business": 705,
+      "india": 2877,
+      "business": 706,
       "defence": 3
     },
     "method": "total_variation",

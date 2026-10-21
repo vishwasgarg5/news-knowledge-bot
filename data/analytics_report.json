@@ -1,5 +1,5 @@
 {
-  "learning_samples": 6542,
+  "learning_samples": 6543,
   "selected_samples": 994,
   "mature_outcome_samples": 6200,
   "avg_outcome": 0.136,
@@ -55,9 +55,9 @@
     ]
   ],
   "learning_data_audit": {
-    "total_rows": 6542,
+    "total_rows": 6543,
     "mature_rows": 6200,
-    "provisional_rows": 342,
+    "provisional_rows": 343,
     "mature_label_coverage": 0.948,
     "selected_mature_rows": 908
   },
