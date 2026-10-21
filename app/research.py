@@ -107,7 +107,10 @@ def _strong_event_match(headline, primary_summary, article):
 
 ALIASES={
     "bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu",
-    "indian express":"indian express","associated press":"associated press",
+    "indian express":"indian express","the indian express":"indian express",
+    "the times of india":"times of india","times of india":"times of india",
+    "the hindustan times":"hindustan times","hindustan times":"hindustan times",
+    "associated press":"associated press",
     "ap news":"associated press","pib":"pib","press information bureau":"pib",
     "reserve bank of india":"reserve bank of india","rbi":"reserve bank of india",
     "deutsche welle":"dw","dw news":"dw","dw":"dw",

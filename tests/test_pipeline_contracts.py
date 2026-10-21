@@ -139,6 +139,22 @@ def test_research_discovery_respects_evidence_priority(monkeypatch):
     assert queried and "Uncorroborated%20important%20event" in queried[0]
 
 
+def test_google_news_publisher_aliases_match_direct_domains():
+    from app.research import _source_key, is_trusted_publisher
+
+    wrapped = "https://news.google.com/rss/articles/opaque-id"
+    assert _source_key("The Times of India", wrapped) == _source_key(
+        "Times of India", "https://timesofindia.indiatimes.com/example"
+    ) == "times of india"
+    assert _source_key("The Indian Express", wrapped) == _source_key(
+        "Indian Express", "https://indianexpress.com/example"
+    ) == "indian express"
+    assert _source_key("The Hindustan Times", wrapped) == _source_key(
+        "Hindustan Times", "https://www.hindustantimes.com/example"
+    ) == "hindustan times"
+    assert is_trusted_publisher("The Times of India", wrapped)
+
+
 def test_research_quality_contract():
     from app.research import verify_article
 
