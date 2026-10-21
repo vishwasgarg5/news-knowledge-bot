@@ -2274,3 +2274,47 @@ def test_verification_does_not_count_publisher_aliases_as_independent_sources():
     result = verify_article(story, evidence)
     assert result["independent_sources"] == 1
     assert result["verification"] == "multi-report"
+
+
+def test_near_identical_syndicated_reports_count_as_one_independent_source():
+    from app.research import _same_reporting_copy, verify_article
+
+    primary = {
+        "headline": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production.",
+        "source": "Reuters",
+        "url": "https://reuters.com/acme-primary",
+        "published": datetime.now(timezone.utc).isoformat(),
+    }
+    copied_a = {
+        "title": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production. The new plant will restore output.",
+        "source": "Example Wire",
+        "url": "https://wire.example/acme",
+        "published": datetime.now(timezone.utc).isoformat(),
+    }
+    copied_b = {
+        "title": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production. The new plant will restore output.",
+        "source": "Example Daily",
+        "url": "https://daily.example/acme",
+        "published": datetime.now(timezone.utc).isoformat(),
+    }
+    assert _same_reporting_copy(copied_a, copied_b)
+    result = verify_article(primary, [copied_a, copied_b], [])
+    assert result["independent_sources"] == 1
+    assert len(result["evidence"]) == 1
+
+
+def test_similar_event_with_distinct_reporting_is_not_automatically_syndicated():
+    from app.research import _same_reporting_copy
+
+    first = {
+        "title": "Acme launches emergency battery plant after factory fire",
+        "summary": "Officials said the new facility will restore production capacity after last week's incident.",
+    }
+    second = {
+        "title": "Battery maker Acme opens replacement plant following industrial blaze",
+        "summary": "The company described a separate investment plan and outlined new safety systems at the site.",
+    }
+    assert not _same_reporting_copy(first, second)

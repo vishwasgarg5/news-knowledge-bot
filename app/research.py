@@ -195,6 +195,19 @@ def _is_derivative_report(article):
     title=str(article.get("title","") or article.get("headline","") or "")
     source=str(article.get("source","") or "")
     return bool(_ROUNDUP_RE.search(title) or _ROUNDUP_RE.search(source))
+
+def _same_reporting_copy(left, right):
+    """Detect near-identical syndicated copy without merging merely related coverage."""
+    left_title = str(left.get("title", "") or left.get("headline", "")).strip()
+    right_title = str(right.get("title", "") or right.get("headline", "")).strip()
+    left_summary = str(left.get("summary", "") or "").strip()
+    right_summary = str(right.get("summary", "") or "").strip()
+    title_tokens = _tokens(left_title) & _tokens(right_title)
+    summary_tokens = _tokens(left_summary) & _tokens(right_summary)
+    # Require substantial lexical overlap, not just a shared subject or event.
+    title_copy = len(title_tokens) >= 6 and _similar(left_title, right_title) >= 0.78
+    summary_copy = len(summary_tokens) >= 10 and _similar(left_summary, right_summary) >= 0.82
+    return bool(title_copy or summary_copy)
 def _is_official(source): return _source_key(source) in OFFICIAL
 
 def _memory_fallback(query:str,memory:list[dict],limit:int=5)->list[dict]:
@@ -488,6 +501,9 @@ def verify_article(story, articles, memory=None):
         if not (strong_match or relaxed_match) and title_sim < 0.55: continue
         key=_source_key(a.get("source",""), a.get("url",""))
         if not key or key==primary_key or key in seen_sources: continue
+        # Different publisher labels do not make syndicated/near-identical copy
+        # independent. Keep the first strongest match and count the copy once.
+        if any(_same_reporting_copy(a, prior) for prior in corroborating): continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
         if len(corroborating)>=8: break
     independent=len(source_names)
