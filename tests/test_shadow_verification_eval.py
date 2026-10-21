@@ -15,8 +15,8 @@ def test_shadow_evaluation_is_deterministic_in_shape_and_discloses_limits():
     result = evaluate()
     assert result["evaluation_type"] == "synthetic_fixture_shadow_only"
     assert result["cases"] == 12
-    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 5
-    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 5
+    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 7
+    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 7
     assert "Synthetic fixtures do not estimate real-world precision, recall, or F1." in result["limitations"]
     assert all("candidate_accept" in row for row in result["cases_detail"])
     assert all("baseline_error" in row and "candidate_error" in row for row in result["cases_detail"])
