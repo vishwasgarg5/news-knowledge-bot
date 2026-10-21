@@ -95,3 +95,12 @@ def test_uncertain_label_requires_rationale():
     record["story_labels"][0]["rationale"] = "  "
 
     assert "story_labels[0]_rationale_required" in validate_record(record)
+
+
+def test_documented_template_is_schema_valid():
+    import json
+    from pathlib import Path
+
+    template_path = Path(__file__).resolve().parents[1] / "docs" / "historical-evaluation-record-template.json"
+    record = json.loads(template_path.read_text(encoding="utf-8"))
+    assert validate_record(record) == []
