@@ -14,7 +14,7 @@ def test_metrics_calculate_confusion_matrix_and_f1():
 def test_shadow_evaluation_is_deterministic_in_shape_and_discloses_limits():
     result = evaluate()
     assert result["evaluation_type"] == "synthetic_fixture_shadow_only"
-    assert result["cases"] == 10
+    assert result["cases"] == 12
     assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 5
     assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 5
     assert "Synthetic fixtures do not estimate real-world precision, recall, or F1." in result["limitations"]
@@ -64,6 +64,25 @@ def test_candidate_gate_does_not_accept_single_independent_report_unless_officia
     assert row["independent_sources"] == 1
     assert row["baseline_accept"] is True
     assert row["candidate_accept"] is False
+
+
+def test_recall_fixtures_distinguish_unrelated_noise_from_same_publisher_aliases():
+    result = evaluate()
+    rows = {row["case"]: row for row in result["cases_detail"]}
+
+    single_report = rows["one-independent-report-plus-unrelated-article"]
+    assert single_report["label"] is True
+    assert single_report["independent_sources"] == 1
+    assert single_report["baseline_accept"] is True
+    assert single_report["candidate_accept"] is False
+    assert single_report["candidate_error"] == "false_negative"
+
+    aliases = rows["same-publisher-aliases-plus-unrelated-article"]
+    assert aliases["label"] is True
+    assert aliases["independent_sources"] == 1
+    assert aliases["baseline_accept"] is True
+    assert aliases["candidate_accept"] is False
+    assert aliases["candidate_error"] == "false_negative"
 
 
 def test_alias_conflict_and_derivative_fixtures_expose_expected_signals():
