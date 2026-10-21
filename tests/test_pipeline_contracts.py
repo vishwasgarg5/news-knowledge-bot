@@ -2318,3 +2318,58 @@ def test_similar_event_with_distinct_reporting_is_not_automatically_syndicated()
         "summary": "The company described a separate investment plan and outlined new safety systems at the site.",
     }
     assert not _same_reporting_copy(first, second)
+
+
+def test_verification_audits_near_identical_reporting_copies_excluded():
+    from datetime import datetime, timezone
+    from app.research import research_stories, verify_article
+
+    now = datetime.now(timezone.utc).isoformat()
+    primary = {
+        "headline": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production.",
+        "source": "Reuters",
+        "url": "https://reuters.com/acme-primary",
+        "published": now,
+    }
+    copied_a = {
+        "title": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production. The new plant will restore output.",
+        "source": "Example Wire",
+        "url": "https://wire.example/acme",
+        "published": now,
+    }
+    copied_b = {
+        "title": "Acme launches emergency battery plant after factory fire",
+        "summary": "Acme opened an emergency battery plant after a factory fire disrupted production. The new plant will restore output.",
+        "source": "Example Daily",
+        "url": "https://daily.example/acme",
+        "published": now,
+    }
+
+    verified = verify_article(primary, [copied_a, copied_b])
+    assert verified["independent_sources"] == 1
+    assert verified["duplicate_reporting_copies_excluded"] == 1
+
+    aggregate = research_stories(
+        [{"story_id": "acme-1", **primary}],
+        articles=[copied_a, copied_b],
+    )
+    assert aggregate["_stats"]["duplicate_reporting_copies_excluded"] == 1
+
+
+def test_duplicate_reporting_audit_metric_defaults_to_zero_without_copies():
+    from datetime import datetime, timezone
+    from app.research import research_stories
+
+    now = datetime.now(timezone.utc).isoformat()
+    story = {
+        "story_id": "acme-2",
+        "headline": "Acme launches emergency battery plant after factory fire",
+        "source": "Reuters",
+        "url": "https://reuters.com/acme-primary",
+        "published": now,
+    }
+    result = research_stories([story], articles=[])
+    assert result["acme-2"]["duplicate_reporting_copies_excluded"] == 0
+    assert result["_stats"]["duplicate_reporting_copies_excluded"] == 0

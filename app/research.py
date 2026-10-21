@@ -488,6 +488,7 @@ def verify_article(story, articles, memory=None):
             matches.append((match_score*0.7+trust*0.3,a,title_sim,0.0))
     matches.sort(key=lambda x:-x[0])
     corroborating=[]; source_names=[]; seen_sources=set()
+    duplicate_reporting_copies_excluded=0
     for score,a,title_sim,context_sim in matches:
         headline_tokens=_tokens(headline); primary_tokens=_tokens(primary_summary)
         article_tokens=_tokens(a.get("title","")); article_summary_tokens=_tokens(a.get("summary",""))
@@ -503,7 +504,9 @@ def verify_article(story, articles, memory=None):
         if not key or key==primary_key or key in seen_sources: continue
         # Different publisher labels do not make syndicated/near-identical copy
         # independent. Keep the first strongest match and count the copy once.
-        if any(_same_reporting_copy(a, prior) for prior in corroborating): continue
+        if any(_same_reporting_copy(a, prior) for prior in corroborating):
+            duplicate_reporting_copies_excluded += 1
+            continue
         seen_sources.add(key); source_names.append(a.get("source","")); corroborating.append(a)
         if len(corroborating)>=8: break
     independent=len(source_names)
@@ -546,6 +549,7 @@ def verify_article(story, articles, memory=None):
         "verification_reason":verification_reason,
         "source_count":independent+(1 if primary_source else 0),
         "independent_sources":independent,
+        "duplicate_reporting_copies_excluded":duplicate_reporting_copies_excluded,
         "fresh_sources":source_names[:5],
         "current_sources":independent+(1 if primary_source else 0),
         "official_source":official,
@@ -584,6 +588,10 @@ def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:lis
     independent_total=sum(max(0,int(x.get("independent_sources",0) or 0)) for x in output.values() if isinstance(x,dict))
     independent_stories=sum(1 for x in output.values() if isinstance(x,dict) and int(x.get("independent_sources",0) or 0)>0)
     stale_primary=sum(1 for x in output.values() if isinstance(x,dict) and not x.get("primary_fresh",False))
+    duplicate_reporting_copies_excluded=sum(
+        max(0,int(x.get("duplicate_reporting_copies_excluded",0) or 0))
+        for x in output.values() if isinstance(x,dict)
+    )
     output["_stats"]={
         "strong":strong,
         "current":current,
@@ -605,6 +613,7 @@ def research_stories(stories:list[dict],memory:list[dict]|None=None,articles:lis
         "contradictions":contradiction_count,
         "contradiction_rate":round(contradiction_count/total,3) if total else 0,
         "stale_primary":stale_primary,
+        "duplicate_reporting_copies_excluded":duplicate_reporting_copies_excluded,
         "status":"PASS" if total and current>=max(1,int(total*.50)) else ("WARN" if current else "FAIL"),
     }
     print(
