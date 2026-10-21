@@ -60,3 +60,19 @@ def test_capture_record_can_be_serialized_as_json():
     )
 
     assert json.loads(json.dumps(record))["run_id"] == "r"
+
+
+def test_write_capture_record_persists_json(tmp_path):
+    from scripts.evaluation_capture import write_capture_record
+
+    path = write_capture_record(
+        [{"title": "Captured story", "source": "Publisher", "url": "https://example.com/a"}],
+        {"https://example.com/a"},
+        tmp_path,
+        "2026-10-21T10:00:00+05:30",
+        "scheduled",
+        "policy-v1",
+    )
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["candidate_articles"][0]["disposition"] == "included"
+    assert saved["story_labels"] == []
