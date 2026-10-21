@@ -129,3 +129,37 @@ A disagreement is a prompt for adjudication, not a declaration that either revie
 wrong. Use distinct, independent reviewer files; repeated copies from the same reviewer
 must not be treated as independent opinions. The default minimum of three candidates per
 stratum is an operational warning threshold, not a statistical guarantee.
+
+
+## Adjudication and consolidated evaluation report
+
+Keep each reviewer's completed queue as a separate file. Record an adjudication only when
+a named adjudicator has explicitly resolved the case. Example adjudication file:
+
+```json
+{
+  "adjudications": [
+    {
+      "candidate_id": "candidate-123",
+      "final_label": "relevant",
+      "adjudicator_id": "review-lead-01",
+      "adjudicated_at": "2026-10-21T12:00:00+05:30",
+      "rationale": "Reviewed the source evidence and briefing scope."
+    }
+  ]
+}
+```
+
+Generate a consolidated report:
+
+```bash
+python scripts/consolidate_human_evaluation.py review-a.json review-b.json \\
+  --adjudications adjudications.json --output consolidated-evaluation.json
+```
+
+The report keeps original reviewer disagreements visible even after adjudication, and
+summarizes accepted adjudications, uncertain candidates, incomplete reviews, missing
+evidence, unresolved cases, and per-queue sampling metadata. A disagreement without a
+valid adjudication remains unresolved; a label is never inferred from a production
+decision. Candidates with missing evidence, uncertainty, or incomplete review must not
+silently enter definitive metrics. This tool is an audit report, not an accuracy calculator.
