@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "replace-with-unique-run-id",
+  "run_timestamp": "2026-10-21T04:07:00+05:30",
+  "policy_version": "replace-with-immutable-policy-version",
+  "candidate_articles": [
+    {
+      "candidate_id": "candidate-001",
+      "title": "Replace with source headline",
+      "source": "Publisher name",
+      "url": "https://example.com/article",
+      "published_at": "2026-10-21T03:45:00+05:30",
+      "summary": "Replace with a concise candidate summary.",
+      "disposition": "included"
+    },
+    {
+      "candidate_id": "candidate-002",
+      "title": "Candidate excluded by production pipeline",
+      "source": "Another publisher",
+      "url": "https://example.org/article",
+      "published_at": "2026-10-21T03:50:00+05:30",
+      "summary": "Keep excluded candidates so recall can be evaluated.",
+      "disposition": "excluded"
+    }
+  ],
+  "story_labels": [
+    {
+      "story_id": "story-001",
+      "label": "supported",
+      "reviewer_id": "reviewer-alias-01",
+      "reviewed_at": "2026-10-21T05:00:00+05:30",
+      "rationale": "Describe independent evidence supporting or rejecting the claim.",
+      "evidence_urls": ["https://example.com/primary-source"]
+    }
+  ]
+}
