@@ -53,8 +53,8 @@ def test_analyzer_flags_roundup_duplicate_and_weak_headline_match():
             "published": "2026-10-21T00:00:00+00:00",
             "verification": {
                 "evidence": [
-                    article(title, "Example Digest"),
-                    article(title, "Example Digest"),
+                    article(title, "Example Digest", summary="City officials approved the new bridge after severe flood damage across the northern region. Construction plans are expected next week."),
+                    article(title, "Example Digest", summary="City officials approved the new bridge after severe flood damage across the northern region. Construction plans are expected next week."),
                     article("Unrelated technology company reports quarterly revenue", "Other Source"),
                 ],
                 "independent_sources": 1,
