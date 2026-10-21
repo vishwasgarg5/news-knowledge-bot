@@ -58,12 +58,34 @@ def test_shadow_report_classifies_false_positives_and_false_negatives():
     assert reported == changed
 
 
-def test_candidate_gate_does_not_accept_single_independent_report_unless_official():
+def test_candidate_gate_preserves_clean_single_report_path_and_rejects_copy_noise():
     result = evaluate()
-    row = next(x for x in result["cases_detail"] if x["case"] == "only-one-independent-report")
-    assert row["independent_sources"] == 1
-    assert row["baseline_accept"] is True
-    assert row["candidate_accept"] is False
+    rows = {row["case"]: row for row in result["cases_detail"]}
+
+    # A fresh, non-contradicted single independent report should not be rejected
+    # merely because a second publisher is absent.
+    for case_id in (
+        "only-one-independent-report",
+        "one-independent-report-plus-unrelated-article",
+        "same-publisher-aliases-plus-unrelated-article",
+    ):
+        row = rows[case_id]
+        assert row["independent_sources"] == 1
+        assert row["baseline_accept"] is True
+        assert row["candidate_accept"] is True
+
+    syndicated = rows["two-syndicated-copies-of-one-report"]
+    assert syndicated["independent_sources"] == 1
+    assert syndicated["duplicate_reporting_copies_excluded"] >= 1
+    assert syndicated["candidate_accept"] is False
+
+    contradiction = rows["conflicting-reporting-flags-contradiction"]
+    assert contradiction["contradiction"] is True
+    assert contradiction["candidate_accept"] is False
+
+    derivative = rows["derivative-primary-roundup"]
+    assert derivative["primary_derivative"] is True
+    assert derivative["candidate_accept"] is False
 
 
 def test_recall_fixtures_distinguish_unrelated_noise_from_same_publisher_aliases():
@@ -74,15 +96,15 @@ def test_recall_fixtures_distinguish_unrelated_noise_from_same_publisher_aliases
     assert single_report["label"] is True
     assert single_report["independent_sources"] == 1
     assert single_report["baseline_accept"] is True
-    assert single_report["candidate_accept"] is False
-    assert single_report["candidate_error"] == "false_negative"
+    assert single_report["candidate_accept"] is True
+    assert single_report["candidate_error"] is None
 
     aliases = rows["same-publisher-aliases-plus-unrelated-article"]
     assert aliases["label"] is True
     assert aliases["independent_sources"] == 1
     assert aliases["baseline_accept"] is True
-    assert aliases["candidate_accept"] is False
-    assert aliases["candidate_error"] == "false_negative"
+    assert aliases["candidate_accept"] is True
+    assert aliases["candidate_error"] is None
 
 
 def test_alias_conflict_and_derivative_fixtures_expose_expected_signals():

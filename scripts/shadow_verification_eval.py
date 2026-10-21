@@ -154,10 +154,14 @@ def evaluate() -> dict[str, Any]:
         derivative = bool(result.get("primary_derivative"))
         # Baseline mirrors the current tier semantics: any independent report or official primary.
         baseline_accept = official or independent >= 1
-        # Candidate shadow gate: official primary OR two independent fresh reports,
-        # fresh primary, and no recorded contradiction/roundup primary.
+        duplicate_copies = int(result.get("duplicate_reporting_copies_excluded", 0) or 0)
+        # Candidate shadow gate: preserve the single-independent-report path when
+        # the story is fresh and the verifier found no contradiction, derivative
+        # roundup, or syndicated copy. The copy counter is important because two
+        # URLs/publisher labels must not turn one underlying report into corroboration.
         candidate_accept = official or (
-            independent >= 2 and primary_fresh and not contradiction and not derivative
+            independent >= 1 and primary_fresh and not contradiction
+            and not derivative and duplicate_copies == 0
         )
         label = bool(case["label"])
         baseline_error = (
@@ -181,6 +185,7 @@ def evaluate() -> dict[str, Any]:
             "independent_sources": independent, "tier": result.get("verification"),
             "primary_fresh": primary_fresh, "contradiction": contradiction,
             "primary_derivative": derivative,
+            "duplicate_reporting_copies_excluded": duplicate_copies,
         })
     baseline_metrics = _metrics(labels, baseline)
     candidate_metrics = _metrics(labels, candidate)
@@ -219,6 +224,7 @@ def evaluate() -> dict[str, Any]:
             "The baseline and candidate run against the same fixture article pools.",
             "Saved production snapshots do not retain all original candidate articles, so historical replay cannot reliably calculate labelled precision/F1.",
             "Candidate policy is diagnostic only and does not change production verification or ranking.",
+            "The duplicate-copy exclusion signal is a heuristic; real-world copy detection still needs broader validation.",
         ],
     }
 
