@@ -83,6 +83,47 @@ def test_category_research_uses_fresh_results_and_deduplicates(monkeypatch):
     )
     assert articles2 == []
 
+def test_research_target_priority_favors_evidence_gaps():
+    from app.main import _research_target_priority
+
+    assert _research_target_priority({}, {
+        "verification": "multi-source", "independent_sources": 2
+    }) == 4
+    assert _research_target_priority({}, {
+        "verification": "official-source", "independent_sources": 0
+    }) == 3
+    assert _research_target_priority({}, {
+        "verification": "multi-report", "independent_sources": 1
+    }) == 2
+    assert _research_target_priority({}, {
+        "verification": "single-source", "independent_sources": 0
+    }) == 1
+    assert _research_target_priority({}, {
+        "verification": "multi-source", "independent_sources": 2,
+        "contradiction_flag": True
+    }) == 0
+
+
+def test_research_discovery_respects_evidence_priority(monkeypatch):
+    from types import SimpleNamespace
+    import app.research as research
+
+    queried = []
+    def fake_get(url, **kwargs):
+        queried.append(url)
+        return SimpleNamespace(content=b"feed", raise_for_status=lambda: None)
+    monkeypatch.setattr(research.requests, "get", fake_get)
+    monkeypatch.setattr(research.feedparser, "parse", lambda _: SimpleNamespace(entries=[]))
+    stories = [
+        {"headline": "Already corroborated event", "importance": 99, "region": "world",
+         "_research_priority": 4},
+        {"headline": "Uncorroborated important event", "importance": 70, "region": "world",
+         "_research_priority": 1},
+    ]
+    research.discover_related_articles(stories, [], max_queries=1)
+    assert queried and "Uncorroborated%20important%20event" in queried[0]
+
+
 def test_research_quality_contract():
     from app.research import verify_article
 

@@ -59,6 +59,10 @@ python scripts/benchmark_ollama_models.py --models qwen2.5:3b,qwen3:4b
 
 Only pass model tags that are already installed. The benchmark checks evidence extraction, unsupported-claim restraint, procedural-status precision, and preservation of allegations; it reports latency and contract scores but never switches `AI_MODEL`. Treat this as a screening test, not a substitute for a representative historical evaluation and production shadow run.
 
+## Evidence-gap-first corroboration
+
+The bounded external research queue is prioritized by the evidence already present in collected feeds: unresolved contradictions and stories with no independent corroboration are searched before already corroborated stories, with importance used to break ties. India and world query caps remain in force. Preflight results are diagnostic only; they do not alter verification labels or bypass freshness, publisher independence, content quality, or production gates. The audit records how many candidates had zero independent sources and the evidence-priority tiers actually searched.
+
 ## Evidence quality diagnostics
 
 The production audit canonicalizes known publisher aliases before measuring source diversity. It also reports evidence gaps, independent-source coverage, verification tiers, contradictions, and stories whose region is missing or outside the India/World taxonomy. Ranking ignores non-finite numeric inputs such as NaN and Infinity rather than allowing them to contaminate scores. These checks measure evidence availability and data quality; they do not establish that a story is true.

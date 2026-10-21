@@ -28,6 +28,28 @@ def _safe_float(v):
     try:return float(v)
     except:return 0.0
 
+def _research_target_priority(candidate, evidence=None):
+    """Prioritize corroboration searches for unresolved evidence gaps.
+
+    Lower values are searched first: contradictions, then stories lacking
+    independent corroboration, then one-source/official stories, then already
+    corroborated events. Importance breaks ties within each evidence tier.
+    """
+    evidence = evidence or {}
+    if evidence.get("contradiction_flag"):
+        return 0
+    independent = max(0, int(evidence.get("independent_sources", 0) or 0))
+    verification = str(evidence.get("verification", "") or "")
+    if independent == 0 and verification != "official-source":
+        return 1
+    if independent <= 1:
+        return 2
+    if verification == "official-source":
+        return 3
+    return 4
+
+
+
 
 def _verification_counts(research_rows):
     """Count evidence-backed stories without inflating counts from single-source reports."""
@@ -346,15 +368,48 @@ def main():
     # region-balanced search. All results still pass strict verification below.
     query_limit=max(0,int(os.getenv("NEWS_RESEARCH_SEARCH_QUERIES","20")))
     per_region_limit=max(0,int(os.getenv("NEWS_RESEARCH_QUERIES_PER_REGION","10")))
-    search_candidates=sorted(
-        [c for c in candidates if _safe_float(c.get("importance",c.get("personalized_score",0)))>=70],
-        key=lambda c:_safe_float(c.get("importance",c.get("personalized_score",0))), reverse=True)
-    research_targets=[]; region_counts={"india":0,"world":0}
-    for candidate in search_candidates:
+    search_candidates=[
+        c for c in candidates
+        if _safe_float(c.get("importance",c.get("personalized_score",0)))>=70
+    ]
+    # Spend scarce external queries on stories with the largest evidence gaps,
+    # not simply the highest importance scores. This preflight is deterministic
+    # and uses only the already-collected pool; it cannot promote any story.
+    preflight_research=research_stories(search_candidates,timeline,all_articles)
+    preflight_research.pop("_stats",None)
+    priority_candidates=sorted(
+        search_candidates,
+        key=lambda c:(
+            _research_target_priority(c,preflight_research.get(c.get("story_id"),{})),
+            -_safe_float(c.get("importance",c.get("personalized_score",0))),
+            str(c.get("story_id","")),
+        ),
+    )
+    research_targets=[]; region_counts={"india":0,"world":0}; target_priority_counts={}
+    for candidate in priority_candidates:
         region=str(candidate.get("region","world") or "world").lower()
         if region not in region_counts or region_counts[region]>=per_region_limit: continue
-        research_targets.append(candidate); region_counts[region]+=1
+        evidence=preflight_research.get(candidate.get("story_id"),{})
+        priority=_research_target_priority(candidate,evidence)
+        research_targets.append({**candidate,"_research_priority":priority})
+        target_priority_counts[str(priority)]=target_priority_counts.get(str(priority),0)+1
+        region_counts[region]+=1
         if len(research_targets)>=query_limit: break
+    research_target_selection={
+        "preflight_candidates":len(search_candidates),
+        "zero_independent_candidates":sum(
+            1 for c in search_candidates
+            if int((preflight_research.get(c.get("story_id"),{}) or {}).get("independent_sources",0) or 0)==0
+        ),
+        "contradictions":sum(
+            1 for c in search_candidates
+            if (preflight_research.get(c.get("story_id"),{}) or {}).get("contradiction_flag")
+        ),
+        "selected":len(research_targets),
+        "selected_priority_counts":target_priority_counts,
+        "region_counts":region_counts,
+    }
+    print(f"[RESEARCH_TARGETS] {research_target_selection}",flush=True)
     discovered_articles,research_discovery_stats=discover_related_articles(
         research_targets,all_articles,max_queries=query_limit)
     if discovered_articles:
@@ -418,6 +473,7 @@ def main():
 "contradictions":sum(1 for s in result.get("top_stories",[]) if (s.get("verification") or {}).get("contradiction_flag")),"contradiction_evidence":sum(len((s.get("verification") or {}).get("contradiction_evidence") or []) for s in result.get("top_stories",[])),"breaking_stories":intel["breaking"],"emerging_topics":intel["emerging"],"avg_personalized_score":intel["avg_personalized"]}
     stats["category_research"]=category_research_stats
     stats["research_discovery"]=research_discovery_stats
+    stats["research_target_selection"]=research_target_selection
     stats["research_verification"]=research_stats
     stats["health"]="PASS" if source_failures==0 and source_warnings==0 and current_coverage>=0.50 and strong_verified/max(1,total_selected)>=0.30 else ("WARN" if current_coverage>=0.20 and source_failures<=2 else "DEGRADED")
 

@@ -251,8 +251,10 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
     seen_headlines = set()
     candidates = sorted(
         [row for row in (stories or []) if isinstance(row, dict) and str(row.get("headline", "")).strip()],
-        key=lambda row: float(row.get("importance", row.get("personalized_score", 0)) or 0),
-        reverse=True,
+        key=lambda row: (
+            int(row.get("_research_priority", 99)),
+            -float(row.get("importance", row.get("personalized_score", 0)) or 0),
+        ),
     )
     for story in candidates:
         if queried >= max(0, int(max_queries)):
