@@ -71,6 +71,10 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/audit_historical_eval_readiness.py --json
+      - name: Audit captured evaluation review queue
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/audit_evaluation_captures.py --json
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
