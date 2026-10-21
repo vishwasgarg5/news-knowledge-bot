@@ -286,17 +286,43 @@ def main():
     print(f"[LEARNING] calibrated_threshold={calibration.get('threshold')} production_threshold={adaptive}",flush=True)
     candidate_limit=max(1,int(os.getenv("NEWS_CANDIDATE_LIMIT","700")))
     initial_candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
+    category_budget=max(0,int(os.getenv("NEWS_CATEGORY_RESEARCH_QUERIES","8")))
     initial_gaps=[gap for gap in coverage_gaps(initial_candidates) if gap in {"economy","defence"}]
     category_articles,category_research_stats=discover_category_articles(
-        initial_gaps,
-        max_queries=max(0,int(os.getenv("NEWS_CATEGORY_RESEARCH_QUERIES","4"))),
-        existing_articles=all_articles,
+        initial_gaps, max_queries=min(4,category_budget), existing_articles=all_articles, pass_index=0,
     )
-    if category_articles:
-        existing_urls={str(a.get("url","")).strip() for a in all_articles}
-        all_articles.extend(a for a in category_articles if str(a.get("url","")).strip() not in existing_urls)
-    print(f"[CATEGORY_RESEARCH] preflight_gaps={initial_gaps} added={len(category_articles)}",flush=True)
+    existing_urls={str(a.get("url","")).strip() for a in all_articles}
+    all_articles.extend(a for a in category_articles if str(a.get("url","")).strip() not in existing_urls)
     candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
+    # If selection still exposes an economy/defence gap, use a second set of
+    # query variants within the same explicit total budget. Discovery results
+    # remain candidates and do not bypass ranking or verification gates.
+    remaining_gaps=[gap for gap in coverage_gaps(candidates) if gap in {"economy","defence"}]
+    remaining_budget=max(0,category_budget-int(category_research_stats.get("queries",0) or 0))
+    if remaining_gaps and remaining_budget:
+        extra_articles,extra_stats=discover_category_articles(
+            remaining_gaps, max_queries=min(4,remaining_budget),
+            existing_articles=all_articles, pass_index=1,
+        )
+        existing_urls={str(a.get("url","")).strip() for a in all_articles}
+        added_extra=[a for a in extra_articles if str(a.get("url","")).strip() not in existing_urls]
+        all_articles.extend(added_extra)
+        category_articles.extend(added_extra)
+        category_research_stats={
+            "categories":list(dict.fromkeys((category_research_stats.get("categories") or [])+(extra_stats.get("categories") or []))),
+            "queries":int(category_research_stats.get("queries",0) or 0)+int(extra_stats.get("queries",0) or 0),
+            "failed_queries":int(category_research_stats.get("failed_queries",0) or 0)+int(extra_stats.get("failed_queries",0) or 0),
+            "articles_found":int(category_research_stats.get("articles_found",0) or 0)+int(extra_stats.get("articles_found",0) or 0),
+            "initial_gaps":initial_gaps,
+            "remaining_gaps_before_second_pass":remaining_gaps,
+            "second_pass":True,
+        }
+        candidates=select_stories(all_articles,top_n=candidate_limit,excluded_headlines=[])
+    else:
+        category_research_stats["initial_gaps"]=initial_gaps
+        category_research_stats["remaining_gaps_before_second_pass"]=remaining_gaps
+        category_research_stats["second_pass"]=False
+    print(f"[CATEGORY_RESEARCH] preflight_gaps={initial_gaps} remaining_gaps={remaining_gaps} queries={category_research_stats.get('queries',0)} added={len(category_articles)}",flush=True)
 
     # Evaluate only mature historical records here. Do not record today's run yet.
     learning_stats=evaluate_and_learn(DATA,candidates,today)
