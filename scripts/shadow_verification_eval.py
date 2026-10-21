@@ -107,6 +107,25 @@ def labelled_cases() -> list[dict[str, Any]]:
             "story": {"headline": "Ministry announces revised national flood warning system", "source": "pib.gov.in", "url": "https://pib.gov.in/example", "published": _published(2), "summary": ""},
             "articles": [],
         },
+        {
+            "id": "one-independent-report-plus-unrelated-article",
+            "label": True,
+            "story": {"headline": "Regulator suspends regional bank licence after audit", "source": "Local News", "url": "https://local.example/bank-one-plus-noise", "published": _published(3), "summary": ""},
+            "articles": [
+                _article("Regulator suspends licence of regional bank after audit", "Reuters", "https://www.reuters.com/business/bank-one-plus-noise", summary="The regulator announced the suspension after an audit."),
+                _article("Technology company raises quarterly revenue forecast", "Associated Press", "https://apnews.com/article/technology-forecast", summary="The company raised its revenue forecast following stronger demand."),
+            ],
+        },
+        {
+            "id": "same-publisher-aliases-plus-unrelated-article",
+            "label": True,
+            "story": {"headline": "City council approves new bridge funding after flood damage", "source": "Local News", "url": "https://local.example/bridge-alias-noise", "published": _published(3), "summary": ""},
+            "articles": [
+                _article("City council approves new bridge funding after flood damage", "Reuters", "https://www.reuters.com/world/bridge-alias-a", summary="The council approved funding after flood damage."),
+                _article("City council approves new bridge funding after flood damage", "Reuters.com", "https://www.reuters.com/world/bridge-alias-b", summary="The council approved funding after flood damage."),
+                _article("City council approves new bridge funding after flood damage", "Associated Press", "https://apnews.com/article/bridge-alias-noise", summary="The council approved funding after flood damage."),
+            ],
+        },
     ]
 
 def _metrics(labels: list[bool], predictions: list[bool]) -> dict[str, Any]:
