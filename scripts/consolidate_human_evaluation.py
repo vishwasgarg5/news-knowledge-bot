@@ -123,9 +123,10 @@ def consolidate_reviews(
             "adjudicated" if adjudication else
             "unresolved_disagreement" if is_disagreement else
             "uncertain" if "uncertain" in labels else
+            "evidence_incomplete" if gaps else
             "reviewed" if labels else "pending_review"
         )
-        if status in {"unresolved_disagreement", "uncertain", "pending_review"}:
+        if status in {"unresolved_disagreement", "uncertain", "evidence_incomplete", "pending_review"}:
             unresolved.append({"candidate_id": candidate_id, "status": status})
         candidate_rows.append({
             "candidate_id": candidate_id,
