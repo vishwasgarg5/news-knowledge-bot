@@ -57,6 +57,12 @@ def compare_policy_reports(
     })
     same_labels = same_ids and all(base[cid].get("adjudicated_label") == cand[cid].get("adjudicated_label") for cid in base)
     checks.append({"name": "same_adjudicated_labels", "passed": same_labels})
+    same_evidence = same_ids and all(
+        base[cid].get("evidence_fingerprint")
+        and base[cid].get("evidence_fingerprint") == cand[cid].get("evidence_fingerprint")
+        for cid in base
+    )
+    checks.append({"name": "same_evidence_snapshot", "passed": same_evidence})
 
     quality_issues = []
     for policy_name, rows in (("baseline", base), ("candidate", cand)):
@@ -90,7 +96,7 @@ def compare_policy_reports(
         "candidate_sampling": [{"method": method, "seed": seed} for method, seed in cand_methods],
     })
 
-    if not same_ids or not same_labels or quality_issues:
+    if not same_ids or not same_labels or not same_evidence or quality_issues:
         errors.append("reports_do_not_describe_the_same_comparable_adjudicated_set")
     if not same_sampling:
         errors.append("sampling_method_or_seed_mismatch")
