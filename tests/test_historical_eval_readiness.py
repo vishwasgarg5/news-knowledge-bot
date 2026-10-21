@@ -53,7 +53,9 @@ def test_pool_and_explicit_label_are_required_for_labelled_evaluation():
     assert result["explicit_candidate_pool_available"] is True
     assert result["labelled_stories"] == 1
     assert result["labelled_historical_evaluation_ready"] is True
+    assert result["saved_evidence_replay_possible"] is False
     assert result["blockers"] == []
+    assert "saved_verification_evidence_rows_not_persisted" in result["warnings"]
 
 
 def test_audit_does_not_infer_truth_from_verification_decision():
