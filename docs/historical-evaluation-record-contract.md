@@ -58,3 +58,22 @@ for reviewer follow-up without failing routine validation CI; unreadable or malf
 JSON records are still reported as invalid. No accuracy metric should be computed until
 the candidate records have been independently reviewed and the evaluation record
 passes `scripts/validate_evaluation_record.py`.
+
+
+## Candidate relevance reviews and offline metrics
+
+Claim truth and candidate relevance answer different questions. Keep them separate:
+
+- `story_labels` answers whether the story's core claim is independently supported.
+- `candidate_reviews` answers whether a candidate belongs in the target news briefing. Each entry requires `candidate_id`, `relevance_label` (`relevant`, `not_relevant`, or `uncertain`), reviewer alias, timezone-aware review timestamp, and rationale.
+- Candidate reviews must refer to IDs in that record's `candidate_articles`. Do not label candidates based on the production verification status alone.
+
+After adding independent candidate reviews, validate and calculate offline metrics:
+
+```bash
+python scripts/validate_evaluation_record.py data/historical_evaluation_records/RECORD.json
+python scripts/evaluate_historical_records.py data/historical_evaluation_records/
+pytest -q tests/test_historical_record_metrics.py
+```
+
+The evaluator reports inclusion precision, recall, false positives (included but independently labelled not relevant), missed relevant candidates (excluded but labelled relevant), and candidate metadata field coverage. Uncertain reviews and duplicate/out-of-scope dispositions do not enter the precision/recall denominators. Unreviewed candidates are not treated as negatives. With no explicit candidate relevance labels, precision and recall are reported as null rather than guessed. Results are offline descriptive metrics, not proof of real-world performance or label quality.
