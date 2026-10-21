@@ -9,10 +9,21 @@ from __future__ import annotations
 
 import argparse
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 LABELS = {"relevant", "not_relevant", "uncertain"}
+
+
+def _aware_timestamp(value: Any) -> bool:
+    if not isinstance(value, str) or not value.strip():
+        return False
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() is not None
 DISPOSITIONS = {"included", "excluded", "duplicate", "out_of_scope"}
 EVIDENCE_FIELDS = ("source", "url", "published_at", "summary")
 
@@ -67,8 +78,8 @@ def evaluate_adjudicated_reviews(
             reasons.append("final_label_invalid")
         if not str(row.get("adjudicator_id", "")).strip():
             reasons.append("adjudicator_id_required")
-        if not str(row.get("adjudicated_at", "")).strip():
-            reasons.append("adjudicated_at_required")
+        if not _aware_timestamp(row.get("adjudicated_at")):
+            reasons.append("adjudicated_at_must_be_timezone_aware_iso8601")
         if not str(row.get("rationale", "")).strip():
             reasons.append("rationale_required")
         if reasons:
