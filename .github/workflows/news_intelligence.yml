@@ -63,6 +63,10 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/analyze_verification_gaps.py
+      - name: Run offline shadow verification evaluation
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/shadow_verification_eval.py
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
