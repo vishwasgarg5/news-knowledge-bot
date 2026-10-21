@@ -67,7 +67,7 @@ def audit_snapshot(snapshot: dict[str, Any], revision: str = "working-tree") -> 
 
     story_count = sum(isinstance(story, dict) for story in stories)
     has_story_records = story_count > 0
-    has_saved_evidence = has_story_records and story_field_counts["verification.evidence"] > 0
+    has_saved_evidence = has_story_records and total_evidence_rows > 0
     has_labels = labelled_stories > 0
     replayable = has_story_records and explicit_pool and has_labels
     blockers = []
@@ -77,8 +77,9 @@ def audit_snapshot(snapshot: dict[str, Any], revision: str = "working-tree") -> 
         blockers.append("original_candidate_article_pool_not_persisted")
     if not has_labels:
         blockers.append("human_or_verified_story_labels_not_persisted")
+    warnings = []
     if has_story_records and not has_saved_evidence:
-        blockers.append("saved_verification_evidence_not_persisted")
+        warnings.append("saved_verification_evidence_rows_not_persisted")
 
     return {
         "audit_type": "historical_evaluation_readiness",
@@ -94,6 +95,7 @@ def audit_snapshot(snapshot: dict[str, Any], revision: str = "working-tree") -> 
         "saved_evidence_replay_possible": has_saved_evidence,
         "labelled_historical_evaluation_ready": replayable,
         "blockers": blockers,
+        "warnings": warnings,
         "story_field_coverage": story_field_counts,
         "evidence_field_row_coverage": evidence_field_counts,
         "required_for_trustworthy_evaluation": [
