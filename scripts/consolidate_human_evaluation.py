@@ -186,7 +186,7 @@ def main() -> int:
             if not isinstance(adjudication_data, dict):
                 raise ValueError("adjudication root must be an object")
         report = consolidate_reviews(queues, adjudication_data)
-        rendered = json.dumps(report, indent=2, ensure_ascii=False) + "\\n"
+        rendered = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
