@@ -82,7 +82,8 @@ def audit_directory(directory: Path) -> dict[str, Any]:
         "record_count": len(records),
         "pending_review_count": sum(row.get("status") == "pending_review" for row in records),
         "reviewed_record_count": sum(row.get("status") == "reviewed_labels_present" for row in records),
-        "invalid_record_count": sum(row.get("status") == "invalid" or bool(row.get("errors")) for row in records),
+        "invalid_record_count": sum(row.get("status") == "invalid" for row in records),
+        "records_with_issues": sum(bool(row.get("errors")) for row in records),
         "records": records,
         "limitations": [
             "This report checks capture completeness only; it does not establish factual truth.",
@@ -102,7 +103,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         print(f"Captured records: {report['record_count']}; pending review: {report['pending_review_count']}; "
-              f"reviewed: {report['reviewed_record_count']}; incomplete/invalid: {report['invalid_record_count']}")
+              f"reviewed: {report['reviewed_record_count']}; records with review issues: {report['records_with_issues']}; "
+              f"unreadable/invalid: {report['invalid_record_count']}")
         for row in report["records"]:
             print(f"- {row.get('run_id') or row['path']}: {row['status']}; "
                   f"candidates={row.get('candidate_count', 0)}; labels={row.get('label_count', 0)}")
