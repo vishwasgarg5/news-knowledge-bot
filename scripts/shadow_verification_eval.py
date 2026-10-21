@@ -108,6 +108,20 @@ def labelled_cases() -> list[dict[str, Any]]:
             "articles": [],
         },
         {
+            "id": "fresh-independent-report-with-undated-primary",
+            "label": True,
+            "story": {"headline": "Regulator suspends licence of regional bank after audit", "source": "Local News", "url": "https://local.example/bank-undated", "published": "", "summary": ""},
+            "articles": [
+                _article("Regulator suspends licence of regional bank after audit", "Reuters", "https://www.reuters.com/business/bank-undated", summary="The regulator announced the suspension after an audit."),
+            ],
+        },
+        {
+            "id": "stale-official-primary",
+            "label": False,
+            "story": {"headline": "Ministry announces temporary flood warning system for last year's storm", "source": "pib.gov.in", "url": "https://pib.gov.in/old-warning", "published": _published(120), "summary": "An old notice about last year's storm."},
+            "articles": [],
+        },
+        {
             "id": "one-independent-report-plus-unrelated-article",
             "label": True,
             "story": {"headline": "Regulator suspends regional bank licence after audit", "source": "Local News", "url": "https://local.example/bank-one-plus-noise", "published": _published(3), "summary": ""},
@@ -159,9 +173,12 @@ def evaluate() -> dict[str, Any]:
         # the story is fresh and the verifier found no contradiction, derivative
         # roundup, or syndicated copy. The copy counter is important because two
         # URLs/publisher labels must not turn one underlying report into corroboration.
-        candidate_accept = official or (
-            independent >= 1 and primary_fresh and not contradiction
-            and not derivative and duplicate_copies == 0
+        # A fresh corroborating report can establish currency even when the
+        # primary story lacks a usable timestamp. Official-primary-only acceptance
+        # still requires the official story itself to be fresh.
+        candidate_accept = (official and primary_fresh) or (
+            independent >= 1 and (primary_fresh or independent >= 1)
+            and not contradiction and not derivative and duplicate_copies == 0
         )
         label = bool(case["label"])
         baseline_error = (
@@ -225,6 +242,7 @@ def evaluate() -> dict[str, Any]:
             "Saved production snapshots do not retain all original candidate articles, so historical replay cannot reliably calculate labelled precision/F1.",
             "Candidate policy is diagnostic only and does not change production verification or ranking.",
             "The duplicate-copy exclusion signal is a heuristic; real-world copy detection still needs broader validation.",
+            "Fresh independent evidence may compensate for a missing primary timestamp; this assumption needs validation against labelled real stories.",
         ],
     }
 

@@ -14,9 +14,9 @@ def test_metrics_calculate_confusion_matrix_and_f1():
 def test_shadow_evaluation_is_deterministic_in_shape_and_discloses_limits():
     result = evaluate()
     assert result["evaluation_type"] == "synthetic_fixture_shadow_only"
-    assert result["cases"] == 12
-    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 7
-    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 7
+    assert result["cases"] == 14
+    assert result["baseline_metrics"]["tp"] + result["baseline_metrics"]["fn"] == 8
+    assert result["candidate_metrics"]["tp"] + result["candidate_metrics"]["fn"] == 8
     assert "Synthetic fixtures do not estimate real-world precision, recall, or F1." in result["limitations"]
     assert all("candidate_accept" in row for row in result["cases_detail"])
     assert all("baseline_error" in row and "candidate_error" in row for row in result["cases_detail"])
@@ -120,3 +120,19 @@ def test_distinct_summaries_are_not_collapsed_only_for_shared_headline():
     row = next(x for x in result["cases_detail"] if x["case"] == "same-headline-distinct-independent-reporting")
     assert row["independent_sources"] == 2
     assert row["baseline_accept"] is True
+
+def test_candidate_freshness_boundary_for_undated_and_stale_official_stories():
+    result = evaluate()
+    rows = {row["case"]: row for row in result["cases_detail"]}
+
+    undated = rows["fresh-independent-report-with-undated-primary"]
+    assert undated["label"] is True
+    assert undated["primary_fresh"] is False
+    assert undated["independent_sources"] == 1
+    assert undated["candidate_accept"] is True
+    assert undated["candidate_error"] is None
+
+    stale_official = rows["stale-official-primary"]
+    assert stale_official["label"] is False
+    assert stale_official["primary_fresh"] is False
+    assert stale_official["candidate_accept"] is False
