@@ -39,6 +39,7 @@ def evaluate_adjudicated_reviews(
         queue_metadata.append({
             "path": path,
             "run_id": queue.get("run_id", ""),
+            "policy_version": queue.get("policy_version", ""),
             "sampling_method": queue.get("sampling_method", ""),
             "sampling_seed": queue.get("sampling_seed", ""),
             "per_disposition_cap": queue.get("per_disposition_cap"),
