@@ -45,7 +45,7 @@ Final regional selection now balances three goals in order: verification strengt
 
 ## Targeted category-gap discovery
 
-Before final candidate selection, the pipeline checks whether the configured feeds yielded eligible economy or defence stories. When either category is missing, it runs a bounded Google News RSS search (up to four queries by default, configurable with `NEWS_CATEGORY_RESEARCH_QUERIES`). Results must be fresh, unique, and still pass normal deterministic scoring, event deduplication, independent verification, and production quality gates. Discovery counts and failures are recorded in the audit and briefing; this mechanism adds candidates, not automatic verification or a guaranteed category quota.
+Before final candidate selection, the pipeline checks whether the configured feeds yielded eligible economy or defence stories. When either category is missing, it runs a bounded Google News RSS search (up to eight queries by default, configurable with `NEWS_CATEGORY_RESEARCH_QUERIES`). If selection still shows a gap, a second pass uses distinct query variants within the same total budget. Results must be fresh, unique, and still pass normal deterministic scoring, event deduplication, independent verification, and production quality gates. RFC 2822 feed timestamps are supported when parsed timestamps are absent, and publisher aliases are canonicalized before counting independent sources. Discovery counts, remaining gaps, and failures are recorded in the audit and briefing; this mechanism adds candidates, not automatic verification or a guaranteed category quota.
 
 ## Research coverage and model evaluation
 
