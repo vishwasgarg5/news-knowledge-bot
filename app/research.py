@@ -251,6 +251,11 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
     results = []
     queried = 0
     failed = 0
+    stale_skipped = 0
+    missing_metadata = 0
+    missing_timestamp = 0
+    duplicate_urls = 0
+    publisher_keys = set()
     seen_headlines = set()
     candidates = sorted(
         [row for row in (stories or []) if isinstance(row, dict) and str(row.get("headline", "")).strip()],
@@ -290,8 +295,15 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
             if publisher and title.lower().endswith(" - " + str(publisher).lower()):
                 title = title[:-(len(str(publisher)) + 3)].strip()
             link = str(entry.get("link", "") or "").strip()
-            if not publisher or not title or not link or link in known_urls:
+            if not publisher or not title or not link:
+                missing_metadata += 1
                 continue
+            if link in known_urls:
+                duplicate_urls += 1
+                continue
+            # Remember even stale/undated links so the same bad result is not
+            # reprocessed from another query in this run.
+            known_urls.add(link)
             published = ""
             parsed_time = entry.get("published_parsed") or entry.get("updated_parsed")
             if parsed_time:
@@ -308,8 +320,14 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
                 except (TypeError, ValueError, OverflowError):
                     published = ""
             if not published:
+                missing_timestamp += 1
                 continue
-            known_urls.add(link)
+            if not _published_recent(published, 72):
+                stale_skipped += 1
+                continue
+            publisher_key = _source_key(publisher, link)
+            if publisher_key:
+                publisher_keys.add(publisher_key)
             results.append({
                 "title": title,
                 "headline": title,
@@ -319,8 +337,17 @@ def discover_related_articles(stories, existing_articles=None, max_queries=12, p
                 "published": published,
                 "category": "research",
             })
-    metrics = {"queries": queried, "failed_queries": failed, "articles_found": len(results)}
-    print(f"[RESEARCH_DISCOVERY] queries={queried} failed={failed} articles={len(results)}", flush=True)
+    metrics = {
+        "queries": queried, "failed_queries": failed, "articles_found": len(results),
+        "stale_skipped": stale_skipped, "missing_metadata": missing_metadata,
+        "missing_timestamp": missing_timestamp, "duplicate_urls": duplicate_urls,
+        "unique_publishers": len(publisher_keys),
+    }
+    print(
+        f"[RESEARCH_DISCOVERY] queries={queried} failed={failed} articles={len(results)} "
+        f"stale={stale_skipped} publishers={len(publisher_keys)}",
+        flush=True,
+    )
     return results, metrics
 
 

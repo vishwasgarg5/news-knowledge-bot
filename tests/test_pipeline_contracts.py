@@ -119,6 +119,45 @@ def test_research_target_priority_favors_evidence_gaps():
     }) == 0
 
 
+def test_related_discovery_filters_stale_results_and_reports_supply_metrics(monkeypatch):
+    from datetime import datetime, timedelta, timezone
+    from email.utils import format_datetime
+    from types import SimpleNamespace
+    import app.research as research
+
+    now = datetime.now(timezone.utc)
+    fresh = {
+        "title": "Company launches new factory - Reuters",
+        "link": "https://reuters.com/fresh-factory",
+        "published": format_datetime(now),
+        "published_parsed": now.utctimetuple(),
+        "summary": "A fresh factory announcement.",
+        "source": {"title": "Reuters"},
+    }
+    old_date = now - timedelta(days=5)
+    stale = {
+        "title": "Company launches old factory - BBC",
+        "link": "https://bbc.com/old-factory",
+        "published": format_datetime(old_date),
+        "published_parsed": old_date.utctimetuple(),
+        "summary": "An old factory announcement.",
+        "source": {"title": "BBC"},
+    }
+    monkeypatch.setattr(research.requests, "get", lambda *a, **k: SimpleNamespace(
+        content=b"feed", raise_for_status=lambda: None
+    ))
+    monkeypatch.setattr(research.feedparser, "parse", lambda _: SimpleNamespace(entries=[fresh, stale]))
+    articles, metrics = research.discover_related_articles(
+        [{"headline": "Company launches factory", "importance": 90, "region": "world"}],
+        existing_articles=[], max_queries=1,
+    )
+    assert [article["url"] for article in articles] == ["https://reuters.com/fresh-factory"]
+    assert metrics["articles_found"] == 1
+    assert metrics["stale_skipped"] == 1
+    assert metrics["unique_publishers"] == 1
+    assert metrics["missing_timestamp"] == 0
+
+
 def test_research_discovery_respects_evidence_priority(monkeypatch):
     from types import SimpleNamespace
     import app.research as research

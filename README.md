@@ -61,7 +61,7 @@ Only pass model tags that are already installed. The benchmark checks evidence e
 
 ## Evidence-gap-first corroboration
 
-The bounded external research queue is prioritized by the evidence already present in collected feeds: unresolved contradictions and stories with no independent corroboration are searched before already corroborated stories, with importance used to break ties. India and world query caps remain in force. Preflight results are diagnostic only; they do not alter verification labels or bypass freshness, publisher independence, content quality, or production gates. The audit records how many candidates had zero independent sources and the evidence-priority tiers actually searched.
+External research discovery now filters out stale or undated RSS entries before adding them to the verification pool and records stale skips, missing metadata/timestamps, duplicate URLs, and distinct publishers. The bounded external research queue is prioritized by the evidence already present in collected feeds: unresolved contradictions and stories with no independent corroboration are searched before already corroborated stories, with importance used to break ties. India and world query caps remain in force. Preflight results are diagnostic only; they do not alter verification labels or bypass freshness, publisher independence, content quality, or production gates. The audit records how many candidates had zero independent sources and the evidence-priority tiers actually searched.
 
 ## Evidence quality diagnostics
 
