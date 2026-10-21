@@ -105,7 +105,21 @@ def _strong_event_match(headline, primary_summary, article):
         return True
     return False
 
-ALIASES={"bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu","indian express":"indian express","associated press":"associated press","ap news":"associated press","pib":"pib","press information bureau":"pib","reserve bank of india":"reserve bank of india","rbi":"reserve bank of india"}
+ALIASES={
+    "bbc news":"bbc","bbc":"bbc","reuters":"reuters","the hindu":"the hindu",
+    "indian express":"indian express","associated press":"associated press",
+    "ap news":"associated press","pib":"pib","press information bureau":"pib",
+    "reserve bank of india":"reserve bank of india","rbi":"reserve bank of india",
+    "deutsche welle":"dw","dw news":"dw","dw":"dw",
+    "the guardian":"the guardian","guardian":"the guardian",
+    "al jazeera english":"al jazeera","al jazeera":"al jazeera",
+    "npr news":"npr","npr":"npr","cnn news":"cnn","cnn":"cnn",
+    "the new york times":"the new york times","new york times":"the new york times",
+    "the washington post":"the washington post","washington post":"the washington post",
+    "financial times":"financial times","the financial times":"financial times",
+    "bloomberg news":"bloomberg","bloomberg":"bloomberg",
+    "the associated press":"associated press",
+}
 def _host_is(host, domain):
     """Match an exact domain or a true subdomain, never a lookalike suffix."""
     return host == domain or host.endswith("." + domain)
@@ -310,14 +324,18 @@ _CATEGORY_QUERY_MAP = {
     "economy": (
         "India economy RBI inflation GDP growth jobs",
         "India economy fiscal policy interest rates inflation",
+        "India manufacturing exports employment economic data",
+        "India budget tax revenue public debt economic policy",
     ),
     "defence": (
         "India defence military procurement Ministry of Defence",
         "India defence border security military technology",
+        "India armed forces defence contracts DRDO procurement",
+        "India military exercise defence policy border update",
     ),
 }
 
-def discover_category_articles(categories, max_queries=4, per_query=8, existing_articles=None):
+def discover_category_articles(categories, max_queries=4, per_query=8, existing_articles=None, pass_index=0):
     """Find fresh category-specific candidates when source feeds leave coverage gaps.
 
     Results are discovery candidates, not proof: they still pass deterministic
@@ -325,8 +343,11 @@ def discover_category_articles(categories, max_queries=4, per_query=8, existing_
     """
     allowed = ("economy", "defence")
     requested = list(dict.fromkeys(str(c).strip().lower() for c in (categories or [])))
+    pass_index = max(0, min(1, int(pass_index)))
+    # Each pass gets different query variants, so remaining gaps are not just
+    # searched again with the same terms. The total budget remains caller-capped.
     queries = [(_category, query) for _category in allowed if _category in requested
-               for query in _CATEGORY_QUERY_MAP[_category]]
+               for query in _CATEGORY_QUERY_MAP[_category][pass_index * 2:(pass_index + 1) * 2]]
     queries = queries[:max(0, int(max_queries))]
     known_urls = {str(row.get("url", "")).strip() for row in (existing_articles or [])
                   if isinstance(row, dict) and str(row.get("url", "")).strip()}
@@ -365,7 +386,16 @@ def discover_category_articles(categories, max_queries=4, per_query=8, existing_
                 except (TypeError, ValueError, OverflowError):
                     published = ""
             if not published:
-                published = _parse_date(entry.get("published", "") or entry.get("updated", ""))
+                raw_date = str(entry.get("published", "") or entry.get("updated", "") or "")
+                published = _parse_date(raw_date)
+                if not published and raw_date:
+                    try:
+                        published = parsedate_to_datetime(raw_date)
+                        if published.tzinfo is None:
+                            published = published.replace(tzinfo=timezone.utc)
+                        published = published.astimezone(timezone.utc)
+                    except (TypeError, ValueError, OverflowError):
+                        published = None
                 published = published.isoformat() if published else ""
             if not _published_recent(published, 72):
                 continue
