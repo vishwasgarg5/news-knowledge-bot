@@ -62,6 +62,39 @@ def _underfilled_research_categories(initial_gaps, candidates, min_candidates=2)
     return [category for category in requested if counts.get(category, 0) < minimum]
 
 
+def _select_research_targets(candidates, preflight_research, query_limit, per_region_limit):
+    """Select a bounded, region-balanced queue ordered by evidence need."""
+    query_limit = max(0, int(query_limit))
+    per_region_limit = max(0, int(per_region_limit))
+    region_counts = {"india": 0, "world": 0}
+    priority_counts = {}
+    targets = []
+    if query_limit == 0 or per_region_limit == 0:
+        return targets, region_counts, priority_counts
+
+    evidence_by_id = preflight_research or {}
+    ordered = sorted(
+        candidates or [],
+        key=lambda candidate: (
+            _research_target_priority(candidate, evidence_by_id.get(candidate.get("story_id"), {})),
+            -_safe_float(candidate.get("importance", candidate.get("personalized_score", 0))),
+            str(candidate.get("story_id", "")),
+        ),
+    )
+    for candidate in ordered:
+        if len(targets) >= query_limit:
+            break
+        region = str(candidate.get("region", "world") or "world").lower()
+        if region not in region_counts or region_counts[region] >= per_region_limit:
+            continue
+        evidence = evidence_by_id.get(candidate.get("story_id"), {})
+        priority = _research_target_priority(candidate, evidence)
+        targets.append({**candidate, "_research_priority": priority})
+        priority_counts[str(priority)] = priority_counts.get(str(priority), 0) + 1
+        region_counts[region] += 1
+    return targets, region_counts, priority_counts
+
+
 
 
 def _verification_counts(research_rows):
@@ -395,24 +428,9 @@ def main():
     # and uses only the already-collected pool; it cannot promote any story.
     preflight_research=research_stories(search_candidates,timeline,all_articles)
     preflight_research.pop("_stats",None)
-    priority_candidates=sorted(
-        search_candidates,
-        key=lambda c:(
-            _research_target_priority(c,preflight_research.get(c.get("story_id"),{})),
-            -_safe_float(c.get("importance",c.get("personalized_score",0))),
-            str(c.get("story_id","")),
-        ),
+    research_targets,region_counts,target_priority_counts=_select_research_targets(
+        search_candidates,preflight_research,query_limit,per_region_limit,
     )
-    research_targets=[]; region_counts={"india":0,"world":0}; target_priority_counts={}
-    for candidate in priority_candidates:
-        region=str(candidate.get("region","world") or "world").lower()
-        if region not in region_counts or region_counts[region]>=per_region_limit: continue
-        evidence=preflight_research.get(candidate.get("story_id"),{})
-        priority=_research_target_priority(candidate,evidence)
-        research_targets.append({**candidate,"_research_priority":priority})
-        target_priority_counts[str(priority)]=target_priority_counts.get(str(priority),0)+1
-        region_counts[region]+=1
-        if len(research_targets)>=query_limit: break
     research_target_selection={
         "preflight_candidates":len(search_candidates),
         "zero_independent_candidates":sum(

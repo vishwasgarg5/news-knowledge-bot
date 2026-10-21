@@ -158,6 +158,34 @@ def test_related_discovery_filters_stale_results_and_reports_supply_metrics(monk
     assert metrics["missing_timestamp"] == 0
 
 
+def test_research_target_selection_respects_budget_and_region_caps():
+    from app.main import _select_research_targets
+
+    candidates = [
+        {"story_id": "strong", "headline": "Corroborated event", "importance": 99, "region": "world"},
+        {"story_id": "weak", "headline": "Uncorroborated event", "importance": 70, "region": "world"},
+        {"story_id": "india-weak", "headline": "Unverified India event", "importance": 71, "region": "india"},
+    ]
+    evidence = {
+        "strong": {"verification": "multi-source", "independent_sources": 2},
+        "weak": {"verification": "single-source", "independent_sources": 0},
+        "india-weak": {"verification": "unverified", "independent_sources": 0},
+    }
+    empty, empty_regions, empty_priorities = _select_research_targets(
+        candidates, evidence, query_limit=0, per_region_limit=1
+    )
+    assert empty == []
+    assert empty_regions == {"india": 0, "world": 0}
+    assert empty_priorities == {}
+
+    targets, regions, priorities = _select_research_targets(
+        candidates, evidence, query_limit=3, per_region_limit=1
+    )
+    assert [item["story_id"] for item in targets] == ["india-weak", "weak"]
+    assert regions == {"india": 1, "world": 1}
+    assert priorities == {"1": 2}
+
+
 def test_research_discovery_respects_evidence_priority(monkeypatch):
     from types import SimpleNamespace
     import app.research as research
