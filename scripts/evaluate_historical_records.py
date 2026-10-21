@@ -28,6 +28,7 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
     dispositions = {"included": 0, "excluded": 0, "duplicate": 0, "out_of_scope": 0}
     field_coverage = {key: 0 for key in ("title", "source", "url", "published_at", "summary")}
     reviewed_included = reviewed_excluded = 0
+    reviewed_by_disposition = {key: 0 for key in dispositions}
     true_positive = false_positive = false_negative = 0
     relevance_label_counts = {"relevant": 0, "not_relevant": 0, "uncertain": 0}
     for candidate in candidates:
@@ -43,6 +44,8 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
         if label not in relevance_label_counts:
             continue
         relevance_label_counts[label] += 1
+        if disposition in reviewed_by_disposition:
+            reviewed_by_disposition[disposition] += 1
         if disposition == "included":
             reviewed_included += 1
             if label == "relevant":
@@ -63,6 +66,20 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
         "candidate_count": len(candidates),
         "candidate_dispositions": dispositions,
         "candidate_reviews": len(labels_by_id),
+        "candidate_review_coverage": {
+            "reviewed": sum(reviewed_by_disposition.values()),
+            "total_candidates": len(candidates),
+            "rate": sum(reviewed_by_disposition.values()) / len(candidates) if candidates else None,
+            "by_disposition": {
+                key: {
+                    "reviewed": reviewed_by_disposition[key],
+                    "total": dispositions[key],
+                    "rate": reviewed_by_disposition[key] / dispositions[key] if dispositions[key] else None,
+                }
+                for key in dispositions
+            },
+            "warning": "Review coverage is descriptive; non-random or partial review may bias precision and recall.",
+        },
         "candidate_relevance_labels": relevance_label_counts,
         "reviewed_included_candidates": reviewed_included,
         "reviewed_excluded_candidates": reviewed_excluded,
@@ -110,6 +127,12 @@ def evaluate_paths(paths: list[Path]) -> dict[str, Any]:
         "invalid_records": len(errors),
         "candidate_count": total_candidates,
         "candidate_reviews": total_reviews,
+        "candidate_review_coverage": {
+            "reviewed": total_reviews,
+            "total_candidates": total_candidates,
+            "rate": total_reviews / total_candidates if total_candidates else None,
+            "warning": "Coverage is pooled across valid records only and does not establish that reviewed candidates are representative.",
+        },
         "false_positives": total_fp,
         "missed_relevant_candidates": total_fn,
         "true_positives": total_tp,
