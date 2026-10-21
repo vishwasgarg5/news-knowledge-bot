@@ -243,6 +243,17 @@ jobs:
           assert 0.0 <= float(stats["research_completion_rate"]) <= 1.0
           assert "v5_research_agent" in stats
           assert (stats["production_decision"] or {}).get("status") in {"PROMOTE","HOLD"}
+          assert "research_target_selection" in stats
+          assert "research_discovery" in stats
+          assert "research_verification" in stats
+          target_selection=stats.get("research_target_selection") or {}
+          discovery=stats.get("research_discovery") or {}
+          verification=stats.get("research_verification") or {}
+          assert 0 <= int(target_selection.get("selected",0) or 0) <= int(target_selection.get("preflight_candidates",0) or 0)
+          assert 0 <= int(target_selection.get("zero_independent_candidates",0) or 0) <= int(target_selection.get("preflight_candidates",0) or 0)
+          assert int(discovery.get("articles_found",0) or 0) >= 0
+          assert int(discovery.get("unique_publishers",0) or 0) <= int(discovery.get("articles_found",0) or 0)
+          assert 0.0 <= float(verification.get("independent_source_coverage",0) or 0) <= 1.0
           # A held research/coverage gate must not be reported as a clean final audit.
           gate=stats.get("v5_quality_gate") or {}
           final=stats.get("final_audit") or {}

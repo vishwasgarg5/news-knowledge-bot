@@ -378,6 +378,9 @@ def test_single_main_workflow_separates_validation_from_production():
     assert "actions/upload-artifact@v7" in text
     assert "NEWS_WORLD_TOP: '5'" in text
     assert "NEWS_CATEGORY_RESEARCH_QUERIES: '8'" in text
+    assert 'assert "research_target_selection" in stats' in text
+    assert 'assert "research_discovery" in stats' in text
+    assert 'assert "research_verification" in stats' in text
     assert "NEWS_INDIA_TOP: '5'" in text
     assert "git add data/" in text
 
