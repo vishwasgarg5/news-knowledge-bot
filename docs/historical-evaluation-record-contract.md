@@ -163,3 +163,23 @@ evidence, unresolved cases, and per-queue sampling metadata. A disagreement with
 valid adjudication remains unresolved; a label is never inferred from a production
 decision. Candidates with missing evidence, uncertainty, or incomplete review must not
 silently enter definitive metrics. This tool is an audit report, not an accuracy calculator.
+
+
+## Adjudicated-only offline metrics
+
+For a conservative precision/recall report, pass the completed reviewer queues and the
+explicit adjudication file to the offline evaluator:
+
+```bash
+python scripts/evaluate_adjudicated_reviews.py review-a.json review-b.json \\
+  --adjudications adjudications.json --output adjudicated-metrics.json
+pytest -q tests/test_adjudicated_review_metrics.py
+```
+
+Only candidates with a valid explicit adjudication, complete source evidence (`source`,
+`url`, `published_at`, `summary`), and an `included` or `excluded` disposition can enter
+the precision/recall denominators. The report lists each candidate's eligibility and
+exclusion reasons. Unadjudicated candidates, uncertain labels, duplicate/out-of-scope
+dispositions, and evidence-incomplete candidates are not silently treated as negatives.
+A missing denominator yields `null`, not a guessed zero. The report retains sampling
+metadata and does not apply sampling weights or claim population-level accuracy.
