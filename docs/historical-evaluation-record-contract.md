@@ -90,3 +90,24 @@ unbiased system accuracy. Review included and excluded candidates, record the sa
 method outside the metric result, and expand review coverage when a disposition group
 has few or no reviewed candidates. Coverage describes what was reviewed; it does not
 prove the reviewed subset is representative.
+
+
+## Stratified human-review queue
+
+Create a deterministic review queue from a captured record without editing the source record:
+
+```bash
+python scripts/create_stratified_review_queue.py data/historical_evaluation_records/RECORD.json --per-disposition 10 --seed study-2026-01 --output review-queue.json
+```
+
+The queue samples each disposition separately, excludes candidates already present in
+`candidate_reviews`, and records eligible and selected counts per stratum. Selection is
+reproducible for the same record, seed, and cap. The output contains blank label fields;
+it does not label candidates or claim that the selected sample is representative.
+
+After independent review, merge the completed review entries into the original record's
+`candidate_reviews` and add an `evaluation_sampling` object containing at least the
+queue's `sampling_method`, `sampling_seed`, `per_disposition_cap`, and `strata`. Keep
+that metadata with the record; the offline evaluator carries it into its report so readers
+can assess the review design. Do not use sampling-adjusted population estimates unless a
+statistically justified sampling design and weighting method have been specified.
