@@ -1,0 +1,13 @@
+{
+  "config_version": "1.0",
+  "tolerances": {
+    "maximum_false_positive_increase": 0,
+    "maximum_missed_relevant_increase": 0,
+    "minimum_precision_delta": 0.0
+  },
+  "notes": [
+    "These are conservative example release tolerances; review and approve them before use.",
+    "Counts are absolute changes on the same independently adjudicated evaluation set.",
+    "A missing metric blocks the gate rather than being treated as zero."
+  ]
+}
