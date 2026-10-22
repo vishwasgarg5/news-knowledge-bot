@@ -80,6 +80,7 @@ def test_integrity_audit_passes_chained_history_and_detects_tampering(tmp_path):
         "inclusion_precision": 0.7, "inclusion_recall": 0.7,
         "false_positives": 1, "missed_relevant_candidates": 1,
     })
+    second_artifacts[5] = dict(second_artifacts[5], comparison="f" * 64)
     second = build_history_entry(*second_artifacts, recorded_at="2026-10-22T10:00:00+05:30")
     assert append_history(path, second) is True
     history = json.loads(path.read_text(encoding="utf-8"))
