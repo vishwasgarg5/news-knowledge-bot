@@ -77,10 +77,10 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         errors.append("human_label_incomplete_or_invalid")
     if state == "pending_review" or not labels:
         status = "pending_review"
-    elif state == "in_progress":
-        status = "in_progress"
     elif errors:
         status = "needs_attention"
+    elif state == "in_progress":
+        status = "in_progress"
     else:
         status = "reviewed_labels_present"
     # Preserve the fact that a pending record also has data-quality problems:
