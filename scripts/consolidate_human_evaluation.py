@@ -29,6 +29,15 @@ def _aware_timestamp(value: Any) -> bool:
     return parsed.tzinfo is not None and parsed.utcoffset() is not None
 
 
+def _group_rows_by_reviewer(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        reviewer_id = str(row.get("reviewer_id", "")).strip()
+        if reviewer_id:
+            grouped[reviewer_id].append(row)
+    return grouped
+
+
 def consolidate_reviews(
     queues: list[tuple[str, dict[str, Any]]],
     adjudication_data: dict[str, Any] | None = None,
@@ -118,6 +127,22 @@ def consolidate_reviews(
             if row.get("relevance_label") in LABELS
         })
         reviewers = sorted({str(row.get("reviewer_id", "")).strip() or "(missing)" for row in rows})
+        labels_by_reviewer: dict[str, set[str]] = defaultdict(set)
+        for row in rows:
+            reviewer_id = str(row.get("reviewer_id", "")).strip() or "(missing)"
+            label = row.get("relevance_label")
+            if label in LABELS:
+                labels_by_reviewer[reviewer_id].add(label)
+        distinct_reviewer_labels = {
+            label
+            for reviewer_id, reviewer_labels in labels_by_reviewer.items()
+            if reviewer_id != "(missing)" and len(reviewer_labels) == 1
+            for label in reviewer_labels
+        }
+        has_duplicate_reviewer_entry = any(
+            reviewer_id != "(missing)" and len(reviewer_rows) > 1
+            for reviewer_id, reviewer_rows in _group_rows_by_reviewer(rows).items()
+        )
         gaps = sorted({field for row in rows for field in EVIDENCE_FIELDS
                        if not str(row.get(field, "") or "").strip()})
         if gaps:
@@ -134,20 +159,21 @@ def consolidate_reviews(
                 missing.append("rationale")
             if missing:
                 incomplete_reviews.append({"candidate_id": candidate_id, "queue": row["_queue_path"], "missing_fields": missing})
-        is_disagreement = len(labels) > 1
+        is_disagreement = len(distinct_reviewer_labels) > 1
         if is_disagreement:
-            disagreements.append({"candidate_id": candidate_id, "labels": labels, "reviewers": reviewers})
+            disagreements.append({"candidate_id": candidate_id, "labels": sorted(distinct_reviewer_labels), "reviewers": reviewers})
         if "uncertain" in labels:
             uncertain.append({"candidate_id": candidate_id, "labels": labels, "reviewers": reviewers})
         adjudication = adjudications.get(candidate_id)
         status = (
             "adjudicated" if adjudication else
+            "duplicate_reviewer_entries" if has_duplicate_reviewer_entry else
             "unresolved_disagreement" if is_disagreement else
             "uncertain" if "uncertain" in labels else
             "evidence_incomplete" if gaps else
             "reviewed" if labels else "pending_review"
         )
-        if status in {"unresolved_disagreement", "uncertain", "evidence_incomplete", "pending_review"}:
+        if status in {"duplicate_reviewer_entries", "unresolved_disagreement", "uncertain", "evidence_incomplete", "pending_review"}:
             unresolved.append({"candidate_id": candidate_id, "status": status})
         candidate_rows.append({
             "candidate_id": candidate_id,

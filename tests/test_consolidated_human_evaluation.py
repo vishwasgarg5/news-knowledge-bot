@@ -98,3 +98,18 @@ def test_consolidation_flags_repeated_entries_from_same_reviewer():
     assert duplicate["entry_count"] == 2
     assert duplicate["labels"] == ["not_relevant", "relevant"]
     assert report["candidate_summaries"][0]["unique_reviewer_count"] == 2
+
+
+def test_same_reviewer_conflict_is_not_misreported_as_independent_disagreement():
+    report = consolidate_reviews([
+        queue("copy-a.json", [review("c1", "relevant", "reviewer-a")]),
+        queue("copy-b.json", [review("c1", "not_relevant", "reviewer-a")]),
+    ])
+
+    row = report["candidate_summaries"][0]
+    assert report["review_disagreement_count"] == 0
+    assert report["duplicate_reviewer_entry_count"] == 1
+    assert row["status"] == "duplicate_reviewer_entries"
+    assert report["unresolved_candidates"] == [{
+        "candidate_id": "c1", "status": "duplicate_reviewer_entries"
+    }]
