@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Offline Policy Evaluation Evidence Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "bundle_schema_version",
+    "bundle_type",
+    "identity",
+    "artifacts",
+    "integrity",
+    "operational_boundary",
+    "bundle_fingerprint_sha256"
+  ],
+  "properties": {
+    "bundle_schema_version": {
+      "const": "1.0"
+    },
+    "bundle_type": {
+      "const": "offline_policy_evaluation_evidence"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_policy_version",
+        "candidate_policy_version",
+        "cohort_fingerprint_sha256",
+        "release_decision",
+        "improvement_claim"
+      ],
+      "properties": {
+        "baseline_policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cohort_fingerprint_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "release_decision": {
+          "enum": [
+            "GO",
+            "NO-GO"
+          ]
+        },
+        "improvement_claim": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison",
+        "baseline_audit",
+        "candidate_audit",
+        "regression_gate",
+        "release_decision",
+        "uncertainty_summary"
+      ],
+      "properties": {
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        "baseline_audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        "candidate_audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        "regression_gate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        "release_decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        "uncertainty_summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "payload_sha256",
+            "payload"
+          ],
+          "properties": {
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "source_artifacts_verified",
+        "source_artifact_sha256",
+        "history_audit"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "source_artifacts_verified": {
+          "const": 6
+        },
+        "source_artifact_sha256": {
+          "type": "object",
+          "required": [
+            "comparison",
+            "baseline_audit",
+            "candidate_audit",
+            "regression_gate",
+            "release_decision",
+            "uncertainty_summary"
+          ],
+          "properties": {
+            "comparison": {
+              "$ref": "#/$defs/sha256"
+            },
+            "baseline_audit": {
+              "$ref": "#/$defs/sha256"
+            },
+            "candidate_audit": {
+              "$ref": "#/$defs/sha256"
+            },
+            "regression_gate": {
+              "$ref": "#/$defs/sha256"
+            },
+            "release_decision": {
+              "$ref": "#/$defs/sha256"
+            },
+            "uncertainty_summary": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "history_audit": {
+          "type": "object",
+          "required": [
+            "status",
+            "entry_count"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pass",
+                "not_provided"
+              ]
+            },
+            "entry_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "warnings": {
+              "type": "array"
+            },
+            "history_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "history_payload_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "history_payload": {
+          "type": "object"
+        },
+        "history_payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "operational_boundary": {
+      "type": "string"
+    },
+    "bundle_fingerprint_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

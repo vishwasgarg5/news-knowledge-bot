@@ -148,3 +148,11 @@ def test_invalid_cohort_fingerprint_is_rejected(tmp_path):
     paths["uncertainty_summary"].write_text(json.dumps(value), encoding="utf-8")
     with pytest.raises(ValueError, match="cohort SHA-256"):
         build_bundle(paths)
+
+
+def test_machine_readable_bundle_schema_matches_required_artifacts():
+    from pathlib import Path
+    schema = json.loads(Path("docs/policy-evidence-bundle.schema.json").read_text(encoding="utf-8"))
+    assert schema["properties"]["bundle_schema_version"]["const"] == "1.0"
+    assert set(schema["properties"]["artifacts"]["required"]) == set(ARTIFACTS)
+    assert schema["properties"]["bundle_fingerprint_sha256"]["$ref"] == "#/$defs/sha256"

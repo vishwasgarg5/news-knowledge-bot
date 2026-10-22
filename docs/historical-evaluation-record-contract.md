@@ -429,3 +429,6 @@ When a history file is included, the bundle also binds the embedded history payl
 
 
 Builds from identical source bytes are deterministic when no history file is supplied: no wall-clock timestamp is injected into the bundle. The regression suite exercises two builds and a command-line verification against the original input directory.
+
+
+The machine-readable bundle contract is published at `docs/policy-evidence-bundle.schema.json`. It defines required artifact names, digest formats, and the top-level bundle envelope; the Python verifier additionally enforces cross-artifact policy/cohort consistency and gate semantics that JSON Schema alone cannot express.
