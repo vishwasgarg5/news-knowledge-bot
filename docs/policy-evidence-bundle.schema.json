@@ -265,9 +265,6 @@
         },
         "history_payload": {
           "type": "object"
-        },
-        "history_payload_sha256": {
-          "$ref": "#/$defs/sha256"
         }
       }
     },

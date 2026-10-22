@@ -432,3 +432,13 @@ Builds from identical source bytes are deterministic when no history file is sup
 
 
 The machine-readable bundle contract is published at `docs/policy-evidence-bundle.schema.json`. It defines required artifact names, digest formats, and the top-level bundle envelope; the Python verifier additionally enforces cross-artifact policy/cohort consistency and gate semantics that JSON Schema alone cannot express.
+
+
+## Upgrade sequence close-out (steps 28–35)
+
+The evidence-bundle builder now has source-byte and embedded-payload digests, an optional
+history integrity audit, strict SHA-256 format checks, deterministic build/verify tests,
+and a machine-readable schema. The bundle is an offline audit convenience, not a
+signature or trusted timestamp. Reviewers must still inspect input quality and cohort
+representativeness. The existing policy release decision remains a local evaluation
+result only; none of these steps authorizes deployment or Telegram delivery.

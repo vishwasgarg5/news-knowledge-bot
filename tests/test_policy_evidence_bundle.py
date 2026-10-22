@@ -156,3 +156,16 @@ def test_machine_readable_bundle_schema_matches_required_artifacts():
     assert schema["properties"]["bundle_schema_version"]["const"] == "1.0"
     assert set(schema["properties"]["artifacts"]["required"]) == set(ARTIFACTS)
     assert schema["properties"]["bundle_fingerprint_sha256"]["$ref"] == "#/$defs/sha256"
+
+
+def test_history_digest_contract_is_nested_with_history_audit(tmp_path):
+    from pathlib import Path
+    schema = json.loads(Path("docs/policy-evidence-bundle.schema.json").read_text(encoding="utf-8"))
+    integrity = schema["properties"]["integrity"]["properties"]
+    assert "history_payload_sha256" not in integrity
+    assert integrity["history_audit"]["properties"]["history_payload_sha256"]["$ref"] == "#/$defs/sha256"
+    paths = fixture_artifacts(tmp_path)
+    history_path = tmp_path / "history.json"
+    history_path.write_text(json.dumps({"history_schema_version": "1.0", "entries": []}), encoding="utf-8")
+    bundle = build_bundle(paths, history_path)
+    assert "history_payload_sha256" in bundle["integrity"]["history_audit"]
