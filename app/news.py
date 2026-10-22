@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import html
 import re
 import time
 from dataclasses import dataclass
@@ -27,6 +28,26 @@ class Article:
 
 def _clean(value: str) -> str:
     return " ".join((value or "").split())
+
+
+def _summary_text(entry) -> str:
+    """Use the first available RSS summary field, including Atom content."""
+    for key in ("summary", "description", "subtitle"):
+        value = entry.get(key, "")
+        if value:
+            cleaned = " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split())
+            if cleaned:
+                return cleaned[:1600]
+    content = entry.get("content", []) or []
+    if isinstance(content, dict):
+        content = [content]
+    for item in content:
+        if isinstance(item, dict):
+            value = item.get("value") or item.get("text") or ""
+            cleaned = " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split())
+            if cleaned:
+                return cleaned[:1600]
+    return ""
 
 
 def _date(entry) -> str:
@@ -128,7 +149,7 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         link = e.get("link", "")
         if not title or not link:
             continue
-        summary = _clean(e.get("summary", e.get("description", "")))
+        summary = _summary_text(e)
         aid = hashlib.sha256((title.lower() + "|" + link).encode()).hexdigest()[:16]
         region, region_confidence, region_evidence = _region(category, title, summary)
         result.append(Article(title, summary[:1600], link, source, category, _date(e), aid, region, region_confidence, region_evidence))
