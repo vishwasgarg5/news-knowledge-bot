@@ -79,6 +79,11 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/audit_capture_quality_trend.py --json --fail-on-regression
+      - name: Report offline human-reviewed candidate metrics
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python scripts/evaluate_historical_records.py data/historical_evaluation_records --json
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
