@@ -1,0 +1,82 @@
+import copy
+import hashlib
+import json
+
+import pytest
+
+from scripts.build_policy_evidence_bundle import ARTIFACTS, build_bundle, verify_bundle
+
+
+def fixture_artifacts(tmp_path, *, decision="GO", improvement="supported_on_this_cohort_only"):
+    base = {"policy_version": "policy-v1", "status": "pass", "passed": True}
+    candidate = {"policy_version": "policy-v2", "status": "pass", "passed": True}
+    comparison = {"status": "comparable", "comparable": True,
+                  "baseline_policy_version": "policy-v1", "candidate_policy_version": "policy-v2"}
+    regression = {"status": "pass", "passed": True,
+                  "baseline_policy_version": "policy-v1", "candidate_policy_version": "policy-v2"}
+    release = {"decision": decision, "baseline_policy_version": "policy-v1",
+               "candidate_policy_version": "policy-v2"}
+    uncertainty = {
+        "summary_schema_version": "1.0", "status": "complete", "comparable": True,
+        "cohort": {"fingerprint_sha256": hashlib.sha256(b"cohort").hexdigest(),
+                   "baseline_policy_version": "policy-v1", "candidate_policy_version": "policy-v2"},
+        "improvement_claim": improvement,
+        "paired_bootstrap": {"intervals": {
+            "inclusion_precision": {"status": "candidate_higher"},
+            "inclusion_recall": {"status": "candidate_higher"},
+        }},
+    }
+    values = {"comparison": comparison, "baseline_audit": base, "candidate_audit": candidate,
+              "regression_gate": regression, "release_decision": release,
+              "uncertainty_summary": uncertainty}
+    paths = {}
+    for name, value in values.items():
+        path = tmp_path / f"{name}.json"
+        path.write_text(json.dumps(value), encoding="utf-8")
+        paths[name] = path
+    return paths
+
+
+def test_build_bundle_is_self_contained_and_verifiable(tmp_path):
+    bundle = build_bundle(fixture_artifacts(tmp_path))
+    assert bundle["bundle_schema_version"] == "1.0"
+    assert set(bundle["artifacts"]) == set(ARTIFACTS)
+    assert bundle["integrity"]["source_artifacts_verified"] == len(ARTIFACTS)
+    assert verify_bundle(bundle)["passed"] is True
+
+
+def test_missing_required_artifact_blocks_bundle(tmp_path):
+    paths = fixture_artifacts(tmp_path)
+    del paths["uncertainty_summary"]
+    with pytest.raises(ValueError, match="missing"):
+        build_bundle(paths)
+
+
+def test_policy_identifier_mismatch_blocks_bundle(tmp_path):
+    paths = fixture_artifacts(tmp_path)
+    value = json.loads(paths["comparison"].read_text())
+    value["candidate_policy_version"] = "wrong-policy"
+    paths["comparison"].write_text(json.dumps(value))
+    with pytest.raises(ValueError, match="identifiers"):
+        build_bundle(paths)
+
+
+def test_go_requires_positive_precision_and_recall_uncertainty(tmp_path):
+    paths = fixture_artifacts(tmp_path, improvement="not_supported")
+    with pytest.raises(ValueError, match="conflicts with uncertainty"):
+        build_bundle(paths)
+
+
+def test_bundle_tampering_is_detected(tmp_path):
+    bundle = build_bundle(fixture_artifacts(tmp_path))
+    altered = copy.deepcopy(bundle)
+    altered["artifacts"]["comparison"]["payload"]["comparable"] = False
+    with pytest.raises(ValueError, match="fingerprint mismatch"):
+        verify_bundle(altered)
+
+
+def test_no_go_can_bundle_complete_but_uncertain_evidence(tmp_path):
+    paths = fixture_artifacts(tmp_path, decision="NO-GO", improvement="not_supported")
+    bundle = build_bundle(paths)
+    assert bundle["identity"]["release_decision"] == "NO-GO"
+    assert verify_bundle(bundle)["passed"] is True
