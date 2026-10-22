@@ -35,7 +35,7 @@ def _summary_text(entry) -> str:
     for key in ("summary", "description", "subtitle"):
         value = entry.get(key, "")
         if value:
-            cleaned = " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split())
+            cleaned = re.sub(r"\s+([.,;:!?])", r"\1", " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split()))
             if cleaned:
                 return cleaned[:1600]
     content = entry.get("content", []) or []
