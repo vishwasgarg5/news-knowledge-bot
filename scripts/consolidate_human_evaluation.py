@@ -85,6 +85,27 @@ def consolidate_reviews(
             continue
         adjudications[candidate_id] = row
 
+    duplicate_reviewer_entries = []
+    for candidate_id, rows in sorted(by_candidate.items()):
+        by_reviewer: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for row in rows:
+            reviewer_id = str(row.get("reviewer_id", "")).strip()
+            if reviewer_id:
+                by_reviewer[reviewer_id].append(row)
+        for reviewer_id, reviewer_rows in sorted(by_reviewer.items()):
+            if len(reviewer_rows) > 1:
+                duplicate_reviewer_entries.append({
+                    "candidate_id": candidate_id,
+                    "reviewer_id": reviewer_id,
+                    "entry_count": len(reviewer_rows),
+                    "labels": sorted({
+                        str(row.get("relevance_label", "")).strip()
+                        for row in reviewer_rows
+                        if row.get("relevance_label") in LABELS
+                    }),
+                    "queues": sorted({row["_queue_path"] for row in reviewer_rows}),
+                })
+
     candidate_rows = []
     disagreements = []
     uncertain = []
@@ -131,6 +152,7 @@ def consolidate_reviews(
         candidate_rows.append({
             "candidate_id": candidate_id,
             "review_count": len(rows),
+            "unique_reviewer_count": len({str(row.get("reviewer_id", "")).strip() for row in rows if str(row.get("reviewer_id", "")).strip()}),
             "valid_labels": labels,
             "reviewers": reviewers,
             "status": status,
@@ -146,6 +168,8 @@ def consolidate_reviews(
         "candidate_summaries": candidate_rows,
         "review_disagreements": disagreements,
         "review_disagreement_count": len(disagreements),
+        "duplicate_reviewer_entries": duplicate_reviewer_entries,
+        "duplicate_reviewer_entry_count": len(duplicate_reviewer_entries),
         "uncertain_candidates": uncertain,
         "uncertain_candidate_count": len(uncertain),
         "evidence_gaps": evidence_gaps,
@@ -159,6 +183,7 @@ def consolidate_reviews(
         "malformed_entries": malformed_entries,
         "sampling_metadata": sampling,
         "limitations": [
+            "Repeated entries from one reviewer are flagged and must not be interpreted as independent opinions.",
             "Only explicit, schema-shaped adjudications are accepted; reviewer disagreement is never auto-resolved.",
             "An adjudication is an accountable human decision, not an independent proof of truth.",
             "Unresolved, uncertain, pending, or evidence-incomplete cases should be excluded from definitive metrics unless the evaluation protocol explicitly defines their treatment.",

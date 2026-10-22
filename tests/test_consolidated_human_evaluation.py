@@ -82,3 +82,19 @@ def test_report_flags_missing_evidence_uncertainty_and_sampling_metadata():
     assert report["uncertain_candidate_count"] == 1
     assert report["evidence_gap_count"] == 1
     assert report["sampling_metadata"][0]["sampling_seed"] == "seed-1"
+
+
+def test_consolidation_flags_repeated_entries_from_same_reviewer():
+    report = consolidate_reviews([
+        queue("copy-a.json", [review("c1", "relevant", "reviewer-a")]),
+        queue("copy-b.json", [review("c1", "not_relevant", "reviewer-a"),
+                              review("c1", "relevant", "reviewer-b")]),
+    ])
+
+    assert report["duplicate_reviewer_entry_count"] == 1
+    duplicate = report["duplicate_reviewer_entries"][0]
+    assert duplicate["candidate_id"] == "c1"
+    assert duplicate["reviewer_id"] == "reviewer-a"
+    assert duplicate["entry_count"] == 2
+    assert duplicate["labels"] == ["not_relevant", "relevant"]
+    assert report["candidate_summaries"][0]["unique_reviewer_count"] == 2
