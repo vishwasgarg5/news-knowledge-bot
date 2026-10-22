@@ -166,6 +166,9 @@ def append_history(history_path: Path, entry: dict[str, Any]) -> bool:
         existing = raw["entries"]
         if not all(isinstance(row, dict) and row.get("entry_sha256") for row in existing):
             raise ValueError("existing history contains an invalid entry")
+        integrity = audit_history(raw)
+        if not integrity["passed"]:
+            raise ValueError("existing history failed integrity audit; refusing to append")
         if any(row.get("run_id") == entry["run_id"] for row in existing):
             return False
     entry = dict(entry)
