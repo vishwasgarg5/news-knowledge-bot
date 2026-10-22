@@ -76,9 +76,20 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
     specificity = _rate(tn, eligible_not_relevant)
     balanced_accuracy = ((recall + specificity) / 2
                          if recall is not None and specificity is not None else None)
+    pending_metadata_suffixes = (
+        "_title_required", "_source_required", "_url_required",
+        "_published_at_required", "_summary_required",
+    )
+    pending_errors_only = all(
+        error == "story_labels_must_be_nonempty_list"
+        or (error.startswith("candidate_articles[")
+            and any(error.endswith(suffix) for suffix in pending_metadata_suffixes)
+            and "]_" in error)
+        for error in errors
+    )
     unreviewed_capture = (
         not record.get("candidate_reviews") and not record.get("story_labels")
-        and errors == ["story_labels_must_be_nonempty_list"]
+        and pending_errors_only
     )
     return {
         "run_id": record.get("run_id", ""),
@@ -150,8 +161,9 @@ def evaluate_paths(
 
     valid = [row for row in results if row["schema_valid"]]
     awaiting_review = [row for row in results if row.get("record_status") == "awaiting_review"]
-    total_candidates = sum(row["candidate_count"] for row in valid)
-    total_reviews = sum(row["candidate_reviews"] for row in valid)
+    reportable_records = valid + awaiting_review
+    total_candidates = sum(row["candidate_count"] for row in reportable_records)
+    total_reviews = sum(row["candidate_reviews"] for row in reportable_records)
     tp = sum(row["true_positives"] for row in valid)
     fp = sum(row["false_positives"] for row in valid)
     tn = sum(row["true_negatives"] for row in valid)
@@ -179,6 +191,7 @@ def evaluate_paths(
         "records_seen": len(paths),
         "schema_valid_records": len(valid),
         "records_awaiting_review": len(awaiting_review),
+        "review_readiness_candidate_count": sum(row["candidate_count"] for row in awaiting_review),
         "invalid_records": len(errors),
         "candidate_count": total_candidates,
         "candidate_reviews": total_reviews,
