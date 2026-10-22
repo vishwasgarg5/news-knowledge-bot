@@ -80,6 +80,82 @@ def build_history_entry(
     return entry
 
 
+def _entry_hash_payload(entry: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in entry.items()
+            if key not in {"entry_sha256", "chain_sha256"}}
+
+
+def _entry_digest(entry: dict[str, Any]) -> str:
+    canonical = json.dumps(_entry_hash_payload(entry), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _chain_digest(previous_entry_sha256: str | None, entry_sha256: str) -> str:
+    return hashlib.sha256(f"{previous_entry_sha256 or 'GENESIS'}:{entry_sha256}".encode("utf-8")).hexdigest()
+
+
+def audit_history(history: dict[str, Any], artifact_map: dict[str, str] | None = None) -> dict[str, Any]:
+    errors: list[dict[str, Any]] = []
+    warnings: list[dict[str, Any]] = []
+    if history.get("history_schema_version") != "1.0" or not isinstance(history.get("entries"), list):
+        return {"passed": False, "status": "invalid", "errors": [{"code": "history_schema_invalid"}], "warnings": [], "entry_count": 0}
+    entries = history["entries"]
+    seen: set[str] = set()
+    previous_id: str | None = None
+    last_timestamp = None
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            errors.append({"index": index, "code": "entry_not_object"})
+            continue
+        run_id = entry.get("run_id")
+        if not isinstance(run_id, str) or not run_id:
+            errors.append({"index": index, "code": "run_id_missing"})
+        elif run_id in seen:
+            errors.append({"index": index, "code": "duplicate_run_id", "run_id": run_id})
+        else:
+            seen.add(run_id)
+        expected = _entry_digest(entry) if entry.get("chain_sha256") else hashlib.sha256(
+            json.dumps({key: value for key, value in entry.items() if key != "entry_sha256"},
+                       sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if entry.get("entry_sha256") != expected:
+            errors.append({"index": index, "code": "entry_hash_mismatch", "run_id": run_id})
+        chain = entry.get("chain_sha256")
+        if chain:
+            if entry.get("previous_entry_sha256") != previous_id:
+                errors.append({"index": index, "code": "broken_previous_hash_link", "run_id": run_id})
+            if chain != _chain_digest(entry.get("previous_entry_sha256"), entry.get("entry_sha256", "")):
+                errors.append({"index": index, "code": "chain_hash_mismatch", "run_id": run_id})
+        else:
+            warnings.append({"index": index, "code": "legacy_entry_without_chain", "run_id": run_id})
+        previous_id = entry.get("entry_sha256")
+        stamp = entry.get("recorded_at")
+        try:
+            parsed = datetime.fromisoformat(stamp.replace("Z", "+00:00")) if isinstance(stamp, str) else None
+            if parsed is None or parsed.tzinfo is None or parsed.utcoffset() is None:
+                raise ValueError
+            if last_timestamp is not None and parsed < last_timestamp:
+                errors.append({"index": index, "code": "recorded_at_out_of_order", "run_id": run_id})
+            last_timestamp = parsed
+        except ValueError:
+            errors.append({"index": index, "code": "recorded_at_invalid", "run_id": run_id})
+        hashes = entry.get("artifact_sha256", {})
+        required = {"comparison", "baseline_audit", "candidate_audit", "regression_gate", "release_decision"}
+        if not isinstance(hashes, dict) or not required.issubset(hashes):
+            errors.append({"index": index, "code": "artifact_hashes_missing", "run_id": run_id})
+        elif any(not isinstance(hashes.get(key), str) or len(hashes[key]) != 64 or any(ch not in "0123456789abcdef" for ch in hashes[key]) for key in required):
+            errors.append({"index": index, "code": "artifact_hash_invalid", "run_id": run_id})
+        if artifact_map:
+            for key, path_text in artifact_map.items():
+                path = Path(path_text)
+                if not path.is_file():
+                    errors.append({"index": index, "code": "artifact_missing", "artifact": key, "path": path_text, "run_id": run_id})
+                elif key in hashes and _digest(path) != hashes[key]:
+                    errors.append({"index": index, "code": "artifact_hash_mismatch", "artifact": key, "path": path_text, "run_id": run_id})
+    return {"passed": not errors, "status": "pass" if not errors else "fail",
+            "entry_count": len(entries), "errors": errors, "warnings": warnings}
+
+
 def append_history(history_path: Path, entry: dict[str, Any]) -> bool:
     history_path.parent.mkdir(parents=True, exist_ok=True)
     existing: list[dict[str, Any]] = []
@@ -92,6 +168,11 @@ def append_history(history_path: Path, entry: dict[str, Any]) -> bool:
             raise ValueError("existing history contains an invalid entry")
         if any(row.get("run_id") == entry["run_id"] for row in existing):
             return False
+    entry = dict(entry)
+    previous = existing[-1].get("entry_sha256") if existing else None
+    entry["previous_entry_sha256"] = previous
+    entry["entry_sha256"] = _entry_digest(entry)
+    entry["chain_sha256"] = _chain_digest(previous, entry["entry_sha256"])
     existing.append(entry)
     document = {
         "history_schema_version": "1.0",
@@ -150,6 +231,10 @@ def main() -> int:
     trend = sub.add_parser("trends", help="write a trend report from an existing history")
     trend.add_argument("--history", required=True, type=Path)
     trend.add_argument("--output", type=Path, required=True)
+    audit = sub.add_parser("audit", help="audit history integrity and optional source artifacts")
+    audit.add_argument("--history", required=True, type=Path)
+    audit.add_argument("--artifact-map", type=Path, help="JSON object mapping artifact names to local paths")
+    audit.add_argument("--output", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "record":
@@ -174,6 +259,15 @@ def main() -> int:
             print(json.dumps({"inserted": inserted, "entry_sha256": entry["entry_sha256"], "history": str(args.history)}, indent=2))
             return 0
         history = _load(args.history)
+        if args.command == "audit":
+            mapping = _load(args.artifact_map) if args.artifact_map else None
+            report = audit_history(history, mapping)
+            output = json.dumps(report, indent=2, ensure_ascii=False) + "\\n"
+            if args.output:
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_text(output, encoding="utf-8")
+            print(output, end="")
+            return 0 if report["passed"] else 1
         trends = build_trends(history)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(trends, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
