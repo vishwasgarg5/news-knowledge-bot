@@ -30,7 +30,10 @@ def _aware_timestamp(value: Any) -> bool:
 def _valid_http_url(value: Any) -> bool:
     if not isinstance(value, str) or not value.strip():
         return False
-    parsed = urlparse(value)
+    try:
+        parsed = urlparse(value)
+    except ValueError:
+        return False
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 
 
@@ -42,7 +45,10 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         return {"valid": False, "errors": ["answer_key_type_invalid"]}
     if queue.get("packet_version") != answer_key.get("packet_version"):
         errors.append("packet_version_mismatch")
-    if queue.get("sampling", {}).get("seed") != answer_key.get("seed"):
+    sampling = queue.get("sampling")
+    if not isinstance(sampling, dict):
+        errors.append("sampling_metadata_invalid")
+    elif sampling.get("seed") != answer_key.get("seed"):
         errors.append("sampling_seed_mismatch")
     queue_items = queue.get("items")
     key_items = answer_key.get("items")
@@ -66,7 +72,10 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         if item["item_id"] in key_map:
             errors.append(f"key_item_id_duplicate:{item['item_id']}")
         key_map[item["item_id"]] = item
-        if item.get("pipeline_disposition") not in {"included", "excluded", "duplicate", "out_of_scope"}:
+        disposition = item.get("pipeline_disposition")
+        if not isinstance(disposition, str) or disposition not in {
+            "included", "excluded", "duplicate", "out_of_scope"
+        }:
             errors.append(f"key_disposition_invalid:{item['item_id']}")
     if set(queue_map) != set(key_map):
         errors.append("queue_answer_key_item_ids_mismatch")
@@ -85,7 +94,7 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         if label == "":
             unreviewed.append(item_id)
             continue
-        if label not in LABELS:
+        if not isinstance(label, str) or label not in LABELS:
             errors.append(f"relevance_label_invalid:{item_id}")
             continue
         label_counts[label] += 1
@@ -104,7 +113,7 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
             errors.append(f"definitive_label_requires_evidence_url:{item_id}")
 
         disposition = key_map[item_id].get("pipeline_disposition")
-        if disposition not in METRIC_DISPOSITIONS or label == "uncertain":
+        if not isinstance(disposition, str) or disposition not in METRIC_DISPOSITIONS or label == "uncertain":
             continue
         eligible += 1
         predicted = disposition == "included"
