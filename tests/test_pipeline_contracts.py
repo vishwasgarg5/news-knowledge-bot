@@ -1789,6 +1789,7 @@ def test_region_classifier_covers_additional_world_geographies():
 
 def test_research_discovery_parses_google_news_publisher_and_freshness(monkeypatch):
     from types import SimpleNamespace
+    import time
     import app.research as research
 
     class Response:
@@ -1796,12 +1797,13 @@ def test_research_discovery_parses_google_news_publisher_and_freshness(monkeypat
         def raise_for_status(self):
             return None
 
+    published_parsed = time.gmtime()
     entry = {
         "title": "Major fire at Canadian military base - BBC News",
         "source": {"title": "BBC News"},
         "link": "https://news.google.com/rss/articles/example",
         "summary": "Four people were killed in a fire.",
-        "published_parsed": (2026, 10, 19, 8, 0, 0, 0, 292, 0),
+        "published_parsed": published_parsed,
     }
     monkeypatch.setattr(research.requests, "get", lambda *a, **k: Response())
     monkeypatch.setattr(research.feedparser, "parse", lambda content: SimpleNamespace(entries=[entry]))
@@ -1812,7 +1814,7 @@ def test_research_discovery_parses_google_news_publisher_and_freshness(monkeypat
     )
     assert len(found) == 1
     assert found[0]["source"] == "BBC News"
-    assert found[0]["published"].startswith("2026-10-19T08:00:00")
+    assert found[0]["published"].startswith(time.strftime("%Y-%m-%dT%H:%M:%S", published_parsed))
     assert metrics["queries"] == 1
     assert metrics["failed_queries"] == 0
     assert metrics["articles_found"] == 1
