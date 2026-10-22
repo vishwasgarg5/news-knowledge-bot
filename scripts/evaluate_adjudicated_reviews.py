@@ -34,6 +34,7 @@ def evaluate_adjudicated_reviews(
     adjudication_data: dict[str, Any],
 ) -> dict[str, Any]:
     candidates: dict[str, dict[str, Any]] = {}
+    candidate_conflicts: dict[str, dict[str, Any]] = {}
     queue_metadata = []
     exclusions: dict[str, int] = {}
     for path, queue in queues:
@@ -58,9 +59,16 @@ def evaluate_adjudicated_reviews(
             if cid not in candidates:
                 candidates[cid] = dict(row)
             else:
-                # Keep first candidate metadata; labels come solely from adjudications.
+                # Repeated candidate IDs are expected across reviewer copies, but their
+                # evidence and policy disposition must agree before metric use.
                 for key in EVIDENCE_FIELDS + ("disposition",):
-                    if not str(candidates[cid].get(key, "") or "").strip() and str(row.get(key, "") or "").strip():
+                    existing = str(candidates[cid].get(key, "") or "").strip()
+                    incoming = str(row.get(key, "") or "").strip()
+                    if existing and incoming and existing != incoming:
+                        conflict = candidate_conflicts.setdefault(cid, {"candidate_id": cid, "fields": {}})
+                        values = conflict["fields"].setdefault(key, set())
+                        values.update((existing, incoming))
+                    elif not existing and incoming:
                         candidates[cid][key] = row[key]
 
     raw = adjudication_data.get("adjudications", [])
@@ -99,6 +107,8 @@ def evaluate_adjudicated_reviews(
         reasons = []
         if not adjudication:
             reasons.append("no_valid_adjudication")
+        if cid in candidate_conflicts:
+            reasons.append("conflicting_candidate_records")
         missing_evidence = [field for field in EVIDENCE_FIELDS if not str(candidate.get(field, "") or "").strip()]
         if missing_evidence:
             reasons.append("missing_evidence:" + ",".join(missing_evidence))
@@ -153,11 +163,17 @@ def evaluate_adjudicated_reviews(
             "recall_denominator": independently_relevant,
         },
         "exclusion_reason_counts": exclusions,
+        "conflicting_candidate_records": [
+            {"candidate_id": cid, "fields": {key: sorted(values) for key, values in sorted(conflict["fields"].items())}}
+            for cid, conflict in sorted(candidate_conflicts.items())
+        ],
+        "conflicting_candidate_record_count": len(candidate_conflicts),
         "invalid_adjudications": invalid_adjudications,
         "candidate_results": candidate_results,
         "sampling_metadata": queue_metadata,
         "limitations": [
             "Metrics use only explicitly adjudicated, evidence-complete included/excluded candidates.",
+            "Conflicting evidence metadata or dispositions for the same candidate are excluded from metrics.",
             "Uncertain, unresolved, duplicate, out-of-scope, or evidence-incomplete candidates are not silently treated as negatives.",
             "Adjudication is a human decision, not independent proof of truth.",
             "Sampling bias is not corrected; precision/recall may not represent the full candidate population.",

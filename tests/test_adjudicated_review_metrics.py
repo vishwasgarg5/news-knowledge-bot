@@ -89,3 +89,23 @@ def test_invalid_and_duplicate_adjudications_are_not_silently_accepted():
 
     assert report["valid_adjudications_for_known_candidates"] == 1
     assert report["invalid_adjudications"][0]["reasons"] == ["duplicate_adjudication"]
+
+
+def test_conflicting_candidate_evidence_or_disposition_is_excluded_from_metrics():
+    first = review("c1", "included", url="https://example.com/one")
+    second = review("c1", "excluded", url="https://example.com/two")
+    queue_a = ("reviewer-a.json", {"reviews": [first]})
+    queue_b = ("reviewer-b.json", {"reviews": [second]})
+
+    report = evaluate_adjudicated_reviews(
+        [queue_a, queue_b], {"adjudications": [adjudication("c1", "relevant")]}
+    )
+
+    assert report["metric_eligible_candidates"] == 0
+    assert report["conflicting_candidate_record_count"] == 1
+    conflict = report["conflicting_candidate_records"][0]
+    assert conflict["candidate_id"] == "c1"
+    assert set(conflict["fields"]) == {"url", "disposition"}
+    row = report["candidate_results"][0]
+    assert "conflicting_candidate_records" in row["exclusion_reasons"]
+    assert not row["eligible_for_precision_recall"]
