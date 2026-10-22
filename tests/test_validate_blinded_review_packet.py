@@ -171,3 +171,16 @@ def test_cli_require_complete_fails_for_unreviewed_items(tmp_path):
 
     assert main([str(queue_path), str(key_path), "--require-complete", "--json"]) == 1
     assert main([str(queue_path), str(key_path), "--json"]) == 0
+
+
+
+def test_rejects_empty_review_queue_and_answer_key():
+    queue, key = packets()
+    queue["items"] = []
+    key["items"] = []
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert report["complete"] is False
+    assert "review_packet_must_not_be_empty" in report["errors"]
