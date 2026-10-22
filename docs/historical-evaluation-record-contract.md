@@ -412,3 +412,14 @@ bundle fingerprint. An optional `--history history.json` is accepted only when t
 chain passes its integrity audit. A bundle fingerprint detects accidental or
 unsophisticated edits; it is not a digital signature and does not establish who
 created the artifact.
+
+
+To verify the bundle against the original files (rather than only its embedded payloads),
+put the six inputs in a directory using the expected names such as `comparison.json`,
+`baseline_audit.json`, and `uncertainty_summary.json`, then run:
+
+```bash
+python scripts/build_policy_evidence_bundle.py verify evidence-bundle.json --artifact-dir path/to/originals/
+```
+
+The verifier checks the exact original file bytes against their recorded source hashes.

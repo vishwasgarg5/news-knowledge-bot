@@ -125,7 +125,7 @@ def build_bundle(paths: dict[str, Path], history_path: Path | None = None) -> di
     return bundle
 
 
-def verify_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
+def verify_bundle(bundle: dict[str, Any], source_paths: dict[str, Path] | None = None) -> dict[str, Any]:
     _require(bundle.get("bundle_schema_version") == "1.0", "unsupported bundle schema")
     expected = bundle.get("bundle_fingerprint_sha256")
     payload = {key: value for key, value in bundle.items() if key != "bundle_fingerprint_sha256"}
@@ -146,6 +146,13 @@ def verify_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
                  f"{name} source hash is invalid")
         _require(item.get("payload_sha256") == actual,
                  f"{name} payload hash mismatch; embedded evidence was modified")
+    if source_paths is not None:
+        _require(set(ARTIFACTS).issubset(source_paths), "source verification requires paths for all six artifacts")
+        for name in ARTIFACTS:
+            path = source_paths[name]
+            _require(path.is_file(), f"source artifact missing: {name} ({path})")
+            _require(_sha256(path.read_bytes()) == artifacts[name]["sha256"],
+                     f"source artifact hash mismatch: {name}")
     identity = _validate_artifacts({name: artifacts[name]["payload"] for name in ARTIFACTS})
     _require(identity == bundle.get("identity"), "bundle identity does not match its artifacts")
     audit = bundle.get("integrity", {}).get("history_audit", {})
@@ -165,6 +172,7 @@ def main() -> int:
     build.add_argument("--output", required=True, type=Path)
     verify = sub.add_parser("verify", help="verify a previously built bundle")
     verify.add_argument("bundle", type=Path)
+    verify.add_argument("--artifact-dir", type=Path, help="directory containing the six original <artifact-name>.json files")
     args = parser.parse_args()
     try:
         if args.command == "build":
@@ -176,7 +184,9 @@ def main() -> int:
                               "bundle_fingerprint_sha256": result["bundle_fingerprint_sha256"]}))
             return 0
         bundle, _ = _read_object(args.bundle)
-        print(json.dumps(verify_bundle(bundle), indent=2))
+        source_paths = ({name: args.artifact_dir / f"{name}.json" for name in ARTIFACTS}
+                        if args.artifact_dir else None)
+        print(json.dumps(verify_bundle(bundle, source_paths=source_paths), indent=2))
         return 0
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError, TypeError) as exc:
         parser.error(str(exc))

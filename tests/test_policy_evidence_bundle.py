@@ -92,3 +92,12 @@ def test_payload_hash_detects_edit_even_if_outer_fingerprint_is_recomputed(tmp_p
     bundle["bundle_fingerprint_sha256"] = _sha256(_canonical(payload))
     with pytest.raises(ValueError, match="payload hash mismatch"):
         verify_bundle(bundle)
+
+
+def test_verifier_checks_original_source_bytes_when_directory_is_supplied(tmp_path):
+    paths = fixture_artifacts(tmp_path)
+    bundle = build_bundle(paths)
+    assert verify_bundle(bundle, source_paths=paths)["passed"] is True
+    paths["comparison"].write_text('{"comparable": false}', encoding="utf-8")
+    with pytest.raises(ValueError, match="source artifact hash mismatch"):
+        verify_bundle(bundle, source_paths=paths)
