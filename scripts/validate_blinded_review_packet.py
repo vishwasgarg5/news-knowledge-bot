@@ -127,6 +127,7 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
     tn, fn = confusion["true_negatives"], confusion["false_negatives"]
     return {
         "valid": not errors,
+        "complete": not unreviewed and not errors,
         "errors": errors,
         "packet_items": len(queue_items),
         "completed_review_count": sum(label_counts.values()),
@@ -151,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("queue", type=Path, help="completed reviewer queue JSON")
     parser.add_argument("answer_key", type=Path, help="separately stored answer-key JSON")
     parser.add_argument("--json", action="store_true", help="emit machine-readable JSON")
+    parser.add_argument("--require-complete", action="store_true", help="fail if any queue item is unreviewed")
     args = parser.parse_args(argv)
     try:
         queue = json.loads(args.queue.read_text(encoding="utf-8"))
@@ -160,7 +162,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     report = validate_packets(queue, answer_key)
     print(json.dumps(report, indent=2, ensure_ascii=False))
-    return 0 if report["valid"] else 1
+    return 0 if report["valid"] and (not args.require_complete or report["complete"]) else 1
 
 
 if __name__ == "__main__":
