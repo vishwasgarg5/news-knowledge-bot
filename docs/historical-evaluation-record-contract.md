@@ -292,3 +292,33 @@ coverage checks are present and pass. Otherwise it returns `NO-GO` with named bl
 and upstream failure details. Missing coverage fails closed. This is an offline decision
 artifact only; it does not deploy, change policy configuration, trigger production, or
 send notifications.
+
+
+## Versioned evaluation history and trends
+
+After producing the comparison, baseline audits, regression gate, and release decision, record
+those exact artifacts in a local JSON history. Each entry includes an artifact-derived stable
+run ID, SHA-256 hashes of the input artifacts, metric snapshots, review coverage, release
+decision, and blockers. Re-recording the same artifact set is idempotent.
+
+```bash
+python scripts/policy_evaluation_history.py record \\
+  --comparison policy-comparison.json \\
+  --baseline-audit policy-v1-gate.json \\
+  --candidate-audit policy-v2-gate.json \\
+  --regression-gate policy-regression-gate.json \\
+  --release-decision policy-release-decision.json \\
+  --history reports/policy-evaluation-history.json
+
+python scripts/policy_evaluation_history.py trends \\
+  --history reports/policy-evaluation-history.json \\
+  --output reports/policy-evaluation-trends.json
+pytest -q tests/test_policy_evaluation_history.py
+```
+
+History is append-only by default: the tool refuses unsupported/corrupt schemas and skips
+duplicate artifact-derived run IDs. It does not provide tamper-proof storage or cryptographic
+signatures; use protected repository history or external immutable storage if stronger
+audit guarantees are required. Trend rows may describe different policy pairs or review
+cohorts, so compare trends only when the underlying sampling design, evidence, and
+adjudication sets are comparable. No workflow dispatch or production delivery is performed.
