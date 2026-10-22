@@ -2377,3 +2377,40 @@ def test_duplicate_reporting_audit_metric_defaults_to_zero_without_copies():
     result = research_stories([story], articles=[])
     assert result["acme-2"]["duplicate_reporting_copies_excluded"] == 0
     assert result["_stats"]["duplicate_reporting_copies_excluded"] == 0
+
+
+
+def test_feed_collection_preserves_description_and_atom_content_summaries(monkeypatch):
+    from types import SimpleNamespace
+    from app import news
+
+    entries = [
+        {
+            "title": "RSS article with description",
+            "link": "https://example.com/rss",
+            "summary": "",
+            "description": "<p>Fallback &amp; useful description.</p>",
+        },
+        {
+            "title": "Atom article with content",
+            "link": "https://example.com/atom",
+            "summary": "",
+            "content": [{"value": "<p>Atom body content.</p>"}],
+        },
+    ]
+    monkeypatch.setattr(news.requests, "get", lambda *a, **k: SimpleNamespace(
+        content=b"feed", status_code=200, headers={"Content-Type": "application/rss+xml"},
+        raise_for_status=lambda: None,
+    ))
+    monkeypatch.setattr(news.feedparser, "parse", lambda _: SimpleNamespace(
+        entries=entries, feed={"title": "Example Feed"}, bozo=False,
+    ))
+
+    articles, ok, warning = news.fetch_feed("https://example.com/feed", "world")
+
+    assert ok is True
+    assert warning == ""
+    assert [article.summary for article in articles] == [
+        "Fallback & useful description.",
+        "Atom body content.",
+    ]
