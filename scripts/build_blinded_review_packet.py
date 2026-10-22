@@ -167,8 +167,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sample-per-disposition", type=int, default=25)
     parser.add_argument("--seed", default="20261022", help="deterministic sampling seed")
     args = parser.parse_args(argv)
-    if args.queue_output.resolve() == args.key_output.resolve():
+    input_path = args.input.resolve()
+    queue_path = args.queue_output.resolve()
+    key_path = args.key_output.resolve()
+    if queue_path == key_path:
         parser.error("--queue-output and --key-output must be different paths")
+    if input_path.is_file() and input_path in {queue_path, key_path}:
+        parser.error("output paths must not overwrite the input record")
+    if input_path.is_dir():
+        for output_path in (queue_path, key_path):
+            if output_path.is_relative_to(input_path):
+                parser.error("output paths must be outside the input records directory")
     try:
         records = load_records(args.input)
         queue, answer_key = build_packet(
