@@ -147,10 +147,18 @@ def _metrics(labels: list[bool], predictions: list[bool]) -> dict[str, Any]:
     fp = sum((not y) and p for y, p in zip(labels, predictions))
     fn = sum(y and (not p) for y, p in zip(labels, predictions))
     tn = sum((not y) and (not p) for y, p in zip(labels, predictions))
+    positive_count = tp + fn
+    negative_count = tn + fp
     precision = tp / (tp + fp) if tp + fp else 0.0
-    recall = tp / (tp + fn) if tp + fn else 0.0
+    recall = tp / positive_count if positive_count else 0.0
+    specificity = tn / negative_count if negative_count else 0.0
+    accuracy = (tp + tn) / len(labels) if labels else 0.0
+    balanced_accuracy = (recall + specificity) / 2 if positive_count and negative_count else 0.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
     return {"tp": tp, "fp": fp, "tn": tn, "fn": fn,
+            "positive_support": positive_count, "negative_support": negative_count,
+            "accuracy": round(accuracy, 3), "specificity": round(specificity, 3),
+            "balanced_accuracy": round(balanced_accuracy, 3),
             "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
 
 def evaluate() -> dict[str, Any]:
