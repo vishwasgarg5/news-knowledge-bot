@@ -246,3 +246,27 @@ A comparable result is descriptive only: it does not prove causality or statisti
 significance, and it cannot correct a non-representative sample. Use the exact same
 reviewed candidate/evidence set and adjudication file; do not re-adjudicate between policy
 runs when measuring the policy effect.
+
+
+## Policy regression tolerance gate
+
+After the same-set comparison is marked `comparable`, run a separate tolerance gate before
+accepting a candidate policy. Copy `config/policy_regression_gate.example.json` to a
+reviewed config file and approve the thresholds for the evaluation design; the example
+defaults permit no increase in false positives or missed relevant candidates and no
+decrease in precision.
+
+```bash
+python scripts/audit_policy_regression_gate.py policy-comparison.json \\
+  --config config/policy-regression-gate.json \\
+  --output policy-regression-gate.json
+pytest -q tests/test_policy_regression_gate.py
+```
+
+The gate fails closed when the comparison is not comparable, policy IDs are missing or
+identical, metrics are absent, tolerances are malformed, or any configured tolerance is
+violated. False-positive and missed-relevant tolerances are absolute count changes on the
+same adjudicated set; precision tolerance is a difference from baseline in the range
+-1 to 1. This is a descriptive release guard, not a significance test or proof of
+production quality. The example configuration is not automatically activated and the gate
+does not trigger a deployment, production workflow, or notification.
