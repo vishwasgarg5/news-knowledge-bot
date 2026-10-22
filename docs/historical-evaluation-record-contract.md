@@ -351,3 +351,33 @@ Entries created before hash-chain support are flagged as legacy warnings; their 
 are still checked. This detects accidental or unauthorized edits when the reference history
 is trusted, but does not protect against an actor who can rewrite both the history and its
 reference hashes. Keep a protected external copy for stronger guarantees.
+
+
+## Paired policy summary and uncertainty
+
+After generating the same-set comparison, create a reproducible paired bootstrap summary from
+the baseline and candidate adjudicated evaluation reports. The tool re-runs the cohort checks;
+if policy gates fail or the candidate IDs, labels, evidence snapshots, or sampling design do not
+match, the summary is blocked and no improvement claim is made.
+
+```bash
+python scripts/summarize_paired_policy_evaluation.py \\
+  baseline-adjudicated.json candidate-adjudicated.json \\
+  --baseline-gate baseline-policy-gate.json \\
+  --candidate-gate candidate-policy-gate.json \\
+  --bootstrap-samples 2000 --seed 20261022 \\
+  --output paired-policy-summary.json
+
+pytest -q tests/test_summarize_paired_policy_evaluation.py
+```
+
+The report includes the cohort fingerprint, observed precision/recall and error counts, plus
+95% paired candidate-level percentile-bootstrap intervals for precision and recall deltas.
+The default seed makes the bootstrap reproducible. If too many bootstrap resamples have an
+undefined precision or recall denominator, the interval is marked uncertain rather than
+fabricated. The summary withholds even a cohort-scoped improvement claim unless both metric
+intervals are entirely above zero.
+
+These intervals describe resampling uncertainty for the reviewed cohort; they do not fix
+selection bias, establish representativeness, or prove causality. A blocked or uncertain result
+is not evidence of no effect; it means the available evidence does not support the claim.
