@@ -19,29 +19,28 @@ REQUIRED_CANDIDATE_FIELDS = ("title", "source", "url", "published_at", "summary"
 def audit_record(record: Any, path: str = "") -> dict[str, Any]:
     if not isinstance(record, dict):
         return {"path": path, "status": "invalid", "errors": ["record_root_must_be_object"]}
-    candidates = record.get("candidate_articles")
-    if not isinstance(candidates, list):
-        candidates = []
+    raw_candidates = record.get("candidate_articles")
+    candidates = raw_candidates if isinstance(raw_candidates, list) else []
     included = sum(isinstance(row, dict) and row.get("disposition") == "included" for row in candidates)
     excluded = sum(isinstance(row, dict) and row.get("disposition") != "included" for row in candidates)
     incomplete = []
+    missing_field_counts = {field: 0 for field in REQUIRED_CANDIDATE_FIELDS}
+    invalid_disposition_count = 0
     for index, candidate in enumerate(candidates):
         if not isinstance(candidate, dict):
             incomplete.append({"index": index, "missing": ["candidate_object"]})
             continue
         missing = [field for field in REQUIRED_CANDIDATE_FIELDS
                    if not isinstance(candidate.get(field), str) or not candidate[field].strip()]
+        for field in missing:
+            missing_field_counts[field] += 1
+        if candidate.get("disposition") not in {"included", "excluded", "duplicate", "out_of_scope"}:
+            invalid_disposition_count += 1
         if missing:
             incomplete.append({"index": index, "candidate_id": candidate.get("candidate_id", ""), "missing": missing})
     labels = record.get("story_labels")
     labels = labels if isinstance(labels, list) else []
     state = str(record.get("labeling_status", "") or "")
-    if state != "pending_review" and labels:
-        status = "reviewed_labels_present"
-    elif state == "pending_review" or not labels:
-        status = "pending_review"
-    else:
-        status = "needs_attention"
     errors = []
     if not str(record.get("run_id", "")).strip():
         errors.append("run_id_missing")
@@ -49,8 +48,20 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         errors.append("policy_version_missing")
     if not candidates:
         errors.append("candidate_pool_empty")
+    if raw_candidates is not None and not isinstance(raw_candidates, list):
+        errors.append("candidate_pool_must_be_list")
     if incomplete:
         errors.append("candidate_metadata_incomplete")
+    if invalid_disposition_count:
+        errors.append("candidate_disposition_invalid")
+    if state == "pending_review" or not labels:
+        status = "pending_review"
+    elif errors:
+        status = "needs_attention"
+    else:
+        status = "reviewed_labels_present"
+    # Preserve the fact that a pending record also has data-quality problems:
+    # review state and capture completeness are separate dimensions.
     return {
         "path": path,
         "run_id": record.get("run_id", ""),
@@ -62,6 +73,8 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         "excluded_or_other_count": excluded,
         "label_count": len(labels),
         "incomplete_candidate_count": len(incomplete),
+        "missing_field_counts": missing_field_counts,
+        "invalid_disposition_count": invalid_disposition_count,
         "incomplete_candidates": incomplete,
         "errors": errors,
     }
@@ -82,13 +95,19 @@ def audit_directory(directory: Path) -> dict[str, Any]:
         "record_count": len(records),
         "pending_review_count": sum(row.get("status") == "pending_review" for row in records),
         "reviewed_record_count": sum(row.get("status") == "reviewed_labels_present" for row in records),
+        "needs_attention_count": sum(row.get("status") == "needs_attention" for row in records),
         "invalid_record_count": sum(row.get("status") == "invalid" for row in records),
         "records_with_issues": sum(bool(row.get("errors")) for row in records),
+        "missing_field_counts": {
+            field: sum(row.get("missing_field_counts", {}).get(field, 0) for row in records)
+            for field in REQUIRED_CANDIDATE_FIELDS
+        },
         "records": records,
         "limitations": [
             "This report checks capture completeness only; it does not establish factual truth.",
             "Production verification decisions are never treated as independent labels.",
             "A pending record must be reviewed independently before accuracy metrics are computed.",
+            "Missing summaries are reported, not fabricated from unrelated fields or labels.",
         ],
     }
 
@@ -103,11 +122,12 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         print(f"Captured records: {report['record_count']}; pending review: {report['pending_review_count']}; "
-              f"reviewed: {report['reviewed_record_count']}; records with review issues: {report['records_with_issues']}; "
-              f"unreadable/invalid: {report['invalid_record_count']}")
+              f"reviewed: {report['reviewed_record_count']}; needs attention: {report['needs_attention_count']}; "
+              f"records with issues: {report['records_with_issues']}; unreadable/invalid: {report['invalid_record_count']}")
         for row in report["records"]:
             print(f"- {row.get('run_id') or row['path']}: {row['status']}; "
-                  f"candidates={row.get('candidate_count', 0)}; labels={row.get('label_count', 0)}")
+                  f"candidates={row.get('candidate_count', 0)}; labels={row.get('label_count', 0)}; "
+                  f"missing_fields={row.get('missing_field_counts', {})}")
     return 1 if report["invalid_record_count"] else 0
 
 
