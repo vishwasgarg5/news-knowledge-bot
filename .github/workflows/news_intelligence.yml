@@ -75,6 +75,10 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/audit_evaluation_captures.py --json
+      - name: Audit evaluation capture quality trend
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/audit_capture_quality_trend.py --json --fail-on-regression
       - name: Audit installed dependencies
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: '1'
