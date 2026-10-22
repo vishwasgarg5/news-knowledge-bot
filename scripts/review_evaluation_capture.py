@@ -90,12 +90,27 @@ def apply_human_label(
     else:
         updated_labels[existing_index] = item
     updated["story_labels"] = updated_labels
-    updated["labeling_status"] = (
-        "pending_review" if any(
-            not isinstance(row, dict) or row.get("label") not in LABELS
-            for row in updated_labels
-        ) else "reviewed"
+    known_candidate_ids = {
+        row.get("candidate_id") for row in candidates
+        if isinstance(row, dict) and isinstance(row.get("candidate_id"), str)
+    }
+    reviewed_candidate_ids = {
+        candidate_id for row in updated_labels if isinstance(row, dict)
+        for candidate_id in (row.get("candidate_ids") if isinstance(row.get("candidate_ids"), list) else [])
+        if isinstance(candidate_id, str)
+    }
+    labels_valid = all(
+        isinstance(row, dict) and row.get("label") in LABELS
+        and str(row.get("reviewer", "")).strip()
+        and str(row.get("rationale", "")).strip()
+        for row in updated_labels
     )
+    if not updated_labels:
+        updated["labeling_status"] = "pending_review"
+    elif labels_valid and known_candidate_ids and known_candidate_ids.issubset(reviewed_candidate_ids):
+        updated["labeling_status"] = "reviewed"
+    else:
+        updated["labeling_status"] = "in_progress"
     return updated
 
 
