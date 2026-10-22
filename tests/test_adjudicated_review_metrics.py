@@ -109,3 +109,27 @@ def test_conflicting_candidate_evidence_or_disposition_is_excluded_from_metrics(
     row = report["candidate_results"][0]
     assert "conflicting_candidate_records" in row["exclusion_reasons"]
     assert not row["eligible_for_precision_recall"]
+
+
+def test_sampling_diagnostics_report_selection_rate_without_applying_weights():
+    queue = ("sampled.json", {
+        "run_id": "run-1",
+        "sampling_method": "deterministic_stratified_by_disposition",
+        "sampling_seed": "fixed-seed",
+        "strata": {
+            "included": {"eligible_unreviewed": 100, "selected": 10, "selection_rate": 0.1},
+            "excluded": {"eligible_unreviewed": 20, "selected": 20, "selection_rate": 1.0},
+        },
+        "reviews": [review("c1", "included")],
+    })
+    report = evaluate_adjudicated_reviews(
+        [queue], {"adjudications": [adjudication("c1", "relevant")]}
+    )
+
+    rows = {row["disposition"]: row for row in report["sampling_diagnostics"]}
+    assert rows["included"]["inverse_selection_weight_diagnostic"] == 10.0
+    assert rows["excluded"]["inverse_selection_weight_diagnostic"] == 1.0
+    assert rows["included"]["eligible_unreviewed"] == 100
+    assert rows["included"]["selected"] == 10
+    assert rows["included"]["weighting_applied_to_metrics"] is False
+    assert report["metrics"]["inclusion_precision"] == 1.0

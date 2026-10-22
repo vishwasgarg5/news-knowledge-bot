@@ -146,6 +146,42 @@ def evaluate_adjudicated_reviews(
             "exclusion_reasons": reasons,
         })
 
+    sampling_diagnostics = []
+    for metadata in queue_metadata:
+        strata = metadata.get("strata", {})
+        if not isinstance(strata, dict):
+            continue
+        for disposition, details in sorted(strata.items()):
+            if not isinstance(details, dict):
+                continue
+            eligible_count = details.get("eligible_unreviewed")
+            selected_count = details.get("selected")
+            selection_rate = details.get("selection_rate")
+            valid_counts = (
+                isinstance(eligible_count, int) and not isinstance(eligible_count, bool)
+                and eligible_count >= 0
+                and isinstance(selected_count, int) and not isinstance(selected_count, bool)
+                and 0 <= selected_count <= eligible_count
+            )
+            valid_rate = (
+                isinstance(selection_rate, (int, float))
+                and not isinstance(selection_rate, bool)
+                and 0 < selection_rate <= 1
+            )
+            sampling_diagnostics.append({
+                "queue": metadata.get("path", ""),
+                "run_id": metadata.get("run_id", ""),
+                "disposition": disposition,
+                "eligible_unreviewed": eligible_count,
+                "selected": selected_count,
+                "reported_selection_rate": selection_rate,
+                "selection_counts_valid": valid_counts,
+                "inverse_selection_weight_diagnostic": (
+                    1 / selection_rate if valid_counts and selected_count > 0 and valid_rate else None
+                ),
+                "weighting_applied_to_metrics": False,
+            })
+
     predicted_included = tp + fp
     independently_relevant = tp + fn
     return {
@@ -171,11 +207,13 @@ def evaluate_adjudicated_reviews(
         "invalid_adjudications": invalid_adjudications,
         "candidate_results": candidate_results,
         "sampling_metadata": queue_metadata,
+        "sampling_diagnostics": sampling_diagnostics,
         "limitations": [
             "Metrics use only explicitly adjudicated, evidence-complete included/excluded candidates.",
             "Conflicting evidence metadata or dispositions for the same candidate are excluded from metrics.",
             "Uncertain, unresolved, duplicate, out-of-scope, or evidence-incomplete candidates are not silently treated as negatives.",
             "Adjudication is a human decision, not independent proof of truth.",
+            "Sampling diagnostics expose reported stratum counts and optional inverse selection-rate diagnostics; these weights are not applied to metrics.",
             "Sampling bias is not corrected; precision/recall may not represent the full candidate population.",
         ],
     }
