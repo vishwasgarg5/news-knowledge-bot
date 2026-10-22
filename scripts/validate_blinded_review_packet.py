@@ -82,6 +82,16 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
     if set(queue_map) != set(key_map):
         errors.append("queue_answer_key_item_ids_mismatch")
 
+    # Item IDs alone are not enough: protect the join between the blinded queue
+    # and answer key from accidental or malicious run/candidate metadata edits.
+    for item_id in sorted(set(queue_map) & set(key_map)):
+        queue_item = queue_map[item_id]
+        key_item = key_map[item_id]
+        for field in ("run_id", "candidate_id"):
+            if field in queue_item or field in key_item:
+                if queue_item.get(field) != key_item.get(field):
+                    errors.append(f"queue_answer_key_{field}_mismatch:{item_id}")
+
     label_counts = {"relevant": 0, "not_relevant": 0, "uncertain": 0}
     confusion = {"true_positives": 0, "false_positives": 0, "true_negatives": 0, "false_negatives": 0}
     eligible = 0
