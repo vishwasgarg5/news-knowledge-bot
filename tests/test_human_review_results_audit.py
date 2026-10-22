@@ -81,6 +81,26 @@ def test_audit_does_not_call_different_reviews_adjudicated_truth():
     assert any("not automatically an adjudicated error" in item for item in report["limitations"])
 
 
+def test_audit_flags_duplicate_reviewer_entries_instead_of_treating_them_as_independent():
+    a = queue("copy-a.json", [
+        review("c1", "included", "relevant", "reviewer-a"),
+    ])
+    b = queue("copy-b.json", [
+        review("c1", "included", "not_relevant", "reviewer-a"),
+        review("c1", "included", "relevant", "reviewer-b"),
+    ])
+
+    report = audit_review_queues([a, b], min_reviews_per_disposition=1)
+
+    assert report["disagreement_count"] == 1
+    assert report["duplicate_reviewer_entry_count"] == 1
+    duplicate = report["duplicate_reviewer_entries"][0]
+    assert duplicate["candidate_id"] == "c1"
+    assert duplicate["reviewer_id"] == "reviewer-a"
+    assert duplicate["entry_count"] == 2
+    assert duplicate["labels"] == ["not_relevant", "relevant"]
+
+
 def test_audit_requires_positive_under_reviewed_threshold():
     with pytest.raises(ValueError, match="at least 1"):
         audit_review_queues([], min_reviews_per_disposition=0)
