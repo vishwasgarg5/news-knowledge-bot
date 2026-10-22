@@ -2,12 +2,45 @@
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import os
+import re
 import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+
+def _clean_text(value: Any) -> str:
+    """Normalize feed text without inventing missing article content."""
+    if isinstance(value, (list, tuple)):
+        parts = []
+        for item in value:
+            if isinstance(item, dict):
+                part = item.get("value") or item.get("text") or item.get("summary") or ""
+            else:
+                part = item
+            cleaned = _clean_text(part)
+            if cleaned:
+                parts.append(cleaned)
+        return " ".join(parts).strip()
+    if isinstance(value, dict):
+        value = value.get("value") or value.get("text") or value.get("title") or ""
+    text = html.unescape(str(value or ""))
+    text = re.sub(r"<[^>]*>", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _first_text(article: dict[str, Any], *keys: str) -> str:
+    for key in keys:
+        value = article.get(key)
+        if isinstance(value, dict) and key == "source":
+            value = value.get("title") or value.get("name") or ""
+        cleaned = _clean_text(value)
+        if cleaned:
+            return cleaned
+    return ""
 
 
 def build_capture_record(
@@ -23,11 +56,11 @@ def build_capture_record(
     for index, article in enumerate(articles):
         if not isinstance(article, dict):
             continue
-        url = str(article.get("url") or "").strip()
-        title = str(article.get("title") or article.get("headline") or "").strip()
-        source = str(article.get("source") or "").strip()
-        published = str(article.get("published") or article.get("published_at") or "").strip()
-        summary = str(article.get("summary") or article.get("description") or "").strip()
+        url = _first_text(article, "url", "link")
+        title = _first_text(article, "title", "headline")
+        source = _first_text(article, "source", "publisher")
+        published = _first_text(article, "published", "published_at", "publication_date", "date")
+        summary = _first_text(article, "summary", "description", "snippet", "abstract", "content")
         identity = url or f"{source}|{title}|{published}|{index}"
         candidate_id = "candidate-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
         if candidate_id in seen_ids:
