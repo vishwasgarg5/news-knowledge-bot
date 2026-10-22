@@ -426,3 +426,6 @@ The verifier checks the exact original file bytes against their recorded source 
 
 
 When a history file is included, the bundle also binds the embedded history payload to its own digest. Verification re-runs the append-only history integrity audit instead of trusting the recorded status alone.
+
+
+Builds from identical source bytes are deterministic when no history file is supplied: no wall-clock timestamp is injected into the bundle. The regression suite exercises two builds and a command-line verification against the original input directory.

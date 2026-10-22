@@ -115,3 +115,27 @@ def test_embedded_history_is_reaudited_during_verification(tmp_path):
     bundle["bundle_fingerprint_sha256"] = _sha256(_canonical(payload))
     with pytest.raises(ValueError, match="history payload hash mismatch"):
         verify_bundle(bundle)
+
+
+def test_bundle_build_is_deterministic_and_cli_round_trip_verifies_originals(tmp_path):
+    import subprocess
+    import sys
+
+    paths = fixture_artifacts(tmp_path)
+    script = "scripts/build_policy_evidence_bundle.py"
+    outputs = [tmp_path / "bundle-a.json", tmp_path / "bundle-b.json"]
+    common = [sys.executable, script, "build"]
+    for output in outputs:
+        command = common[:]
+        for name, path in paths.items():
+            command.extend(["--" + name.replace("_", "-"), str(path)])
+        command.extend(["--output", str(output)])
+        subprocess.run(command, check=True, capture_output=True, text=True)
+    first = json.loads(outputs[0].read_text(encoding="utf-8"))
+    second = json.loads(outputs[1].read_text(encoding="utf-8"))
+    assert first == second
+    checked = subprocess.run(
+        [sys.executable, script, "verify", str(outputs[0]), "--artifact-dir", str(tmp_path)],
+        check=True, capture_output=True, text=True,
+    )
+    assert json.loads(checked.stdout)["status"] == "pass"
