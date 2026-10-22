@@ -1,6 +1,7 @@
 import json
 
 from scripts.audit_evaluation_captures import audit_directory, audit_record
+from scripts.audit_capture_quality_trend import build_trend
 
 
 def test_pending_capture_is_reported_without_inventing_labels():
@@ -107,3 +108,51 @@ def test_directory_aggregates_missing_fields_and_needs_attention(tmp_path):
     assert report["needs_attention_count"] == 1
     assert report["records"][0]["status"] == "needs_attention"
     assert report["missing_field_counts"]["summary"] == 1
+
+
+
+def test_capture_quality_trend_reports_coverage_and_detects_regression():
+    from pathlib import Path
+
+    complete = {
+        "run_id": "older",
+        "run_timestamp": "2026-10-20T08:00:00Z",
+        "candidate_articles": [{
+            "title": "Title", "source": "Source", "url": "https://example.com/a",
+            "published_at": "2026-10-20T07:00:00Z", "summary": "Real available summary",
+        }],
+    }
+    incomplete = {
+        "run_id": "newer",
+        "run_timestamp": "2026-10-21T08:00:00Z",
+        "candidate_articles": [{
+            "title": "Title", "source": "Source", "url": "https://example.com/b",
+            "published_at": "2026-10-21T07:00:00Z", "summary": "",
+        }],
+    }
+
+    report = build_trend([(Path("older.json"), complete), (Path("newer.json"), incomplete)])
+
+    assert report["record_count"] == 2
+    assert report["candidate_count"] == 2
+    assert report["overall_field_coverage"]["summary"] == 0.5
+    assert report["missing_field_counts"]["summary"] == 1
+    assert report["quality_gate"]["status"] == "BLOCKED"
+    assert report["previous_run_comparison"]["regressions"] == [{
+        "field": "summary", "previous_coverage": 1.0, "latest_coverage": 0.0, "delta": -1.0,
+    }]
+
+
+def test_capture_quality_trend_requires_history_and_does_not_invent_fields():
+    from pathlib import Path
+
+    report = build_trend([(Path("one.json"), {
+        "run_id": "one", "run_timestamp": "2026-10-22T08:00:00Z",
+        "candidate_articles": [{"title": "Known", "summary": ""}],
+    })])
+
+    assert report["quality_gate"]["status"] == "INSUFFICIENT_HISTORY"
+    assert report["overall_field_coverage"]["title"] == 1.0
+    assert report["overall_field_coverage"]["summary"] == 0.0
+    assert report["missing_field_counts"]["summary"] == 1
+    assert report["previous_run_comparison"] is None
