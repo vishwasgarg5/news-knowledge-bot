@@ -76,3 +76,55 @@ def test_write_capture_record_persists_json(tmp_path):
     saved = json.loads(path.read_text(encoding="utf-8"))
     assert saved["candidate_articles"][0]["disposition"] == "included"
     assert saved["story_labels"] == []
+
+
+
+def test_capture_uses_fallback_fields_and_cleans_available_summary_content():
+    record = build_capture_record(
+        articles=[{
+            "headline": "Feed headline",
+            "publisher": {"title": "Publisher Name"},
+            "link": "https://example.com/story",
+            "publication_date": "2026-10-22T08:00:00Z",
+            "summary": "",
+            "description": "<p>Useful &amp; available <b>context</b>.</p>",
+        }],
+        included_urls={"https://example.com/story"},
+        run_id="fallback-fields",
+        run_timestamp="2026-10-22T09:00:00+00:00",
+        policy_version="p",
+    )
+
+    candidate = record["candidate_articles"][0]
+    assert candidate["title"] == "Feed headline"
+    assert candidate["source"] == "Publisher Name"
+    assert candidate["url"] == "https://example.com/story"
+    assert candidate["published_at"] == "2026-10-22T08:00:00Z"
+    assert candidate["summary"] == "Useful & available context."
+    assert candidate["disposition"] == "included"
+
+
+def test_capture_handles_missing_or_malformed_metadata_without_inventing_values():
+    record = build_capture_record(
+        articles=[
+            {"title": "No source metadata", "source": {}, "url": "https://example.com/missing"},
+            {"headline": "Malformed source", "source": ["unexpected", "shape"],
+             "link": "https://example.com/malformed", "published": "not-a-date",
+             "content": [{"value": "<p>Actual snippet</p>"}]},
+            None,
+        ],
+        included_urls=set(),
+        run_id="metadata-gaps",
+        run_timestamp="2026-10-22T09:00:00+00:00",
+        policy_version="p",
+    )
+
+    candidates = record["candidate_articles"]
+    assert len(candidates) == 2
+    assert candidates[0]["source"] == ""
+    assert candidates[0]["published_at"] == ""
+    assert candidates[0]["summary"] == ""
+    assert candidates[1]["source"] == "unexpected shape"
+    assert candidates[1]["published_at"] == "not-a-date"
+    assert candidates[1]["summary"] == "Actual snippet"
+    assert all(candidate["disposition"] == "excluded" for candidate in candidates)
