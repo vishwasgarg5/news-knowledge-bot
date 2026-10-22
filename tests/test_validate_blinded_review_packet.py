@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
 
-from scripts.validate_blinded_review_packet import validate_packets
+from scripts.validate_blinded_review_packet import main, validate_packets
 
 
 def packets():
@@ -142,3 +143,31 @@ def test_rejects_malformed_url_authority_without_crashing():
 
     assert report["valid"] is False
     assert "evidence_urls_must_be_http_urls:run::a" in report["errors"]
+
+
+
+def test_completion_status_is_distinct_from_structural_validity():
+    queue, key = packets()
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is True
+    assert report["complete"] is False
+    queue["items"][3]["review"] = {
+        "relevance_label": "uncertain", "reviewer_id": "reviewer-c",
+        "reviewed_at": "2026-10-22T13:00:00+00:00",
+        "rationale": "Evidence remains ambiguous.", "evidence_urls": [],
+    }
+    report = validate_packets(queue, key)
+    assert report["valid"] is True
+    assert report["complete"] is True
+
+
+def test_cli_require_complete_fails_for_unreviewed_items(tmp_path):
+    queue, key = packets()
+    queue_path = tmp_path / "queue.json"
+    key_path = tmp_path / "key.json"
+    queue_path.write_text(json.dumps(queue), encoding="utf-8")
+    key_path.write_text(json.dumps(key), encoding="utf-8")
+
+    assert main([str(queue_path), str(key_path), "--require-complete", "--json"]) == 1
+    assert main([str(queue_path), str(key_path), "--json"]) == 0
