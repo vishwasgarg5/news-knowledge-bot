@@ -96,3 +96,21 @@ def test_cli_writes_distinct_queue_and_key(tmp_path):
     key = json.loads(key_path.read_text(encoding="utf-8"))
     assert "pipeline_disposition" not in queue["items"][0]
     assert key["items"][0]["pipeline_disposition"] == "included"
+
+
+
+@pytest.mark.parametrize("records, message", [
+    ([("bad.json", None)], "record root must be an object"),
+    ([("bad.json", {"run_id": "run", "candidate_articles": None})], "candidate_articles must be a list"),
+    ([("bad.json", make_record("run", [candidate("x", ["included"])]))], "invalid disposition"),
+])
+def test_builder_rejects_malformed_record_shapes(records, message):
+    with pytest.raises(ValueError, match=message):
+        build_packet(records)
+
+
+@pytest.mark.parametrize("sample_cap", [0, -1, 1.5, "2", True])
+def test_builder_requires_positive_integer_sample_cap(sample_cap):
+    records = [("record.json", make_record("run", [candidate("x", "included")]))]
+    with pytest.raises(ValueError, match="sample_per_disposition"):
+        build_packet(records, sample_per_disposition=sample_cap)
