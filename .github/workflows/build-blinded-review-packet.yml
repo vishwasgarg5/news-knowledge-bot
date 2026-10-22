@@ -43,7 +43,6 @@ jobs:
           SAMPLE_CAP: ${{ inputs.sample_per_disposition }}
           SAMPLE_SEED: ${{ inputs.seed }}
           RUNNER_TEMP: ${{ runner.temp }}
-          GITHUB_OUTPUT: ${{ github.output }}
         run: |
           set -euo pipefail
           case "$RECORD_PATH" in
