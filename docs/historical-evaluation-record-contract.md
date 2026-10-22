@@ -72,9 +72,17 @@ After adding independent candidate reviews, validate and calculate offline metri
 
 ```bash
 python scripts/validate_evaluation_record.py data/historical_evaluation_records/RECORD.json
-python scripts/evaluate_historical_records.py data/historical_evaluation_records/
-pytest -q tests/test_historical_record_metrics.py
+python scripts/evaluate_historical_records.py data/historical_evaluation_records/ --json
+pytest -q tests/test_evaluate_historical_records.py
 ```
+
+The evaluator defaults to a minimum of 30 metric-eligible binary reviews and at least 10
+examples in each truth class. It reports `BLOCKED_INSUFFICIENT_SAMPLE` when those
+thresholds are not met; this is a valid report outcome, not an assertion that the model
+failed. Schema-invalid records are reported separately. Records with no labels remain
+awaiting review rather than being counted as negative examples. CI runs this evaluator
+offline so review readiness and sample limitations remain visible without invoking the
+production news or Telegram delivery job.
 
 The evaluator reports inclusion precision, recall, false positives (included but independently labelled not relevant), missed relevant candidates (excluded but labelled relevant), and candidate metadata field coverage. Uncertain reviews and duplicate/out-of-scope dispositions do not enter the precision/recall denominators. Unreviewed candidates are not treated as negatives. With no explicit candidate relevance labels, precision and recall are reported as null rather than guessed. Results are offline descriptive metrics, not proof of real-world performance or label quality.
 
