@@ -322,3 +322,32 @@ signatures; use protected repository history or external immutable storage if st
 audit guarantees are required. Trend rows may describe different policy pairs or review
 cohorts, so compare trends only when the underlying sampling design, evidence, and
 adjudication sets are comparable. No workflow dispatch or production delivery is performed.
+
+
+## History integrity audit
+
+Audit stored history without modifying it:
+
+```bash
+python scripts/policy_evaluation_history.py audit \\
+  --history reports/policy-evaluation-history.json
+```
+
+The audit checks duplicate run IDs, entry digests, append-order timestamps, required source
+artifact hashes, and chain links for entries recorded by the chain-enabled writer. To also
+verify that the original source artifacts still exist locally and match their recorded SHA-256
+values, pass a JSON object mapping artifact names to file paths:
+
+```bash
+python scripts/policy_evaluation_history.py audit \\
+  --history reports/policy-evaluation-history.json \\
+  --artifact-map reports/policy-artifact-paths.json \\
+  --output reports/policy-history-integrity.json
+```
+
+Example artifact map keys are `comparison`, `baseline_audit`, `candidate_audit`,
+`regression_gate`, and `release_decision`. Audit errors produce a nonzero exit status.
+Entries created before hash-chain support are flagged as legacy warnings; their entry hashes
+are still checked. This detects accidental or unauthorized edits when the reference history
+is trusted, but does not protect against an actor who can rewrite both the history and its
+reference hashes. Keep a protected external copy for stronger guarantees.
