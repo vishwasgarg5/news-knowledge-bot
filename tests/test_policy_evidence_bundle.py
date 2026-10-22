@@ -139,3 +139,12 @@ def test_bundle_build_is_deterministic_and_cli_round_trip_verifies_originals(tmp
         check=True, capture_output=True, text=True,
     )
     assert json.loads(checked.stdout)["status"] == "pass"
+
+
+def test_invalid_cohort_fingerprint_is_rejected(tmp_path):
+    paths = fixture_artifacts(tmp_path)
+    value = json.loads(paths["uncertainty_summary"].read_text(encoding="utf-8"))
+    value["cohort"]["fingerprint_sha256"] = "g" * 64
+    paths["uncertainty_summary"].write_text(json.dumps(value), encoding="utf-8")
+    with pytest.raises(ValueError, match="cohort SHA-256"):
+        build_bundle(paths)

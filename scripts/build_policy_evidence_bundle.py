@@ -22,6 +22,10 @@ def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _is_sha256(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(ch in "0123456789abcdef" for ch in value)
+
+
 def _read_object(path: Path) -> tuple[dict[str, Any], str]:
     raw = path.read_bytes()
     value = json.loads(raw.decode("utf-8"))
@@ -65,8 +69,7 @@ def _validate_artifacts(values: dict[str, dict[str, Any]]) -> dict[str, Any]:
              uncertainty.get("status") == "complete" and uncertainty.get("comparable") is True,
              "uncertainty summary must be complete and comparable")
     cohort = uncertainty.get("cohort")
-    _require(isinstance(cohort, dict) and isinstance(cohort.get("fingerprint_sha256"), str)
-             and len(cohort["fingerprint_sha256"]) == 64,
+    _require(isinstance(cohort, dict) and _is_sha256(cohort.get("fingerprint_sha256")),
              "uncertainty summary must include a cohort SHA-256 fingerprint")
     _require(cohort.get("baseline_policy_version") == base_policy and
              cohort.get("candidate_policy_version") == candidate_policy,
@@ -130,7 +133,7 @@ def verify_bundle(bundle: dict[str, Any], source_paths: dict[str, Path] | None =
     _require(bundle.get("bundle_schema_version") == "1.0", "unsupported bundle schema")
     expected = bundle.get("bundle_fingerprint_sha256")
     payload = {key: value for key, value in bundle.items() if key != "bundle_fingerprint_sha256"}
-    _require(isinstance(expected, str) and expected == _sha256(_canonical(payload)),
+    _require(_is_sha256(expected) and expected == _sha256(_canonical(payload)),
              "bundle fingerprint mismatch; bundle may have been modified")
     artifacts = bundle.get("artifacts")
     _require(isinstance(artifacts, dict) and set(ARTIFACTS).issubset(artifacts),
@@ -142,8 +145,7 @@ def verify_bundle(bundle: dict[str, Any], source_paths: dict[str, Path] | None =
         actual = _sha256(_canonical(item["payload"]))
         # Source hash preserves original bytes; payload hash binds parsed JSON content.
         source_hash = item.get("sha256")
-        _require(isinstance(source_hash, str) and len(source_hash) == 64
-                 and all(ch in "0123456789abcdef" for ch in source_hash),
+        _require(_is_sha256(source_hash),
                  f"{name} source hash is invalid")
         _require(item.get("payload_sha256") == actual,
                  f"{name} payload hash mismatch; embedded evidence was modified")
