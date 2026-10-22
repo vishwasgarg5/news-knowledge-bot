@@ -156,3 +156,29 @@ def test_capture_quality_trend_requires_history_and_does_not_invent_fields():
     assert report["overall_field_coverage"]["summary"] == 0.0
     assert report["missing_field_counts"]["summary"] == 1
     assert report["previous_run_comparison"] is None
+
+
+
+def test_audit_keeps_partial_reviews_in_progress_and_rejects_incomplete_labels():
+    partial = {
+        "run_id": "run-partial", "policy_version": "policy-v1", "labeling_status": "in_progress",
+        "candidate_articles": [
+            {"candidate_id": "c1", "title": "A", "source": "S", "url": "https://a.example",
+             "published_at": "2026-10-22T08:00:00Z", "summary": "Summary", "disposition": "included"},
+            {"candidate_id": "c2", "title": "B", "source": "S", "url": "https://b.example",
+             "published_at": "2026-10-22T08:00:00Z", "summary": "Summary", "disposition": "excluded"},
+        ],
+        "story_labels": [{
+            "story_id": "story-1", "label": "supported", "reviewer": "r1",
+            "reviewed_at": "2026-10-22T09:00:00Z", "rationale": "Confirmed independently.",
+            "candidate_ids": ["c1"], "evidence_urls": ["https://official.example/a"],
+        }],
+    }
+    result = audit_record(partial, "partial.json")
+    assert result["status"] == "in_progress"
+    assert result["invalid_label_count"] == 0
+
+    partial["story_labels"][0]["evidence_urls"] = []
+    invalid = audit_record(partial, "partial.json")
+    assert invalid["invalid_label_count"] == 1
+    assert "human_label_incomplete_or_invalid" in invalid["errors"]
