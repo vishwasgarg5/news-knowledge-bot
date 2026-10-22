@@ -47,6 +47,14 @@ Final regional selection now balances three goals in order: verification strengt
 
 Before final candidate selection, the pipeline checks whether the configured feeds yielded eligible economy or defence stories. When either category is missing, it runs a bounded Google News RSS search (up to eight queries by default, configurable with `NEWS_CATEGORY_RESEARCH_QUERIES`). If selection still shows a gap, a second pass uses distinct query variants within the same total budget. Results must be fresh, unique, and still pass normal deterministic scoring, event deduplication, independent verification, and production quality gates. The second pass targets initially missing categories that remain below two selected candidates, so one incidental result does not prematurely close a coverage gap. RFC 2822 feed timestamps are supported when parsed timestamps are absent, and publisher aliases are canonicalized before counting independent sources. Discovery counts, remaining gaps, and failures are recorded in the audit and briefing; this mechanism adds candidates, not automatic verification or a guaranteed category quota.
 
+## Offline human review and evaluation
+
+The manual workflow defaults to `review-packet`, which builds a blinded queue from a historical capture without running production news fetching, ranking, or Telegram delivery. Open [Actions → News Intelligence](https://github.com/vishwasgarg5/news-knowledge-bot/actions/workflows/news_intelligence.yml), choose **Run workflow**, leave `mode` as `review-packet`, and download the `blinded-review-queue` artifact from the successful run.
+
+Read [the blinded review guide](docs/blinded-candidate-review-packet.md) before distributing the queue. Keep the separate answer key private until reviewers finish. Human reviewers must provide genuine labels, reviewer IDs, timezone-aware timestamps, rationale, and evidence URLs for definitive labels. Never fabricate missing labels or treat pipeline decisions as ground truth. The current historical capture is not enough to claim model quality or release readiness until genuine review labels have been collected and audited.
+
+The queue artifact is available to repository collaborators with Actions access, so it is not a restricted reviewer-sharing mechanism. Use a deliberate sharing process and keep the answer key out of the repository and artifact.
+
 ## Research coverage and model evaluation
 
 The default corroboration search budget is 20 Google News RSS queries, balanced up to 10 candidates per region. Override with `NEWS_RESEARCH_SEARCH_QUERIES` and `NEWS_RESEARCH_QUERIES_PER_REGION` if runtime budgets require it. An official Reserve Bank of India RSS source is also configured under `economy`; feed availability and category coverage are measured at run time, so an unavailable feed is reported rather than silently treated as evidence.
