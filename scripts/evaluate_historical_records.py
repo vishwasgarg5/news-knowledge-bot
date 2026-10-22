@@ -76,8 +76,13 @@ def evaluate_record(record: dict[str, Any]) -> dict[str, Any]:
     specificity = _rate(tn, eligible_not_relevant)
     balanced_accuracy = ((recall + specificity) / 2
                          if recall is not None and specificity is not None else None)
+    unreviewed_capture = (
+        not record.get("candidate_reviews") and not record.get("story_labels")
+        and errors == ["story_labels_must_be_nonempty_list"]
+    )
     return {
         "run_id": record.get("run_id", ""),
+        "record_status": "evaluated" if not errors else ("awaiting_review" if unreviewed_capture else "invalid"),
         "schema_valid": not errors,
         "validation_errors": errors,
         "candidate_count": len(candidates),
@@ -138,12 +143,13 @@ def evaluate_paths(
             result = evaluate_record(value)
             result["path"] = str(path)
             results.append(result)
-            if not result["schema_valid"]:
+            if not result["schema_valid"] and result.get("record_status") != "awaiting_review":
                 errors.append({"path": str(path), "errors": result["validation_errors"]})
         except (OSError, json.JSONDecodeError, ValueError) as exc:
             errors.append({"path": str(path), "errors": [str(exc)]})
 
     valid = [row for row in results if row["schema_valid"]]
+    awaiting_review = [row for row in results if row.get("record_status") == "awaiting_review"]
     total_candidates = sum(row["candidate_count"] for row in valid)
     total_reviews = sum(row["candidate_reviews"] for row in valid)
     tp = sum(row["true_positives"] for row in valid)
@@ -172,6 +178,7 @@ def evaluate_paths(
         "evaluation_type": "offline_historical_candidate_relevance",
         "records_seen": len(paths),
         "schema_valid_records": len(valid),
+        "records_awaiting_review": len(awaiting_review),
         "invalid_records": len(errors),
         "candidate_count": total_candidates,
         "candidate_reviews": total_reviews,
