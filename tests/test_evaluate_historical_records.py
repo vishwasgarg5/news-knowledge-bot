@@ -115,3 +115,21 @@ def test_aggregate_gate_only_reports_thresholds_met_when_both_classes_have_suppo
 def test_invalid_sample_thresholds_are_rejected(minimum, per_class):
     with pytest.raises(ValueError, match="at least 1"):
         evaluate_paths([], min_reviewed_candidates=minimum, min_per_class=per_class)
+
+
+
+def test_unreviewed_capture_is_reported_as_awaiting_review_not_as_bad_json(tmp_path):
+    value = record_with_reviews([("included", "relevant")])
+    value["candidate_reviews"] = []
+    value["story_labels"] = []
+    path = tmp_path / "capture.json"
+    path.write_text(json.dumps(value), encoding="utf-8")
+
+    report = evaluate_paths([path])
+
+    assert report["records_seen"] == 1
+    assert report["records_awaiting_review"] == 1
+    assert report["invalid_records"] == 0
+    assert report["metric_eligible_reviews"] == 0
+    assert report["evaluation_gate"]["status"] == "BLOCKED_INSUFFICIENT_SAMPLE"
+    assert report["records"][0]["record_status"] == "awaiting_review"
