@@ -29,7 +29,8 @@ def _clean_text(value: Any) -> str:
         value = value.get("value") or value.get("text") or value.get("title") or ""
     text = html.unescape(str(value or ""))
     text = re.sub(r"<[^>]*>", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"\s+([.,;:!?])", r"\1", text)
 
 
 def _first_text(article: dict[str, Any], *keys: str) -> str:
