@@ -114,3 +114,31 @@ def test_builder_requires_positive_integer_sample_cap(sample_cap):
     records = [("record.json", make_record("run", [candidate("x", "included")]))]
     with pytest.raises(ValueError, match="sample_per_disposition"):
         build_packet(records, sample_per_disposition=sample_cap)
+
+
+@pytest.mark.parametrize("same_output", ["queue", "key"])
+def test_cli_refuses_to_overwrite_input_record(tmp_path, same_output):
+    record_path = tmp_path / "record.json"
+    original = json.dumps(make_record("run-1", [candidate("a", "included")]))
+    record_path.write_text(original, encoding="utf-8")
+    queue_path = record_path if same_output == "queue" else tmp_path / "queue.json"
+    key_path = record_path if same_output == "key" else tmp_path / "key.json"
+
+    with pytest.raises(SystemExit) as exc:
+        main([str(record_path), "--queue-output", str(queue_path), "--key-output", str(key_path)])
+    assert exc.value.code == 2
+    assert record_path.read_text(encoding="utf-8") == original
+
+
+def test_cli_refuses_outputs_inside_input_directory(tmp_path):
+    input_dir = tmp_path / "records"
+    input_dir.mkdir()
+    (input_dir / "record.json").write_text(
+        json.dumps(make_record("run-1", [candidate("a", "included")])), encoding="utf-8"
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        main([str(input_dir), "--queue-output", str(input_dir / "queue.json"),
+              "--key-output", str(tmp_path / "key.json")])
+    assert exc.value.code == 2
+    assert not (input_dir / "queue.json").exists()
