@@ -423,3 +423,6 @@ python scripts/build_policy_evidence_bundle.py verify evidence-bundle.json --art
 ```
 
 The verifier checks the exact original file bytes against their recorded source hashes.
+
+
+When a history file is included, the bundle also binds the embedded history payload to its own digest. Verification re-runs the append-only history integrity audit instead of trusting the recorded status alone.

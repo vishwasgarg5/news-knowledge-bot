@@ -101,3 +101,17 @@ def test_verifier_checks_original_source_bytes_when_directory_is_supplied(tmp_pa
     paths["comparison"].write_text('{"comparable": false}', encoding="utf-8")
     with pytest.raises(ValueError, match="source artifact hash mismatch"):
         verify_bundle(bundle, source_paths=paths)
+
+
+def test_embedded_history_is_reaudited_during_verification(tmp_path):
+    paths = fixture_artifacts(tmp_path)
+    history_path = tmp_path / "history.json"
+    history_path.write_text(json.dumps({"history_schema_version": "1.0", "entries": []}), encoding="utf-8")
+    bundle = build_bundle(paths, history_path)
+    assert verify_bundle(bundle)["history_audit_status"] == "pass"
+    bundle["integrity"]["history_payload"]["entries"].append({"run_id": "tampered"})
+    from scripts.build_policy_evidence_bundle import _canonical, _sha256
+    payload = {key: value for key, value in bundle.items() if key != "bundle_fingerprint_sha256"}
+    bundle["bundle_fingerprint_sha256"] = _sha256(_canonical(payload))
+    with pytest.raises(ValueError, match="history payload hash mismatch"):
+        verify_bundle(bundle)

@@ -111,6 +111,7 @@ def build_bundle(paths: dict[str, Path], history_path: Path | None = None) -> di
         integrity["history_audit"] = {
             "status": audit.get("status"), "entry_count": audit.get("entry_count"),
             "warnings": audit.get("warnings", []), "history_sha256": history_hash,
+            "history_payload_sha256": _sha256(_canonical(history)),
         }
         integrity["history_payload"] = history
     bundle: dict[str, Any] = {
@@ -155,9 +156,22 @@ def verify_bundle(bundle: dict[str, Any], source_paths: dict[str, Path] | None =
                      f"source artifact hash mismatch: {name}")
     identity = _validate_artifacts({name: artifacts[name]["payload"] for name in ARTIFACTS})
     _require(identity == bundle.get("identity"), "bundle identity does not match its artifacts")
-    audit = bundle.get("integrity", {}).get("history_audit", {})
+    integrity = bundle.get("integrity", {})
+    audit = integrity.get("history_audit", {})
     _require(isinstance(audit, dict) and audit.get("status") in {"pass", "not_provided"},
              "history audit status is invalid")
+    if audit.get("status") == "pass":
+        history = integrity.get("history_payload")
+        _require(isinstance(history, dict), "verified history payload is missing")
+        _require(integrity.get("history_payload_sha256") == _sha256(_canonical(history)),
+                 "history payload hash mismatch")
+        from scripts.policy_evaluation_history import audit_history
+        history_audit = audit_history(history)
+        _require(history_audit.get("passed") is True, "embedded history integrity audit failed")
+        _require(history_audit.get("entry_count") == audit.get("entry_count"),
+                 "embedded history entry count does not match audit metadata")
+    else:
+        _require("history_payload" not in integrity, "history payload exists without a passing audit")
     return {"passed": True, "status": "pass", "artifact_count": len(ARTIFACTS),
             "bundle_fingerprint_sha256": expected, "history_audit_status": audit["status"]}
 
