@@ -54,6 +54,8 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
     key_items = answer_key.get("items")
     if not isinstance(queue_items, list) or not isinstance(key_items, list):
         return {"valid": False, "errors": errors + ["items_must_be_lists"]}
+    if not queue_items or not key_items:
+        errors.append("review_packet_must_not_be_empty")
     queue_map: dict[str, dict[str, Any]] = {}
     key_map: dict[str, dict[str, Any]] = {}
     for index, item in enumerate(queue_items):
