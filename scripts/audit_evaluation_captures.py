@@ -41,6 +41,25 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
     labels = record.get("story_labels")
     labels = labels if isinstance(labels, list) else []
     state = str(record.get("labeling_status", "") or "")
+    invalid_label_count = 0
+    for label in labels:
+        if not isinstance(label, dict):
+            invalid_label_count += 1
+            continue
+        label_value = label.get("label")
+        malformed = (
+            label_value not in {"supported", "unsupported", "uncertain"}
+            or not str(label.get("story_id", "")).strip()
+            or not str(label.get("reviewer", "")).strip()
+            or not str(label.get("reviewed_at", "")).strip()
+            or not str(label.get("rationale", "")).strip()
+            or not isinstance(label.get("candidate_ids"), list)
+            or not label.get("candidate_ids")
+            or not isinstance(label.get("evidence_urls"), list)
+            or (label_value in {"supported", "unsupported"} and not label.get("evidence_urls"))
+        )
+        if malformed:
+            invalid_label_count += 1
     errors = []
     if not str(record.get("run_id", "")).strip():
         errors.append("run_id_missing")
@@ -54,6 +73,8 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         errors.append("candidate_metadata_incomplete")
     if invalid_disposition_count:
         errors.append("candidate_disposition_invalid")
+    if invalid_label_count:
+        errors.append("human_label_incomplete_or_invalid")
     if state == "pending_review" or not labels:
         status = "pending_review"
     elif errors:
@@ -75,6 +96,7 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         "incomplete_candidate_count": len(incomplete),
         "missing_field_counts": missing_field_counts,
         "invalid_disposition_count": invalid_disposition_count,
+        "invalid_label_count": invalid_label_count,
         "incomplete_candidates": incomplete,
         "errors": errors,
     }
