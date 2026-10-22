@@ -87,6 +87,20 @@ def test_rejects_unblinded_queue_and_mismatched_answer_key():
     assert "queue_answer_key_item_ids_mismatch" in report["errors"]
 
 
+def test_rejects_run_or_candidate_metadata_mismatch_even_when_item_id_matches():
+    queue, key = packets()
+    queue["items"][0]["run_id"] = "different-run"
+    key["items"][0]["run_id"] = "run"
+    queue["items"][1]["candidate_id"] = "different-candidate"
+    key["items"][1]["candidate_id"] = "b"
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "queue_answer_key_run_id_mismatch:run::a" in report["errors"]
+    assert "queue_answer_key_candidate_id_mismatch:run::b" in report["errors"]
+
+
 def test_rejects_invalid_label_and_duplicate_item_ids():
     queue, key = packets()
     queue["items"][0]["review"]["relevance_label"] = "yes"
