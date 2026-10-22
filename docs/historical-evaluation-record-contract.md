@@ -381,3 +381,34 @@ intervals are entirely above zero.
 These intervals describe resampling uncertainty for the reviewed cohort; they do not fix
 selection bias, establish representativeness, or prove causality. A blocked or uncertain result
 is not evidence of no effect; it means the available evidence does not support the claim.
+
+
+## Verifiable policy-evaluation evidence bundle
+
+Package the reviewed comparison and release-gate outputs with the paired uncertainty
+summary into one portable JSON artifact. This builder is offline and does not alter
+production decisions or send notifications.
+
+```bash
+python scripts/build_policy_evidence_bundle.py build \
+  --comparison comparison.json \
+  --baseline-audit baseline-audit.json \
+  --candidate-audit candidate-audit.json \
+  --regression-gate regression-gate.json \
+  --release-decision release-decision.json \
+  --uncertainty-summary paired-uncertainty.json \
+  --output evidence-bundle.json
+
+python scripts/build_policy_evidence_bundle.py verify evidence-bundle.json
+```
+
+All six source artifacts are required. The builder checks that policy identifiers
+agree across artifacts, all upstream gates pass, the uncertainty summary is complete
+for the same cohort, and a GO decision is consistent with both precision and recall
+intervals being entirely above zero. NO-GO bundles remain useful audit records when
+the evidence is complete but does not support an improvement claim. Source-file
+SHA-256 digests and the embedded payloads are covered by a deterministic bundle
+fingerprint. An optional `--history history.json` is accepted only when the history
+chain passes its integrity audit. A bundle fingerprint detects accidental or
+unsophisticated edits; it is not a digital signature and does not establish who
+created the artifact.
