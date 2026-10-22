@@ -109,3 +109,36 @@ def test_duplicate_and_out_of_scope_are_not_scored_as_binary_predictions():
     assert report["metric_eligible_review_count"] == 0
     assert report["precision"] is None
     assert report["recall"] is None
+
+
+
+def test_rejects_malformed_sampling_metadata_without_crashing():
+    queue, key = packets()
+    queue["sampling"] = None
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "sampling_metadata_invalid" in report["errors"]
+
+
+def test_rejects_non_string_labels_and_dispositions_without_crashing():
+    queue, key = packets()
+    queue["items"][0]["review"]["relevance_label"] = ["relevant"]
+    key["items"][1]["pipeline_disposition"] = ["included"]
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "relevance_label_invalid:run::a" in report["errors"]
+    assert "key_disposition_invalid:run::b" in report["errors"]
+
+
+def test_rejects_malformed_url_authority_without_crashing():
+    queue, key = packets()
+    queue["items"][0]["review"]["evidence_urls"] = ["http://[invalid"]
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "evidence_urls_must_be_http_urls:run::a" in report["errors"]
