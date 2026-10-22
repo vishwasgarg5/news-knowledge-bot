@@ -80,3 +80,15 @@ def test_no_go_can_bundle_complete_but_uncertain_evidence(tmp_path):
     bundle = build_bundle(paths)
     assert bundle["identity"]["release_decision"] == "NO-GO"
     assert verify_bundle(bundle)["passed"] is True
+
+
+def test_payload_hash_detects_edit_even_if_outer_fingerprint_is_recomputed(tmp_path):
+    bundle = build_bundle(fixture_artifacts(tmp_path))
+    bundle["artifacts"]["comparison"]["payload"]["comparable"] = False
+    # Simulate an editor who recomputes the outer fingerprint: the per-payload
+    # digest still catches that the embedded artifact no longer matches its hash.
+    from scripts.build_policy_evidence_bundle import _canonical, _sha256
+    payload = {key: value for key, value in bundle.items() if key != "bundle_fingerprint_sha256"}
+    bundle["bundle_fingerprint_sha256"] = _sha256(_canonical(payload))
+    with pytest.raises(ValueError, match="payload hash mismatch"):
+        verify_bundle(bundle)

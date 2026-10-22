@@ -117,7 +117,7 @@ def build_bundle(paths: dict[str, Path], history_path: Path | None = None) -> di
         "bundle_schema_version": "1.0",
         "bundle_type": "offline_policy_evaluation_evidence",
         "identity": identity,
-        "artifacts": {name: {"sha256": hashes[name], "payload": values[name]} for name in ARTIFACTS},
+        "artifacts": {name: {"sha256": hashes[name], "payload_sha256": _sha256(_canonical(values[name])), "payload": values[name]} for name in ARTIFACTS},
         "integrity": integrity,
         "operational_boundary": "Offline audit artifact only; does not deploy a policy, change production behavior, or send Telegram notifications.",
     }
@@ -139,9 +139,13 @@ def verify_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
         _require(isinstance(item, dict) and isinstance(item.get("payload"), dict),
                  f"{name} payload missing")
         actual = _sha256(_canonical(item["payload"]))
-        # Source hashes refer to original file bytes; the bundle fingerprint protects embedded payloads.
-        _require(isinstance(item.get("sha256"), str) and len(item["sha256"]) == 64,
+        # Source hash preserves original bytes; payload hash binds parsed JSON content.
+        source_hash = item.get("sha256")
+        _require(isinstance(source_hash, str) and len(source_hash) == 64
+                 and all(ch in "0123456789abcdef" for ch in source_hash),
                  f"{name} source hash is invalid")
+        _require(item.get("payload_sha256") == actual,
+                 f"{name} payload hash mismatch; embedded evidence was modified")
     identity = _validate_artifacts({name: artifacts[name]["payload"] for name in ARTIFACTS})
     _require(identity == bundle.get("identity"), "bundle identity does not match its artifacts")
     audit = bundle.get("integrity", {}).get("history_audit", {})
