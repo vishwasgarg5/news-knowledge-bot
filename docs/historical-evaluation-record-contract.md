@@ -270,3 +270,25 @@ same adjudicated set; precision tolerance is a difference from baseline in the r
 -1 to 1. This is a descriptive release guard, not a significance test or proof of
 production quality. The example configuration is not automatically activated and the gate
 does not trigger a deployment, production workflow, or notification.
+
+
+## Consolidated policy release decision
+
+Combine the policy comparison, both policy-specific baseline audits, the regression tolerance
+gate, and each policy's explicit review-coverage check into one auditable decision report:
+
+```bash
+python scripts/build_policy_release_decision.py policy-comparison.json \\
+  --baseline-audit policy-v1-gate.json \\
+  --candidate-audit policy-v2-gate.json \\
+  --regression-gate policy-regression-gate.json \\
+  --output policy-release-decision.json
+pytest -q tests/test_policy_release_decision.py
+```
+
+The report returns `GO` only when the comparison is comparable, both baseline audits pass,
+the regression gate passes, policy identifiers agree across all artifacts, and both
+coverage checks are present and pass. Otherwise it returns `NO-GO` with named blockers
+and upstream failure details. Missing coverage fails closed. This is an offline decision
+artifact only; it does not deploy, change policy configuration, trigger production, or
+send notifications.
