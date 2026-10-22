@@ -19,7 +19,7 @@ on:
           - production
           - validate
           - review-packet
-        default: validate
+        default: review-packet
       record_path:
         description: "Historical capture JSON under data/historical_evaluation_records/"
         required: true
