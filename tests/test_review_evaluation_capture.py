@@ -85,4 +85,21 @@ def test_label_amendment_requires_explicit_replace_and_atomic_writer(tmp_path):
     assert len(saved["story_labels"]) == 1
     assert saved["story_labels"][0]["label"] == "supported"
     assert saved["story_labels"][0]["reviewer"] == "reviewer-2"
-    assert saved["labeling_status"] == "reviewed"
+    assert saved["labeling_status"] == "in_progress"
+
+
+
+def test_record_is_marked_reviewed_only_when_every_candidate_is_labelled():
+    record = sample_record()
+    first = apply_human_label(
+        record, story_id="story-a", label="supported", reviewer="reviewer-1",
+        rationale="Official notice confirms the event.", candidate_ids=["candidate-a"],
+        evidence_urls=["https://official.example/a"],
+    )
+    assert first["labeling_status"] == "in_progress"
+    complete = apply_human_label(
+        first, story_id="story-b", label="uncertain", reviewer="reviewer-1",
+        rationale="No independent confirmation was found in reviewed material.",
+        candidate_ids=["candidate-b"], evidence_urls=[],
+    )
+    assert complete["labeling_status"] == "reviewed"
