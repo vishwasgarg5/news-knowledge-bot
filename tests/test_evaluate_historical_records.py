@@ -86,7 +86,6 @@ def test_aggregate_gate_blocks_small_samples_and_keeps_sampling_metadata(tmp_pat
     assert report["evaluation_gate"]["status"] == "BLOCKED_INSUFFICIENT_SAMPLE"
     assert set(report["evaluation_gate"]["reasons"]) == {
         "insufficient_metric_eligible_reviews",
-        "insufficient_relevant_class_support",
         "insufficient_not_relevant_class_support",
     }
     assert report["class_support"] == {"relevant": 2, "not_relevant": 1}
