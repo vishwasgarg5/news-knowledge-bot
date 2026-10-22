@@ -163,7 +163,7 @@ def verify_bundle(bundle: dict[str, Any], source_paths: dict[str, Path] | None =
     if audit.get("status") == "pass":
         history = integrity.get("history_payload")
         _require(isinstance(history, dict), "verified history payload is missing")
-        _require(integrity.get("history_payload_sha256") == _sha256(_canonical(history)),
+        _require(audit.get("history_payload_sha256") == _sha256(_canonical(history)),
                  "history payload hash mismatch")
         from scripts.policy_evaluation_history import audit_history
         history_audit = audit_history(history)
