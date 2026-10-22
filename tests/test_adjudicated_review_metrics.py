@@ -133,3 +133,38 @@ def test_sampling_diagnostics_report_selection_rate_without_applying_weights():
     assert rows["included"]["selected"] == 10
     assert rows["included"]["weighting_applied_to_metrics"] is False
     assert report["metrics"]["inclusion_precision"] == 1.0
+
+
+def test_sampling_diagnostics_flag_inconsistent_rates_and_withhold_weights():
+    queue = ("bad-sampling.json", {
+        "strata": {
+            "included": {"eligible_unreviewed": 10, "selected": 5, "selection_rate": 0.9},
+            "excluded": {"eligible_unreviewed": 0, "selected": 0, "selection_rate": 0.0},
+            "duplicate": {"eligible_unreviewed": 2, "selected": 3, "selection_rate": 1.5},
+        },
+        "reviews": [review("c1", "included"), review("c2", "excluded")],
+    })
+    report = evaluate_adjudicated_reviews([queue], {"adjudications": []})
+    rows = {row["disposition"]: row for row in report["sampling_diagnostics"]}
+
+    assert rows["included"]["metadata_valid"] is False
+    assert rows["included"]["inverse_selection_weight_diagnostic"] is None
+    assert rows["excluded"]["metadata_valid"] is False
+    assert rows["duplicate"]["selection_counts_valid"] is False
+    assert rows["duplicate"]["inverse_selection_weight_diagnostic"] is None
+
+
+def test_sample_coverage_is_explicitly_limited_to_supplied_queues():
+    queue = ("reviews.json", {"reviews": [review("a", "included"), review("b", "excluded"), review("c", "duplicate")]})
+    report = evaluate_adjudicated_reviews([queue], {"adjudications": [
+        adjudication("a", "relevant"), adjudication("b", "not_relevant"),
+        adjudication("c", "relevant"),
+    ]})
+
+    coverage = report["sample_coverage"]
+    assert coverage["unique_candidates_in_supplied_queues"] == 3
+    assert coverage["metric_eligible_candidates"] == 2
+    assert coverage["not_metric_eligible_candidates"] == 1
+    assert coverage["metric_eligibility_rate_within_supplied_candidates"] == 2 / 3
+    assert coverage["disposition_counts"] == {"duplicate": 1, "excluded": 1, "included": 1, "out_of_scope": 0}
+    assert "not coverage of the full candidate population" in coverage["interpretation"]

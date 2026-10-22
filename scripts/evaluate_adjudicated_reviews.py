@@ -163,10 +163,26 @@ def evaluate_adjudicated_reviews(
                 and isinstance(selected_count, int) and not isinstance(selected_count, bool)
                 and 0 <= selected_count <= eligible_count
             )
-            valid_rate = (
-                isinstance(selection_rate, (int, float))
-                and not isinstance(selection_rate, bool)
-                and 0 < selection_rate <= 1
+            valid_rate_type = (
+                selection_rate is None
+                or (
+                    isinstance(selection_rate, (int, float))
+                    and not isinstance(selection_rate, bool)
+                    and 0 <= selection_rate <= 1
+                )
+            )
+            expected_rate = selected_count / eligible_count if valid_counts and eligible_count else None
+            rate_consistent = (
+                valid_counts and valid_rate_type
+                and (
+                    (eligible_count == 0 and selected_count == 0 and selection_rate is None)
+                    or (
+                        eligible_count > 0
+                        and isinstance(selection_rate, (int, float))
+                        and not isinstance(selection_rate, bool)
+                        and abs(selection_rate - expected_rate) < 1e-9
+                    )
+                )
             )
             sampling_diagnostics.append({
                 "queue": metadata.get("path", ""),
@@ -175,9 +191,12 @@ def evaluate_adjudicated_reviews(
                 "eligible_unreviewed": eligible_count,
                 "selected": selected_count,
                 "reported_selection_rate": selection_rate,
+                "expected_selection_rate": expected_rate,
                 "selection_counts_valid": valid_counts,
+                "selection_rate_consistent": rate_consistent,
+                "metadata_valid": bool(valid_counts and rate_consistent),
                 "inverse_selection_weight_diagnostic": (
-                    1 / selection_rate if valid_counts and selected_count > 0 and valid_rate else None
+                    1 / expected_rate if valid_counts and rate_consistent and expected_rate else None
                 ),
                 "weighting_applied_to_metrics": False,
             })
@@ -187,6 +206,19 @@ def evaluate_adjudicated_reviews(
     return {
         "evaluation_type": "offline_adjudicated_candidate_relevance",
         "candidate_count": len(candidates),
+        "sample_coverage": {
+            "unique_candidates_in_supplied_queues": len(candidates),
+            "metric_eligible_candidates": metric_eligible,
+            "not_metric_eligible_candidates": len(candidates) - metric_eligible,
+            "metric_eligibility_rate_within_supplied_candidates": (
+                metric_eligible / len(candidates) if candidates else None
+            ),
+            "disposition_counts": {
+                disposition: sum(1 for candidate in candidates.values() if candidate.get("disposition") == disposition)
+                for disposition in sorted(DISPOSITIONS)
+            },
+            "interpretation": "Describes only unique candidates present in supplied review queues, not full-population coverage.",
+        },
         "valid_adjudications_for_known_candidates": sum(1 for cid in adjudications if cid in candidates),
         "metric_eligible_candidates": metric_eligible,
         "metrics": {
@@ -213,7 +245,9 @@ def evaluate_adjudicated_reviews(
             "Conflicting evidence metadata or dispositions for the same candidate are excluded from metrics.",
             "Uncertain, unresolved, duplicate, out-of-scope, or evidence-incomplete candidates are not silently treated as negatives.",
             "Adjudication is a human decision, not independent proof of truth.",
-            "Sampling diagnostics expose reported stratum counts and optional inverse selection-rate diagnostics; these weights are not applied to metrics.",
+            "Sampling diagnostics validate reported stratum counts and selection rates; inconsistent metadata has no inverse-weight diagnostic.",
+            "Sample coverage describes only candidates present in supplied review queues, not coverage of the full candidate population.",
+            "Inverse selection-rate diagnostics are not applied to metrics.",
             "Sampling bias is not corrected; precision/recall may not represent the full candidate population.",
         ],
     }
