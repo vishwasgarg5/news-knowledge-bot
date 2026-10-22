@@ -52,15 +52,21 @@ def build_packet(
     """Return blinded review queue and separate disposition answer key."""
     if not records:
         raise ValueError("no JSON records supplied")
+    if isinstance(sample_per_disposition, bool) or not isinstance(sample_per_disposition, int):
+        raise ValueError("sample_per_disposition must be an integer")
     if sample_per_disposition < 1:
         raise ValueError("sample_per_disposition must be at least 1")
     groups: dict[str, list[dict[str, Any]]] = {value: [] for value in DISPOSITIONS}
     seen_item_ids: set[str] = set()
     for record_path, record in records:
+        if not isinstance(record, dict):
+            raise ValueError(f"{record_path}: record root must be an object")
         run_id = record.get("run_id")
         if not isinstance(run_id, str) or not run_id.strip():
             raise ValueError(f"{record_path}: run_id must be a non-empty string")
-        candidates = record["candidate_articles"]
+        candidates = record.get("candidate_articles")
+        if not isinstance(candidates, list):
+            raise ValueError(f"{record_path}: candidate_articles must be a list")
         for index, candidate in enumerate(candidates):
             if not isinstance(candidate, dict):
                 raise ValueError(f"{record_path}: candidate_articles[{index}] must be an object")
@@ -68,7 +74,7 @@ def build_packet(
             disposition = candidate.get("disposition")
             if not isinstance(candidate_id, str) or not candidate_id.strip():
                 raise ValueError(f"{record_path}: candidate_articles[{index}] has no candidate_id")
-            if disposition not in groups:
+            if not isinstance(disposition, str) or disposition not in groups:
                 raise ValueError(f"{record_path}: candidate_articles[{index}] has invalid disposition")
             item_id = f"{run_id}::{candidate_id}"
             if item_id in seen_item_ids:
