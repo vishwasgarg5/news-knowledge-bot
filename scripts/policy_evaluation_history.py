@@ -44,8 +44,17 @@ def build_history_entry(
                 return check.get("observed")
         return None
 
+    artifact_identity = {
+        "baseline_policy_version": baseline_audit.get("policy_version"),
+        "candidate_policy_version": candidate_audit.get("policy_version"),
+        "artifact_sha256": artifact_hashes,
+    }
+    run_id = hashlib.sha256(
+        json.dumps(artifact_identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
     entry = {
         "history_schema_version": "1.0",
+        "run_id": run_id,
         "recorded_at": recorded_at or datetime.now(timezone.utc).isoformat(),
         "baseline_policy_version": baseline_audit.get("policy_version"),
         "candidate_policy_version": candidate_audit.get("policy_version"),
@@ -81,7 +90,7 @@ def append_history(history_path: Path, entry: dict[str, Any]) -> bool:
         existing = raw["entries"]
         if not all(isinstance(row, dict) and row.get("entry_sha256") for row in existing):
             raise ValueError("existing history contains an invalid entry")
-        if any(row.get("entry_sha256") == entry["entry_sha256"] for row in existing):
+        if any(row.get("run_id") == entry["run_id"] for row in existing):
             return False
     existing.append(entry)
     document = {
