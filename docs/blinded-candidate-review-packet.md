@@ -14,3 +14,14 @@ The queue and answer key are separate files. **Do not share the answer key with 
 Sampling is deterministic for a fixed input and seed and samples independently within each available disposition group (included, excluded, duplicate, out_of_scope), up to the requested maximum per group. The output records available and selected counts. Small groups are included in full. This helps expose errors in both included and excluded decisions but does not, by itself, create a statistically representative sample or authorize population-level accuracy claims.
 
 Candidate metadata is copied as captured. Missing fields remain blank and are not inferred or synthesized. The builder performs no fetching, production ranking, label creation, or delivery. Keep the answer key access-controlled and preserve the queue and key together with the seed for auditability.
+
+
+After reviewers complete the queue, validate it against the separately stored answer key:
+
+\`\`\`bash
+python scripts/validate_blinded_review_packet.py \\
+  /path/to/completed-review-queue.json \\
+  /path/to/candidate-review-answer-key.json --json
+\`\`\`
+
+The validator rejects mismatched item IDs, duplicate IDs, unblinded queues, invalid labels, missing reviewer/rationale, timestamps without timezone offsets, and missing/invalid evidence URLs for definitive labels. It reports descriptive confusion-matrix metrics only for definitive labels on included and excluded candidates. Uncertain, duplicate, and out-of-scope are not guessed into binary classes. This report validates a review packet; it does not automatically modify the historical capture records or make the evaluation sample representative.
