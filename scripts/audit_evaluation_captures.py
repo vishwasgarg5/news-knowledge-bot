@@ -77,6 +77,8 @@ def audit_record(record: Any, path: str = "") -> dict[str, Any]:
         errors.append("human_label_incomplete_or_invalid")
     if state == "pending_review" or not labels:
         status = "pending_review"
+    elif state == "in_progress":
+        status = "in_progress"
     elif errors:
         status = "needs_attention"
     else:
@@ -116,6 +118,7 @@ def audit_directory(directory: Path) -> dict[str, Any]:
         "directory": str(directory),
         "record_count": len(records),
         "pending_review_count": sum(row.get("status") == "pending_review" for row in records),
+        "in_progress_count": sum(row.get("status") == "in_progress" for row in records),
         "reviewed_record_count": sum(row.get("status") == "reviewed_labels_present" for row in records),
         "needs_attention_count": sum(row.get("status") == "needs_attention" for row in records),
         "invalid_record_count": sum(row.get("status") == "invalid" for row in records),
@@ -144,7 +147,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         print(f"Captured records: {report['record_count']}; pending review: {report['pending_review_count']}; "
-              f"reviewed: {report['reviewed_record_count']}; needs attention: {report['needs_attention_count']}; "
+              f"in progress: {report['in_progress_count']}; reviewed: {report['reviewed_record_count']}; "
+              f"needs attention: {report['needs_attention_count']}; "
               f"records with issues: {report['records_with_issues']}; unreadable/invalid: {report['invalid_record_count']}")
         for row in report["records"]:
             print(f"- {row.get('run_id') or row['path']}: {row['status']}; "
