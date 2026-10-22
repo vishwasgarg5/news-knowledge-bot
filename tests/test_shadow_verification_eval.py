@@ -7,6 +7,8 @@ def test_metrics_calculate_confusion_matrix_and_f1():
     result = _metrics([True, True, False, False], [True, False, True, False])
     assert result == {
         "tp": 1, "fp": 1, "tn": 1, "fn": 1,
+        "positive_support": 2, "negative_support": 2,
+        "accuracy": 0.5, "specificity": 0.5, "balanced_accuracy": 0.5,
         "precision": 0.5, "recall": 0.5, "f1": 0.5,
     }
 
@@ -136,3 +138,13 @@ def test_candidate_freshness_boundary_for_undated_and_stale_official_stories():
     assert stale_official["label"] is False
     assert stale_official["primary_fresh"] is False
     assert stale_official["candidate_accept"] is False
+
+
+
+def test_shadow_metrics_report_class_support_and_balanced_accuracy():
+    result = _metrics([True, True, True, False], [True, False, True, False])
+    assert result["positive_support"] == 3
+    assert result["negative_support"] == 1
+    assert result["recall"] == 0.667
+    assert result["specificity"] == 1.0
+    assert result["balanced_accuracy"] == 0.833
