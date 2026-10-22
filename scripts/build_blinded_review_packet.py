@@ -50,6 +50,8 @@ def build_packet(
     seed: str = "20261022",
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return blinded review queue and separate disposition answer key."""
+    if not records:
+        raise ValueError("no JSON records supplied")
     if sample_per_disposition < 1:
         raise ValueError("sample_per_disposition must be at least 1")
     groups: dict[str, list[dict[str, Any]]] = {value: [] for value in DISPOSITIONS}
