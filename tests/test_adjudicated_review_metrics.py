@@ -167,4 +167,4 @@ def test_sample_coverage_is_explicitly_limited_to_supplied_queues():
     assert coverage["not_metric_eligible_candidates"] == 1
     assert coverage["metric_eligibility_rate_within_supplied_candidates"] == 2 / 3
     assert coverage["disposition_counts"] == {"duplicate": 1, "excluded": 1, "included": 1, "out_of_scope": 0}
-    assert "not coverage of the full candidate population" in coverage["interpretation"]
+    assert "not full-population coverage" in coverage["interpretation"]
