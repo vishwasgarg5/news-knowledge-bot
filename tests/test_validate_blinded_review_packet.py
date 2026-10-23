@@ -223,3 +223,16 @@ def test_rejects_item_id_that_does_not_match_run_and_candidate():
     assert report["valid"] is False
     assert "queue_item_identity_mismatch:run::a" in report["errors"]
     assert "key_item_identity_mismatch:run::a" in report["errors"]
+
+
+
+def test_rejects_pipeline_disposition_nested_in_reviewer_queue_item():
+    queue, key = packets()
+    queue["items"][0]["candidate_metadata"] = {
+        "source_details": [{"disposition": "included"}]
+    }
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "queue_not_blinded:run::a" in report["errors"]

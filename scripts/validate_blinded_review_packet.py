@@ -37,6 +37,17 @@ def _valid_http_url(value: Any) -> bool:
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 
 
+def _contains_pipeline_disposition(value: Any) -> bool:
+    """Find disposition fields anywhere in a reviewer-facing item."""
+    if isinstance(value, dict):
+        if "pipeline_disposition" in value or "disposition" in value:
+            return True
+        return any(_contains_pipeline_disposition(child) for child in value.values())
+    if isinstance(value, list):
+        return any(_contains_pipeline_disposition(child) for child in value)
+    return False
+
+
 def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
     errors: list[str] = []
     if not isinstance(queue, dict) or queue.get("packet_type") != "blinded_candidate_relevance_review":
@@ -73,7 +84,7 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         if isinstance(run_id, str) and run_id.strip() and isinstance(candidate_id, str) and candidate_id.strip():
             if item["item_id"] != f"{run_id}::{candidate_id}":
                 errors.append(f"queue_item_identity_mismatch:{item['item_id']}")
-        if "pipeline_disposition" in item or "disposition" in item:
+        if _contains_pipeline_disposition(item):
             errors.append(f"queue_not_blinded:{item['item_id']}")
     for index, item in enumerate(key_items):
         if not isinstance(item, dict) or not isinstance(item.get("item_id"), str) or not item["item_id"].strip():
