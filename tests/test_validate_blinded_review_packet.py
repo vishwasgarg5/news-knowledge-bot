@@ -12,24 +12,24 @@ def packets():
         "packet_version": "1.0",
         "sampling": {"seed": "seed-1"},
         "items": [
-            {"item_id": "run::a", "review": {
+            {"item_id": "run::a", "run_id": "run", "candidate_id": "a", "review": {
                 "relevance_label": "relevant", "reviewer_id": "reviewer-a",
                 "reviewed_at": "2026-10-22T10:00:00+00:00",
                 "rationale": "Evidence supports topical relevance.",
                 "evidence_urls": ["https://example.com/evidence-a"],
             }},
-            {"item_id": "run::b", "review": {
+            {"item_id": "run::b", "run_id": "run", "candidate_id": "b", "review": {
                 "relevance_label": "not_relevant", "reviewer_id": "reviewer-b",
                 "reviewed_at": "2026-10-22T11:00:00Z",
                 "rationale": "Evidence does not match the target topic.",
                 "evidence_urls": ["https://example.com/evidence-b"],
             }},
-            {"item_id": "run::c", "review": {
+            {"item_id": "run::c", "run_id": "run", "candidate_id": "c", "review": {
                 "relevance_label": "uncertain", "reviewer_id": "reviewer-a",
                 "reviewed_at": "2026-10-22T12:00:00+00:00",
                 "rationale": "Evidence is ambiguous.", "evidence_urls": [],
             }},
-            {"item_id": "run::d", "review": {
+            {"item_id": "run::d", "run_id": "run", "candidate_id": "d", "review": {
                 "relevance_label": "", "reviewer_id": "", "reviewed_at": "",
                 "rationale": "", "evidence_urls": [],
             }},
@@ -40,10 +40,10 @@ def packets():
         "packet_version": "1.0",
         "seed": "seed-1",
         "items": [
-            {"item_id": "run::a", "pipeline_disposition": "included"},
-            {"item_id": "run::b", "pipeline_disposition": "included"},
-            {"item_id": "run::c", "pipeline_disposition": "excluded"},
-            {"item_id": "run::d", "pipeline_disposition": "excluded"},
+            {"item_id": "run::a", "run_id": "run", "candidate_id": "a", "pipeline_disposition": "included"},
+            {"item_id": "run::b", "run_id": "run", "candidate_id": "b", "pipeline_disposition": "included"},
+            {"item_id": "run::c", "run_id": "run", "candidate_id": "c", "pipeline_disposition": "excluded"},
+            {"item_id": "run::d", "run_id": "run", "candidate_id": "d", "pipeline_disposition": "excluded"},
         ],
     }
     return queue, key
@@ -198,3 +198,28 @@ def test_rejects_empty_review_queue_and_answer_key():
     assert report["valid"] is False
     assert report["complete"] is False
     assert "review_packet_must_not_be_empty" in report["errors"]
+
+
+
+def test_rejects_missing_review_item_identity_fields():
+    queue, key = packets()
+    del queue["items"][0]["candidate_id"]
+    del key["items"][1]["run_id"]
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "queue_candidate_id_required:run::a" in report["errors"]
+    assert "key_run_id_required:run::b" in report["errors"]
+
+
+def test_rejects_item_id_that_does_not_match_run_and_candidate():
+    queue, key = packets()
+    queue["items"][0]["candidate_id"] = "different"
+    key["items"][0]["candidate_id"] = "different"
+
+    report = validate_packets(queue, key)
+
+    assert report["valid"] is False
+    assert "queue_item_identity_mismatch:run::a" in report["errors"]
+    assert "key_item_identity_mismatch:run::a" in report["errors"]

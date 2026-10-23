@@ -65,6 +65,14 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         if item["item_id"] in queue_map:
             errors.append(f"queue_item_id_duplicate:{item['item_id']}")
         queue_map[item["item_id"]] = item
+        run_id, candidate_id = item.get("run_id"), item.get("candidate_id")
+        if not isinstance(run_id, str) or not run_id.strip():
+            errors.append(f"queue_run_id_required:{item['item_id']}")
+        if not isinstance(candidate_id, str) or not candidate_id.strip():
+            errors.append(f"queue_candidate_id_required:{item['item_id']}")
+        if isinstance(run_id, str) and run_id.strip() and isinstance(candidate_id, str) and candidate_id.strip():
+            if item["item_id"] != f"{run_id}::{candidate_id}":
+                errors.append(f"queue_item_identity_mismatch:{item['item_id']}")
         if "pipeline_disposition" in item or "disposition" in item:
             errors.append(f"queue_not_blinded:{item['item_id']}")
     for index, item in enumerate(key_items):
@@ -74,6 +82,14 @@ def validate_packets(queue: Any, answer_key: Any) -> dict[str, Any]:
         if item["item_id"] in key_map:
             errors.append(f"key_item_id_duplicate:{item['item_id']}")
         key_map[item["item_id"]] = item
+        run_id, candidate_id = item.get("run_id"), item.get("candidate_id")
+        if not isinstance(run_id, str) or not run_id.strip():
+            errors.append(f"key_run_id_required:{item['item_id']}")
+        if not isinstance(candidate_id, str) or not candidate_id.strip():
+            errors.append(f"key_candidate_id_required:{item['item_id']}")
+        if isinstance(run_id, str) and run_id.strip() and isinstance(candidate_id, str) and candidate_id.strip():
+            if item["item_id"] != f"{run_id}::{candidate_id}":
+                errors.append(f"key_item_identity_mismatch:{item['item_id']}")
         disposition = item.get("pipeline_disposition")
         if not isinstance(disposition, str) or disposition not in {
             "included", "excluded", "duplicate", "out_of_scope"
