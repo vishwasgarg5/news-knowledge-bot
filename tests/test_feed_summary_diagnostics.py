@@ -144,3 +144,25 @@ def test_fetch_feed_extracts_namespaced_rss_summary_end_to_end_offline(monkeypat
     assert articles[0].source == "Synthetic Publisher Feed"
     assert articles[0].summary == "Publisher-provided media summary for offline integration test."
     assert "[SUMMARY FIELD GAP]" not in capsys.readouterr().out
+
+
+def test_feedparser_content_encoded_summary_is_extracted_offline():
+    import feedparser
+
+    xml = b"""<?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0"
+         xmlns:content="http://purl.org/rss/1.0/modules/content/">
+      <channel>
+        <title>Synthetic Content Feed</title>
+        <item>
+          <title>Encoded content summary example</title>
+          <link>https://example.com/content-encoded-summary</link>
+          <description></description>
+          <content:encoded><![CDATA[<p>Publisher excerpt from content:encoded.</p>]]></content:encoded>
+        </item>
+      </channel>
+    </rss>"""
+
+    parsed = feedparser.parse(xml)
+    assert len(parsed.entries) == 1
+    assert _summary_text(parsed.entries[0]) == "Publisher excerpt from content:encoded."
