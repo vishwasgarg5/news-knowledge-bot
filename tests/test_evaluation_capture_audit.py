@@ -162,6 +162,15 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "previous_summary_coverage": 1.0, "latest_summary_coverage": 0.0,
         "coverage_delta": -1.0,
     }
+    assert report["latest_run"]["summary_coverage_by_domain"]["example.com"] == {
+        "candidate_count": 1, "summary_present_count": 0,
+        "summary_missing_count": 1, "summary_coverage": 0.0,
+    }
+    assert report["previous_run_comparison"]["summary_coverage_by_domain_delta"]["example.com"] == {
+        "previous_candidate_count": 1, "latest_candidate_count": 1,
+        "previous_summary_coverage": 1.0, "latest_summary_coverage": 0.0,
+        "coverage_delta": -1.0,
+    }
 
 
 def test_capture_quality_trend_requires_history_and_does_not_invent_fields():
@@ -230,3 +239,26 @@ def test_capture_quality_diagnoses_missing_blank_and_non_string_summaries():
         "missing_key", "blank_string", "non_string",
     ]
     assert report["missing_field_counts"]["summary"] == 3
+
+
+def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access():
+    from pathlib import Path
+
+    record = {
+        "run_id": "domain-grouping",
+        "candidate_articles": [
+            {"url": "https://www.Example.com/story/1", "summary": "Known summary"},
+            {"url": "https://example.com/story/2", "summary": ""},
+            {"url": "https://news.example.org/story/3", "summary": ""},
+            {"url": "not a valid absolute URL", "summary": ""},
+        ],
+    }
+    report = build_trend([(Path("domains.json"), record)])
+    domains = report["latest_run"]["summary_coverage_by_domain"]
+
+    assert domains["example.com"] == {
+        "candidate_count": 2, "summary_present_count": 1,
+        "summary_missing_count": 1, "summary_coverage": 0.5,
+    }
+    assert domains["news.example.org"]["summary_missing_count"] == 1
+    assert domains["unknown"]["summary_missing_count"] == 1

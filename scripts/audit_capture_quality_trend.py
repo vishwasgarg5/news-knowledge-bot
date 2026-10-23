@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse, json
 from datetime import datetime
+from urllib.parse import urlsplit
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,19 @@ FIELDS = ("title", "source", "url", "published_at", "summary")
 
 def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+def _url_domain(value: Any) -> str:
+    """Return a normalized hostname for offline grouping; never fetch the URL."""
+    if not _nonempty(value):
+        return "unknown"
+    try:
+        hostname = urlsplit(value.strip()).hostname
+    except ValueError:
+        return "unknown"
+    if not hostname:
+        return "unknown"
+    hostname = hostname.lower().rstrip(".")
+    return hostname[4:] if hostname.startswith("www.") else hostname
 
 def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     timestamp = path.stem
@@ -79,11 +93,25 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
         }
         for source, group in sorted(source_groups.items())
     }
+    domain_groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        domain = _url_domain(row.get("url"))
+        domain_groups.setdefault(domain, []).append(row)
+    summary_coverage_by_domain = {
+        domain: {
+            "candidate_count": len(group),
+            "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
+            "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
+            "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+        }
+        for domain, group in sorted(domain_groups.items())
+    }
     return {"path": str(path), "run_id": str(record.get("run_id") or ""), "timestamp": timestamp,
             "candidate_count": n, "field_coverage": {f: round((n-missing[f])/n, 4) if n else 0.0 for f in FIELDS},
             "missing_counts": missing, "summary_value_diagnostics": summary_value_diagnostics,
             "summary_coverage_by_category": summary_coverage_by_category,
             "summary_coverage_by_source": summary_coverage_by_source,
+            "summary_coverage_by_domain": summary_coverage_by_domain,
             "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
 
 def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
@@ -121,6 +149,7 @@ def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
                       "coverage_delta": {f: round(latest["field_coverage"][f]-prev["field_coverage"][f], 4) for f in FIELDS},
                       "summary_coverage_by_category_delta": _group_coverage_delta("summary_coverage_by_category"),
                       "summary_coverage_by_source_delta": _group_coverage_delta("summary_coverage_by_source"),
+                      "summary_coverage_by_domain_delta": _group_coverage_delta("summary_coverage_by_domain"),
                       "regressions": regressions}
     return {"audit_type": "evaluation_capture_quality_trend", "record_count": len(rows), "candidate_count": total,
             "overall_field_coverage": coverage, "missing_field_counts": missing, "latest_run": rows[-1] if rows else None,
