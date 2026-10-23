@@ -2478,3 +2478,32 @@ def test_review_packet_rejects_paths_outside_capture_directory():
     assert '$(dirname "$resolved_record")" != "$records_dir"' in text
     assert '[[ ! -f "$resolved_record"' in text
     assert 'Record must resolve to a regular JSON file directly inside data/historical_evaluation_records/' in text
+
+
+def test_review_packet_rejects_missing_and_malformed_capture_files(tmp_path):
+    import pytest
+    from scripts.build_blinded_review_packet import load_records
+
+    missing = tmp_path / "missing.json"
+    with pytest.raises(ValueError, match="cannot read"):
+        load_records(missing)
+
+    malformed = tmp_path / "malformed.json"
+    malformed.write_text("{not valid JSON", encoding="utf-8")
+    with pytest.raises(ValueError, match="cannot read"):
+        load_records(malformed)
+
+    wrong_root = tmp_path / "wrong-root.json"
+    wrong_root.write_text('[]', encoding="utf-8")
+    with pytest.raises(ValueError, match="record root must be an object"):
+        load_records(wrong_root)
+
+    missing_candidates = tmp_path / "missing-candidates.json"
+    missing_candidates.write_text('{"run_id":"test-run"}', encoding="utf-8")
+    with pytest.raises(ValueError, match="candidate_articles must be a list"):
+        load_records(missing_candidates)
+
+    empty_dir = tmp_path / "empty-captures"
+    empty_dir.mkdir()
+    with pytest.raises(ValueError, match="no JSON records found"):
+        load_records(empty_dir)
