@@ -43,9 +43,25 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
         }
         for category, group in sorted(category_groups.items())
     }
+    # Categories are absent in some legacy captures, so source-level grouping
+    # provides a second diagnostic dimension that remains useful for those runs.
+    source_groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        source = str(row.get("source") or "").strip() or "unknown"
+        source_groups.setdefault(source, []).append(row)
+    summary_coverage_by_source = {
+        source: {
+            "candidate_count": len(group),
+            "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
+            "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
+            "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+        }
+        for source, group in sorted(source_groups.items())
+    }
     return {"path": str(path), "run_id": str(record.get("run_id") or ""), "timestamp": timestamp,
             "candidate_count": n, "field_coverage": {f: round((n-missing[f])/n, 4) if n else 0.0 for f in FIELDS},
             "missing_counts": missing, "summary_coverage_by_category": summary_coverage_by_category,
+            "summary_coverage_by_source": summary_coverage_by_source,
             "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
 
 def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
@@ -60,26 +76,29 @@ def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
             before, after = prev["field_coverage"][f], latest["field_coverage"][f]
             if latest["candidate_count"] and after < before:
                 regressions.append({"field": f, "previous_coverage": before, "latest_coverage": after, "delta": round(after-before, 4)})
-        previous_categories = prev.get("summary_coverage_by_category", {})
-        latest_categories = latest.get("summary_coverage_by_category", {})
-        category_summary_coverage_delta = {}
-        for category in sorted(set(previous_categories) | set(latest_categories)):
-            before = previous_categories.get(category, {})
-            after = latest_categories.get(category, {})
-            before_coverage = before.get("summary_coverage")
-            after_coverage = after.get("summary_coverage")
-            category_summary_coverage_delta[category] = {
-                "previous_candidate_count": before.get("candidate_count", 0),
-                "latest_candidate_count": after.get("candidate_count", 0),
-                "previous_summary_coverage": before_coverage,
-                "latest_summary_coverage": after_coverage,
-                "coverage_delta": round(after_coverage-before_coverage, 4)
-                    if before_coverage is not None and after_coverage is not None else None,
-            }
+        def _group_coverage_delta(group_key: str) -> dict[str, Any]:
+            previous_groups = prev.get(group_key, {})
+            latest_groups = latest.get(group_key, {})
+            result = {}
+            for group_name in sorted(set(previous_groups) | set(latest_groups)):
+                before = previous_groups.get(group_name, {})
+                after = latest_groups.get(group_name, {})
+                before_coverage = before.get("summary_coverage")
+                after_coverage = after.get("summary_coverage")
+                result[group_name] = {
+                    "previous_candidate_count": before.get("candidate_count", 0),
+                    "latest_candidate_count": after.get("candidate_count", 0),
+                    "previous_summary_coverage": before_coverage,
+                    "latest_summary_coverage": after_coverage,
+                    "coverage_delta": round(after_coverage-before_coverage, 4)
+                        if before_coverage is not None and after_coverage is not None else None,
+                }
+            return result
         comparison = {"previous_run_id": prev["run_id"], "latest_run_id": latest["run_id"],
                       "previous_timestamp": prev["timestamp"], "latest_timestamp": latest["timestamp"],
                       "coverage_delta": {f: round(latest["field_coverage"][f]-prev["field_coverage"][f], 4) for f in FIELDS},
-                      "summary_coverage_by_category_delta": category_summary_coverage_delta,
+                      "summary_coverage_by_category_delta": _group_coverage_delta("summary_coverage_by_category"),
+                      "summary_coverage_by_source_delta": _group_coverage_delta("summary_coverage_by_source"),
                       "regressions": regressions}
     return {"audit_type": "evaluation_capture_quality_trend", "record_count": len(rows), "candidate_count": total,
             "overall_field_coverage": coverage, "missing_field_counts": missing, "latest_run": rows[-1] if rows else None,
