@@ -26,6 +26,17 @@ def _nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _valid_http_url(value: Any) -> bool:
+    if not _nonempty(value):
+        return False
+    from urllib.parse import urlparse
+    try:
+        parsed = urlparse(value.strip())
+    except ValueError:
+        return False
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
 def _valid_timestamp(value: Any) -> bool:
     if not _nonempty(value):
         return False
@@ -103,6 +114,12 @@ def validate_record(record: Any) -> list[str]:
             errors.append(f"{prefix}_reviewed_at_must_be_timezone_aware_iso8601")
         if label.get("label") == "uncertain" and not _nonempty(label.get("rationale")):
             errors.append(f"{prefix}_uncertain_label_requires_rationale")
+        if label.get("label") in {"supported", "not_supported"}:
+            evidence_urls = label.get("evidence_urls")
+            if not isinstance(evidence_urls, list) or not evidence_urls:
+                errors.append(f"{prefix}_definitive_label_requires_evidence_urls")
+            elif not any(_valid_http_url(url) for url in evidence_urls):
+                errors.append(f"{prefix}_definitive_label_requires_valid_evidence_url")
 
     candidate_reviews = record.get("candidate_reviews", [])
     if not isinstance(candidate_reviews, list):

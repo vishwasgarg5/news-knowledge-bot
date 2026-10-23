@@ -104,3 +104,32 @@ def test_documented_template_is_schema_valid():
     template_path = Path(__file__).resolve().parents[1] / "docs" / "historical-evaluation-record-template.json"
     record = json.loads(template_path.read_text(encoding="utf-8"))
     assert validate_record(record) == []
+
+
+
+def test_definitive_story_label_requires_supporting_http_evidence():
+    record = valid_record()
+    record["story_labels"][0].pop("evidence_urls")
+
+    errors = validate_record(record)
+
+    assert "story_labels[0]_definitive_label_requires_evidence_urls" in errors
+
+
+def test_definitive_story_label_rejects_invalid_evidence_urls():
+    record = valid_record()
+    record["story_labels"][0]["evidence_urls"] = ["not-a-url", "ftp://example.com/source"]
+
+    errors = validate_record(record)
+
+    assert "story_labels[0]_definitive_label_requires_valid_evidence_url" in errors
+
+
+def test_definitive_story_label_accepts_any_valid_http_evidence_url():
+    record = valid_record()
+    record["story_labels"][0]["evidence_urls"] = [
+        "not-a-url",
+        "https://independent-source.example/story",
+    ]
+
+    assert validate_record(record) == []
