@@ -36,7 +36,8 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
             except ValueError: pass
     if not isinstance(record, dict):
         return {"path": str(path), "run_id": "", "timestamp": timestamp, "candidate_count": 0,
-                "field_coverage": {f: 0.0 for f in FIELDS}, "missing_counts": {f: 0 for f in FIELDS}, "invalid_record": True}
+                "field_coverage": {f: 0.0 for f in FIELDS}, "missing_counts": {f: 0 for f in FIELDS},
+                "invalid_record": True, "record_error": "record_not_object"}
     raw = record.get("candidate_articles")
     candidates = raw if isinstance(raw, list) else []
     rows = [row for row in candidates if isinstance(row, dict)]
@@ -127,7 +128,11 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
             "summary_coverage_by_category": summary_coverage_by_category,
             "summary_coverage_by_source": summary_coverage_by_source,
             "summary_coverage_by_domain": summary_coverage_by_domain,
-            "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
+            "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates),
+            "record_error": (
+                "candidate_articles_not_list" if not isinstance(raw, list) else
+                "candidate_articles_contains_non_object" if len(rows) != len(candidates) else None
+            )}
 
 def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
     rows = sorted((_record_quality(record, path) for path, record in records), key=lambda row: (row["timestamp"], row["path"]))

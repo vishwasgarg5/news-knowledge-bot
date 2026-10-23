@@ -294,3 +294,34 @@ def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
     assert exit_code == 0
     assert "SUMMARY GAPS example.com: 1/2 missing (50.0% coverage)" in output
     assert "[blank_string] Headline missing summary — https://www.example.com/story/1" in output
+
+
+
+def test_capture_quality_marks_malformed_record_shapes(tmp_path):
+    from pathlib import Path
+
+    malformed = tmp_path / "malformed.json"
+    malformed.write_text("{ definitely not JSON", encoding="utf-8")
+    (tmp_path / "wrong-shape.json").write_text(json.dumps({
+        "run_id": "wrong-shape",
+        "candidate_articles": {"not": "a list"},
+    }), encoding="utf-8")
+    (tmp_path / "mixed-rows.json").write_text(json.dumps({
+        "run_id": "mixed-rows",
+        "candidate_articles": [
+            {"title": "Valid row", "summary": "Text"},
+            "not an article object",
+        ],
+    }), encoding="utf-8")
+
+    report = build_trend([
+        (malformed, None),
+        (Path("wrong-shape.json"), json.loads((tmp_path / "wrong-shape.json").read_text(encoding="utf-8"))),
+        (Path("mixed-rows.json"), json.loads((tmp_path / "mixed-rows.json").read_text(encoding="utf-8"))),
+    ])
+    records = {Path(item["path"]).name: item for item in report["records"]}
+
+    assert records["malformed.json"]["invalid_record"] is True
+    assert records["malformed.json"]["record_error"] == "record_not_object"
+    assert records["wrong-shape.json"]["record_error"] == "candidate_articles_not_list"
+    assert records["mixed-rows.json"]["record_error"] == "candidate_articles_contains_non_object"
