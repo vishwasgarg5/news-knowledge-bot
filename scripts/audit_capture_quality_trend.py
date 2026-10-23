@@ -28,9 +28,25 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     rows = [row for row in candidates if isinstance(row, dict)]
     missing = {f: sum(not _nonempty(row.get(f)) for row in rows) for f in FIELDS}
     n = len(rows)
+    # Category-level summary coverage makes future capture regressions diagnosable
+    # without inferring missing article text or making network requests.
+    category_groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        category = str(row.get("category") or "").strip() or "unknown"
+        category_groups.setdefault(category, []).append(row)
+    summary_coverage_by_category = {
+        category: {
+            "candidate_count": len(group),
+            "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
+            "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
+            "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+        }
+        for category, group in sorted(category_groups.items())
+    }
     return {"path": str(path), "run_id": str(record.get("run_id") or ""), "timestamp": timestamp,
             "candidate_count": n, "field_coverage": {f: round((n-missing[f])/n, 4) if n else 0.0 for f in FIELDS},
-            "missing_counts": missing, "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
+            "missing_counts": missing, "summary_coverage_by_category": summary_coverage_by_category,
+            "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
 
 def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
     rows = sorted((_record_quality(record, path) for path, record in records), key=lambda row: (row["timestamp"], row["path"]))

@@ -97,6 +97,7 @@ def test_capture_uses_fallback_fields_and_cleans_available_summary_content():
 
     candidate = record["candidate_articles"][0]
     assert candidate["title"] == "Feed headline"
+    assert candidate["category"] == ""
     assert candidate["source"] == "Publisher Name"
     assert candidate["url"] == "https://example.com/story"
     assert candidate["published_at"] == "2026-10-22T08:00:00Z"

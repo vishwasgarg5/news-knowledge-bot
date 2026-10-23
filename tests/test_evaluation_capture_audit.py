@@ -138,6 +138,10 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
     assert report["overall_field_coverage"]["summary"] == 0.5
     assert report["missing_field_counts"]["summary"] == 1
     assert report["quality_gate"]["status"] == "BLOCKED"
+    assert report["latest_run"]["summary_coverage_by_category"]["unknown"] == {
+        "candidate_count": 1, "summary_present_count": 0,
+        "summary_missing_count": 1, "summary_coverage": 0.0,
+    }
     assert report["previous_run_comparison"]["regressions"] == [{
         "field": "summary", "previous_coverage": 1.0, "latest_coverage": 0.0, "delta": -1.0,
     }]

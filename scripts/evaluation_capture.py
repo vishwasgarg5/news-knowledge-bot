@@ -70,6 +70,7 @@ def build_capture_record(
         candidates.append({
             "candidate_id": candidate_id,
             "title": title,
+            "category": _first_text(article, "category"),
             "source": source,
             "url": url,
             "published_at": published,
