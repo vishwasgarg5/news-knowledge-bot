@@ -91,3 +91,24 @@ def test_summary_extractor_does_not_substitute_unrelated_entry_metadata():
         "summary": "   ",
         "description": "",
     }) == ""
+
+
+
+def test_feedparser_xml_namespace_summary_is_extracted_offline():
+    import feedparser
+
+    xml = b\'''<?xml version="1.0" encoding="UTF-8"?>
+    <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+      <channel>
+        <title>Synthetic RSS</title>
+        <item>
+          <title>Namespace summary example</title>
+          <link>https://example.com/namespace-summary</link>
+          <media:description><![CDATA[Publisher-provided media summary.]]></media:description>
+        </item>
+      </channel>
+    </rss>\'''
+
+    parsed = feedparser.parse(xml)
+    assert len(parsed.entries) == 1
+    assert _summary_text(parsed.entries[0]) == "Publisher-provided media summary."
