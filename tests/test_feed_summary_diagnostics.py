@@ -114,7 +114,7 @@ def test_feedparser_xml_namespace_summary_is_extracted_offline():
     assert _summary_text(parsed.entries[0]) == "Publisher-provided media summary."
 
 def test_fetch_feed_extracts_namespaced_rss_summary_end_to_end_offline(monkeypatch, capsys):
-    xml = b\"""<?xml version="1.0" encoding="UTF-8"?>
+    xml = b"""<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
       <channel>
         <title>Synthetic Publisher Feed</title>
@@ -124,7 +124,7 @@ def test_fetch_feed_extracts_namespaced_rss_summary_end_to_end_offline(monkeypat
           <media:description><![CDATA[Publisher-provided media summary for offline integration test.]]></media:description>
         </item>
       </channel>
-    </rss>\""" 
+    </rss>"""
 
     class Response:
         content = xml
