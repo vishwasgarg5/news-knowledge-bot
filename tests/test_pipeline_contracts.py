@@ -2580,3 +2580,31 @@ def test_evaluation_review_labels_reject_unknown_ids_when_candidate_ids_are_miss
     assert "candidate_reviews[0]_candidate_id_unknown" in errors
     assert "candidate_reviews[1]_candidate_id_unknown" in errors
     assert "candidate_reviews[1]_candidate_id_duplicate" in errors
+
+
+def test_review_packet_job_is_independent_of_production_and_validation():
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    jobs = workflow["jobs"]
+    packet = jobs["build-review-packet"]
+    production = jobs["run-news"]
+
+    assert "needs" not in packet
+    assert "workflow_dispatch" in packet["if"]
+    assert "inputs.mode == 'review-packet'" in packet["if"]
+    assert packet["permissions"]["contents"] == "read"
+    packet_script = "\\n".join(
+        str(step.get("run", "")) for step in packet["steps"]
+    )
+    assert "scripts/build_blinded_review_packet.py" in packet_script
+    assert "scripts/validate_blinded_review_packet.py" in packet_script
+    assert "python -m app.main" not in packet_script
+    assert "TELEGRAM_BOT_TOKEN" not in packet_script
+    assert "Upload blinded reviewer queue only" in packet_script or any(
+        step.get("name") == "Upload blinded reviewer queue only" for step in packet["steps"]
+    )
+
+    assert production["needs"] == "validate"
+    assert "inputs.mode == 'production'" in production["if"]
+    assert "python -m app.main" in "\\n".join(
+        str(step.get("run", "")) for step in production["steps"]
+    )
