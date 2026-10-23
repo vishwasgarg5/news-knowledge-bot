@@ -34,6 +34,10 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
         if isinstance(raw_ts, str) and raw_ts.strip():
             try: timestamp = datetime.fromisoformat(raw_ts.replace("Z", "+00:00")).isoformat()
             except ValueError: pass
+    if isinstance(record, dict) and record.get("__audit_parse_error__") is True:
+        return {"path": str(path), "run_id": "", "timestamp": timestamp, "candidate_count": 0,
+                "field_coverage": {f: 0.0 for f in FIELDS}, "missing_counts": {f: 0 for f in FIELDS},
+                "invalid_record": True, "record_error": "json_parse_error"}
     if not isinstance(record, dict):
         return {"path": str(path), "run_id": "", "timestamp": timestamp, "candidate_count": 0,
                 "field_coverage": {f: 0.0 for f in FIELDS}, "missing_counts": {f: 0 for f in FIELDS},
@@ -184,8 +188,13 @@ def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
 def audit_directory(directory: Path) -> dict[str, Any]:
     records = []
     for path in sorted(directory.glob("*.json")) if directory.exists() else []:
-        try: records.append((path, json.loads(path.read_text(encoding="utf-8"))))
-        except (OSError, json.JSONDecodeError): records.append((path, None))
+        try:
+            records.append((path, json.loads(path.read_text(encoding="utf-8"))))
+        except json.JSONDecodeError:
+            # Preserve the distinction between malformed JSON and valid JSON null.
+            records.append((path, {"__audit_parse_error__": True}))
+        except OSError:
+            records.append((path, None))
     return build_trend(records)
 
 def main(argv: list[str] | None = None) -> int:

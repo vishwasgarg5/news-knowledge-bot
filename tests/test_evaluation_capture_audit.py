@@ -325,3 +325,32 @@ def test_capture_quality_marks_malformed_record_shapes(tmp_path):
     assert records["malformed.json"]["record_error"] == "record_not_object"
     assert records["wrong-shape.json"]["record_error"] == "candidate_articles_not_list"
     assert records["mixed-rows.json"]["record_error"] == "candidate_articles_contains_non_object"
+
+
+
+def test_capture_quality_directory_distinguishes_malformed_json_from_json_null(tmp_path):
+    from pathlib import Path
+    from scripts.audit_capture_quality_trend import audit_directory
+
+    (tmp_path / "malformed.json").write_text("{ definitely not JSON", encoding="utf-8")
+    (tmp_path / "null.json").write_text("null", encoding="utf-8")
+
+    report = audit_directory(tmp_path)
+    records = {Path(item["path"]).name: item for item in report["records"]}
+
+    assert records["malformed.json"]["record_error"] == "json_parse_error"
+    assert records["null.json"]["record_error"] == "record_not_object"
+    assert records["malformed.json"]["invalid_record"] is True
+    assert records["null.json"]["invalid_record"] is True
+
+
+def test_capture_quality_empty_directory_is_insufficient_history(tmp_path):
+    from scripts.audit_capture_quality_trend import audit_directory
+
+    report = audit_directory(tmp_path)
+
+    assert report["record_count"] == 0
+    assert report["candidate_count"] == 0
+    assert report["latest_run"] is None
+    assert report["previous_run_comparison"] is None
+    assert report["quality_gate"]["status"] == "INSUFFICIENT_HISTORY"
