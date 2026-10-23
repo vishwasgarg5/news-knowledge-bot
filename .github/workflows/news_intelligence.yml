@@ -138,11 +138,16 @@ jobs:
             RECORD_PATH="data/historical_evaluation_records/$latest_capture"
             echo "No capture path supplied; selected latest capture: $RECORD_PATH"
           fi
-          case "$RECORD_PATH" in
-            data/historical_evaluation_records/*.json) ;;
-            *) echo "::error::Record must be a JSON file under data/historical_evaluation_records/"; exit 1 ;;
-          esac
-          test -f "$RECORD_PATH"
+          records_dir="$(realpath -e data/historical_evaluation_records)"
+          if ! resolved_record="$(realpath -e -- "$RECORD_PATH")"; then
+            echo "::error::Capture file does not exist or cannot be resolved"
+            exit 1
+          fi
+          if [[ ! -f "$resolved_record" || "$resolved_record" != "$records_dir/"*.json || "$(dirname "$resolved_record")" != "$records_dir" ]]; then
+            echo "::error::Record must resolve to a regular JSON file directly inside data/historical_evaluation_records/"
+            exit 1
+          fi
+          RECORD_PATH="$resolved_record"
           case "$SAMPLE_CAP" in
             ''|*[!0-9]*) echo "::error::Sample cap must be a positive integer"; exit 1 ;;
           esac

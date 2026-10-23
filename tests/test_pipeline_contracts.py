@@ -2469,3 +2469,12 @@ def test_review_packet_defaults_to_latest_capture_without_hardcoded_filename():
     assert "find data/historical_evaluation_records -maxdepth 1 -type f -name '*.json'" in text
     assert "sort | tail -n 1" in text
     assert "No historical capture JSON files are available" in text
+
+
+def test_review_packet_rejects_paths_outside_capture_directory():
+    text = read(".github/workflows/news_intelligence.yml")
+    assert 'records_dir="$(realpath -e data/historical_evaluation_records)"' in text
+    assert 'resolved_record="$(realpath -e -- "$RECORD_PATH")"' in text
+    assert '$(dirname "$resolved_record")" != "$records_dir"' in text
+    assert '[[ ! -f "$resolved_record"' in text
+    assert 'Record must resolve to a regular JSON file directly inside data/historical_evaluation_records/' in text
