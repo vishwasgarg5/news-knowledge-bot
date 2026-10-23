@@ -150,11 +150,11 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "previous_summary_coverage": 1.0, "latest_summary_coverage": 0.0,
         "coverage_delta": -1.0,
     }
-    assert report["latest_run"]["summary_coverage_by_source"]["Source"]["summary_missing_count"] == 0
+    assert report["latest_run"]["summary_coverage_by_source"]["Source"]["summary_missing_count"] == 1
     assert report["previous_run_comparison"]["summary_coverage_by_source_delta"]["Source"] == {
-        "previous_candidate_count": 1, "latest_candidate_count": 0,
-        "previous_summary_coverage": 1.0, "latest_summary_coverage": None,
-        "coverage_delta": None,
+        "previous_candidate_count": 1, "latest_candidate_count": 1,
+        "previous_summary_coverage": 1.0, "latest_summary_coverage": 0.0,
+        "coverage_delta": -1.0,
     }
 
 
