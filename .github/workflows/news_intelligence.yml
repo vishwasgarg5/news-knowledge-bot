@@ -21,10 +21,10 @@ on:
           - review-packet
         default: review-packet
       record_path:
-        description: "Historical capture JSON under data/historical_evaluation_records/"
-        required: true
+        description: "Optional historical capture JSON; blank selects the newest available capture"
+        required: false
         type: string
-        default: "data/historical_evaluation_records/20261023T062636+0530-morning.json"
+        default: ""
       sample_per_disposition:
         description: "Maximum candidates sampled from each disposition (1-100)"
         required: true
@@ -129,6 +129,15 @@ jobs:
           RUNNER_TEMP: ${{ runner.temp }}
         run: |
           set -euo pipefail
+          if [[ -z "$RECORD_PATH" ]]; then
+            latest_capture="$(find data/historical_evaluation_records -maxdepth 1 -type f -name '*.json' -printf '%f\\n' | sort | tail -n 1)"
+            if [[ -z "$latest_capture" ]]; then
+              echo "::error::No historical capture JSON files are available"
+              exit 1
+            fi
+            RECORD_PATH="data/historical_evaluation_records/$latest_capture"
+            echo "No capture path supplied; selected latest capture: $RECORD_PATH"
+          fi
           case "$RECORD_PATH" in
             data/historical_evaluation_records/*.json) ;;
             *) echo "::error::Record must be a JSON file under data/historical_evaluation_records/"; exit 1 ;;

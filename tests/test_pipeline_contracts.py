@@ -2456,3 +2456,16 @@ def test_feed_collection_uses_detail_and_namespaced_summary_fallbacks(monkeypatc
         "Media namespace description.",
         "Actual Atom content.",
     ]
+
+
+def test_review_packet_defaults_to_latest_capture_without_hardcoded_filename():
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    triggers = workflow.get(True) or workflow.get("on") or {}
+    inputs = triggers["workflow_dispatch"]["inputs"]
+    assert inputs["record_path"]["default"] == ""
+    assert inputs["record_path"]["required"] is False
+    text = read(".github/workflows/news_intelligence.yml")
+    assert "selected latest capture: $RECORD_PATH" in text
+    assert "find data/historical_evaluation_records -maxdepth 1 -type f -name '*.json'" in text
+    assert "sort | tail -n 1" in text
+    assert "No historical capture JSON files are available" in text
