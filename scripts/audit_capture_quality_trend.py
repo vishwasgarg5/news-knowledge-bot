@@ -55,6 +55,16 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
             "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
             "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
             "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+            # Keep a small, offline-only sample of missing-summary candidates so
+            # a blocked quality gate points to concrete records for investigation.
+            "missing_summary_examples": [
+                {
+                    "candidate_id": row.get("candidate_id", ""),
+                    "title": str(row.get("title") or ""),
+                    "url": str(row.get("url") or ""),
+                }
+                for row in group if not _nonempty(row.get("summary"))
+            ][:5],
         }
         for source, group in sorted(source_groups.items())
     }
