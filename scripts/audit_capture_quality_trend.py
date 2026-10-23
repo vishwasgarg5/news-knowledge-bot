@@ -103,6 +103,21 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
             "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
             "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
             "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+            "missing_summary_examples": [
+                {
+                    "candidate_id": row.get("candidate_id", ""),
+                    "title": str(row.get("title") or ""),
+                    "source": str(row.get("source") or ""),
+                    "url": str(row.get("url") or ""),
+                    "summary_state": (
+                        "missing_key" if "summary" not in row else
+                        "blank_string" if isinstance(row.get("summary"), str) and not row.get("summary", "").strip() else
+                        "non_string" if not isinstance(row.get("summary"), str) else
+                        "present"
+                    ),
+                }
+                for row in group if not _nonempty(row.get("summary"))
+            ][:5],
         }
         for domain, group in sorted(domain_groups.items())
     }

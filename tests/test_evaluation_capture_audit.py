@@ -262,3 +262,7 @@ def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access
     }
     assert domains["news.example.org"]["summary_missing_count"] == 1
     assert domains["unknown"]["summary_missing_count"] == 1
+    assert domains["example.com"]["missing_summary_examples"] == [{
+        "candidate_id": "", "title": "", "source": "",
+        "url": "https://example.com/story/2", "summary_state": "blank_string",
+    }]
