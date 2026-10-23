@@ -97,7 +97,7 @@ def test_summary_extractor_does_not_substitute_unrelated_entry_metadata():
 def test_feedparser_xml_namespace_summary_is_extracted_offline():
     import feedparser
 
-    xml = b\'''<?xml version="1.0" encoding="UTF-8"?>
+    xml = b"""<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
       <channel>
         <title>Synthetic RSS</title>
@@ -107,7 +107,7 @@ def test_feedparser_xml_namespace_summary_is_extracted_offline():
           <media:description><![CDATA[Publisher-provided media summary.]]></media:description>
         </item>
       </channel>
-    </rss>\'''
+    </rss>"""
 
     parsed = feedparser.parse(xml)
     assert len(parsed.entries) == 1
