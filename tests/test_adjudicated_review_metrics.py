@@ -168,3 +168,23 @@ def test_sample_coverage_is_explicitly_limited_to_supplied_queues():
     assert coverage["metric_eligibility_rate_within_supplied_candidates"] == 2 / 3
     assert coverage["disposition_counts"] == {"duplicate": 1, "excluded": 1, "included": 1, "out_of_scope": 0}
     assert "not full-population coverage" in coverage["interpretation"]
+
+
+def test_same_candidate_from_different_runs_or_policies_is_excluded():
+    queue_a = ("run-a.json", {
+        "run_id": "run-a", "policy_version": "policy-v1",
+        "reviews": [review("reused-id", "included")],
+    })
+    queue_b = ("run-b.json", {
+        "run_id": "run-b", "policy_version": "policy-v2",
+        "reviews": [review("reused-id", "included")],
+    })
+
+    report = evaluate_adjudicated_reviews(
+        [queue_a, queue_b], {"adjudications": [adjudication("reused-id", "relevant")]}
+    )
+
+    assert report["metric_eligible_candidates"] == 0
+    assert report["conflicting_candidate_record_count"] == 1
+    assert set(report["conflicting_candidate_records"][0]["fields"]) == {"run_id", "policy_version"}
+    assert "conflicting_candidate_records" in report["candidate_results"][0]["exclusion_reasons"]

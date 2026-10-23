@@ -56,11 +56,23 @@ def evaluate_adjudicated_reviews(
                 exclusions["invalid_review_entry"] = exclusions.get("invalid_review_entry", 0) + 1
                 continue
             cid = str(row["candidate_id"]).strip()
+            run_id = str(queue.get("run_id", "") or "").strip()
+            policy_version = str(queue.get("policy_version", "") or "").strip()
             if cid not in candidates:
                 candidates[cid] = dict(row)
+                candidates[cid]["_evaluation_run_id"] = run_id
+                candidates[cid]["_evaluation_policy_version"] = policy_version
             else:
-                # Repeated candidate IDs are expected across reviewer copies, but their
-                # evidence and policy disposition must agree before metric use.
+                # Candidate identity must be consistent across both evidence and
+                # evaluation provenance before a row can contribute to metrics.
+                for key, existing_provenance, incoming_provenance in (
+                    ("run_id", candidates[cid].get("_evaluation_run_id", ""), run_id),
+                    ("policy_version", candidates[cid].get("_evaluation_policy_version", ""), policy_version),
+                ):
+                    if existing_provenance and incoming_provenance and existing_provenance != incoming_provenance:
+                        conflict = candidate_conflicts.setdefault(cid, {"candidate_id": cid, "fields": {}})
+                        values = conflict["fields"].setdefault(key, set())
+                        values.update((existing_provenance, incoming_provenance))
                 for key in EVIDENCE_FIELDS + ("disposition",):
                     existing = str(candidates[cid].get(key, "") or "").strip()
                     incoming = str(row.get(key, "") or "").strip()
