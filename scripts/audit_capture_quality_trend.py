@@ -79,6 +79,17 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
             "summary_present_count": sum(_nonempty(row.get("summary")) for row in group),
             "summary_missing_count": sum(not _nonempty(row.get("summary")) for row in group),
             "summary_coverage": round(sum(_nonempty(row.get("summary")) for row in group) / len(group), 4),
+            "summary_value_diagnostics": {
+                "missing_key_count": sum("summary" not in row for row in group),
+                "blank_string_count": sum(
+                    isinstance(row.get("summary"), str) and not row.get("summary", "").strip()
+                    for row in group
+                ),
+                "non_string_count": sum(
+                    "summary" in row and not isinstance(row.get("summary"), str)
+                    for row in group
+                ),
+            },
             # Keep a small, offline-only sample of missing-summary candidates so
             # a blocked quality gate points to concrete records for investigation.
             "missing_summary_examples": [

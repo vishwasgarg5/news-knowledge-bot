@@ -151,6 +151,9 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "coverage_delta": -1.0,
     }
     assert report["latest_run"]["summary_coverage_by_source"]["Source"]["summary_missing_count"] == 1
+    assert report["latest_run"]["summary_coverage_by_source"]["Source"]["summary_value_diagnostics"] == {
+        "missing_key_count": 0, "blank_string_count": 1, "non_string_count": 0,
+    }
     assert report["latest_run"]["summary_coverage_by_source"]["Source"]["missing_summary_examples"] == [{
         "candidate_id": "",
         "title": "Title",
