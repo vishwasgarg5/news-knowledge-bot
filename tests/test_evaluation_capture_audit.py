@@ -155,6 +155,7 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "candidate_id": "",
         "title": "Title",
         "url": "https://example.com/b",
+        "summary_state": "blank_string",
     }]
     assert report["previous_run_comparison"]["summary_coverage_by_source_delta"]["Source"] == {
         "previous_candidate_count": 1, "latest_candidate_count": 1,
@@ -202,3 +203,30 @@ def test_audit_keeps_partial_reviews_in_progress_and_rejects_incomplete_labels()
     invalid = audit_record(partial, "partial.json")
     assert invalid["invalid_label_count"] == 1
     assert "human_label_incomplete_or_invalid" in invalid["errors"]
+
+
+def test_capture_quality_diagnoses_missing_blank_and_non_string_summaries():
+    from pathlib import Path
+
+    record = {
+        "run_id": "summary-shapes",
+        "candidate_articles": [
+            {"candidate_id": "missing", "title": "Missing key"},
+            {"candidate_id": "blank", "title": "Blank summary", "summary": "  "},
+            {"candidate_id": "wrong-type", "title": "Non-string summary", "summary": {"value": "not normalized"}},
+            {"candidate_id": "valid", "title": "Valid summary", "summary": "Publisher supplied text"},
+        ],
+    }
+    report = build_trend([(Path("shapes.json"), record)])
+    latest = report["latest_run"]
+
+    assert latest["summary_value_diagnostics"] == {
+        "missing_key_count": 1,
+        "blank_string_count": 1,
+        "non_string_count": 1,
+    }
+    examples = latest["summary_coverage_by_source"]["unknown"]["missing_summary_examples"]
+    assert [item["summary_state"] for item in examples] == [
+        "missing_key", "blank_string", "non_string",
+    ]
+    assert report["missing_field_counts"]["summary"] == 3

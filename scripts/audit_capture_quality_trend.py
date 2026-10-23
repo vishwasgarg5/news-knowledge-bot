@@ -27,6 +27,11 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     candidates = raw if isinstance(raw, list) else []
     rows = [row for row in candidates if isinstance(row, dict)]
     missing = {f: sum(not _nonempty(row.get(f)) for row in rows) for f in FIELDS}
+    summary_value_diagnostics = {
+        "missing_key_count": sum("summary" not in row for row in rows),
+        "blank_string_count": sum(isinstance(row.get("summary"), str) and not row.get("summary", "").strip() for row in rows),
+        "non_string_count": sum("summary" in row and not isinstance(row.get("summary"), str) for row in rows),
+    }
     n = len(rows)
     # Category-level summary coverage makes future capture regressions diagnosable
     # without inferring missing article text or making network requests.
@@ -62,6 +67,12 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
                     "candidate_id": row.get("candidate_id", ""),
                     "title": str(row.get("title") or ""),
                     "url": str(row.get("url") or ""),
+                    "summary_state": (
+                        "missing_key" if "summary" not in row else
+                        "blank_string" if isinstance(row.get("summary"), str) and not row.get("summary", "").strip() else
+                        "non_string" if not isinstance(row.get("summary"), str) else
+                        "present"
+                    ),
                 }
                 for row in group if not _nonempty(row.get("summary"))
             ][:5],
@@ -70,7 +81,8 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     }
     return {"path": str(path), "run_id": str(record.get("run_id") or ""), "timestamp": timestamp,
             "candidate_count": n, "field_coverage": {f: round((n-missing[f])/n, 4) if n else 0.0 for f in FIELDS},
-            "missing_counts": missing, "summary_coverage_by_category": summary_coverage_by_category,
+            "missing_counts": missing, "summary_value_diagnostics": summary_value_diagnostics,
+            "summary_coverage_by_category": summary_coverage_by_category,
             "summary_coverage_by_source": summary_coverage_by_source,
             "invalid_record": not isinstance(raw, list) or len(rows) != len(candidates)}
 
