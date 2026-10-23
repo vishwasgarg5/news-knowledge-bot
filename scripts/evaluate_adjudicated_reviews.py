@@ -69,7 +69,7 @@ def evaluate_adjudicated_reviews(
                     ("run_id", candidates[cid].get("_evaluation_run_id", ""), run_id),
                     ("policy_version", candidates[cid].get("_evaluation_policy_version", ""), policy_version),
                 ):
-                    if existing_provenance and incoming_provenance and existing_provenance != incoming_provenance:
+                    if existing_provenance != incoming_provenance and (existing_provenance or incoming_provenance):
                         conflict = candidate_conflicts.setdefault(cid, {"candidate_id": cid, "fields": {}})
                         values = conflict["fields"].setdefault(key, set())
                         values.update((existing_provenance, incoming_provenance))

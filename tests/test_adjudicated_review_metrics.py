@@ -188,3 +188,22 @@ def test_same_candidate_from_different_runs_or_policies_is_excluded():
     assert report["conflicting_candidate_record_count"] == 1
     assert set(report["conflicting_candidate_records"][0]["fields"]) == {"run_id", "policy_version"}
     assert "conflicting_candidate_records" in report["candidate_results"][0]["exclusion_reasons"]
+
+def test_same_candidate_with_missing_provenance_is_not_merged_with_known_provenance():
+    queue_a = ("run-unknown.json", {
+        "reviews": [review("reused-id", "included")],
+    })
+    queue_b = ("run-known.json", {
+        "run_id": "run-known", "policy_version": "policy-v1",
+        "reviews": [review("reused-id", "included")],
+    })
+
+    report = evaluate_adjudicated_reviews(
+        [queue_a, queue_b], {"adjudications": [adjudication("reused-id", "relevant")]}
+    )
+
+    assert report["metric_eligible_candidates"] == 0
+    assert report["conflicting_candidate_record_count"] == 1
+    assert set(report["conflicting_candidate_records"][0]["fields"]) == {"run_id", "policy_version"}
+    assert "conflicting_candidate_records" in report["candidate_results"][0]["exclusion_reasons"]
+
