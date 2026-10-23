@@ -2507,3 +2507,34 @@ def test_review_packet_rejects_missing_and_malformed_capture_files(tmp_path):
     empty_dir.mkdir()
     with pytest.raises(ValueError, match="no JSON records found"):
         load_records(empty_dir)
+
+
+def test_summary_extraction_handles_nested_values_empty_fields_and_html():
+    from app.news import _summary_text
+
+    assert _summary_text({
+        "summary": "   ",
+        "description_detail": {"value": "<p>  Detail&nbsp; text &amp; context. </p>"},
+        "content": [{"value": "Later content should not win."}],
+    }) == "Detail text & context."
+    assert _summary_text({
+        "summary": "",
+        "media_description": [{"value": "<b>First segment.</b>"}, {"text": "Second segment!"}],
+    }) == "First segment. Second segment!"
+    assert _summary_text({
+        "summary": "",
+        "description": "",
+        "subtitle": "",
+        "summary_detail": {"value": ""},
+        "content": [{"value": ""}, {"value": "<div> Useful   Atom text </div>"}],
+    }) == "Useful Atom text"
+    assert _summary_text({"summary": "", "description": "", "content": []}) == ""
+
+
+def test_summary_extraction_truncates_publisher_text_without_fabricating_content():
+    from app.news import _summary_text
+
+    source = "publisher supplied text " * 100
+    extracted = _summary_text({"summary": source})
+    assert len(extracted) == 1600
+    assert extracted == source.strip()[:1600]
