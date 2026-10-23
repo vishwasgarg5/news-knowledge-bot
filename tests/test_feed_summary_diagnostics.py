@@ -1,4 +1,6 @@
-from app.news import Article, collect
+from types import SimpleNamespace
+
+from app.news import Article, collect, fetch_feed
 
 
 def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
@@ -30,3 +32,38 @@ def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
         "Monsoon crops recover",
     ]
     assert all(row["url"].startswith("https://example.com/") for row in source["missing_summary_examples"])
+
+
+
+def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypatch, capsys):
+    class Response:
+        content = b"offline fixture"
+        status_code = 200
+        headers = {"Content-Type": "application/rss+xml"}
+
+        def raise_for_status(self):
+            return None
+
+    entries = [
+        {"title": f"Blank summary story {i}", "link": f"https://example.com/{i}", "author": "Reporter"}
+        for i in range(4)
+    ]
+    parsed = SimpleNamespace(
+        entries=entries,
+        feed={"title": "Synthetic Publisher Feed"},
+        bozo=False,
+        bozo_exception=None,
+    )
+    monkeypatch.setattr("app.news.requests.get", lambda *args, **kwargs: Response())
+    monkeypatch.setattr("app.news.feedparser.parse", lambda _content: parsed)
+
+    articles, ok, warning = fetch_feed("https://example.com/feed", "world", limit=10)
+
+    output = capsys.readouterr().out
+    assert ok is True
+    assert warning == ""
+    assert len(articles) == 4
+    assert output.count("[SUMMARY FIELD GAP]") == 3
+    assert "source=Synthetic Publisher Feed" in output
+    assert "publisher_summary_fields_present=none" in output
+    assert "'author'" in output
