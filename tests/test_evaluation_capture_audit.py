@@ -145,6 +145,11 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
     assert report["previous_run_comparison"]["regressions"] == [{
         "field": "summary", "previous_coverage": 1.0, "latest_coverage": 0.0, "delta": -1.0,
     }]
+    assert report["previous_run_comparison"]["summary_coverage_by_category_delta"]["unknown"] == {
+        "previous_candidate_count": 1, "latest_candidate_count": 1,
+        "previous_summary_coverage": 1.0, "latest_summary_coverage": 0.0,
+        "coverage_delta": -1.0,
+    }
 
 
 def test_capture_quality_trend_requires_history_and_does_not_invent_fields():

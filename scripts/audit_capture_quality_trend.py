@@ -60,9 +60,26 @@ def build_trend(records: list[tuple[Path, Any]]) -> dict[str, Any]:
             before, after = prev["field_coverage"][f], latest["field_coverage"][f]
             if latest["candidate_count"] and after < before:
                 regressions.append({"field": f, "previous_coverage": before, "latest_coverage": after, "delta": round(after-before, 4)})
+        previous_categories = prev.get("summary_coverage_by_category", {})
+        latest_categories = latest.get("summary_coverage_by_category", {})
+        category_summary_coverage_delta = {}
+        for category in sorted(set(previous_categories) | set(latest_categories)):
+            before = previous_categories.get(category, {})
+            after = latest_categories.get(category, {})
+            before_coverage = before.get("summary_coverage")
+            after_coverage = after.get("summary_coverage")
+            category_summary_coverage_delta[category] = {
+                "previous_candidate_count": before.get("candidate_count", 0),
+                "latest_candidate_count": after.get("candidate_count", 0),
+                "previous_summary_coverage": before_coverage,
+                "latest_summary_coverage": after_coverage,
+                "coverage_delta": round(after_coverage-before_coverage, 4)
+                    if before_coverage is not None and after_coverage is not None else None,
+            }
         comparison = {"previous_run_id": prev["run_id"], "latest_run_id": latest["run_id"],
                       "previous_timestamp": prev["timestamp"], "latest_timestamp": latest["timestamp"],
                       "coverage_delta": {f: round(latest["field_coverage"][f]-prev["field_coverage"][f], 4) for f in FIELDS},
+                      "summary_coverage_by_category_delta": category_summary_coverage_delta,
                       "regressions": regressions}
     return {"audit_type": "evaluation_capture_quality_trend", "record_count": len(rows), "candidate_count": total,
             "overall_field_coverage": coverage, "missing_field_counts": missing, "latest_run": rows[-1] if rows else None,
