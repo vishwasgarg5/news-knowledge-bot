@@ -123,7 +123,7 @@ def validate_record(record: Any) -> list[str]:
             if candidate_id in seen_review_ids:
                 errors.append(f"{prefix}_candidate_id_duplicate")
             seen_review_ids.add(candidate_id)
-            if known_candidate_ids and candidate_id not in known_candidate_ids:
+            if candidate_id not in known_candidate_ids:
                 errors.append(f"{prefix}_candidate_id_unknown")
         if review.get("relevance_label") not in RELEVANCE_LABELS:
             errors.append(f"{prefix}_relevance_label_invalid")

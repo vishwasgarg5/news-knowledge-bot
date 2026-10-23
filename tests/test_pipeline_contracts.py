@@ -2538,3 +2538,45 @@ def test_summary_extraction_truncates_publisher_text_without_fabricating_content
     extracted = _summary_text({"summary": source})
     assert len(extracted) == 1600
     assert extracted == source.strip()[:1600]
+
+
+def test_evaluation_review_labels_reject_unknown_ids_when_candidate_ids_are_missing():
+    from scripts.validate_evaluation_record import validate_record
+
+    record = {
+        "schema_version": "1.0",
+        "run_id": "integrity-test",
+        "policy_version": "policy-test",
+        "run_timestamp": "2026-10-23T00:00:00+00:00",
+        "candidate_articles": [{
+            "title": "Candidate without a stable ID",
+            "source": "Example",
+            "url": "https://example.com/candidate",
+            "published_at": "2026-10-22T00:00:00+00:00",
+            "summary": "Publisher supplied summary.",
+            "disposition": "included",
+        }],
+        "story_labels": [],
+        "candidate_reviews": [
+            {
+                "candidate_id": "orphan-id",
+                "relevance_label": "relevant",
+                "reviewer_id": "reviewer-a",
+                "reviewed_at": "2026-10-23T00:00:00+00:00",
+                "rationale": "Reviewed from the source.",
+            },
+            {
+                "candidate_id": "orphan-id",
+                "relevance_label": "not_relevant",
+                "reviewer_id": "reviewer-b",
+                "reviewed_at": "2026-10-23T00:01:00+00:00",
+                "rationale": "Independent review.",
+            },
+        ],
+    }
+
+    errors = validate_record(record)
+    assert "candidate_articles[0]_candidate_id_required" in errors
+    assert "candidate_reviews[0]_candidate_id_unknown" in errors
+    assert "candidate_reviews[1]_candidate_id_unknown" in errors
+    assert "candidate_reviews[1]_candidate_id_duplicate" in errors
