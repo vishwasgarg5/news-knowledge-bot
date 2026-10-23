@@ -4539,7 +4539,7 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-02,05585bda4eef3352,1cbc7b59092a822f,OpenAI unveils GPT-6.1 Sol and ‘Dots’ AI agents at DevDay,"Technology News Today, Latest Tech News | The Hindu",technology,70.9,false,1,0,0,,,0.45,0.45
 2026-10-02,e957f7c3a2530905,3d4b4ecd0de7e6d8,UAE launches Flydubai hijacking and terrorism investigation,World | Deutsche Welle,world,70.0,false,0,0,0,,,0.00,0.00
 2026-10-02,5e79b05cc352bcff,8c3fb2a28c693424,"Of 97 left out in Goa, 88 are back, 3 others are Portuguese citizens: EC",Times of India,india,68.6,false,0,0,0,,,0.00,0.00
-2026-10-02,24c3ad9720177957,705e4b16d8f489b0,BBC Inside Science,BBC News,science,69.8,false,0,0,0,,,0.00,0.00
+2026-10-02,24c3ad9720177957,705e4b16d8f489b0,BBC Inside Science,BBC News,science,69.8,false,0,0,0,1,,0.00,0.00
 2026-10-02,73464436f05992be,801b6b7e803ecb3b,"APPCB to divert Vizag port, steel plant heavy vehicles to curb pollution",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,68.1,false,0,0,0,,,0.00,0.00
 2026-10-02,c6ebde1397ff27d4,c97a16f3dcb25552,Jacob Geller: What are the allegations against YouTuber? Podcast MinnMax takes big step,"World News: Breaking World News Today, International News, Live World News | Hindustan Times | Hindustan Times",world,68.8,false,0,0,0,,,0.00,0.00
 2026-10-02,d20923c217e37333,02740290614efab8,"DGCA should be turned independent, with own money and hiring: Proposal before govt","India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,68.1,false,0,0,0,,,0.00,0.00
@@ -6492,121 +6492,162 @@ run_date,event_id,story_id,headline,source,category,initial_score,selected,seen_
 2026-10-20,d01ddc1f028f2781,fae0a5c30fd71fc1,Huge fin whale filmed off Welsh coast,BBC News,science,68.9,false,0,0,,,,0.00,0.00
 2026-10-20,4cb95e6e3552fed7,037871476894323e,What does RBI's repo rate hike to 5.50% mean for India's economy and future inflation?,ET Government,economy,85.0,false,1,0,,,,0.56,0.56
 2026-10-20,92d84b561494b693,9db3efbfd81854e4,Can monetary policy address inflation arising from supply-side disruption?,The Indian Express,economy,78.3,false,1,0,,,,0.56,0.56
-2026-10-21,8256a9e9b40ccb2d,50e7da2919e7dad9,Presidential adviser says Ukraine is in talks to lift speed limit on military satellite network,"Technology News Today, Latest Tech News | The Hindu",technology,95.5,false,0,,,,,0.00,0.00
-2026-10-21,ec2093b23dc992aa,1d6d4629f51f380b,Odds of fifth interest rate hike this year likely to shorten as RBA deputy warns inflation outlook ‘worsening’,World news | The Guardian,world,98.9,false,0,,,,,0.00,0.00
-2026-10-21,6225a6aef2da9f24,3989e2d6ccf4dd67,'Russia a big machine': Trump says Ukraine 'has to want' to settle war with Putin,Times of India,world,97.0,false,0,,,,,0.00,0.00
-2026-10-21,10e1a2db2232166c,3ea9612c77df5101,Trump and Zelensky appear at loggerheads despite Oslo optimism,BBC News,world,92.1,false,0,,,,,0.00,0.00
-2026-10-21,8d88903d1b828a97,249136afadfb10e0,"Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",Times of India,world,92.3,true,0,,,,,0.00,0.00
-2026-10-21,4cb95e6e3552fed7,037871476894323e,What does RBI's repo rate hike to 5.50% mean for India's economy and future inflation?,ET Government,economy,82.0,false,0,,,,,0.00,0.00
-2026-10-21,1756dab513b233e2,ecd66ea429082cd2,Italy to deploy 500 troops to Milan after days of protests and looting,World news | The Guardian,world,90.5,false,0,,,,,0.00,0.00
-2026-10-21,fdf0ee4b4ca2c924,30e0969093732bb1,How is the US economy really doing under President Trump?,BBC News,business,88.1,true,1,,,,,1.00,1.00
-2026-10-21,4ad2379e1dc4424c,f69faf7c4fdd9c52,UK to deploy fighter jets to protect Saudi Arabia from Houthi attacks,World news | The Guardian,world,90.2,true,0,,,,,0.00,0.00
-2026-10-21,3540370efe3eafa5,d9bb935bac82557d,Alberta voters overwhelmingly reject plan to leave Canada in referendum,World news | The Guardian,world,89.5,true,0,,,,,0.00,0.00
-2026-10-21,1eb9e0927e1e8353,694ae767bab6ee68,Hugging Face CEO warns that Netflix’s OpenAI hack documentary isn’t accurate,TechCrunch,technology,87.4,false,0,,,,,0.00,0.00
-2026-10-21,4a47bc45dd0f0fe3,2a387f25c6b9b19f,Pinarayi Vijayan questions SMA drug distribution; SAT Hospital says only CDSCO-approved drugs used,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.3,false,0,,,,,0.00,0.00
-2026-10-21,92d84b561494b693,9db3efbfd81854e4,Can monetary policy address inflation arising from supply-side disruption?,The Indian Express,economy,78.3,false,0,,,,,0.00,0.00
-2026-10-21,e8eaa85761371c41,1aa4ffc87c7fe266,"No double standards on terror, need unified action to dismantle its entire ecosystem: Rajnath at SCO; says members will have to work together on resilient supply chains",Times of India,india,88.3,false,0,,,,,0.00,0.00
-2026-10-21,a98875445885925a,70dbf232135248d3,Bereaved families could face 'unjust' tax bill after civil service pension delays,BBC News,business,84.6,true,0,,,,,0.00,0.00
-2026-10-21,1abe84e4bdf36928,bf75f5c3ae3c4b2f,U.S.-India perfectly aligned on core issues: Marco Rubio,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.2,true,0,,,,,0.00,0.00
-2026-10-21,6d3b90a0c226ae9a,51ba67bb5abc733e,Is Donald Trump ready to do business with Myanmar?,BBC News,world,85.4,false,0,,,,,0.00,0.00
-2026-10-21,137fe257044b4e28,69776b34cabeb8bd,Amazon targets Nvidia’s software edge with new AI tool,"Business News Today – Finance, Industry & Economy | The Hindu",business,82.9,false,0,,,,,0.00,0.00
-2026-10-21,5b473d94da85ab18,5f3291c0450e8cd0,US banning Chinese AI DeepSeek from government agency IT systems,"Technology News Today, Latest Tech News | The Hindu",technology,81.7,true,0,,,,,0.00,0.00
-2026-10-21,a909ef5941c77a9b,9debacb8694b4d34,"Paddy Power cuts 1,400 jobs and blames betting tax rises",BBC News,business,82.8,false,0,,,,,0.00,0.00
-2026-10-21,3b3098faa488221d,a3748fd4233200c6,Storm Austen to bring severe gales to UK as weather warning issued,BBC News,science,83.0,false,1,,,,,1.00,1.00
-2026-10-21,2cf047c47064fc75,88e7083d4329cadf,"Kashmir clerics, including Mirwaiz, say eviction of Delhi’s historic Race Course mosque ‘deeply disturbing’",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,86.3,false,0,,,,,0.00,0.00
-2026-10-21,46e2fdebbdb061f6,1b45ac14e06278cf,"SpaceX, Tesla earnings to test Musk's AI spending ambitions as merger talk grows","Business News Today – Finance, Industry & Economy | The Hindu",business,82.0,false,1,,,,,1.00,1.00
-2026-10-21,5de45ca53cc33649,2c15956777ee9ac2,Robert E. Hall and Michael Woodford | Putting people in economics,"Business News Today – Finance, Industry & Economy | The Hindu",business,81.9,false,0,,,,,0.00,0.00
-2026-10-21,855ec4205771824c,0a172854326842e8,India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary,"Business News Today – Finance, Industry & Economy | The Hindu",business,81.7,true,0,,,,,0.00,0.00
-2026-10-21,b9d4a5e56aa6e0b4,e2f8d212a5551191,"Allahabad HC cites long trial, lets off offenders, SC slams ‘misplaced sympathy’",Times of India,india,85.6,true,0,,,,,0.00,0.00
-2026-10-21,281592db478b9188,10395e2c8246c8b5,SpaceX’s AI business is beating expectations,TechCrunch,technology,82.9,false,0,,,,,0.00,0.00
-2026-10-21,990cb9f3efcea91d,ba162214d9c29577,Chancellor rejects calls to raise Capital Gains Tax in Budget,BBC News,business,80.8,false,0,,,,,0.00,0.00
-2026-10-21,a8deb739dde1dda7,9d2d53f398f8e199,"Smartphone shipments slip, Chinese brands lose ground",Times of India,india,83.2,true,0,,,,,0.00,0.00
-2026-10-21,2112749bfc616424,006d5ba04499eec3,Northern Ireland needs 'courage and leadership' to tackle climate change,BBC News,science,80.0,false,1,,,,,1.00,1.00
-2026-10-21,6a75c713ec9bf2c8,51e2ef06315b54cc,On paddy field conservation in Keralam,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,82.1,false,0,,,,,0.00,0.00
-2026-10-21,03efe6795c8fd92c,7cea887931a23012,"PM Modi flags three ‘enemies’ of India, calls for unity in national interest",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,80.6,false,0,,,,,0.00,0.00
-2026-10-21,fb56945e9a8a6a05,3a8acfecb412bbe8,SpaceX and Tesla boards form special committees to review merger,TechCrunch,technology,77.7,false,0,,,,,0.00,0.00
-2026-10-21,9ce90a2b708a8b76,7c799d105fd2ab94,Google is bringing a more personal version of its Gemini AI assistant to your car,TechCrunch,technology,76.7,false,0,,,,,0.00,0.00
-2026-10-21,72e43985d41563ff,7a38e5b84656039e,"SpaceX alum’s aviation startup, Reliable Robotics, lands $115M, topping $1B valuation",TechCrunch,technology,76.4,false,0,,,,,0.00,0.00
-2026-10-21,d71f07bd85df89de,927eb26512666bac,"Meta’s Muse hits 10M U.S. downloads in 40 days, a milestone reached by only 11 other apps",TechCrunch,technology,76.1,false,0,,,,,0.00,0.00
-2026-10-21,642d5ed331fdbd9d,56ea5e4e1d52de68,Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’,World news | The Guardian,world,98.9,true,0,,,,,0.00,0.00
-2026-10-21,15e7a0d0ad00ed0a,817c3e32c79ecf90,Is Pak's ruling elite losing faith in country? Minister flags exodus of bureaucrats,India Today | Latest Stories,world,89.2,false,0,,,,,0.00,0.00
-2026-10-21,d0eb12d845c04a2f,f3ddd90e0f199e35,"Troops in ‘body bags,’ ships in a ‘graveyard’? What is Iran's Mojtaba planning for Trump's military?",Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,92.9,false,0,,,,,0.00,0.00
-2026-10-21,1512b970b6b4f97c,a6acdfdcf31c6cb1,Can India turn retrofitment into the next mobility revolution?,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.2,true,0,,,,,0.00,0.00
-2026-10-21,ab57386447bd5ed3,1c8243ac8451384b,US blacklists Chinese firm tied to engineer who stole Google secrets,Times of India,world,90.6,false,0,,,,,0.00,0.00
-2026-10-21,098e9df375cc2519,fe590888cadecfc1,Get tough on Putin or lose Pentagon funds? Trump’s $350 billion military push hits GOP resistance,Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,89.9,false,0,,,,,0.00,0.00
-2026-10-21,c951e3b48af3fa2a,355cdf8a7f082064,"Uddhav Thackeray backs youth agitation over voter deletions, slams police crackdown at Dussehra rally",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.3,false,0,,,,,0.00,0.00
-2026-10-21,f4c006855c7b7a9d,bbaa22990bb1d0f8,‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview,"India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,88.6,true,0,,,,,0.00,0.00
-2026-10-21,ce5f3525c6acdc45,4651144b5241f066,"‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",Times of India,india,84.9,true,0,,,,,0.00,0.00
-2026-10-21,0ce43fbee795babe,09d81dabbb00a166,"T.N. government should construct new Secretariat complex outside Chennai, says Anbumani",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,83.6,false,0,,,,,0.00,0.00
-2026-10-21,e686966bf62f3ed1,2de40f3624a5631a,"‘Citizens can challenge false poll affidavits without ECI sanction’, says Supreme Court","India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,82.6,false,0,,,,,0.00,0.00
-2026-10-21,0fe132290f2fc620,75d08f29bd3b9f5a,"Plants can speak using electricity, so this startup built an AI model to decipher their language",TechCrunch,technology,74.8,false,0,,,,,0.00,0.00
-2026-10-21,818fd13a5aa66cc5,6746e540082abfdf,US orders federal agencies to remove China’s DeepSeek AI from their systems,TechCrunch,technology,73.4,false,0,,,,,0.00,0.00
-2026-10-21,4d831c9e86036e4b,b3abe07a0f0e35c5,A student protest movement has gripped Serbia for two years. This weekend it will try to take power,World news | The Guardian,world,98.9,false,0,,,,,0.00,0.00
-2026-10-21,a098c8b4ceaab347,84fc2dc16091d01c,Ahead Of Midterm Elections Trump Launches $25 million Cash Reward,NDTV News- Special,world,98.5,false,0,,,,,0.00,0.00
-2026-10-21,ad8da61db5a00439,c311fcee9afaff88,Reader Q&A: What’s next for France after a weekend of riots? Ask our Europe columnists,World news | The Guardian,world,98.9,false,0,,,,,0.00,0.00
-2026-10-21,924573826ddad1c2,3b83f64310bdf5ad,Inflation and government borrowing highest for a year ahead of next week's Budget,BBC News,business,95.2,true,1,,,,,1.00,1.00
-2026-10-21,8a7e14b2d7b79d6d,4086a0ef60184136,Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge,BBC News,business,93.2,true,1,,,,,1.00,1.00
-2026-10-21,d97d5555b5c45511,03afc2710248c090,China reveals advanced nuclear subs in Pacific test; a look inside its submarine fleet,Times of India,world,94.7,false,0,,,,,0.00,0.00
-2026-10-21,8e1794862e195877,db95151784f068d2,Continuing violence in Manipur an indictment of BJP’s failure of governance: Congress,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.2,true,0,,,,,0.00,0.00
-2026-10-21,9a930f7c581eedcb,7af73118c0da0d78,Modi government has no moral right to remain in power: Congress flags ‘lapses’ in PM-DAKSH scheme,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.0,false,0,,,,,0.00,0.00
-2026-10-21,b845fa24e5c29cbd,a8ebe1d46a9b0bbd,"After Amazon, Google targets Nvidia’s software lock-in with TorchTPU","Business News Today – Finance, Industry & Economy | The Hindu",business,88.3,false,1,,,,,1.00,1.00
-2026-10-21,02dc95cef8b128ed,08e69f084b3bde93,"Monsoon's gone, El Nino isn't: Why India's weather worries are far from over",Times of India,india,91.9,true,1,,,,,1.00,1.00
-2026-10-21,1633329a76c05fe8,cba4167969df2775,Irish weather warning ahead of Storm Austen,BBC News,science,86.6,false,0,,,,,0.00,0.00
-2026-10-21,a419501b36752923,e4ff3def31aa359b,Trump and Zelensky appear at loggerheads despite new optimism,BBC News,world,87.4,false,0,,,,,0.00,0.00
-2026-10-21,0a76f8e01ae8e739,9c369dabddf0e454,"Delaware plants 75,000th tree across 17 state parks, meets 5-year goal",Times of India,india,88.6,false,0,,,,,0.00,0.00
-2026-10-21,48a4dd38e7d49b1a,bdddc3e2179fd201,Tamil Nadu government sanctions ₹71 crore to enhance contingency funds for police stations,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.3,false,0,,,,,0.00,0.00
-2026-10-21,11ba593028c6206a,56740bda5fce9695,"Directions under Section 35 A read with Section 56 of the Banking Regulation Act, 1949 – Puducherry Co-operative Urban Bank Ltd",PRESS RELEASES FROM RBI,economy,77.7,true,1,,,,,1.00,1.00
-2026-10-21,ccaf1b1d081b9e51,30ceaed1eeec82c8,"Putin meets US envoy Witkoff: Ukraine peace, prisoner release among topics disccused",Times of India,world,86.7,false,0,,,,,0.00,0.00
-2026-10-21,ec67905be310eb5c,cdf51cd8f4587e06,‘A powerful warning’: will Europe’s angry protests lead to real political change?,World news | The Guardian,world,84.9,false,0,,,,,0.00,0.00
-2026-10-21,05fc7dbde51e9cc1,a1c8c3253a30b748,Tamil Nadu rains LIVE: Warning to residents along Palar river,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,85.6,false,0,,,,,0.00,0.00
-2026-10-21,7aa0678f71f18d2e,d253cbe2a085d6f2,"Rafales, Sukhois, Tejas over the Ganga: IAF gears up for grand aerial display in Varanasi",Times of India,india,85.3,false,0,,,,,0.00,0.00
-2026-10-21,b6aa9ecd0e8c508f,baa82c2e27bead16,"Integrated control room for rain-related complaints opened in Vellore, Ranipet, Tirupattur and Tiruvannamalai",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,85.0,false,0,,,,,0.00,0.00
-2026-10-21,738291f1bd10ee70,8b8d92cb0ed32c13,ChatGPT users can lock their chats as OpenAI rolls out new privacy feature,"Technology News Today, Latest Tech News | The Hindu",technology,79.1,false,0,,,,,0.00,0.00
-2026-10-21,b3eda42c9c07921e,0768af097f8c0c7c,Civil servant admits he 'made mistakes' juggling five government jobs,BBC News,business,80.2,false,0,,,,,0.00,0.00
-2026-10-21,ec60ff2a306cb0d1,2e10a48e0f1aa292,Meta's global affairs officer Joel Kaplan to leave company after 15 years,"Technology News Today, Latest Tech News | The Hindu",technology,75.8,false,0,,,,,0.00,0.00
-2026-10-21,55e679112a556aad,a50108ada9550b9f,"Minutes of the Monetary Policy Committee Meeting, October 5 to 7, 2026",PRESS RELEASES FROM RBI,economy,71.2,true,0,,,,,0.00,0.00
-2026-10-21,21a9c162fe3201ee,3b64b9e858173ce2,How much gas could Jackdaw provide? And will it cut your energy bills?,BBC News,science,71.0,false,1,,,,,1.00,1.00
-2026-10-21,eec5fb5d3abac744,a6aa0c11c1008acc,Astronaut surprise video leaves pupils starstruck,BBC News,science,69.6,false,0,,,,,0.00,0.00
-2026-10-21,5ab9dc52f5899eda,6d53817b779c9960,Farmer lost out by minutes in race for wildlife funding,BBC News,science,69.6,false,0,,,,,0.00,0.00
-2026-10-22,faa09cefb916e718,92b67eebc18a8dc0,Rosenberg: US diplomatic push offers little hope for imminent Ukraine peace,BBC News,world,95.5,true,,,,,,,
-2026-10-22,0173b9e61f6d1c57,629096dc17987736,"Trade, defence and the Russia-Ukraine conflict to dominate Modi-Tusk talks on October 22",India Latest News: Top National Headlines Today & Breaking News | The Hindu,world,97.0,false,,,,,,,
-2026-10-22,04c9a84bcb184a11,0952ba60470dbffa,"One killed, 8 injured in Saudi airport attack amid US order for diplomats to leave",Times of India,world,97.0,true,,,,,,,
-2026-10-22,dca13963dccbf23d,6858d89c9e07f6ba,"PM Modi has failed ‘abysmally’ on Manipur, says Congress chief Mallikarjun Kharge",Times of India,india,96.3,false,,,,,,,
-2026-10-22,5e244fe1343505d5,2fb599898a887ab6,RBI MPC flags widening inflationary pressures; two members oppose hawkish stance,"Business News Today – Finance, Industry & Economy | The Hindu",business,91.6,true,,,,,,,
-2026-10-22,28d6797ac9815556,0895f063a797bb3b,Why are uninsured vehicles not part of crash relief scheme? Supreme Court,Times of India,india,94.9,true,,,,,,,
-2026-10-22,924573826ddad1c2,3b83f64310bdf5ad,Inflation and government borrowing highest for a year ahead of next week's Budget,BBC News,business,91.2,true,,,,,,,
-2026-10-22,9d332483965601a0,92fce53706f818a0,"Trump's son 'opposed' Iran war, believed US should avoid another Middle East conflict",Times of India,world,94.0,false,,,,,,,
-2026-10-22,d9347be8a8748e39,7afe4dadd93dd3c9,Watch: Trump's favourite Pakistani army chief got cold shoulder from Iran’s most powerful general,Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,93.2,false,,,,,,,
-2026-10-22,8a7e14b2d7b79d6d,4086a0ef60184136,Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge,BBC News,business,89.2,false,,,,,,,
-2026-10-22,a3456ba186527dae,ea52e4a87efcd3a5,"MrBeast builds 5 medical clinics across 4 countries to help 10,000 annually",Times of India,world,91.6,false,,,,,,,
-2026-10-22,3441aa01073184ab,0386f74a6b663bfb,Andhra Pradesh SEC halts election process for 100 ULBs after Supreme Court order,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,91.3,true,,,,,,,
-2026-10-22,db794e45be5e640d,0fe72cc35c9d63a7,Poland’s parliament votes to ease abortion ban but faces likely veto from president,World news | The Guardian,world,89.9,true,,,,,,,
-2026-10-22,47bf3d0097ce052c,d9bda75b20ab4b89,Decades-old flaw discovered in PHP forces govt websites to go offline globally,Times of India,india,89.9,false,,,,,,,
-2026-10-22,ac717d3bb8164d61,7cc2986affcd2ee6,"The ""trillion pound"" oil fund the government believes Britain could have built",BBC News,business,86.2,false,,,,,,,
-2026-10-22,ea2d4c3286f3bcb0,413eb72e947a4343,Haryana Congress flays BJP government over its failure to keep poll promises,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.6,false,,,,,,,
-2026-10-22,4ed3cb09521c8042,2ed7bebc713b9148,"‘Badr MoU’ won’t put New Delhi-Jakarta missile contracts in jeopardy, experts say",Times of India,india,89.2,false,,,,,,,
-2026-10-22,ad30ba281c7b1a7f,7c321f1c84447217,Airbnb hosts can no longer make guests strip beds and wash dishes under new rules,BBC News,business,85.6,false,,,,,,,
-2026-10-22,b845fa24e5c29cbd,a8ebe1d46a9b0bbd,"After Amazon, Google targets Nvidia’s software lock-in with TorchTPU","Business News Today – Finance, Industry & Economy | The Hindu",business,84.3,true,,,,,,,
-2026-10-22,96fc064fd95e0ede,9f99ee9e174d75ce,"Will not rest until J&K is freed from separatist, terrorist elements: J&K L-G Manoj Sinha",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.3,false,,,,,,,
-2026-10-22,ba3172a05789f3b6,6b746294b964209c,Eight web security keys of eMudhra firm used by Govt. and PSUs leaked,"Technology News Today, Latest Tech News | The Hindu",technology,83.1,false,,,,,,,
-2026-10-22,fdf0ee4b4ca2c924,30e0969093732bb1,How is the US economy really doing under President Trump?,BBC News,business,84.1,false,,,,,,,
-2026-10-22,02dc95cef8b128ed,08e69f084b3bde93,"Monsoon's gone, El Nino isn't: Why India's weather worries are far from over",Times of India,india,87.9,false,,,,,,,
-2026-10-22,958b39d2c8197f86,f0c921642bb5bbb0,"IRGC drops bombshell before US midterms: Hormuz now 100% close, missiles more deadly & longer range?",Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,86.2,false,,,,,,,
-2026-10-22,3d798001c4f7899b,ae87b738275162a0,Tesla says it will start selling Cybercabs by end of year,TechCrunch,technology,84.0,false,,,,,,,
-2026-10-22,8541714268f6d7c3,2cf0f5bf4933843e,Burnham proposes plan to cut standing charges from gas bills,BBC News,business,81.8,false,,,,,,,
-2026-10-22,05a4c82ac813848c,7b1a2375c20a8ef9,Fuel leak which killed fish in River Taff stopped,BBC News,science,82.0,false,,,,,,,
-2026-10-22,e9d8a622cb65b25d,ea728447330cb570,Burnham defends Jackdaw decision as Badenoch urges PM to overturn ban on new oil and gas licences,BBC News,science,81.0,false,,,,,,,
-2026-10-22,46e2fdebbdb061f6,1b45ac14e06278cf,"SpaceX, Tesla earnings to test Musk's AI spending ambitions as merger talk grows","Technology News Today, Latest Tech News | The Hindu",technology,78.8,false,,,,,,,
-2026-10-22,ffb6a5191366de2d,df9b259a739107d0,Pupils who designed a badge sent to space meet NASA astronaut,BBC News,science,80.0,false,,,,,,,
-2026-10-22,3b3098faa488221d,a3748fd4233200c6,Storm Austen to bring severe gales to UK as weather warning issued,BBC News,science,79.0,false,,,,,,,
-2026-10-22,11ba593028c6206a,56740bda5fce9695,"Directions under Section 35 A read with Section 56 of the Banking Regulation Act, 1949 – Puducherry Co-operative Urban Bank Ltd",PRESS RELEASES FROM RBI,economy,73.7,true,,,,,,,
-2026-10-22,6eec71638b017088,b7075f1fab161422,Year-old AI lab Flapping Airplanes raises $1B at a $6B valuation,TechCrunch,technology,78.6,false,,,,,,,
-2026-10-22,24523296464d12d4,0b9f9ac620fe4906,Meta wants to pay for its broad AI buildout with a newly created class of stock,TechCrunch,technology,77.4,false,,,,,,,
-2026-10-22,6b890214b397243d,ed9de5d5894d16e7,"Recursive launches Flint, a laptop coding model it says was largely built by AI",TechCrunch,technology,77.4,false,,,,,,,
-2026-10-22,cf777ae8f2d85e2b,caf7a2acd7ed68a0,GM is betting compute and AI will help it compete with Chinese automakers,TechCrunch,technology,76.7,false,,,,,,,
-2026-10-22,65e26d3a29e81c61,f3eb0936e0555749,Blacksmith hits unicorn valuation after Sequoia leads Series C,TechCrunch,technology,76.7,false,,,,,,,
-2026-10-22,2112749bfc616424,006d5ba04499eec3,Northern Ireland needs 'courage and leadership' to tackle climate change,BBC News,science,76.0,false,,,,,,,
-2026-10-22,9406f6f056689906,649af28fa6c8bc32,"RBI to conduct Overnight Variable Rate Repo (VRR) auction under LAF on October 22, 2026",PRESS RELEASES FROM RBI,economy,71.6,true,,,,,,,
-2026-10-22,57d472b0d80de9ae,79c41b87022cf79b,New lab to become centre for investigating uplands,BBC News,science,74.2,false,,,,,,,
-2026-10-22,b7a140c4bd1bce46,4fe5ae8c7a913a13,Will Jackdaw cut your energy bills?,BBC News,science,70.9,false,,,,,,,
-2026-10-22,83aba50d2d4a5e75,8a327bdebbb078e5,How Jackdaw ignites row over climate and costs,BBC News,science,69.9,false,,,,,,,
+2026-10-21,8256a9e9b40ccb2d,50e7da2919e7dad9,Presidential adviser says Ukraine is in talks to lift speed limit on military satellite network,"Technology News Today, Latest Tech News | The Hindu",technology,95.5,false,0,0,,,,0.00,0.00
+2026-10-21,ec2093b23dc992aa,1d6d4629f51f380b,Odds of fifth interest rate hike this year likely to shorten as RBA deputy warns inflation outlook ‘worsening’,World news | The Guardian,world,98.9,false,0,0,,,,0.00,0.00
+2026-10-21,6225a6aef2da9f24,3989e2d6ccf4dd67,'Russia a big machine': Trump says Ukraine 'has to want' to settle war with Putin,Times of India,world,97.0,false,0,0,,,,0.00,0.00
+2026-10-21,10e1a2db2232166c,3ea9612c77df5101,Trump and Zelensky appear at loggerheads despite Oslo optimism,BBC News,world,92.1,false,0,0,,,,0.00,0.00
+2026-10-21,8d88903d1b828a97,249136afadfb10e0,"Musk ordered Starlink slowdown, kept Ukraine and Trump administration in dark",Times of India,world,92.3,true,0,0,,,,0.00,0.00
+2026-10-21,4cb95e6e3552fed7,037871476894323e,What does RBI's repo rate hike to 5.50% mean for India's economy and future inflation?,ET Government,economy,82.0,false,0,0,,,,0.00,0.00
+2026-10-21,1756dab513b233e2,ecd66ea429082cd2,Italy to deploy 500 troops to Milan after days of protests and looting,World news | The Guardian,world,90.5,false,0,0,,,,0.00,0.00
+2026-10-21,fdf0ee4b4ca2c924,30e0969093732bb1,How is the US economy really doing under President Trump?,BBC News,business,88.1,true,1,0,,,,0.56,0.56
+2026-10-21,4ad2379e1dc4424c,f69faf7c4fdd9c52,UK to deploy fighter jets to protect Saudi Arabia from Houthi attacks,World news | The Guardian,world,90.2,true,0,0,,,,0.00,0.00
+2026-10-21,3540370efe3eafa5,d9bb935bac82557d,Alberta voters overwhelmingly reject plan to leave Canada in referendum,World news | The Guardian,world,89.5,true,0,0,,,,0.00,0.00
+2026-10-21,1eb9e0927e1e8353,694ae767bab6ee68,Hugging Face CEO warns that Netflix’s OpenAI hack documentary isn’t accurate,TechCrunch,technology,87.4,false,0,0,,,,0.00,0.00
+2026-10-21,4a47bc45dd0f0fe3,2a387f25c6b9b19f,Pinarayi Vijayan questions SMA drug distribution; SAT Hospital says only CDSCO-approved drugs used,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.3,false,0,0,,,,0.00,0.00
+2026-10-21,92d84b561494b693,9db3efbfd81854e4,Can monetary policy address inflation arising from supply-side disruption?,The Indian Express,economy,78.3,false,0,0,,,,0.00,0.00
+2026-10-21,e8eaa85761371c41,1aa4ffc87c7fe266,"No double standards on terror, need unified action to dismantle its entire ecosystem: Rajnath at SCO; says members will have to work together on resilient supply chains",Times of India,india,88.3,false,0,0,,,,0.00,0.00
+2026-10-21,a98875445885925a,70dbf232135248d3,Bereaved families could face 'unjust' tax bill after civil service pension delays,BBC News,business,84.6,true,0,0,,,,0.00,0.00
+2026-10-21,1abe84e4bdf36928,bf75f5c3ae3c4b2f,U.S.-India perfectly aligned on core issues: Marco Rubio,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.2,true,0,0,,,,0.00,0.00
+2026-10-21,6d3b90a0c226ae9a,51ba67bb5abc733e,Is Donald Trump ready to do business with Myanmar?,BBC News,world,85.4,false,0,0,,,,0.00,0.00
+2026-10-21,137fe257044b4e28,69776b34cabeb8bd,Amazon targets Nvidia’s software edge with new AI tool,"Business News Today – Finance, Industry & Economy | The Hindu",business,82.9,false,0,0,,,,0.00,0.00
+2026-10-21,5b473d94da85ab18,5f3291c0450e8cd0,US banning Chinese AI DeepSeek from government agency IT systems,"Technology News Today, Latest Tech News | The Hindu",technology,81.7,true,0,0,,,,0.00,0.00
+2026-10-21,a909ef5941c77a9b,9debacb8694b4d34,"Paddy Power cuts 1,400 jobs and blames betting tax rises",BBC News,business,82.8,false,0,0,,,,0.00,0.00
+2026-10-21,3b3098faa488221d,a3748fd4233200c6,Storm Austen to bring severe gales to UK as weather warning issued,BBC News,science,83.0,false,1,0,,,,0.56,0.56
+2026-10-21,2cf047c47064fc75,88e7083d4329cadf,"Kashmir clerics, including Mirwaiz, say eviction of Delhi’s historic Race Course mosque ‘deeply disturbing’",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,86.3,false,0,0,,,,0.00,0.00
+2026-10-21,46e2fdebbdb061f6,1b45ac14e06278cf,"SpaceX, Tesla earnings to test Musk's AI spending ambitions as merger talk grows","Business News Today – Finance, Industry & Economy | The Hindu",business,82.0,false,1,0,,,,0.56,0.56
+2026-10-21,5de45ca53cc33649,2c15956777ee9ac2,Robert E. Hall and Michael Woodford | Putting people in economics,"Business News Today – Finance, Industry & Economy | The Hindu",business,81.9,false,0,0,,,,0.00,0.00
+2026-10-21,855ec4205771824c,0a172854326842e8,India’s agrivoltaic capacity is expected to be more than 5-gigawatts in next 3-4 years: MNRE Secretary,"Business News Today – Finance, Industry & Economy | The Hindu",business,81.7,true,0,0,,,,0.00,0.00
+2026-10-21,b9d4a5e56aa6e0b4,e2f8d212a5551191,"Allahabad HC cites long trial, lets off offenders, SC slams ‘misplaced sympathy’",Times of India,india,85.6,true,0,0,,,,0.00,0.00
+2026-10-21,281592db478b9188,10395e2c8246c8b5,SpaceX’s AI business is beating expectations,TechCrunch,technology,82.9,false,0,0,,,,0.00,0.00
+2026-10-21,990cb9f3efcea91d,ba162214d9c29577,Chancellor rejects calls to raise Capital Gains Tax in Budget,BBC News,business,80.8,false,0,0,,,,0.00,0.00
+2026-10-21,a8deb739dde1dda7,9d2d53f398f8e199,"Smartphone shipments slip, Chinese brands lose ground",Times of India,india,83.2,true,0,0,,,,0.00,0.00
+2026-10-21,2112749bfc616424,006d5ba04499eec3,Northern Ireland needs 'courage and leadership' to tackle climate change,BBC News,science,80.0,false,1,0,,,,0.56,0.56
+2026-10-21,6a75c713ec9bf2c8,51e2ef06315b54cc,On paddy field conservation in Keralam,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,82.1,false,0,0,,,,0.00,0.00
+2026-10-21,03efe6795c8fd92c,7cea887931a23012,"PM Modi flags three ‘enemies’ of India, calls for unity in national interest",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,80.6,false,0,0,,,,0.00,0.00
+2026-10-21,fb56945e9a8a6a05,3a8acfecb412bbe8,SpaceX and Tesla boards form special committees to review merger,TechCrunch,technology,77.7,false,0,0,,,,0.00,0.00
+2026-10-21,9ce90a2b708a8b76,7c799d105fd2ab94,Google is bringing a more personal version of its Gemini AI assistant to your car,TechCrunch,technology,76.7,false,0,0,,,,0.00,0.00
+2026-10-21,72e43985d41563ff,7a38e5b84656039e,"SpaceX alum’s aviation startup, Reliable Robotics, lands $115M, topping $1B valuation",TechCrunch,technology,76.4,false,0,0,,,,0.00,0.00
+2026-10-21,d71f07bd85df89de,927eb26512666bac,"Meta’s Muse hits 10M U.S. downloads in 40 days, a milestone reached by only 11 other apps",TechCrunch,technology,76.1,false,0,0,,,,0.00,0.00
+2026-10-21,642d5ed331fdbd9d,56ea5e4e1d52de68,Odds of fifth interest rate hike this year shorten as RBA deputy warns inflation outlook ‘worsening’,World news | The Guardian,world,98.9,true,0,0,,,,0.00,0.00
+2026-10-21,15e7a0d0ad00ed0a,817c3e32c79ecf90,Is Pak's ruling elite losing faith in country? Minister flags exodus of bureaucrats,India Today | Latest Stories,world,89.2,false,0,0,,,,0.00,0.00
+2026-10-21,d0eb12d845c04a2f,f3ddd90e0f199e35,"Troops in ‘body bags,’ ships in a ‘graveyard’? What is Iran's Mojtaba planning for Trump's military?",Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,92.9,false,0,0,,,,0.00,0.00
+2026-10-21,1512b970b6b4f97c,a6acdfdcf31c6cb1,Can India turn retrofitment into the next mobility revolution?,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.2,true,0,0,,,,0.00,0.00
+2026-10-21,ab57386447bd5ed3,1c8243ac8451384b,US blacklists Chinese firm tied to engineer who stole Google secrets,Times of India,world,90.6,false,0,0,,,,0.00,0.00
+2026-10-21,098e9df375cc2519,fe590888cadecfc1,Get tough on Putin or lose Pentagon funds? Trump’s $350 billion military push hits GOP resistance,Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,89.9,false,0,0,,,,0.00,0.00
+2026-10-21,c951e3b48af3fa2a,355cdf8a7f082064,"Uddhav Thackeray backs youth agitation over voter deletions, slams police crackdown at Dussehra rally",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.3,false,0,0,,,,0.00,0.00
+2026-10-21,f4c006855c7b7a9d,bbaa22990bb1d0f8,‘Congress not coming forward to talk to govt on delimitation’: Union Parliamentary Affairs Minister Kiren Rijiju | HT Interview,"India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,88.6,true,0,0,,,,0.00,0.00
+2026-10-21,ce5f3525c6acdc45,4651144b5241f066,"‘Who will talk to me, and why?’: Shami’s blunt take after selectors overlook him",Times of India,india,84.9,true,0,0,,,,0.00,0.00
+2026-10-21,0ce43fbee795babe,09d81dabbb00a166,"T.N. government should construct new Secretariat complex outside Chennai, says Anbumani",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,83.6,false,0,0,,,,0.00,0.00
+2026-10-21,e686966bf62f3ed1,2de40f3624a5631a,"‘Citizens can challenge false poll affidavits without ECI sanction’, says Supreme Court","India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,82.6,false,0,0,,,,0.00,0.00
+2026-10-21,0fe132290f2fc620,75d08f29bd3b9f5a,"Plants can speak using electricity, so this startup built an AI model to decipher their language",TechCrunch,technology,74.8,false,0,0,,,,0.00,0.00
+2026-10-21,818fd13a5aa66cc5,6746e540082abfdf,US orders federal agencies to remove China’s DeepSeek AI from their systems,TechCrunch,technology,73.4,false,0,0,,,,0.00,0.00
+2026-10-21,4d831c9e86036e4b,b3abe07a0f0e35c5,A student protest movement has gripped Serbia for two years. This weekend it will try to take power,World news | The Guardian,world,98.9,false,0,0,,,,0.00,0.00
+2026-10-21,a098c8b4ceaab347,84fc2dc16091d01c,Ahead Of Midterm Elections Trump Launches $25 million Cash Reward,NDTV News- Special,world,98.5,false,0,0,,,,0.00,0.00
+2026-10-21,ad8da61db5a00439,c311fcee9afaff88,Reader Q&A: What’s next for France after a weekend of riots? Ask our Europe columnists,World news | The Guardian,world,98.9,false,0,1,,,,0.44,0.44
+2026-10-21,924573826ddad1c2,3b83f64310bdf5ad,Inflation and government borrowing highest for a year ahead of next week's Budget,BBC News,business,95.2,true,1,1,,,,1.00,1.00
+2026-10-21,8a7e14b2d7b79d6d,4086a0ef60184136,Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge,BBC News,business,93.2,true,1,1,,,,1.00,1.00
+2026-10-21,d97d5555b5c45511,03afc2710248c090,China reveals advanced nuclear subs in Pacific test; a look inside its submarine fleet,Times of India,world,94.7,false,0,0,,,,0.00,0.00
+2026-10-21,8e1794862e195877,db95151784f068d2,Continuing violence in Manipur an indictment of BJP’s failure of governance: Congress,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.2,true,0,0,,,,0.00,0.00
+2026-10-21,9a930f7c581eedcb,7af73118c0da0d78,Modi government has no moral right to remain in power: Congress flags ‘lapses’ in PM-DAKSH scheme,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,93.0,false,0,0,,,,0.00,0.00
+2026-10-21,b845fa24e5c29cbd,a8ebe1d46a9b0bbd,"After Amazon, Google targets Nvidia’s software lock-in with TorchTPU","Business News Today – Finance, Industry & Economy | The Hindu",business,88.3,false,1,1,,,,1.00,1.00
+2026-10-21,02dc95cef8b128ed,08e69f084b3bde93,"Monsoon's gone, El Nino isn't: Why India's weather worries are far from over",Times of India,india,91.9,true,1,0,,,,0.56,0.56
+2026-10-21,1633329a76c05fe8,cba4167969df2775,Irish weather warning ahead of Storm Austen,BBC News,science,86.6,false,0,0,,,,0.00,0.00
+2026-10-21,a419501b36752923,e4ff3def31aa359b,Trump and Zelensky appear at loggerheads despite new optimism,BBC News,world,87.4,false,0,0,,,,0.00,0.00
+2026-10-21,0a76f8e01ae8e739,9c369dabddf0e454,"Delaware plants 75,000th tree across 17 state parks, meets 5-year goal",Times of India,india,88.6,false,0,0,,,,0.00,0.00
+2026-10-21,48a4dd38e7d49b1a,bdddc3e2179fd201,Tamil Nadu government sanctions ₹71 crore to enhance contingency funds for police stations,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.3,false,0,0,,,,0.00,0.00
+2026-10-21,11ba593028c6206a,56740bda5fce9695,"Directions under Section 35 A read with Section 56 of the Banking Regulation Act, 1949 – Puducherry Co-operative Urban Bank Ltd",PRESS RELEASES FROM RBI,economy,77.7,true,1,0,,,,0.56,0.56
+2026-10-21,ccaf1b1d081b9e51,30ceaed1eeec82c8,"Putin meets US envoy Witkoff: Ukraine peace, prisoner release among topics disccused",Times of India,world,86.7,false,0,0,,,,0.00,0.00
+2026-10-21,ec67905be310eb5c,cdf51cd8f4587e06,‘A powerful warning’: will Europe’s angry protests lead to real political change?,World news | The Guardian,world,84.9,false,0,0,,,,0.00,0.00
+2026-10-21,05fc7dbde51e9cc1,a1c8c3253a30b748,Tamil Nadu rains LIVE: Warning to residents along Palar river,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,85.6,false,0,0,,,,0.00,0.00
+2026-10-21,7aa0678f71f18d2e,d253cbe2a085d6f2,"Rafales, Sukhois, Tejas over the Ganga: IAF gears up for grand aerial display in Varanasi",Times of India,india,85.3,false,0,0,,,,0.00,0.00
+2026-10-21,b6aa9ecd0e8c508f,baa82c2e27bead16,"Integrated control room for rain-related complaints opened in Vellore, Ranipet, Tirupattur and Tiruvannamalai",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,85.0,false,0,0,,,,0.00,0.00
+2026-10-21,738291f1bd10ee70,8b8d92cb0ed32c13,ChatGPT users can lock their chats as OpenAI rolls out new privacy feature,"Technology News Today, Latest Tech News | The Hindu",technology,79.1,false,0,0,,,,0.00,0.00
+2026-10-21,b3eda42c9c07921e,0768af097f8c0c7c,Civil servant admits he 'made mistakes' juggling five government jobs,BBC News,business,80.2,false,0,0,,,,0.00,0.00
+2026-10-21,ec60ff2a306cb0d1,2e10a48e0f1aa292,Meta's global affairs officer Joel Kaplan to leave company after 15 years,"Technology News Today, Latest Tech News | The Hindu",technology,75.8,false,0,0,,,,0.00,0.00
+2026-10-21,55e679112a556aad,a50108ada9550b9f,"Minutes of the Monetary Policy Committee Meeting, October 5 to 7, 2026",PRESS RELEASES FROM RBI,economy,71.2,true,0,0,,,,0.00,0.00
+2026-10-21,21a9c162fe3201ee,3b64b9e858173ce2,How much gas could Jackdaw provide? And will it cut your energy bills?,BBC News,science,71.0,false,1,0,,,,0.56,0.56
+2026-10-21,eec5fb5d3abac744,a6aa0c11c1008acc,Astronaut surprise video leaves pupils starstruck,BBC News,science,69.6,false,0,0,,,,0.00,0.00
+2026-10-21,5ab9dc52f5899eda,6d53817b779c9960,Farmer lost out by minutes in race for wildlife funding,BBC News,science,69.6,false,0,0,,,,0.00,0.00
+2026-10-22,faa09cefb916e718,92b67eebc18a8dc0,Rosenberg: US diplomatic push offers little hope for imminent Ukraine peace,BBC News,world,95.5,true,0,,,,,0.00,0.00
+2026-10-22,0173b9e61f6d1c57,629096dc17987736,"Trade, defence and the Russia-Ukraine conflict to dominate Modi-Tusk talks on October 22",India Latest News: Top National Headlines Today & Breaking News | The Hindu,world,97.0,false,0,,,,,0.00,0.00
+2026-10-22,04c9a84bcb184a11,0952ba60470dbffa,"One killed, 8 injured in Saudi airport attack amid US order for diplomats to leave",Times of India,world,97.0,true,0,,,,,0.00,0.00
+2026-10-22,dca13963dccbf23d,6858d89c9e07f6ba,"PM Modi has failed ‘abysmally’ on Manipur, says Congress chief Mallikarjun Kharge",Times of India,india,96.3,false,0,,,,,0.00,0.00
+2026-10-22,5e244fe1343505d5,2fb599898a887ab6,RBI MPC flags widening inflationary pressures; two members oppose hawkish stance,"Business News Today – Finance, Industry & Economy | The Hindu",business,91.6,true,0,,,,,0.00,0.00
+2026-10-22,28d6797ac9815556,0895f063a797bb3b,Why are uninsured vehicles not part of crash relief scheme? Supreme Court,Times of India,india,94.9,true,0,,,,,0.00,0.00
+2026-10-22,924573826ddad1c2,3b83f64310bdf5ad,Inflation and government borrowing highest for a year ahead of next week's Budget,BBC News,business,91.2,true,1,,,,,1.00,1.00
+2026-10-22,9d332483965601a0,92fce53706f818a0,"Trump's son 'opposed' Iran war, believed US should avoid another Middle East conflict",Times of India,world,94.0,false,0,,,,,0.00,0.00
+2026-10-22,d9347be8a8748e39,7afe4dadd93dd3c9,Watch: Trump's favourite Pakistani army chief got cold shoulder from Iran’s most powerful general,Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,93.2,false,0,,,,,0.00,0.00
+2026-10-22,8a7e14b2d7b79d6d,4086a0ef60184136,Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge,BBC News,business,89.2,false,1,,,,,1.00,1.00
+2026-10-22,a3456ba186527dae,ea52e4a87efcd3a5,"MrBeast builds 5 medical clinics across 4 countries to help 10,000 annually",Times of India,world,91.6,false,0,,,,,0.00,0.00
+2026-10-22,3441aa01073184ab,0386f74a6b663bfb,Andhra Pradesh SEC halts election process for 100 ULBs after Supreme Court order,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,91.3,true,0,,,,,0.00,0.00
+2026-10-22,db794e45be5e640d,0fe72cc35c9d63a7,Poland’s parliament votes to ease abortion ban but faces likely veto from president,World news | The Guardian,world,89.9,true,0,,,,,0.00,0.00
+2026-10-22,47bf3d0097ce052c,d9bda75b20ab4b89,Decades-old flaw discovered in PHP forces govt websites to go offline globally,Times of India,india,89.9,false,0,,,,,0.00,0.00
+2026-10-22,ac717d3bb8164d61,7cc2986affcd2ee6,"The ""trillion pound"" oil fund the government believes Britain could have built",BBC News,business,86.2,false,0,,,,,0.00,0.00
+2026-10-22,ea2d4c3286f3bcb0,413eb72e947a4343,Haryana Congress flays BJP government over its failure to keep poll promises,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,89.6,false,0,,,,,0.00,0.00
+2026-10-22,4ed3cb09521c8042,2ed7bebc713b9148,"‘Badr MoU’ won’t put New Delhi-Jakarta missile contracts in jeopardy, experts say",Times of India,india,89.2,false,0,,,,,0.00,0.00
+2026-10-22,ad30ba281c7b1a7f,7c321f1c84447217,Airbnb hosts can no longer make guests strip beds and wash dishes under new rules,BBC News,business,85.6,false,0,,,,,0.00,0.00
+2026-10-22,b845fa24e5c29cbd,a8ebe1d46a9b0bbd,"After Amazon, Google targets Nvidia’s software lock-in with TorchTPU","Business News Today – Finance, Industry & Economy | The Hindu",business,84.3,true,1,,,,,1.00,1.00
+2026-10-22,96fc064fd95e0ede,9f99ee9e174d75ce,"Will not rest until J&K is freed from separatist, terrorist elements: J&K L-G Manoj Sinha",India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,88.3,false,0,,,,,0.00,0.00
+2026-10-22,ba3172a05789f3b6,6b746294b964209c,Eight web security keys of eMudhra firm used by Govt. and PSUs leaked,"Technology News Today, Latest Tech News | The Hindu",technology,83.1,false,1,,,,,1.00,1.00
+2026-10-22,fdf0ee4b4ca2c924,30e0969093732bb1,How is the US economy really doing under President Trump?,BBC News,business,84.1,false,0,,,,,0.00,0.00
+2026-10-22,02dc95cef8b128ed,08e69f084b3bde93,"Monsoon's gone, El Nino isn't: Why India's weather worries are far from over",Times of India,india,87.9,false,0,,,,,0.00,0.00
+2026-10-22,958b39d2c8197f86,f0c921642bb5bbb0,"IRGC drops bombshell before US midterms: Hormuz now 100% close, missiles more deadly & longer range?",Latest News: Todays Latest News Headlines from India & World | Hindustan Times | Hindustan Times,world,86.2,false,0,,,,,0.00,0.00
+2026-10-22,3d798001c4f7899b,ae87b738275162a0,Tesla says it will start selling Cybercabs by end of year,TechCrunch,technology,84.0,false,0,,,,,0.00,0.00
+2026-10-22,8541714268f6d7c3,2cf0f5bf4933843e,Burnham proposes plan to cut standing charges from gas bills,BBC News,business,81.8,false,0,,,,,0.00,0.00
+2026-10-22,05a4c82ac813848c,7b1a2375c20a8ef9,Fuel leak which killed fish in River Taff stopped,BBC News,science,82.0,false,1,,,,,1.00,1.00
+2026-10-22,e9d8a622cb65b25d,ea728447330cb570,Burnham defends Jackdaw decision as Badenoch urges PM to overturn ban on new oil and gas licences,BBC News,science,81.0,false,0,,,,,0.00,0.00
+2026-10-22,46e2fdebbdb061f6,1b45ac14e06278cf,"SpaceX, Tesla earnings to test Musk's AI spending ambitions as merger talk grows","Technology News Today, Latest Tech News | The Hindu",technology,78.8,false,0,,,,,0.00,0.00
+2026-10-22,ffb6a5191366de2d,df9b259a739107d0,Pupils who designed a badge sent to space meet NASA astronaut,BBC News,science,80.0,false,1,,,,,1.00,1.00
+2026-10-22,3b3098faa488221d,a3748fd4233200c6,Storm Austen to bring severe gales to UK as weather warning issued,BBC News,science,79.0,false,0,,,,,0.00,0.00
+2026-10-22,11ba593028c6206a,56740bda5fce9695,"Directions under Section 35 A read with Section 56 of the Banking Regulation Act, 1949 – Puducherry Co-operative Urban Bank Ltd",PRESS RELEASES FROM RBI,economy,73.7,true,0,,,,,0.00,0.00
+2026-10-22,6eec71638b017088,b7075f1fab161422,Year-old AI lab Flapping Airplanes raises $1B at a $6B valuation,TechCrunch,technology,78.6,false,0,,,,,0.00,0.00
+2026-10-22,24523296464d12d4,0b9f9ac620fe4906,Meta wants to pay for its broad AI buildout with a newly created class of stock,TechCrunch,technology,77.4,false,0,,,,,0.00,0.00
+2026-10-22,6b890214b397243d,ed9de5d5894d16e7,"Recursive launches Flint, a laptop coding model it says was largely built by AI",TechCrunch,technology,77.4,false,0,,,,,0.00,0.00
+2026-10-22,cf777ae8f2d85e2b,caf7a2acd7ed68a0,GM is betting compute and AI will help it compete with Chinese automakers,TechCrunch,technology,76.7,false,0,,,,,0.00,0.00
+2026-10-22,65e26d3a29e81c61,f3eb0936e0555749,Blacksmith hits unicorn valuation after Sequoia leads Series C,TechCrunch,technology,76.7,false,0,,,,,0.00,0.00
+2026-10-22,2112749bfc616424,006d5ba04499eec3,Northern Ireland needs 'courage and leadership' to tackle climate change,BBC News,science,76.0,false,0,,,,,0.00,0.00
+2026-10-22,9406f6f056689906,649af28fa6c8bc32,"RBI to conduct Overnight Variable Rate Repo (VRR) auction under LAF on October 22, 2026",PRESS RELEASES FROM RBI,economy,71.6,true,1,,,,,1.00,1.00
+2026-10-22,57d472b0d80de9ae,79c41b87022cf79b,New lab to become centre for investigating uplands,BBC News,science,74.2,false,0,,,,,0.00,0.00
+2026-10-22,b7a140c4bd1bce46,4fe5ae8c7a913a13,Will Jackdaw cut your energy bills?,BBC News,science,70.9,false,0,,,,,0.00,0.00
+2026-10-22,83aba50d2d4a5e75,8a327bdebbb078e5,How Jackdaw ignites row over climate and costs,BBC News,science,69.9,false,0,,,,,0.00,0.00
+2026-10-23,ad8da61db5a00439,c311fcee9afaff88,Reader Q&A: What’s next for France after a weekend of riots? Ask our Europe columnists,World news | The Guardian,world,98.9,true,,,,,,,
+2026-10-23,d0c4bd742cde725c,46454f97bab38ca6,"3 aircraft carriers, jets &amp; troops: Israel, US plan to attack Iran after midterms",Times of India,world,97.0,false,,,,,,,
+2026-10-23,1288b3f9be3159c6,15ae8d6d8a26ba10,Warhound raises $200M to engineer war dogs and arm them with Anduril gear,TechCrunch,technology,94.7,false,,,,,,,
+2026-10-23,c7484c436fec3d2a,31b2c8cefeaaa8e2,Civil war &amp; terror: Why Libya is still broken 15 yrs after Gaddafi's bloody end,Times of India,india,96.3,false,,,,,,,
+2026-10-23,4f6b81caae8801f4,b28236c1fed40d62,"US-sanctioned ICC wins Sakharov Prize, EU’s top human rights award","Al Jazeera – Breaking News, World News and Video from Al Jazeera",world,90.8,false,,,,,,,
+2026-10-23,cd9d50f217784f4d,d5769a2aafbbd5b2,"21 years on, double life term for Jammu terror attack that killed baby, 2 others",Times of India,india,95.0,true,,,,,,,
+2026-10-23,94765d9e6db4c042,ca3793948f6a6d90,"'He put it back': Trump says Ukraine's Starlink restored, stays silent on Musk",Times of India,world,94.3,false,,,,,,,
+2026-10-23,ce30d262515a59b9,75a7f2ebe2ca267d,Bulgaria: Concerns about security in the Black Sea dominate presidential election campaign,World | Deutsche Welle,world,92.7,true,,,,,,,
+2026-10-23,2dca62c5499244be,71585744ee6158fb,Massive student-led rally marches in Belgrade ahead of Serbian election,World news | The Guardian,world,92.5,true,,,,,,,
+2026-10-23,4f67921f21f6748b,d43a539d996d2cd0,Will decide on any notice to remove CEC according to rules: LS Speaker Om Birla,Times of India,india,93.9,false,,,,,,,
+2026-10-23,c95f41e7c58671cf,7c118ee4780a4c50,India's West Asia oil imports return to pre-war levels in September,"Business News Today – Finance, Industry & Economy | The Hindu",business,89.9,true,,,,,,,
+2026-10-23,b1e8eaaac1401572,3ac01856069e902f,El Salvador's president threatens Haitian gangs over military hostages,BBC News,world,88.8,false,,,,,,,
+2026-10-23,924573826ddad1c2,3b83f64310bdf5ad,Inflation and government borrowing highest for a year ahead of next week's Budget,BBC News,business,87.2,false,,,,,,,
+2026-10-23,260c52c2fbf7cb8f,9c7c12758c497935,Should children be involved in political campaigning?,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,90.8,false,,,,,,,
+2026-10-23,b4897bebd4fad02a,727440b452cbd341,Missiles hit Kyiv after Russia agrees to US call to resume Ukraine peace talks,BBC News,world,88.2,true,,,,,,,
+2026-10-23,83efc6955a1f5739,5eb3c1e8b2297c6f,UK working to identify exposure after global cyber-security warning,BBC News,technology,85.6,true,,,,,,,
+2026-10-23,8a7e14b2d7b79d6d,4086a0ef60184136,Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge,BBC News,business,85.2,false,,,,,,,
+2026-10-23,947fef46d7a295ab,235bc08663d13c94,"PM Modi, Polish PM Donald Tusk agree to deepen cooperation in defence, space, nuclear energy","India News: Latest India News, Today breaking News Headlines, Real-time News coverage from India | Hindustan Times | Hindustan Times",india,88.3,false,,,,,,,
+2026-10-23,c6e5b1beb7dd2553,9af538b732f9d00a,"Centre flags data gap, regulatory hurdles in curbing hospital mark-ups",Times of India,india,87.9,false,,,,,,,
+2026-10-23,d7d2a542cd1e0ab2,b1da9cfeb91bbf4c,"After Musk ‘punishes’ Ukraine, how exposed is India to foreign tech?","Technology News Today, Latest Tech News | The Hindu",technology,82.4,true,,,,,,,
+2026-10-23,7736b9d551515955,c1655e10eaaf009f,Use of Chief Minister C. Joseph Vijay’s deep fake videos to collect money: Rajasthan youth moves Madras High Court seeking bail,India Latest News: Top National Headlines Today & Breaking News | The Hindu,india,87.3,false,,,,,,,
+2026-10-23,bb71a8a3fea93939,69539d702ebf8fad,The RBI and its growing fiscal role,"Business News Today – Finance, Industry & Economy | The Hindu",business,83.1,false,,,,,,,
+2026-10-23,7b53d39937bf6da2,ae174572229d124f,"Sensex, Nifty decline in early trade as power, metal stocks drag markets lower","Business News Today – Finance, Industry & Economy | The Hindu",business,82.7,false,,,,,,,
+2026-10-23,b6c7bbfbd18219b6,416ec1a3340d741f,"From Jan 1, WhatsApp, Telegram won’t work without SIM cards, govt issues guidelines",Times of India,india,86.6,false,,,,,,,
+2026-10-23,62de19079fe3b34e,023b9ddbf708db4e,Former OpenAI science lead launches Warp Science to automate wet labs with robots,TechCrunch,technology,84.1,false,,,,,,,
+2026-10-23,b845fa24e5c29cbd,a8ebe1d46a9b0bbd,"After Amazon, Google targets Nvidia’s software lock-in with TorchTPU","Technology News Today, Latest Tech News | The Hindu",technology,81.1,false,,,,,,,
+2026-10-23,abee9fc7bc09efb3,4d29dcd4df31a9b6,SEBI eases margin rules for early share delivery; EPI value to be calculated on trade day,"Business News Today – Finance, Industry & Economy | The Hindu",business,82.0,false,,,,,,,
+2026-10-23,1498bf361f53ca7a,89eed1aee39f8a26,Project aims to protect rare arctic-alpine plants,BBC News,science,82.3,false,,,,,,,
+2026-10-23,6c2b61c5661a677d,904d8d81ca21398c,Mark Zuckerberg’s creative plan to pay California’s proposed billionaire tax without losing control of Meta,TechCrunch,technology,82.8,false,,,,,,,
+2026-10-23,ba3172a05789f3b6,6b746294b964209c,Eight web security keys of eMudhra firm used by Govt. and PSUs leaked,"Technology News Today, Latest Tech News | The Hindu",technology,79.1,false,,,,,,,
+2026-10-23,bacdbcca2db5de60,d7590e7bdedd92da,Is an 'AI war' complicating your job search?,BBC News,business,80.0,false,,,,,,,
+2026-10-23,c397db615afbfa47,bf0d9fc56efc6915,Amber warning in place as Storm Austen hits parts of UK,BBC News,science,80.3,false,,,,,,,
+2026-10-23,04492f6fb7dce0be,84687f984f1fb2b3,SBI’s cyber defences: What the bank had in place,"Business News Today – Finance, Industry & Economy | The Hindu",business,79.5,false,,,,,,,
+2026-10-23,c622c6f12da46266,78a496ffe8c405e2,Activists celebrate as land given protected status,BBC News,science,78.6,false,,,,,,,
+2026-10-23,05a4c82ac813848c,7b1a2375c20a8ef9,Fuel leak which killed fish in River Taff stopped,BBC News,science,78.0,false,,,,,,,
+2026-10-23,d5baa7222a61349b,755d36e67efbf61b,OpenAI makes its Jev competitor widely available as decision model competition heats up,TechCrunch,technology,77.4,false,,,,,,,
+2026-10-23,22f5447a2491227c,7ab4eaec9d2b2223,"RBI to conduct 3-day Variable Rate Repo (VRR) auction under LAF on October 23, 2026",PRESS RELEASES FROM RBI,economy,70.9,true,,,,,,,
+2026-10-23,216bc085e49f39b5,08386189f682abd0,"Money Market Operations as on October 21, 2026",PRESS RELEASES FROM RBI,economy,70.8,true,,,,,,,
+2026-10-23,24c3ad9720177957,705e4b16d8f489b0,BBC Inside Science,BBC News,science,73.8,false,,,,,,,
+2026-10-23,ffb6a5191366de2d,df9b259a739107d0,Pupils who designed a badge sent to space meet NASA astronaut,BBC News,science,72.0,false,,,,,,,
+2026-10-23,7fe06d485a219d95,67eda668d1f00dca,Gasps as Prince William makes surprise appearance on Graham Norton Show,BBC News,science,71.7,false,,,,,,,

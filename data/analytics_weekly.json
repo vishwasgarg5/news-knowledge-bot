@@ -1,10 +1,10 @@
 {
-  "learning_samples": 6611,
-  "selected_samples": 1010,
+  "learning_samples": 6652,
+  "selected_samples": 1020,
   "mature_outcome_samples": 6200,
   "avg_outcome": 0.136,
-  "daily_runs": 27,
-  "history_stories": 1360,
+  "daily_runs": 28,
+  "history_stories": 1370,
   "source_reliability": {
     "BBC News": 0.283,
     "India Latest News: Top National Headlines Today & Breaking News | The Hindu": 0.028,
@@ -31,19 +31,19 @@
   "top_categories": [
     [
       "india",
-      661
+      662
     ],
     [
       "world",
-      301
+      305
     ],
     [
       "business",
-      220
+      221
     ],
     [
       "technology",
-      138
+      140
     ],
     [
       "science",
@@ -51,7 +51,7 @@
     ],
     [
       "economy",
-      3
+      5
     ],
     [
       "defence",
@@ -59,10 +59,10 @@
     ]
   ],
   "learning_data_audit": {
-    "total_rows": 6611,
+    "total_rows": 6652,
     "mature_rows": 6200,
-    "provisional_rows": 411,
-    "mature_label_coverage": 0.938,
+    "provisional_rows": 452,
+    "mature_label_coverage": 0.932,
     "selected_mature_rows": 908
   },
   "chronological_ranking_evaluation": {
@@ -94,21 +94,21 @@
     "leakage_safe": true
   },
   "outcome_horizon_coverage": {
-    "24h": 6569,
-    "48h": 6493,
+    "24h": 6611,
+    "48h": 6569,
     "7d": 6200
   },
   "outcome_maturity": {
-    "24h": 6569,
-    "48h": 6493,
+    "24h": 6611,
+    "48h": 6569,
     "7d": 6200
   },
   "false_positives": 611,
-  "missed_stories": 366,
+  "missed_stories": 367,
   "last_7_days": {
-    "runs": 6,
+    "runs": 7,
     "avg_success_rate": 0.326,
     "avg_false_positive_rate": 0.672,
-    "avg_miss_rate": 0.066
+    "avg_miss_rate": 0.065
   }
 }
