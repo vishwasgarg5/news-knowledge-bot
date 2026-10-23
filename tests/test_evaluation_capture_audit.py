@@ -165,6 +165,10 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
     assert report["latest_run"]["summary_coverage_by_domain"]["example.com"] == {
         "candidate_count": 1, "summary_present_count": 0,
         "summary_missing_count": 1, "summary_coverage": 0.0,
+        "missing_summary_examples": [{
+            "candidate_id": "", "title": "Title", "source": "Source",
+            "url": "https://example.com/b", "summary_state": "blank_string",
+        }],
     }
     assert report["previous_run_comparison"]["summary_coverage_by_domain_delta"]["example.com"] == {
         "previous_candidate_count": 1, "latest_candidate_count": 1,
@@ -259,6 +263,10 @@ def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access
     assert domains["example.com"] == {
         "candidate_count": 2, "summary_present_count": 1,
         "summary_missing_count": 1, "summary_coverage": 0.5,
+        "missing_summary_examples": [{
+            "candidate_id": "", "title": "", "source": "",
+            "url": "https://example.com/story/2", "summary_state": "blank_string",
+        }],
     }
     assert domains["news.example.org"]["summary_missing_count"] == 1
     assert domains["unknown"]["summary_missing_count"] == 1
