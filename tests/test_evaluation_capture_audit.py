@@ -1,7 +1,7 @@
 import json
 
 from scripts.audit_evaluation_captures import audit_directory, audit_record
-from scripts.audit_capture_quality_trend import build_trend
+from scripts.audit_capture_quality_trend import build_trend, main as capture_quality_main
 
 
 def test_pending_capture_is_reported_without_inventing_labels():
@@ -274,3 +274,23 @@ def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access
         "candidate_id": "", "title": "", "source": "",
         "url": "https://example.com/story/2", "summary_state": "blank_string",
     }]
+
+
+
+def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
+    capture = {
+        "run_id": "cli-check",
+        "run_timestamp": "2026-10-23T08:00:00Z",
+        "candidate_articles": [
+            {"title": "Headline missing summary", "url": "https://www.example.com/story/1", "summary": ""},
+            {"title": "Has summary", "url": "https://example.com/story/2", "summary": "Known text"},
+        ],
+    }
+    (tmp_path / "capture.json").write_text(json.dumps(capture), encoding="utf-8")
+
+    exit_code = capture_quality_main(["--directory", str(tmp_path)])
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "SUMMARY GAPS example.com: 1/2 missing (50.0% coverage)" in output
+    assert "[blank_string] Headline missing summary — https://www.example.com/story/1" in output

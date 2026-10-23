@@ -196,6 +196,23 @@ def main(argv: list[str] | None = None) -> int:
         print("Field coverage: " + ", ".join(f"{k}={v:.1%}" for k,v in report["overall_field_coverage"].items()))
         for item in (report["previous_run_comparison"] or {}).get("regressions", []):
             print(f"REGRESSION {item['field']}: {item['previous_coverage']:.1%} -> {item['latest_coverage']:.1%}")
+        latest = report["latest_run"] or {}
+        domains = latest.get("summary_coverage_by_domain", {})
+        affected = sorted(
+            ((domain, details) for domain, details in domains.items()
+             if details.get("summary_missing_count", 0)),
+            key=lambda item: (-item[1].get("summary_missing_count", 0), item[0]),
+        )
+        for domain, details in affected[:5]:
+            print(
+                f"SUMMARY GAPS {domain}: {details['summary_missing_count']}/"
+                f"{details['candidate_count']} missing "
+                f"({details['summary_coverage']:.1%} coverage)"
+            )
+            for example in details.get("missing_summary_examples", [])[:3]:
+                title = example.get("title") or "(untitled)"
+                url = example.get("url") or "(no URL)"
+                print(f"  - [{example['summary_state']}] {title} — {url}")
     if args.fail_on_regression and report["quality_gate"]["status"] == "BLOCKED": return 1
     return 2 if any(row["invalid_record"] for row in report["records"]) else 0
 if __name__ == "__main__": raise SystemExit(main())
