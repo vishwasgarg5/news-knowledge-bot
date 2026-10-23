@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from app.news import Article, collect, fetch_feed
+from app.news import Article, _summary_text, collect, fetch_feed
 
 
 def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
@@ -67,3 +67,27 @@ def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypat
     assert "source=Synthetic Publisher Feed" in output
     assert "publisher_summary_fields_present=none" in output
     assert "'author'" in output
+
+
+
+def test_summary_extractor_uses_publisher_detail_and_content_fallbacks():
+    assert _summary_text({
+        "summary": "",
+        "description": "",
+        "summary_detail": {"value": "<p>Publisher &amp; verified context.</p>"},
+    }) == "Publisher & verified context."
+    assert _summary_text({
+        "summary": "",
+        "description": "",
+        "content": [{"value": "<p>Actual article excerpt</p>"}],
+    }) == "Actual article excerpt"
+
+
+def test_summary_extractor_does_not_substitute_unrelated_entry_metadata():
+    assert _summary_text({
+        "title": "Story headline",
+        "author": "Reporter",
+        "tags": [{"term": "business"}],
+        "summary": "   ",
+        "description": "",
+    }) == ""
