@@ -2608,3 +2608,29 @@ def test_review_packet_job_is_independent_of_production_and_validation():
     assert "python -m app.main" in "\\n".join(
         str(step.get("run", "")) for step in production["steps"]
     )
+
+
+def test_feed_configuration_uses_explicit_https_endpoints_and_pinned_dependencies():
+    from urllib.parse import urlsplit
+
+    config = yaml.safe_load(read("config/sources.yaml"))
+    sources = config["sources"]
+    assert sources and all(isinstance(urls, list) and urls for urls in sources.values())
+    for category, urls in sources.items():
+        for url in urls:
+            parsed = urlsplit(url)
+            assert parsed.scheme == "https", f"{category} feed must use HTTPS: {url}"
+            assert parsed.hostname, f"{category} feed must have a hostname: {url}"
+            assert parsed.username is None and parsed.password is None, (
+                f"{category} feed must not embed credentials"
+            )
+            assert not parsed.fragment, f"{category} feed must not include a fragment"
+
+    requirements = [
+        line.strip() for line in read("requirements.txt").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    ]
+    assert requirements
+    assert all("==" in requirement for requirement in requirements), (
+        "Runtime and test dependencies must be version-pinned for reproducible audits"
+    )
