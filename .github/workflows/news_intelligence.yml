@@ -24,7 +24,7 @@ on:
         description: "Historical capture JSON under data/historical_evaluation_records/"
         required: true
         type: string
-        default: "data/historical_evaluation_records/20261022T062359+0530-morning.json"
+        default: "data/historical_evaluation_records/20261023T062636+0530-morning.json"
       sample_per_disposition:
         description: "Maximum candidates sampled from each disposition (1-100)"
         required: true
