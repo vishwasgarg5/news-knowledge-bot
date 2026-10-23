@@ -22,7 +22,8 @@ def record_with_reviews():
         ],
         "story_labels": [
             {"story_id": "claim-1", "label": "supported", "reviewer_id": "reviewer-1",
-             "reviewed_at": "2026-10-21T10:30:00+05:30", "rationale": "Independently checked claim."}
+             "reviewed_at": "2026-10-21T10:30:00+05:30", "rationale": "Independently checked claim.",
+             "evidence_urls": ["https://official.example/claim-1"]}
         ],
         "candidate_reviews": [
             {"candidate_id": "c1", "relevance_label": "relevant", "reviewer_id": "reviewer-1",
