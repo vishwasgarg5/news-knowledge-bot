@@ -175,7 +175,7 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         if not summary and missing_summary_diagnostics < 3:
             present_fields = [
                 key for key in summary_fields
-                if e.get(key) not in (None, "", [], {})
+                if _summary_text({key: e.get(key, "")})
             ]
             field_shapes = []
             for key in summary_fields:
