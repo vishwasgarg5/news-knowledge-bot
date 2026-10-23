@@ -2414,3 +2414,45 @@ def test_feed_collection_preserves_description_and_atom_content_summaries(monkey
         "Fallback & useful description.",
         "Atom body content.",
     ]
+
+
+
+def test_feed_collection_uses_detail_and_namespaced_summary_fallbacks(monkeypatch):
+    from types import SimpleNamespace
+    from app import news
+
+    entries = [
+        {
+            "title": "RSS detail field",
+            "link": "https://example.com/detail",
+            "summary": "",
+            "summary_detail": {"value": "<p>Publisher supplied detail &amp; context.</p>"},
+        },
+        {
+            "title": "Media extension field",
+            "link": "https://example.com/media",
+            "media_description": "<p>Media namespace description.</p>",
+        },
+        {
+            "title": "Atom content fallback",
+            "link": "https://example.com/content",
+            "content": [{"value": "<p>Actual Atom content.</p>"}],
+        },
+    ]
+    monkeypatch.setattr(news.requests, "get", lambda *a, **k: SimpleNamespace(
+        content=b"feed", status_code=200, headers={"Content-Type": "application/rss+xml"},
+        raise_for_status=lambda: None,
+    ))
+    monkeypatch.setattr(news.feedparser, "parse", lambda _: SimpleNamespace(
+        entries=entries, feed={"title": "Example Feed"}, bozo=False,
+    ))
+
+    articles, ok, warning = news.fetch_feed("https://example.com/feed", "world")
+
+    assert ok is True
+    assert warning == ""
+    assert [article.summary for article in articles] == [
+        "Publisher supplied detail & context.",
+        "Media namespace description.",
+        "Actual Atom content.",
+    ]

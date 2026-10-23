@@ -31,24 +31,40 @@ def _clean(value: str) -> str:
 
 
 def _summary_text(entry) -> str:
-    """Use the first available RSS summary field, including Atom content."""
-    for key in ("summary", "description", "subtitle"):
-        value = entry.get(key, "")
-        if value:
-            cleaned = re.sub(r"\s+([.,;:!?])", r"\1", " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split()))
-            if cleaned:
-                return cleaned[:1600]
+    """Extract publisher-provided summary text across common RSS/Atom field shapes."""
+    def clean_value(value) -> str:
+        # feedparser detail fields and namespaced extensions may be mappings,
+        # not plain strings. Read only their actual text/value fields.
+        if isinstance(value, dict):
+            value = value.get("value") or value.get("text") or value.get("summary") or ""
+        if isinstance(value, (list, tuple)):
+            value = " ".join(
+                str(item.get("value") or item.get("text") or "")
+                if isinstance(item, dict) else str(item or "")
+                for item in value
+            )
+        cleaned = " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value or ""))).split())
+        return re.sub(r"\s+([.,;:!?])", r"\1", cleaned)
+
+    # Standard RSS/Atom names come first; detail and namespaced fields are
+    # fallbacks when a parser exposes publisher-provided text separately.
+    for key in (
+        "summary", "description", "subtitle",
+        "summary_detail", "description_detail", "subtitle_detail",
+        "media_description", "itunes_summary",
+    ):
+        cleaned = clean_value(entry.get(key, ""))
+        if cleaned:
+            return cleaned[:1600]
+
     content = entry.get("content", []) or []
     if isinstance(content, dict):
         content = [content]
     for item in content:
-        if isinstance(item, dict):
-            value = item.get("value") or item.get("text") or ""
-            cleaned = " ".join(re.sub(r"<[^>]*>", " ", html.unescape(str(value))).split())
-            if cleaned:
-                return cleaned[:1600]
+        cleaned = clean_value(item)
+        if cleaned:
+            return cleaned[:1600]
     return ""
-
 
 def _date(entry) -> str:
     raw = entry.get("published") or entry.get("updated") or ""
