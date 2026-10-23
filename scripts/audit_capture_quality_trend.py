@@ -227,6 +227,22 @@ def main(argv: list[str] | None = None) -> int:
                 title = example.get("title") or "(untitled)"
                 url = example.get("url") or "(no URL)"
                 print(f"  - [{example['summary_state']}] {title} — {url}")
+        sources = latest.get("summary_coverage_by_source", {})
+        affected_sources = sorted(
+            ((source, details) for source, details in sources.items()
+             if details.get("summary_missing_count", 0)),
+            key=lambda item: (-item[1].get("summary_missing_count", 0), item[0]),
+        )
+        for source, details in affected_sources[:5]:
+            print(
+                f"SUMMARY SOURCE GAPS {source}: {details['summary_missing_count']}/"
+                f"{details['candidate_count']} missing "
+                f"({details['summary_coverage']:.1%} coverage)"
+            )
+            for example in details.get("missing_summary_examples", [])[:3]:
+                title = example.get("title") or "(untitled)"
+                url = example.get("url") or "(no URL)"
+                print(f"  - [{example['summary_state']}] {title} — {url}")
     if args.fail_on_regression and report["quality_gate"]["status"] == "BLOCKED": return 1
     return 2 if any(row["invalid_record"] for row in report["records"]) else 0
 if __name__ == "__main__": raise SystemExit(main())

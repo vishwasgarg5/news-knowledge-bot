@@ -294,6 +294,7 @@ def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
     assert exit_code == 0
     assert "SUMMARY GAPS example.com: 1/2 missing (50.0% coverage)" in output
     assert "[blank_string] Headline missing summary — https://www.example.com/story/1" in output
+    assert "SUMMARY SOURCE GAPS unknown: 1/2 missing (50.0% coverage)" in output
 
 
 
