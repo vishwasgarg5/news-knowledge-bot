@@ -217,7 +217,20 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
             try:
                 items, ok, error = fetch_feed(url, category, per_source)
                 all_articles.extend(items)
-                source_status.append({"url": url, "category": category, "ok": ok, "count": len(items), "error": error, "warning": bool(ok and error)})
+                missing_summaries = [article for article in items if not _clean(article.summary)]
+                source_status.append({
+                    "url": url,
+                    "category": category,
+                    "ok": ok,
+                    "count": len(items),
+                    "error": error,
+                    "warning": bool(ok and error),
+                    "summary_missing_count": len(missing_summaries),
+                    "missing_summary_examples": [
+                        {"title": article.title, "url": article.url}
+                        for article in missing_summaries[:3]
+                    ],
+                })
             except Exception as exc:
                 source_status.append({"url": url, "category": category, "ok": False, "count": 0, "error": str(exc), "warning": False})
                 print(f"feed failed: {url}: {exc}", flush=True)

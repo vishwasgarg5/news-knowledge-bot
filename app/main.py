@@ -721,6 +721,11 @@ def main():
         if not failure.get("ok"): print(f"[WARN] source failed | category={failure.get('category','')} | url={failure.get('url','')} | error={failure.get('error','')}",flush=True)
     for warning in (cstats.get("source_status") or []):
         if warning.get("warning"): print(f"[WARN] source recovered with parser warning | category={warning.get('category','')} | url={warning.get('url','')} | warning={warning.get('error','')}",flush=True)
+        missing_count = int(warning.get("summary_missing_count", 0) or 0)
+        if missing_count:
+            print(f"[WARN] feed entries missing publisher summaries | category={warning.get('category','')} | url={warning.get('url','')} | missing={missing_count}/{warning.get('count', 0)}",flush=True)
+            for example in warning.get("missing_summary_examples", [])[:3]:
+                print(f"  [SUMMARY GAP] {example.get('title','(untitled)')} — {example.get('url','(no URL)')}",flush=True)
 
     if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
         try:
