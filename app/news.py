@@ -160,12 +160,31 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         parse_warning = str(getattr(parsed, "bozo_exception", "malformed feed"))
     source = parsed.feed.get("title", url)
     result = []
+    missing_summary_diagnostics = 0
+    summary_fields = (
+        "summary", "description", "subtitle", "summary_detail",
+        "description_detail", "subtitle_detail", "media_description",
+        "itunes_summary", "content",
+    )
     for e in entries[:limit]:
         title = _clean(e.get("title", ""))
         link = e.get("link", "")
         if not title or not link:
             continue
         summary = _summary_text(e)
+        if not summary and missing_summary_diagnostics < 3:
+            present_fields = [
+                key for key in summary_fields
+                if e.get(key) not in (None, "", [], {})
+            ]
+            print(
+                "[SUMMARY FIELD GAP] "
+                f"source={source} title={title[:160]} "
+                f"publisher_summary_fields_present={present_fields or 'none'} "
+                f"entry_keys={sorted(str(key) for key in e.keys())[:30]}",
+                flush=True,
+            )
+            missing_summary_diagnostics += 1
         aid = hashlib.sha256((title.lower() + "|" + link).encode()).hexdigest()[:16]
         region, region_confidence, region_evidence = _region(category, title, summary)
         result.append(Article(title, summary[:1600], link, source, category, _date(e), aid, region, region_confidence, region_evidence))
