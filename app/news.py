@@ -177,10 +177,30 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
                 key for key in summary_fields
                 if e.get(key) not in (None, "", [], {})
             ]
+            field_shapes = []
+            for key in summary_fields:
+                if key not in e or e.get(key) is None:
+                    continue
+                value = e.get(key)
+                if isinstance(value, str):
+                    shape = f"string(len={len(value)})"
+                elif isinstance(value, dict):
+                    nested = [
+                        f"{nested_key}:len={len(str(nested_value or ''))}"
+                        for nested_key, nested_value in value.items()
+                        if nested_key in ("value", "text", "summary")
+                    ]
+                    shape = "mapping(" + ",".join(nested[:3]) + ")"
+                elif isinstance(value, (list, tuple)):
+                    shape = f"{type(value).__name__}(items={len(value)})"
+                else:
+                    shape = type(value).__name__
+                field_shapes.append(f"{key}={shape}")
             print(
                 "[SUMMARY FIELD GAP] "
                 f"source={source} title={title[:160]} "
                 f"publisher_summary_fields_present={present_fields or 'none'} "
+                f"publisher_summary_field_shapes={field_shapes or 'none'} "
                 f"entry_keys={sorted(str(key) for key in e.keys())[:30]}",
                 flush=True,
             )

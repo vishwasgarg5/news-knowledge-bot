@@ -45,7 +45,13 @@ def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypat
             return None
 
     entries = [
-        {"title": f"Blank summary story {i}", "link": f"https://example.com/{i}", "author": "Reporter"}
+        {
+            "title": f"Blank summary story {i}",
+            "link": f"https://example.com/{i}",
+            "author": "Reporter",
+            "summary": "",
+            "summary_detail": {"type": "text", "value": ""},
+        }
         for i in range(4)
     ]
     parsed = SimpleNamespace(
@@ -66,6 +72,7 @@ def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypat
     assert output.count("[SUMMARY FIELD GAP]") == 3
     assert "source=Synthetic Publisher Feed" in output
     assert "publisher_summary_fields_present=none" in output
+    assert "publisher_summary_field_shapes=['summary=string(len=0)', 'summary_detail=mapping(value:len=0)']" in output
     assert "'author'" in output
 
 
