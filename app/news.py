@@ -4,7 +4,7 @@ import hashlib
 import html
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 
@@ -24,10 +24,31 @@ class Article:
     region: str = "world"
     region_confidence: float = 0.0
     region_evidence: str = ""
+    summary_selected_field: str | None = None
+    summary_field_diagnostics: dict[str, str] = field(default_factory=dict)
 
 
 def _clean(value: str) -> str:
     return " ".join((value or "").split())
+
+
+def _summary_field_provenance(entry) -> tuple[str | None, dict[str, str]]:
+    """Report which original RSS/Atom summary fields were present and usable."""
+    keys = (
+        "summary", "description", "subtitle",
+        "summary_detail", "description_detail", "subtitle_detail",
+        "media_description", "itunes_summary", "content",
+    )
+    diagnostics = {
+        key: (
+            "missing_key" if key not in entry else
+            "present" if _summary_text({key: entry.get(key, "")}) else
+            "blank"
+        )
+        for key in keys
+    }
+    selected = next((key for key in keys if diagnostics[key] == "present"), None)
+    return selected, diagnostics
 
 
 def _summary_text(entry) -> str:
@@ -172,6 +193,7 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
         if not title or not link:
             continue
         summary = _summary_text(e)
+        summary_selected_field, summary_field_diagnostics = _summary_field_provenance(e)
         if not summary and missing_summary_diagnostics < 3:
             present_fields = [
                 key for key in summary_fields
@@ -207,7 +229,12 @@ def fetch_feed(url: str, category: str, limit: int = 30) -> tuple[list[Article],
             missing_summary_diagnostics += 1
         aid = hashlib.sha256((title.lower() + "|" + link).encode()).hexdigest()[:16]
         region, region_confidence, region_evidence = _region(category, title, summary)
-        result.append(Article(title, summary[:1600], link, source, category, _date(e), aid, region, region_confidence, region_evidence))
+        result.append(Article(
+            title, summary[:1600], link, source, category, _date(e), aid,
+            region, region_confidence, region_evidence,
+            summary_selected_field=summary_selected_field,
+            summary_field_diagnostics=summary_field_diagnostics,
+        ))
     return result, bool(result), parse_warning
 
 
