@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from app.news import Article, _summary_text, collect, fetch_feed
+from app.news import Article, _summary_field_provenance, _summary_text, collect, fetch_feed
 
 
 def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
@@ -54,6 +54,20 @@ def test_summary_extractor_uses_publisher_detail_and_content_fallbacks():
 
 def test_summary_extractor_does_not_substitute_unrelated_entry_metadata():
     assert _summary_text({"title": "Story headline", "author": "Reporter", "tags": [{"term": "business"}], "summary": "   ", "description": ""}) == ""
+
+
+def test_summary_provenance_matches_actual_extractor_precedence():
+    entry = {
+        "summary": "Normalized publisher summary",
+        "media_description": "Different extension text",
+        "content": [{"value": "Longer article body"}],
+    }
+    selected, diagnostics = _summary_field_provenance(entry)
+    assert _summary_text(entry) == "Normalized publisher summary"
+    assert selected == "summary"
+    assert diagnostics["summary"] == "present"
+    assert diagnostics["media_description"] == "present"
+    assert diagnostics["content"] == "present"
 
 
 def test_feedparser_xml_namespace_summary_is_extracted_offline():
