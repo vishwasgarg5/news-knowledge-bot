@@ -63,18 +63,27 @@ def build_capture_record(
         published = _first_text(article, "published", "published_at", "publication_date", "date")
         summary_fields = ("summary", "description", "snippet", "abstract", "content")
         summary = _first_text(article, *summary_fields)
-        summary_field_diagnostics = {
-            key: (
-                "missing_key" if key not in article else
-                "blank" if not _clean_text(article.get(key)) else
-                "present"
+        # Prefer provenance recorded at the feed-parser boundary. Generic/offline
+        # candidate inputs retain the normalized-field fallback for compatibility.
+        source_diagnostics = article.get("summary_field_diagnostics")
+        if isinstance(source_diagnostics, dict) and source_diagnostics:
+            summary_field_diagnostics = {
+                str(key): str(value) for key, value in source_diagnostics.items()
+            }
+            summary_selected_field = article.get("summary_selected_field")
+        else:
+            summary_field_diagnostics = {
+                key: (
+                    "missing_key" if key not in article else
+                    "blank" if not _clean_text(article.get(key)) else
+                    "present"
+                )
+                for key in summary_fields
+            }
+            summary_selected_field = next(
+                (key for key in summary_fields if summary_field_diagnostics[key] == "present"),
+                None,
             )
-            for key in summary_fields
-        }
-        summary_selected_field = next(
-            (key for key in summary_fields if summary_field_diagnostics[key] == "present"),
-            None,
-        )
         identity = url or f"{source}|{title}|{published}|{index}"
         candidate_id = "candidate-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
         if candidate_id in seen_ids:
