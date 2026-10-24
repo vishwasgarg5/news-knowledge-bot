@@ -204,7 +204,7 @@ jobs:
             echo "Only reviewers should receive the queue artifact. Repository collaborators with Actions access may be able to download artifacts; do not treat this artifact as access-controlled reviewer distribution."
           } >> "$GITHUB_STEP_SUMMARY"
   run-news:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'production'))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.mode == 'production'
     needs: validate
     permissions:
       contents: write
@@ -287,11 +287,10 @@ jobs:
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
           case "${{ github.event_name }}" in
-            schedule) ;;
             workflow_dispatch)
               test "${{ inputs.mode }}" = "production"
               ;;
-            *) echo "::error::Production is allowed only on schedule or explicit production dispatch"; exit 1 ;;
+            *) echo "::error::Production is allowed only after explicit manual production dispatch"; exit 1 ;;
           esac
           grep -q "needs: validate" .github/workflows/news_intelligence_main.yml
           grep -q "python -m app.main" .github/workflows/news_intelligence_main.yml
