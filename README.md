@@ -3,7 +3,7 @@
 A **news-only India + World intelligence bot** for Telegram. It scans a large article pool, reduces it to high-value event candidates, selects **every story above the importance threshold**, and learns from what happens to those stories after selection.
 
 ## Run
-GitHub → **Actions → News Intelligence → Run workflow**. The production workflow runs only by manual dispatch or its configured daily schedule; repository pushes do not trigger news delivery.
+GitHub → **Actions → News Intelligence (Manual or Scheduled) → Run workflow**. The daily schedule runs validation only; it does not fetch production news or send Telegram messages. Production is a separate explicit manual mode and remains blocked whenever validation or the release quality gate fails. Pushes, commits, and pull requests do not trigger this workflow.
 
 ## Intelligence flow
 ```
@@ -49,7 +49,7 @@ Before final candidate selection, the pipeline checks whether the configured fee
 
 ## Offline human review and evaluation
 
-The manual workflow defaults to `review-packet`, which builds a blinded queue from a historical capture without running production news fetching, ranking, or Telegram delivery. Open [Actions → News Intelligence](https://github.com/vishwasgarg5/news-knowledge-bot/actions/workflows/news_intelligence.yml), choose **Run workflow**, leave `mode` as `review-packet`, and download the `blinded-review-queue` artifact from the successful run.
+The manual workflow defaults to `review-packet`, which builds a blinded queue from a historical capture without running production news fetching, ranking, or Telegram delivery. Open [Actions → News Intelligence](https://github.com/vishwasgarg5/news-knowledge-bot/actions/workflows/news_intelligence_main.yml), choose **Run workflow**, leave `mode` as `review-packet`, and download the `blinded-review-queue` artifact from the successful run.
 
 Read [the blinded review guide](docs/blinded-candidate-review-packet.md) before distributing the queue. Keep the separate answer key private until reviewers finish. Human reviewers must provide genuine labels, reviewer IDs, timezone-aware timestamps, rationale, and evidence URLs for definitive labels. Never fabricate missing labels or treat pipeline decisions as ground truth. The current historical capture is not enough to claim model quality or release readiness until genuine review labels have been collected and audited.
 
@@ -111,8 +111,8 @@ The latest successful scheduled production run should be treated as the baseline
 
 ## Single main workflow and production safety
 
-- `.github/workflows/news_intelligence.yml` is the only workflow file. Its validation job runs on code/configuration pushes to `main`, pull requests targeting `main`, manual dispatches, and the daily schedule; data-only memory commits are excluded to avoid redundant test runs. It compiles the application, validates YAML configuration, runs regression contract tests, and audits installed dependencies.
-- The production job depends on validation and can run only on the daily schedule or an explicit `workflow_dispatch` with `mode=production` on `main`. Pushes and pull requests never send Telegram messages or write production memory. Choose `mode=validate` for a validation-only manual run.
+- `.github/workflows/news_intelligence_main.yml` is the only workflow file. It is triggered only by manual dispatch or the daily schedule; pushes, commits, and pull requests do not trigger it. The validation job compiles the application, validates YAML configuration, runs regression contract tests, and audits installed dependencies.
+- The daily schedule runs validation only. Production fetching, Telegram delivery, and production-memory writes can run only after an explicit manual dispatch with `mode=production` on `main`, and only if the validation job passes. The historical capture-quality gate is currently failing, so release remains on HOLD. Choose `mode=validate` for validation-only or `mode=review-packet` for offline human-review preparation.
 - Production writes are scoped to the production job; the validation job has read-only repository permissions.
 - Production quality stays on `HOLD` when regional targets are missed, source collection fails, queued research remains uncorroborated, evidence gaps exceed the threshold, calibration/drift checks fail, or out-of-sample ranking improvement is not proven.
 - RSS collection uses explicit HTTP timeouts and a bot User-Agent; source errors report HTTP status and parser context where available. Failed feeds remain visible in health checks rather than being silently treated as successful.
