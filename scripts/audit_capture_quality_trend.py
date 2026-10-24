@@ -27,6 +27,20 @@ def _url_domain(value: Any) -> str:
     hostname = hostname.lower().rstrip(".")
     return hostname[4:] if hostname.startswith("www.") else hostname
 
+
+def _summary_provenance(row: dict[str, Any]) -> dict[str, Any]:
+    """Expose bounded parser-boundary states without storing publisher text."""
+    selected = row.get("summary_selected_field")
+    diagnostics = row.get("summary_field_diagnostics")
+    safe_diagnostics = (
+        {str(key): str(value) for key, value in sorted(diagnostics.items())}
+        if isinstance(diagnostics, dict) else {}
+    )
+    return {
+        "summary_selected_field": selected if isinstance(selected, str) and selected else None,
+        "summary_field_diagnostics": safe_diagnostics,
+    }
+
 def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     timestamp = path.stem
     if isinstance(record, dict):
@@ -103,6 +117,7 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
                         "non_string" if not isinstance(row.get("summary"), str) else
                         "present"
                     ),
+                    **_summary_provenance(row),
                 }
                 for row in group if not _nonempty(row.get("summary"))
             ][:5],
@@ -131,6 +146,7 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
                         "non_string" if not isinstance(row.get("summary"), str) else
                         "present"
                     ),
+                    **_summary_provenance(row),
                 }
                 for row in group if not _nonempty(row.get("summary"))
             ][:5],
@@ -260,6 +276,11 @@ def main(argv: list[str] | None = None) -> int:
                 title = example.get("title") or "(untitled)"
                 url = example.get("url") or "(no URL)"
                 print(f"  - [{example['summary_state']}] {title} — {url}")
+                selected = example.get("summary_selected_field")
+                diagnostics = example.get("summary_field_diagnostics") or {}
+                if selected or diagnostics:
+                    states = ", ".join(f"{key}={value}" for key, value in sorted(diagnostics.items()))
+                    print(f"    parser provenance: selected={selected or 'none'}; fields={states or 'none'}")
         sources = latest.get("summary_coverage_by_source", {})
         affected_sources = sorted(
             ((source, details) for source, details in sources.items()
@@ -276,6 +297,11 @@ def main(argv: list[str] | None = None) -> int:
                 title = example.get("title") or "(untitled)"
                 url = example.get("url") or "(no URL)"
                 print(f"  - [{example['summary_state']}] {title} — {url}")
+                selected = example.get("summary_selected_field")
+                diagnostics = example.get("summary_field_diagnostics") or {}
+                if selected or diagnostics:
+                    states = ", ".join(f"{key}={value}" for key, value in sorted(diagnostics.items()))
+                    print(f"    parser provenance: selected={selected or 'none'}; fields={states or 'none'}")
     if args.fail_on_regression and report["quality_gate"]["status"] == "BLOCKED": return 1
     return 2 if any(row["invalid_record"] for row in report["records"]) else 0
 if __name__ == "__main__": raise SystemExit(main())

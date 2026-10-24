@@ -129,3 +129,77 @@ def test_capture_handles_missing_or_malformed_metadata_without_inventing_values(
     assert candidates[1]["published_at"] == "not-a-date"
     assert candidates[1]["summary"] == "Actual snippet"
     assert all(candidate["disposition"] == "excluded" for candidate in candidates)
+
+
+def test_capture_records_summary_field_provenance_without_inventing_text():
+    record = build_capture_record(
+        articles=[{
+            "title": "Publisher with blank summary",
+            "url": "https://example.com/story",
+            "summary": "  ",
+            "description": "",
+            "snippet": "<p>Real publisher excerpt.</p>",
+            "content": "",
+        }],
+        included_urls=set(),
+        run_id="summary-provenance",
+        run_timestamp="2026-10-24T09:00:00+00:00",
+        policy_version="p",
+    )
+
+    candidate = record["candidate_articles"][0]
+    assert candidate["summary"] == "Real publisher excerpt."
+    assert candidate["summary_selected_field"] == "snippet"
+    assert candidate["summary_field_diagnostics"] == {
+        "summary": "blank",
+        "description": "blank",
+        "snippet": "present",
+        "abstract": "missing_key",
+        "content": "blank",
+    }
+
+
+def test_capture_diagnoses_absent_summary_fields_without_fabricating_summary():
+    record = build_capture_record(
+        articles=[{"title": "Headline only", "url": "https://example.com/headline"}],
+        included_urls=set(),
+        run_id="no-summary-fields",
+        run_timestamp="2026-10-24T09:00:00+00:00",
+        policy_version="p",
+    )
+    candidate = record["candidate_articles"][0]
+    assert candidate["summary"] == ""
+    assert candidate["summary_selected_field"] is None
+    assert set(candidate["summary_field_diagnostics"].values()) == {"missing_key"}
+
+
+ 
+def test_capture_preserves_original_feed_summary_field_provenance():
+    record = build_capture_record(
+        articles=[{
+            "title": "Headline only",
+            "url": "https://example.com/headline",
+            "summary": "",
+            "summary_selected_field": None,
+            "summary_field_diagnostics": {
+                "summary": "blank",
+                "description": "missing_key",
+                "summary_detail": "blank",
+                "content": "missing_key",
+            },
+        }],
+        included_urls=set(),
+        run_id="raw-feed-provenance",
+        run_timestamp="2026-10-24T10:00:00+00:00",
+        policy_version="p",
+    )
+
+    candidate = record["candidate_articles"][0]
+    assert candidate["summary"] == ""
+    assert candidate["summary_selected_field"] is None
+    assert candidate["summary_field_diagnostics"] == {
+        "summary": "blank",
+        "description": "missing_key",
+        "summary_detail": "blank",
+        "content": "missing_key",
+    }

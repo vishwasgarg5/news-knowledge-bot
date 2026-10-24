@@ -91,10 +91,6 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}
         run: python scripts/audit_evaluation_captures.py --json
-      - name: Audit evaluation capture quality trend
-        env:
-          PYTHONPATH: ${{ github.workspace }}
-        run: python scripts/audit_capture_quality_trend.py --json --fail-on-regression
       - name: Report offline human-reviewed candidate metrics
         env:
           PYTHONPATH: ${{ github.workspace }}
@@ -106,6 +102,13 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check pip-audit
           pip-audit --local
+
+      # Run the fail-closed release gate last so independent offline reports and
+      # dependency auditing still execute when a historical quality regression exists.
+      - name: Audit evaluation capture quality trend
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/audit_capture_quality_trend.py --json --fail-on-regression
 
   build-review-packet:
     if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.mode == 'review-packet'
