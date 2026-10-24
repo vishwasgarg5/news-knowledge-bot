@@ -112,3 +112,23 @@ def test_feedparser_content_encoded_summary_is_extracted_offline():
     parsed = feedparser.parse(xml)
     assert len(parsed.entries) == 1
     assert _summary_text(parsed.entries[0]) == "Publisher excerpt from content:encoded."
+
+
+def test_atom_xml_fixture_extracts_publisher_summary_without_fabricating_missing_text():
+    from pathlib import Path
+    import feedparser
+
+    fixture_path = Path(__file__).parent / "fixtures" / "rss" / "atom_summary.xml"
+    parsed = feedparser.parse(fixture_path.read_bytes())
+    assert len(parsed.entries) == 2
+
+    summary_entry, missing_entry = parsed.entries
+    assert _summary_text(summary_entry) == "Publisher-provided Atom summary with & encoded text."
+    selected, diagnostics = _summary_field_provenance(summary_entry)
+    assert selected == "summary"
+    assert diagnostics["summary"] == "present"
+
+    assert _summary_text(missing_entry) == ""
+    selected, diagnostics = _summary_field_provenance(missing_entry)
+    assert selected is None
+    assert diagnostics["summary"] == "missing_key"

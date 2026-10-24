@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Synthetic offline Atom fixture</title>
+  <id>https://example.com/atom-feed</id>
+  <updated>2026-10-24T00:00:00Z</updated>
+  <entry>
+    <title>Atom entry with publisher summary</title>
+    <id>https://example.com/atom-summary</id>
+    <link href="https://example.com/atom-summary"/>
+    <updated>2026-10-24T00:00:00Z</updated>
+    <summary type="html">&lt;p&gt;Publisher-provided Atom summary with &amp;amp; encoded text.&lt;/p&gt;</summary>
+  </entry>
+  <entry>
+    <title>Atom entry with no summary</title>
+    <id>https://example.com/atom-no-summary</id>
+    <link href="https://example.com/atom-no-summary"/>
+    <updated>2026-10-24T00:00:00Z</updated>
+  </entry>
+</feed>
