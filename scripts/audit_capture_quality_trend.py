@@ -146,6 +146,7 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
                         "non_string" if not isinstance(row.get("summary"), str) else
                         "present"
                     ),
+                    **_summary_provenance(row),
                 }
                 for row in group if not _nonempty(row.get("summary"))
             ][:5],
