@@ -61,7 +61,20 @@ def build_capture_record(
         title = _first_text(article, "title", "headline")
         source = _first_text(article, "source", "publisher")
         published = _first_text(article, "published", "published_at", "publication_date", "date")
-        summary = _first_text(article, "summary", "description", "snippet", "abstract", "content")
+        summary_fields = ("summary", "description", "snippet", "abstract", "content")
+        summary = _first_text(article, *summary_fields)
+        summary_field_diagnostics = {
+            key: (
+                "missing_key" if key not in article else
+                "blank" if not _clean_text(article.get(key)) else
+                "present"
+            )
+            for key in summary_fields
+        }
+        summary_selected_field = next(
+            (key for key in summary_fields if summary_field_diagnostics[key] == "present"),
+            None,
+        )
         identity = url or f"{source}|{title}|{published}|{index}"
         candidate_id = "candidate-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
         if candidate_id in seen_ids:
@@ -75,6 +88,10 @@ def build_capture_record(
             "url": url,
             "published_at": published,
             "summary": summary,
+            # Preserve field presence without storing duplicate publisher text; this makes
+            # future blank-summary captures diagnosable without live-feed replay.
+            "summary_selected_field": summary_selected_field,
+            "summary_field_diagnostics": summary_field_diagnostics,
             "disposition": "included" if url and url in included_urls else "excluded",
         })
     return {
