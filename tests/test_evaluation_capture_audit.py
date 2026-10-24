@@ -159,6 +159,8 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "title": "Title",
         "url": "https://example.com/b",
         "summary_state": "blank_string",
+        "summary_selected_field": None,
+        "summary_field_diagnostics": {},
     }]
     assert report["previous_run_comparison"]["summary_coverage_by_source_delta"]["Source"] == {
         "previous_candidate_count": 1, "latest_candidate_count": 1,
@@ -171,6 +173,7 @@ def test_capture_quality_trend_reports_coverage_and_detects_regression():
         "missing_summary_examples": [{
             "candidate_id": "", "title": "Title", "source": "Source",
             "url": "https://example.com/b", "summary_state": "blank_string",
+        "summary_selected_field": None, "summary_field_diagnostics": {},
         }],
     }
     assert report["previous_run_comparison"]["summary_coverage_by_domain_delta"]["example.com"] == {
@@ -269,6 +272,7 @@ def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access
         "missing_summary_examples": [{
             "candidate_id": "", "title": "", "source": "",
             "url": "https://example.com/story/2", "summary_state": "blank_string",
+            "summary_selected_field": None, "summary_field_diagnostics": {},
         }],
     }
     assert domains["news.example.org"]["summary_missing_count"] == 1
@@ -388,3 +392,29 @@ def test_capture_quality_empty_directory_is_insufficient_history(tmp_path):
     assert report["latest_run"] is None
     assert report["previous_run_comparison"] is None
     assert report["quality_gate"]["status"] == "INSUFFICIENT_HISTORY"
+
+
+def test_capture_quality_exposes_stored_parser_provenance_for_missing_summaries():
+    from pathlib import Path
+
+    report = build_trend([(Path("provenance.json"), {
+        "run_id": "provenance",
+        "candidate_articles": [{
+            "candidate_id": "c1",
+            "title": "Blank after parsing",
+            "source": "Publisher",
+            "url": "https://publisher.example/story",
+            "summary": "",
+            "summary_selected_field": None,
+            "summary_field_diagnostics": {
+                "summary": "blank",
+                "description": "missing_key",
+            },
+        }],
+    })])
+    example = report["latest_run"]["summary_coverage_by_source"]["Publisher"]["missing_summary_examples"][0]
+    assert example["summary_selected_field"] is None
+    assert example["summary_field_diagnostics"] == {
+        "description": "missing_key",
+        "summary": "blank",
+    }
