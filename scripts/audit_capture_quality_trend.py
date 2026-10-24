@@ -222,6 +222,28 @@ def main(argv: list[str] | None = None) -> int:
         for item in (report["previous_run_comparison"] or {}).get("regressions", []):
             print(f"REGRESSION {item['field']}: {item['previous_coverage']:.1%} -> {item['latest_coverage']:.1%}")
         latest = report["latest_run"] or {}
+        comparison = report["previous_run_comparison"] or {}
+        source_deltas = comparison.get("summary_coverage_by_source_delta", {})
+        source_regressions = sorted(
+            (
+                (source, details) for source, details in source_deltas.items()
+                if details.get("coverage_delta") is not None
+                and details["coverage_delta"] < 0
+            ),
+            key=lambda item: (item[1]["coverage_delta"], item[0]),
+        )
+        for source, details in source_regressions[:5]:
+            latest_source = latest.get("summary_coverage_by_source", {}).get(source, {})
+            value_diagnostics = latest_source.get("summary_value_diagnostics", {})
+            print(
+                f"SUMMARY SOURCE TREND {source}: "
+                f"{details['previous_summary_coverage']:.1%} -> "
+                f"{details['latest_summary_coverage']:.1%} "
+                f"({details['coverage_delta'] * 100:+.1f} percentage points; "
+                f"candidates {details['previous_candidate_count']} -> "
+                f"{details['latest_candidate_count']}; "
+                f"blank summaries {value_diagnostics.get('blank_string_count', 0)})"
+            )
         domains = latest.get("summary_coverage_by_domain", {})
         affected = sorted(
             ((domain, details) for domain, details in domains.items()

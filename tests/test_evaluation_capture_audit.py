@@ -301,6 +301,36 @@ def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
 
 
 
+def test_capture_quality_cli_reports_publisher_coverage_regressions(tmp_path, capsys):
+    older = {
+        "run_id": "older",
+        "run_timestamp": "2026-10-22T08:00:00Z",
+        "candidate_articles": [
+            {"title": "Complete story", "source": "Publisher", "url": "https://publisher.example/a",
+             "summary": "Publisher-provided summary"},
+        ],
+    }
+    newer = {
+        "run_id": "newer",
+        "run_timestamp": "2026-10-23T08:00:00Z",
+        "candidate_articles": [
+            {"title": "Blank story", "source": "Publisher", "url": "https://publisher.example/b",
+             "summary": ""},
+        ],
+    }
+    (tmp_path / "older.json").write_text(json.dumps(older), encoding="utf-8")
+    (tmp_path / "newer.json").write_text(json.dumps(newer), encoding="utf-8")
+
+    exit_code = capture_quality_main(["--directory", str(tmp_path)])
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert (
+        "SUMMARY SOURCE TREND Publisher: 100.0% -> 0.0% "
+        "(-100.0 percentage points; candidates 1 -> 1; blank summaries 1)"
+    ) in output
+
+
 def test_capture_quality_marks_malformed_record_shapes(tmp_path):
     from pathlib import Path
 
