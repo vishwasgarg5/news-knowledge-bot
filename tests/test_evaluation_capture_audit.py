@@ -280,6 +280,7 @@ def test_capture_quality_domain_grouping_normalizes_hosts_without_network_access
     assert domains["example.com"]["missing_summary_examples"] == [{
         "candidate_id": "", "title": "", "source": "",
         "url": "https://example.com/story/2", "summary_state": "blank_string",
+    "summary_selected_field": None, "summary_field_diagnostics": {},
     }]
 
 
