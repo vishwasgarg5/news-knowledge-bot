@@ -171,3 +171,35 @@ def test_capture_diagnoses_absent_summary_fields_without_fabricating_summary():
     assert candidate["summary"] == ""
     assert candidate["summary_selected_field"] is None
     assert set(candidate["summary_field_diagnostics"].values()) == {"missing_key"}
+
+
+ 
+def test_capture_preserves_original_feed_summary_field_provenance():
+    record = build_capture_record(
+        articles=[{
+            "title": "Headline only",
+            "url": "https://example.com/headline",
+            "summary": "",
+            "summary_selected_field": None,
+            "summary_field_diagnostics": {
+                "summary": "blank",
+                "description": "missing_key",
+                "summary_detail": "blank",
+                "content": "missing_key",
+            },
+        }],
+        included_urls=set(),
+        run_id="raw-feed-provenance",
+        run_timestamp="2026-10-24T10:00:00+00:00",
+        policy_version="p",
+    )
+
+    candidate = record["candidate_articles"][0]
+    assert candidate["summary"] == ""
+    assert candidate["summary_selected_field"] is None
+    assert candidate["summary_field_diagnostics"] == {
+        "summary": "blank",
+        "description": "missing_key",
+        "summary_detail": "blank",
+        "content": "missing_key",
+    }
