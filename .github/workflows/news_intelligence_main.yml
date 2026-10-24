@@ -1,14 +1,6 @@
-name: News Intelligence
+name: News Intelligence (Manual or Scheduled)
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'data/**'
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - 'data/**'
   workflow_dispatch:
     inputs:
       mode:
@@ -301,8 +293,8 @@ jobs:
               ;;
             *) echo "::error::Production is allowed only on schedule or explicit production dispatch"; exit 1 ;;
           esac
-          grep -q "needs: validate" .github/workflows/news_intelligence.yml
-          grep -q "python -m app.main" .github/workflows/news_intelligence.yml
+          grep -q "needs: validate" .github/workflows/news_intelligence_main.yml
+          grep -q "python -m app.main" .github/workflows/news_intelligence_main.yml
           echo "Production freeze gate passed"
 
       - name: Validate runtime configuration
