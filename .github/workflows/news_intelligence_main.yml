@@ -204,7 +204,7 @@ jobs:
             echo "Only reviewers should receive the queue artifact. Repository collaborators with Actions access may be able to download artifacts; do not treat this artifact as access-controlled reviewer distribution."
           } >> "$GITHUB_STEP_SUMMARY"
   run-news:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.mode == 'production'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.mode == 'production' && vars.NEWS_PRODUCTION_RELEASE_APPROVED == 'true'
     needs: validate
     permissions:
       contents: write
@@ -286,12 +286,12 @@ jobs:
       - name: Production freeze gate
         run: |
           test "${{ github.ref }}" = "refs/heads/main"
-          case "${{ github.event_name }}" in
-            workflow_dispatch)
-              test "${{ inputs.mode }}" = "production"
-              ;;
-            *) echo "::error::Production is allowed only after explicit manual production dispatch"; exit 1 ;;
-          esac
+          test "${{ github.event_name }}" = "workflow_dispatch"
+          test "${{ inputs.mode }}" = "production"
+          test "${{ vars.NEWS_PRODUCTION_RELEASE_APPROVED }}" = "true" || {
+            echo "::error::Production is disabled while release approval is absent"
+            exit 1
+          }
           grep -q "needs: validate" .github/workflows/news_intelligence_main.yml
           grep -q "python -m app.main" .github/workflows/news_intelligence_main.yml
           echo "Production freeze gate passed"
