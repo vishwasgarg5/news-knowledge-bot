@@ -27,6 +27,20 @@ def _url_domain(value: Any) -> str:
     hostname = hostname.lower().rstrip(".")
     return hostname[4:] if hostname.startswith("www.") else hostname
 
+
+def _summary_provenance(row: dict[str, Any]) -> dict[str, Any]:
+    """Expose bounded parser-boundary states without storing publisher text."""
+    selected = row.get("summary_selected_field")
+    diagnostics = row.get("summary_field_diagnostics")
+    safe_diagnostics = (
+        {str(key): str(value) for key, value in sorted(diagnostics.items())}
+        if isinstance(diagnostics, dict) else {}
+    )
+    return {
+        "summary_selected_field": selected if isinstance(selected, str) and selected else None,
+        "summary_field_diagnostics": safe_diagnostics,
+    }
+
 def _record_quality(record: Any, path: Path) -> dict[str, Any]:
     timestamp = path.stem
     if isinstance(record, dict):
@@ -103,6 +117,7 @@ def _record_quality(record: Any, path: Path) -> dict[str, Any]:
                         "non_string" if not isinstance(row.get("summary"), str) else
                         "present"
                     ),
+                    **_summary_provenance(row),
                 }
                 for row in group if not _nonempty(row.get("summary"))
             ][:5],
