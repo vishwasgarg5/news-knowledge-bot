@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 from app.news import Article, _summary_field_provenance, _summary_text, collect, fetch_feed
+from scripts.evaluation_capture import build_capture_record
 
 
 def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
@@ -132,3 +133,42 @@ def test_atom_xml_fixture_extracts_publisher_summary_without_fabricating_missing
     selected, diagnostics = _summary_field_provenance(missing_entry)
     assert selected is None
     assert diagnostics["summary"] == "missing_key"
+
+
+def test_parser_article_provenance_survives_production_capture_boundary():
+    # app.main passes Article.__dict__ into write_capture_record; exercise that
+    # exact boundary offline so parser diagnostics cannot silently disappear.
+    article = Article(
+        title="Publisher entry without a summary",
+        summary="",
+        url="https://example.com/no-summary",
+        source="Example Feed",
+        category="world",
+        published="2026-10-24T00:00:00+00:00",
+        article_id="offline-no-summary",
+        summary_selected_field=None,
+        summary_field_diagnostics={
+            "summary": "blank",
+            "description": "missing_key",
+            "summary_detail": "blank",
+            "content": "missing_key",
+        },
+    )
+
+    record = build_capture_record(
+        articles=[article.__dict__],
+        included_urls=set(),
+        run_id="offline-provenance-boundary",
+        run_timestamp="2026-10-24T00:00:00+00:00",
+        policy_version="test",
+    )
+
+    candidate = record["candidate_articles"][0]
+    assert candidate["summary"] == ""
+    assert candidate["summary_selected_field"] is None
+    assert candidate["summary_field_diagnostics"] == {
+        "summary": "blank",
+        "description": "missing_key",
+        "summary_detail": "blank",
+        "content": "missing_key",
+    }
