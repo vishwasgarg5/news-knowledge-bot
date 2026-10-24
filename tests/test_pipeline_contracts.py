@@ -383,14 +383,14 @@ def test_telegram_chunks_preserve_content():
 
 
 def test_single_main_workflow_separates_validation_from_production():
-    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence_main.yml"))
     triggers = workflow.get(True) or workflow.get("on") or {}
     assert {"push", "pull_request", "workflow_dispatch", "schedule"} <= set(triggers)
     workflow_dir = ROOT / ".github" / "workflows"
     workflow_files = sorted(list(workflow_dir.glob("*.yml")) + list(workflow_dir.glob("*.yaml")))
     assert workflow_files == [workflow_dir / "news_intelligence.yml"]
 
-    text = read(".github/workflows/news_intelligence.yml")
+    text = read(".github/workflows/news_intelligence_main.yml")
     assert "  validate:" in text and "  run-news:" in text
     assert "needs: validate" in text
     assert "github.event_name == 'schedule'" in text
@@ -890,10 +890,10 @@ def test_evidence_audit_recognizes_nested_independent_sources():
     assert production_quality_gate({"paired_folds":0},{"samples":0,"ece":None},{"status":"UNKNOWN"},audit)["status"]=="HOLD"
 
 def test_single_main_workflow_guards_production_triggers():
-    workflow=yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    workflow=yaml.safe_load(read(".github/workflows/news_intelligence_main.yml"))
     triggers=workflow.get(True) or workflow.get("on") or {}
     assert {"push","pull_request","workflow_dispatch","schedule"} <= set(triggers)
-    text=read(".github/workflows/news_intelligence.yml")
+    text=read(".github/workflows/news_intelligence_main.yml")
     assert "needs: validate" in text
     assert "inputs.mode == 'production'" in text
     assert "actions/upload-artifact@v7" in text
@@ -2459,12 +2459,12 @@ def test_feed_collection_uses_detail_and_namespaced_summary_fallbacks(monkeypatc
 
 
 def test_review_packet_defaults_to_latest_capture_without_hardcoded_filename():
-    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence_main.yml"))
     triggers = workflow.get(True) or workflow.get("on") or {}
     inputs = triggers["workflow_dispatch"]["inputs"]
     assert inputs["record_path"]["default"] == ""
     assert inputs["record_path"]["required"] is False
-    text = read(".github/workflows/news_intelligence.yml")
+    text = read(".github/workflows/news_intelligence_main.yml")
     assert "selected latest capture: $RECORD_PATH" in text
     assert "find data/historical_evaluation_records -maxdepth 1 -type f -name '*.json'" in text
     assert "sort | tail -n 1" in text
@@ -2472,7 +2472,7 @@ def test_review_packet_defaults_to_latest_capture_without_hardcoded_filename():
 
 
 def test_review_packet_rejects_paths_outside_capture_directory():
-    text = read(".github/workflows/news_intelligence.yml")
+    text = read(".github/workflows/news_intelligence_main.yml")
     assert 'records_dir="$(realpath -e data/historical_evaluation_records)"' in text
     assert 'resolved_record="$(realpath -e -- "$RECORD_PATH")"' in text
     assert '$(dirname "$resolved_record")" != "$records_dir"' in text
@@ -2583,7 +2583,7 @@ def test_evaluation_review_labels_reject_unknown_ids_when_candidate_ids_are_miss
 
 
 def test_review_packet_job_is_independent_of_production_and_validation():
-    workflow = yaml.safe_load(read(".github/workflows/news_intelligence.yml"))
+    workflow = yaml.safe_load(read(".github/workflows/news_intelligence_main.yml"))
     jobs = workflow["jobs"]
     packet = jobs["build-review-packet"]
     production = jobs["run-news"]
