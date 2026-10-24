@@ -74,6 +74,10 @@ def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypat
     assert "publisher_summary_fields_present=none" in output
     assert "publisher_summary_field_shapes=['summary=string(len=0)', 'summary_detail=mapping(value:len=0)']" in output
     assert "'author'" in output
+    assert articles[0].summary_selected_field is None
+    assert articles[0].summary_field_diagnostics["summary"] == "blank"
+    assert articles[0].summary_field_diagnostics["summary_detail"] == "blank"
+    assert articles[0].summary_field_diagnostics["description"] == "missing_key"
 
 
 
@@ -150,6 +154,9 @@ def test_fetch_feed_extracts_namespaced_rss_summary_end_to_end_offline(monkeypat
     assert len(articles) == 1
     assert articles[0].source == "Synthetic Publisher Feed"
     assert articles[0].summary == "Publisher-provided media summary for offline integration test."
+    assert articles[0].summary_selected_field == "media_description"
+    assert articles[0].summary_field_diagnostics["media_description"] == "present"
+    assert articles[0].summary_field_diagnostics["summary"] == "missing_key"
     assert "[SUMMARY FIELD GAP]" not in capsys.readouterr().out
 
 
