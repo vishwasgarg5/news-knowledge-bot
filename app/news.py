@@ -34,10 +34,12 @@ def _clean(value: str) -> str:
 
 def _summary_field_provenance(entry) -> tuple[str | None, dict[str, str]]:
     """Report which original RSS/Atom summary fields were present and usable."""
+    # Prefer explicit extension/content fields before feedparser's normalized
+    # summary alias, which can be synthesized from namespaced RSS elements.
     keys = (
+        "media_description", "itunes_summary", "content",
         "summary", "description", "subtitle",
         "summary_detail", "description_detail", "subtitle_detail",
-        "media_description", "itunes_summary", "content",
     )
     diagnostics = {
         key: (
