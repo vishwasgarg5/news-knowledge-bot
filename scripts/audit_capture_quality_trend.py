@@ -276,6 +276,11 @@ def main(argv: list[str] | None = None) -> int:
                 title = example.get("title") or "(untitled)"
                 url = example.get("url") or "(no URL)"
                 print(f"  - [{example['summary_state']}] {title} — {url}")
+                selected = example.get("summary_selected_field")
+                diagnostics = example.get("summary_field_diagnostics") or {}
+                if selected or diagnostics:
+                    states = ", ".join(f"{key}={value}" for key, value in sorted(diagnostics.items()))
+                    print(f"    parser provenance: selected={selected or 'none'}; fields={states or 'none'}")
         sources = latest.get("summary_coverage_by_source", {})
         affected_sources = sorted(
             ((source, details) for source, details in sources.items()
@@ -292,6 +297,11 @@ def main(argv: list[str] | None = None) -> int:
                 title = example.get("title") or "(untitled)"
                 url = example.get("url") or "(no URL)"
                 print(f"  - [{example['summary_state']}] {title} — {url}")
+                selected = example.get("summary_selected_field")
+                diagnostics = example.get("summary_field_diagnostics") or {}
+                if selected or diagnostics:
+                    states = ", ".join(f"{key}={value}" for key, value in sorted(diagnostics.items()))
+                    print(f"    parser provenance: selected={selected or 'none'}; fields={states or 'none'}")
     if args.fail_on_regression and report["quality_gate"]["status"] == "BLOCKED": return 1
     return 2 if any(row["invalid_record"] for row in report["records"]) else 0
 if __name__ == "__main__": raise SystemExit(main())
