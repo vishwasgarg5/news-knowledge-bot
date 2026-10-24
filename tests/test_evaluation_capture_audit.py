@@ -290,7 +290,9 @@ def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
         "run_id": "cli-check",
         "run_timestamp": "2026-10-23T08:00:00Z",
         "candidate_articles": [
-            {"title": "Headline missing summary", "url": "https://www.example.com/story/1", "summary": ""},
+            {"title": "Headline missing summary", "url": "https://www.example.com/story/1", "summary": "",
+             "summary_selected_field": None,
+             "summary_field_diagnostics": {"summary": "blank", "description": "missing_key"}},
             {"title": "Has summary", "url": "https://example.com/story/2", "summary": "Known text"},
         ],
     }
@@ -303,6 +305,7 @@ def test_capture_quality_cli_prints_bounded_domain_examples(tmp_path, capsys):
     assert "SUMMARY GAPS example.com: 1/2 missing (50.0% coverage)" in output
     assert "[blank_string] Headline missing summary — https://www.example.com/story/1" in output
     assert "SUMMARY SOURCE GAPS unknown: 1/2 missing (50.0% coverage)" in output
+    assert "parser provenance: selected=none; fields=description=missing_key, summary=blank" in output
 
 
 
