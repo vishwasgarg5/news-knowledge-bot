@@ -2,6 +2,7 @@ from types import SimpleNamespace
 
 from app.news import Article, _summary_field_provenance, _summary_text, collect, fetch_feed
 from scripts.evaluation_capture import build_capture_record
+from scripts.audit_capture_quality_trend import _summary_provenance
 
 
 def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
@@ -172,3 +173,25 @@ def test_parser_article_provenance_survives_production_capture_boundary():
         "summary_detail": "blank",
         "content": "missing_key",
     }
+
+
+
+def test_legacy_capture_without_parser_diagnostics_is_explicitly_unknown():
+    provenance = _summary_provenance({"summary": ""})
+
+    assert provenance["summary_selected_field"] is None
+    assert provenance["summary_field_diagnostics"] == {}
+    assert provenance["summary_provenance_status"] == "unavailable_legacy_capture"
+
+
+def test_capture_with_parser_diagnostics_is_marked_as_captured():
+    provenance = _summary_provenance({
+        "summary": "",
+        "summary_selected_field": None,
+        "summary_field_diagnostics": {
+            "summary": "blank",
+            "description": "missing_key",
+        },
+    })
+
+    assert provenance["summary_provenance_status"] == "captured"
