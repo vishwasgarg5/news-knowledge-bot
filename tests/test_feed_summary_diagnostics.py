@@ -23,6 +23,59 @@ def test_collect_reports_missing_publisher_summaries_per_feed(monkeypatch):
     assert [row["title"] for row in source["missing_summary_examples"]] == [
         "Harbour bridge repairs delayed", "Quantum telescope launched", "Monsoon crops recover"
     ]
+    assert source["summary_field_state_counts"] == {}
+    assert source["missing_summary_examples"][0]["summary_provenance_status"] == "unavailable"
+
+
+def test_collect_reports_parser_provenance_for_missing_summaries(monkeypatch):
+    articles = [
+        Article(
+            "Blank publisher summary",
+            "",
+            "https://example.com/blank",
+            "Example Feed",
+            "world",
+            "2026-10-23T00:00:00+00:00",
+            "id-blank",
+            summary_selected_field=None,
+            summary_field_diagnostics={
+                "summary": "blank",
+                "description": "missing_key",
+            },
+        ),
+        Article(
+            "Publisher summary present",
+            "Publisher text",
+            "https://example.com/present",
+            "Example Feed",
+            "world",
+            "2026-10-23T00:00:00+00:00",
+            "id-present",
+            summary_selected_field="summary",
+            summary_field_diagnostics={
+                "summary": "present",
+                "description": "missing_key",
+            },
+        ),
+    ]
+    monkeypatch.setattr("app.news.fetch_feed", lambda *args: (articles, True, ""))
+    monkeypatch.setattr("app.news.time.sleep", lambda *_: None)
+
+    _, stats = collect({"world": ["https://example.com/feed"]})
+
+    source = stats["source_status"][0]
+    assert source["summary_missing_count"] == 1
+    assert source["summary_field_state_counts"] == {
+        "summary": {"present": 0, "blank": 1, "missing_key": 0, "other": 0},
+        "description": {"present": 0, "blank": 0, "missing_key": 1, "other": 0},
+    }
+    example = source["missing_summary_examples"][0]
+    assert example["summary_selected_field"] is None
+    assert example["summary_field_diagnostics"] == {
+        "summary": "blank",
+        "description": "missing_key",
+    }
+    assert example["summary_provenance_status"] == "captured"
 
 
 def test_fetch_feed_logs_bounded_field_diagnostics_for_blank_summaries(monkeypatch, capsys):
