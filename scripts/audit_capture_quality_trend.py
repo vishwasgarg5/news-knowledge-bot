@@ -36,9 +36,17 @@ def _summary_provenance(row: dict[str, Any]) -> dict[str, Any]:
         {str(key): str(value) for key, value in sorted(diagnostics.items())}
         if isinstance(diagnostics, dict) else {}
     )
+    selected_field = selected if isinstance(selected, str) and selected else None
     return {
-        "summary_selected_field": selected if isinstance(selected, str) and selected else None,
+        "summary_selected_field": selected_field,
         "summary_field_diagnostics": safe_diagnostics,
+        # Legacy captures predate parser-boundary instrumentation. An empty
+        # diagnostics map is unknown provenance, not evidence that the parser
+        # saw no publisher summary fields.
+        "summary_provenance_status": (
+            "captured" if selected_field is not None or safe_diagnostics
+            else "unavailable_legacy_capture"
+        ),
     }
 
 def _record_quality(record: Any, path: Path) -> dict[str, Any]:
@@ -278,7 +286,9 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  - [{example['summary_state']}] {title} — {url}")
                 selected = example.get("summary_selected_field")
                 diagnostics = example.get("summary_field_diagnostics") or {}
-                if selected or diagnostics:
+                if example.get("summary_provenance_status") == "unavailable_legacy_capture":
+                    print("    parser provenance: unavailable (not recorded in this legacy capture; cause cannot be inferred)")
+                else:
                     states = ", ".join(f"{key}={value}" for key, value in sorted(diagnostics.items()))
                     print(f"    parser provenance: selected={selected or 'none'}; fields={states or 'none'}")
         sources = latest.get("summary_coverage_by_source", {})
