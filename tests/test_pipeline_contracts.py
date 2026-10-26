@@ -393,7 +393,7 @@ def test_single_main_workflow_separates_validation_from_production():
     text = read(".github/workflows/news_intelligence_main.yml")
     assert "  validate:" in text and "  run-news:" in text
     assert "needs: validate" in text
-    assert "github.event_name == 'schedule'" in text
+    assert "  schedule:" in text
     assert "inputs.mode == 'production'" in text
     assert "contents: write" in text
     assert "python -m compileall -q app" in text
