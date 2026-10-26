@@ -287,6 +287,33 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
                 items, ok, error = fetch_feed(url, category, per_source)
                 all_articles.extend(items)
                 missing_summaries = [article for article in items if not _clean(article.summary)]
+                # Keep summary gaps actionable in the normal collection report.
+                # Older/custom Article producers may not expose parser provenance;
+                # label those rows unknown instead of treating absent diagnostics
+                # as evidence that the publisher omitted the field.
+                summary_field_state_counts: dict[str, dict[str, int]] = {}
+                missing_summary_examples = []
+                for article in missing_summaries:
+                    diagnostics = article.summary_field_diagnostics
+                    provenance_available = bool(diagnostics)
+                    if provenance_available:
+                        for field_name, state in diagnostics.items():
+                            states = summary_field_state_counts.setdefault(
+                                str(field_name),
+                                {"present": 0, "blank": 0, "missing_key": 0, "other": 0},
+                            )
+                            states[state if state in {"present", "blank", "missing_key"} else "other"] += 1
+                    if len(missing_summary_examples) < 3:
+                        missing_summary_examples.append({
+                            "title": article.title,
+                            "url": article.url,
+                            "summary_selected_field": article.summary_selected_field,
+                            "summary_field_diagnostics": dict(diagnostics),
+                            "summary_provenance_status": (
+                                "captured" if provenance_available
+                                else "unavailable"
+                            ),
+                        })
                 source_status.append({
                     "url": url,
                     "category": category,
@@ -295,10 +322,8 @@ def collect(sources: dict, per_source: int = 30, max_total: int = 700) -> tuple[
                     "error": error,
                     "warning": bool(ok and error),
                     "summary_missing_count": len(missing_summaries),
-                    "missing_summary_examples": [
-                        {"title": article.title, "url": article.url}
-                        for article in missing_summaries[:3]
-                    ],
+                    "summary_field_state_counts": summary_field_state_counts,
+                    "missing_summary_examples": missing_summary_examples,
                 })
             except Exception as exc:
                 source_status.append({"url": url, "category": category, "ok": False, "count": 0, "error": str(exc), "warning": False})
